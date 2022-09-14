@@ -24,8 +24,15 @@
   left: 0;
 }
 .TopCate .nametop .tright {
-  background-color: aliceblue;
+  background-color: #e94560;
   color: black;
   position: absolute;
   right: 0;
+}
+.product_category{
+  text-align: center;
+  margin-top: 10px;
+  /* position: absolute;
+  bottom: 30px; */
+  /* left: 50%; */
 }

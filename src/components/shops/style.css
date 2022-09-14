@@ -23,7 +23,7 @@
   height: auto;
 }
 .shop .category .box:hover {
-  background-color: #fff;
+  background-color: #ffe1e6;
   box-shadow: rgb(43 52 69 / 10%) 0px 4px 16px;
 }
 .shop .box2 {
@@ -39,13 +39,13 @@
 }
 
 .shop .contentWidth {
-  margin-left: 30px;
+  margin-left: 20px;
 }
 
 .grid1 {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 20px;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 0px;
 }
 .shop .product img {
   width: 100%;
@@ -56,4 +56,8 @@
 }
 .shop .product:hover {
   box-shadow: rgb(43 52 69 / 10%) 0px 4px 16px;
+}
+.isSelected{
+  background-color: #e94560 !important;
+  color: #ffffff;
 }

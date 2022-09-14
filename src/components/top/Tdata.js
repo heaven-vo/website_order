@@ -1,28 +1,28 @@
 const Tdata = [
   {
-    cover: "./images/top/category-1.png",
+    cover: "https://www.alaska.vn/Data/Sites/1/media/tintuc/cach-bao-quan-thit-ca-1.jpg",
     para: "headphone",
-    desc: "3k orders this week",
+    desc: "Thịt Tươi Sống",
   },
   {
-    cover: "./images/top/category-2.png",
+    cover: "https://www.alaska.vn/Data/Sites/1/media/tintuc/cach-bao-quan-thit-ca-2.jpg",
     para: "watch",
-    desc: "4k orders this week",
+    desc: "Hải Sản Tươi Sống",
   },
   {
-    cover: "./images/top/category-3.png",
+    cover: "https://media.baodansinh.vn/baodansinh/Images/2019/05/01/hoacu/mqe1537348518.jpg",
     para: "sunglass",
-    desc: "6k orders this week",
+    desc: "Rau Củ",
   },
   {
-    cover: "./images/top/category-2.png",
+    cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRwBtRrFxSNTvXp1zgW3vjYsd5b8tkPcZdOQ&usqp=CAU",
     para: "watch",
-    desc: "4k orders this week",
+    desc: "Các Loại Hạt",
   },
   {
-    cover: "./images/top/category-3.png",
+    cover: "https://cdn-www.vinid.net/2020/05/a3ce42b8-n%C6%B0%E1%BB%9Bc-ng%E1%BB%8Dt-%C4%91%C6%B0%E1%BB%A3c-y%C3%AAu-th%C3%ADch-nh%E1%BA%A5t.jpg",
     para: "sunglass",
-    desc: "6k orders this week",
+    desc: "Đồ uống",
   },
 ]
 

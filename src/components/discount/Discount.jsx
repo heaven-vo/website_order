@@ -4,15 +4,15 @@ import Dcard from "./Dcard"
 const Discount = () => {
   return (
     <>
-      <section className='Discount background NewArrivals'>
+      <section className='Discount background '>
         <div className='container'>
           <div className='heading d_flex'>
             <div className='heading-left row  f_flex'>
-              <img src='https://img.icons8.com/windows/32/fa314a/gift.png' />
-              <h2>Big Discounts</h2>
+              <img src='https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/food%2Fmarket-svgrepo-com.svg?alt=media&token=88f13597-490d-405e-bd33-b34d9bf8acc3' />
+              <h2>Cửa Hàng Nổi Bật</h2>
             </div>
             <div className='heading-right row '>
-              <span>View all</span>
+              <span>Xem tất cả</span>
               <i className='fa-solid fa-caret-right'></i>
             </div>
           </div>
