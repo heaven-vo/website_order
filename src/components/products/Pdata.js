@@ -1,4 +1,4 @@
-const Sdata = {
+const Pdata = {
     shopItems: [
         {
             id: 7,
@@ -7,6 +7,9 @@ const Sdata = {
             price: "180",
             weight: "500g",
             discount: "25",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: false,
         },
         {
             id: 8,
@@ -15,6 +18,9 @@ const Sdata = {
             price: "120",
             weight: "500g",
             discount: "10",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: true,
         },
         {
             id: 9,
@@ -23,6 +29,9 @@ const Sdata = {
             price: "20",
             weight: "500g",
             discount: "50 ",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: false,
         },
         {
             id: 10,
@@ -31,6 +40,9 @@ const Sdata = {
             price: "999",
             weight: "500g",
             discount: "10 ",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: true,
         },
         {
             id: 11,
@@ -39,6 +51,9 @@ const Sdata = {
             price: "80",
             weight: "500g",
             discount: "20 ",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: false,
         },
         {
             id: 12,
@@ -47,6 +62,9 @@ const Sdata = {
             price: "400",
             weight: "500g",
             discount: "20 ",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: false,
         },
         {
             id: 13,
@@ -55,7 +73,11 @@ const Sdata = {
             price: "60",
             weight: "500g",
             discount: "5 ",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: false,
         },
+
         {
             id: 14,
             cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/food%2Fwagyu-a5-thumbnail2x.jpg?alt=media&token=607e08a7-5914-41a5-9b70-23433c75284e",
@@ -63,6 +85,9 @@ const Sdata = {
             price: "120",
             weight: "500g",
             discount: "10",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: false,
         },
         {
             id: 15,
@@ -71,7 +96,10 @@ const Sdata = {
             price: "80",
             weight: "500g",
             discount: "20 ",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: false,
         },
     ],
 };
-export default Sdata;
+export default Pdata;

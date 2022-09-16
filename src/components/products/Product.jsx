@@ -1,9 +1,9 @@
 import React from "react";
 import Catg from "./Catg";
-import ShopCart from "./ShopCart";
+import ProductCart from "./ProductCart";
 import "./style.css";
 
-const Shop = ({ addToCart, shopItems }) => {
+const Product = ({ shopItems }) => {
     return (
         <>
             <section className="shop background">
@@ -12,7 +12,7 @@ const Shop = ({ addToCart, shopItems }) => {
                     <div className="contentWidth">
                         {[1, 2].map((item) => {
                             return (
-                                <div style={{ marginBottom: 20 }}>
+                                <div style={{ marginBottom: 20 }} key={item}>
                                     <div className="heading d_flex">
                                         <div className="heading-left row  f_flex">
                                             <h2>Tops Market</h2>
@@ -22,8 +22,8 @@ const Shop = ({ addToCart, shopItems }) => {
                                             <i className="fa-solid fa-caret-right"></i>
                                         </div>
                                     </div>
-                                    <div className="product-content  grid1">
-                                        <ShopCart addToCart={addToCart} shopItems={shopItems} />
+                                    <div className="product-content  grid5">
+                                        <ProductCart shopItems={shopItems} />
                                     </div>
                                 </div>
                             );
@@ -35,4 +35,4 @@ const Shop = ({ addToCart, shopItems }) => {
     );
 };
 
-export default Shop;
+export default Product;

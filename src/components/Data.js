@@ -4,9 +4,10 @@ const Data = {
             id: 1,
             discount: 50,
             cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/food-order-fast%2Fbanh-mi-chao-93-mac-thi-buoi-quan-1-ho-chi-minh-1612212178150882437-eatery-avatar-1625937741.jpg?alt=media&token=cbdf1dba-0f99-4bcc-8966-4868cef5f8e9",
-            name: "Bánh Mì Thịt",
+            name: "Bánh Mì Thịt 1312 12313 23 12312 123 12",
             price: 15,
             shop: "Tops Market",
+            isLike: true,
         },
         {
             id: 2,
@@ -15,6 +16,7 @@ const Data = {
             name: "Bún Bò",
             price: 40,
             shop: "Tops Market",
+            isLike: false,
         },
         {
             id: 3,
@@ -23,6 +25,7 @@ const Data = {
             name: "Cơm Tấm",
             price: 35,
             shop: "Tops Market",
+            isLike: false,
         },
         {
             id: 4,
@@ -31,6 +34,7 @@ const Data = {
             name: "Cơm Gà Chiên Mắm Tỏi",
             price: 40,
             shop: "Tops Market",
+            isLike: false,
         },
         {
             id: 5,
@@ -39,6 +43,7 @@ const Data = {
             name: "Cơm Tấm Phúc Lộc Thọ",
             price: 50,
             shop: "Tops Market",
+            isLike: false,
         },
         {
             id: 6,
@@ -47,6 +52,7 @@ const Data = {
             name: "Bún Bò",
             price: 40,
             shop: "Tops Market",
+            isLike: false,
         },
     ],
 };

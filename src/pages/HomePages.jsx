@@ -3,24 +3,25 @@ import Home from "../components/MainPage/Home"
 import FlashDeals from "../components/flashDeals/FlashDeals"
 import TopCate from "../components/top/TopCate"
 import NewArrivals from "../components/newarrivals/NewArrivals"
-import Discount from "../components/discount/Discount"
-import Shop from "../components/shops/Shop"
+import Shop from "../components/shop/ShopSlide"
+import Product from "../components/products/Product"
 import Annocument from "../components/annocument/Annocument"
 import Wrapper from "../components/wrapper/Wrapper"
+import ShopSlide from "../components/shop/ShopSlide"
 
-const Pages = ({ productItems, addToCart, CartItem, shopItems }) => {
+const HomePage = ({ productItems, shopItems }) => {
   return (
     <>
-      <Home CartItem={CartItem} />
-      <FlashDeals productItems={productItems} addToCart={addToCart} />
+      <Home  />
+      <FlashDeals productItems={productItems}  />
       <TopCate />
       <NewArrivals />
-      <Discount />
-      
+      <ShopSlide />
+      <Product shopItems={shopItems}  />
       <Annocument />
       <Wrapper />
     </>
   )
 }
 
-export default Pages
+export default HomePage

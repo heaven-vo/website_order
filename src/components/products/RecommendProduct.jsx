@@ -1,57 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import { SampleNextArrow, SamplePrevArrow } from "../flashDeals/FlashCard";
+import Pdata from "./Pdata";
 
-export const SampleNextArrow = (props) => {
-    const { onClick } = props;
-    return (
-        <div className="control-btn" onClick={onClick}>
-            <button className="next">
-                <i className="fa fa-long-arrow-alt-right"></i>
-            </button>
-        </div>
-    );
-};
-export const SamplePrevArrow = (props) => {
-    const { onClick } = props;
-    return (
-        <div className="control-btn" onClick={onClick}>
-            <button className="prev">
-                <i className="fa fa-long-arrow-alt-left"></i>
-            </button>
-        </div>
-    );
-};
-const FlashCard = ({ productItems,}) => {
-    const [count, setCount] = useState(0);
-    const increment = () => {
-        setCount(count + 1);
-    };
+export const RecommendProduct = () => {
+    const { shopItems } = Pdata;
     const settings = {
         dots: false,
         infinite: true,
         speed: 500,
         slidesToShow: 5,
         slidesToScroll: 1,
+        autoplay: true,
         nextArrow: <SampleNextArrow />,
         prevArrow: <SamplePrevArrow />,
     };
-
     return (
         <>
             <Slider {...settings}>
-                {productItems.map((productItems) => {
+                {shopItems.map((productItems) => {
                     return (
                         <div className="box" key={productItems.id}>
                             <div className="product mtop">
                                 <div className="img">
-                                    {/* <span className='discount'>{productItems.discount}% Off</span> */}
                                     <img style={{ width: "100%" }} src={productItems.cover} alt="" />
-                                    <div className="product-count">
-                                        <label>{count}</label> <br />
-                                    </div>
-                                    <div className="product-like">{productItems.isLike ? <i className="fa-solid fa-heart like"></i> : <i className="fa-regular fa-heart"></i>}</div>
                                 </div>
                                 <div className="product-details">
                                     <span style={{ fontSize: 15, color: "#666" }}>{productItems.shop}</span>
@@ -65,9 +37,6 @@ const FlashCard = ({ productItems,}) => {
                                     </div>
                                     <div className="price">
                                         <h4>{productItems.price}.000đ </h4>
-                                        {/* step : 3  
-                     if hami le button ma click garryo bahne 
-                    */}
                                         <button
                                             onClick={() => {
                                                 // addToCart(productItems);
@@ -86,5 +55,3 @@ const FlashCard = ({ productItems,}) => {
         </>
     );
 };
-
-export default FlashCard;

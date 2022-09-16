@@ -1,4 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap");
 * {
     padding: 0;
     margin: 0;
@@ -8,7 +9,7 @@ html {
     scroll-behavior: smooth;
 }
 body {
-    font-family: "Poppins", sans-serif;
+    font-family: "Open Sans", sans-serif;
     background-color: #ffffff;
 }
 .background {
@@ -26,6 +27,11 @@ body {
 .c_flex {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+}
+.center_flex {
+    display: flex;
+    justify-content: center;
     align-items: center;
 }
 .f_flex {
@@ -138,14 +144,25 @@ button {
     border-radius: 8px;
     box-shadow: rgb(3 0 71 / 9%) 0px 1px 3px;
     margin: 8px;
-    cursor: pointer;
 }
 .product h3 {
     font-weight: 400;
     font-size: 17px;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 1; 
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    
+}
+.product img{
+    cursor: pointer;
+}
+.product h4 {
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
     line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
@@ -175,12 +192,35 @@ button {
     background-color: #e94560;
     color: #fff;
 }
+.shop-product-like{
+    position: absolute;
+    top: 0px;
+    right: 0;
+    margin: 8px;
+    opacity: 1;
+    transition: 0.5s;
+}
+.shop-product-like label{
+    background-color: #0f3460;
+    padding: 1px 10px;
+    font-size: 12px;
+    color: white;
+    border-radius: 50px;
+}
+.shop-product-like i {
+    font-size: 20px;
+    margin: 10px 3px;
+    opacity: 0;
+}
+.shop .product:hover  .shop-product-like i{
+    opacity: 1 ;
+}
 .product-like {
     position: absolute;
-    top: 0;
+    top: 25px;
     right: 0;
     margin: 10px;
-    opacity: 0;
+    opacity: 1;
     transition: 0.5s;
 }
 .product-like label {
@@ -194,6 +234,23 @@ button {
     font-size: 20px;
     margin: 10px 3px;
 }
+
+.product-count {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 9px;
+    opacity: 1;
+    transition: 0.5s;
+}
+.product-count label {
+    background-color: #0f3460;
+    padding: 1px 10px;
+    font-size: 12px;
+    color: white;
+    border-radius: 50px;
+}
+
 .product:hover .product-like {
     opacity: 1;
 }
@@ -249,13 +306,87 @@ button {
 }
 
 /*----- heading -------*/
-.grid {
+.grid6 {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-gap: 30px;
 }
-.grid2 {
+.grid4 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 10px;
+}
+
+.grid6-shop {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 0px;
+}
+
+.shop-detail {
+    gap: 50px;
+}
+.shop-detail-left {
+    width: 35%;
+}
+.shop-detail-left img {
+    width: 100%;
+}
+.shop-detail-right {
+    width: 65%;
+}
+.shop-detail-right h2 {
+    font-size: 30px;
+    padding-bottom: 10px;
+}
+.shop-detail-right p {
+    white-space: pre-line;
+}
+
+/* -----------Food Detail-------- */
+.food-detail-left img {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+.food-detail-left {
+    margin-top: 20px;
+    width: 40%;
+}
+.food-detail-right {
+    padding-right: 150px;
+    margin-top: 20px;
+    width: 60%;
+}
+
+.food-detail-label {
+    padding: 9px 0;
+    font-size: 16;
+    font-weight: 400;
+    color: rgb(102, 102, 102);
+}
+.food-detail-text {
+    font-size: 16;
+    font-weight: 600;
+}
+.cusor {
+    cursor: pointer;
+}
+td {
+  padding-left: 15px;
+}
+/* ----------- */
+.hover:hover {
+    color: #ffcd4e;
+    cursor: pointer;
+}
+
+.btn-hover {
+    background-color: #ffcd4e;
+    cursor: pointer;
+    transition: 0.5s all;
+}
+.btn-hover:hover {
+    
+    background-color: #e5b846;
 }

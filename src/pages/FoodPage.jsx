@@ -1,10 +1,10 @@
 import React from "react";
-import Shop from "../components/shops/Shop";
+import Product from "../components/products/Product";
 
 const FoodPage = ({shopItems, addToCart}) => {
     return (
         <>
-            <Shop shopItems={shopItems} addToCart={addToCart} />
+            <Product shopItems={shopItems} addToCart={addToCart} />
         </>
     );
 };
