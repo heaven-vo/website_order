@@ -1,4 +1,4 @@
-const Sdata = {
+const Pdata = {
     shopItems: [
         {
             id: 7,
@@ -7,6 +7,9 @@ const Sdata = {
             price: "180",
             weight: "500g",
             discount: "25",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: false,
         },
         {
             id: 8,
@@ -15,6 +18,9 @@ const Sdata = {
             price: "120",
             weight: "500g",
             discount: "10",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: true,
         },
         {
             id: 9,
@@ -23,6 +29,9 @@ const Sdata = {
             price: "20",
             weight: "500g",
             discount: "50 ",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: false,
         },
         {
             id: 10,
@@ -31,6 +40,9 @@ const Sdata = {
             price: "999",
             weight: "500g",
             discount: "10 ",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: true,
         },
         {
             id: 11,
@@ -39,6 +51,9 @@ const Sdata = {
             price: "80",
             weight: "500g",
             discount: "20 ",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: false,
         },
         {
             id: 12,
@@ -47,6 +62,9 @@ const Sdata = {
             price: "400",
             weight: "500g",
             discount: "20 ",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: false,
         },
         {
             id: 13,
@@ -55,7 +73,11 @@ const Sdata = {
             price: "60",
             weight: "500g",
             discount: "5 ",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: false,
         },
+
         {
             id: 14,
             cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/food%2Fwagyu-a5-thumbnail2x.jpg?alt=media&token=607e08a7-5914-41a5-9b70-23433c75284e",
@@ -63,6 +85,9 @@ const Sdata = {
             price: "120",
             weight: "500g",
             discount: "10",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: false,
         },
         {
             id: 15,
@@ -71,7 +96,43 @@ const Sdata = {
             price: "80",
             weight: "500g",
             discount: "20 ",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: false,
+        },
+        {
+            id: 16,
+            cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/food%2FaGkwUKhS8qYrdqvU5ZtV_U%CC%9B%CC%81c%20ga%CC%80%20Phille-thumbnail%402x.jpg.jpg?alt=media&token=8f47ae83-85be-4649-a8d9-f447d48abb4d",
+            name: "Ức Gà",
+            price: "999",
+            weight: "500g",
+            discount: "10 ",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: true,
+        },
+        {
+            id: 17,
+            cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/food%2Fwagyu-a5-thumbnail2x.jpg?alt=media&token=607e08a7-5914-41a5-9b70-23433c75284e",
+            name: "Thịt Thăn Bò",
+            price: "120",
+            weight: "500g",
+            discount: "10",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: false,
+        },
+        {
+            id: 7,
+            cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/food%2F2601183000000-thumbnail2x.jpg?alt=media&token=02f4f53f-2982-4a2f-9a11-23a76b4e75ad",
+            name: "Thịt Ba Rọi Heo",
+            price: "180",
+            weight: "500g",
+            discount: "25",
+            shop: "Tops Market",
+            quantityCart: 0,
+            isLike: false,
         },
     ],
 };
-export default Sdata;
+export default Pdata;

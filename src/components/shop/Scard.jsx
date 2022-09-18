@@ -2,21 +2,22 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Ddata from "./Ddata";
+import Sdata from "./Sdata";
 import "../newarrivals/style.css";
 
-const Dcard = () => {
+const Scard = () => {
     const settings = {
         dots: false,
-        infinite: true,
-        slidesToShow: 5,
-        slidesToScroll: 1,
-        autoplay: true,
+        infinite: false,
+        slidesToShow: 4,
+        slidesToScroll: 4,
+        rows: 2,
+        // autoplay: true,
     };
     return (
         <>
             <Slider {...settings}>
-                {Ddata.map((value, index) => {
+                {Sdata.map((value, index) => {
                     return (
                         <>
                             <div className="box product" key={index}>
@@ -34,4 +35,4 @@ const Dcard = () => {
     );
 };
 
-export default Dcard;
+export default Scard;

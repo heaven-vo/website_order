@@ -5,48 +5,47 @@ const Footer = () => {
   return (
     <>
       <footer>
-        <div className='container grid2'>
+        <div className='container grid4'>
           <div className='box'>
             <h1>Bonik</h1>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Auctor libero id et, in gravida. Sit diam duis mauris nulla cursus. Erat et lectus vel ut sollicitudin elit at amet.</p>
-            <div className='icon d_flex'>
+            {/* <div className='icon d_flex'>
               <div className='img d_flex'>
-                <i class='fa-brands fa-google-play'></i>
+                <i className='fa-brands fa-google-play'></i>
                 <span>Google Play</span>
               </div>
               <div className='img d_flex'>
-                <i class='fa-brands fa-app-store-ios'></i>
+                <i className='fa-brands fa-app-store-ios'></i>
                 <span>App Store</span>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className='box'>
-            <h2>About Us</h2>
+            <h2>Về Chúng Tôi</h2>
             <ul>
-              <li>Careers</li>
-              <li>Our Stores</li>
-              <li>Our Cares</li>
-              <li>Terms & Conditions</li>
-              <li>Privacy Policy</li>
+              <li>Hỏi và đáp</li>
+              <li>Giới thiệu</li>
+              <li>Liên hệ</li>
+              <li>Điều khoản dịch vụ</li>
+              <li>Chính sách bảo mật</li>
             </ul>
           </div>
           <div className='box'>
-            <h2>Customer Care</h2>
+            <h2>Chăm Sóc Khách Hàng</h2>
             <ul>
-              <li>Help Center </li>
-              <li>How to Buy </li>
-              <li>Track Your Order </li>
-              <li>Corporate & Bulk Purchasing </li>
-              <li>Returns & Refunds </li>
+              <li>Tổng Đài Hỗ Trợ </li>
+              <li>Hướng dẫn đặt hàng </li>
+              <li>Theo dõi đơn hàng của bạn </li>
+              <li>Tra hàng & Hoàn tiền </li>
             </ul>
           </div>
           <div className='box'>
-            <h2>Contact Us</h2>
+            <h2>Liên Hệ Với Chúng Tôi</h2>
             <ul>
-              <li>70 Washington Square South, New York, NY 10012, United States </li>
-              <li>Email: uilib.help@gmail.com</li>
-              <li>Phone: +1 1123 456 780</li>
+              <li>Vinhomes Grand Park Quận 9 – Thành Phố Thủ Đức </li>
+              <li>Email: support.help@gmail.com</li>
+              <li>Phone: +035 1123 456 </li>
             </ul>
           </div>
         </div>

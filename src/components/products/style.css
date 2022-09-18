@@ -24,7 +24,7 @@
 }
 .shop .category .box:hover {
   background-color: #ffe1e6;
-  box-shadow: rgb(43 52 69 / 10%) 0px 4px 16px;
+  box-shadow: rgb(43 52 69 / 20%) 0px 4px 16px;
 }
 .shop .box2 {
   margin-top: 100px !important;
@@ -42,7 +42,7 @@
   margin-left: 20px;
 }
 
-.grid1 {
+.grid5 {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-gap: 0px;
@@ -55,7 +55,7 @@
   transition: 0.5s;
 }
 .shop .product:hover {
-  box-shadow: rgb(43 52 69 / 10%) 0px 4px 16px;
+  box-shadow: rgb(43 52 69 / 15%) 0px 4px 16px;
 }
 .isSelected{
   background-color: #e94560 !important;
