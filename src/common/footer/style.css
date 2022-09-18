@@ -29,8 +29,19 @@ footer p {
 }
 footer h2 {
   margin-bottom: 20px;
+  cursor: pointer;
 }
 footer li {
+  cursor: pointer;
   margin-bottom: 10px;
   opacity: 0.5;
+}
+
+.footer-title{
+  max-height: 0px;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+.activeFooter{
+  max-height: 200px;
 }

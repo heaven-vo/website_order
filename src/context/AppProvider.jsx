@@ -6,7 +6,9 @@ export const AppContext = React.createContext();
 
 export default function AppProvider({ children }) {
     const [listProducts, setlistProducts] = useState([]);
+    const [mobileMode, setMobileMode] = useState(window.innerWidth < 700 ? true : false);
     const [Cart, setCart] = useState([]);
+    const [isOpenDrawer, setIsOpenDrawer] = useState(false);
     const { shopItems } = Pdata;
     useEffect(() => {
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_NAME))) {
@@ -34,6 +36,9 @@ export default function AppProvider({ children }) {
                 setlistProducts,
                 Cart,
                 setCart,
+                mobileMode,
+                setMobileMode,
+                isOpenDrawer, setIsOpenDrawer
             }}
         >
             {children}

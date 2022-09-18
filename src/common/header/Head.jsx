@@ -5,7 +5,7 @@ const Head = () => {
         <>
             <section className="head">
                 <div className="container d_flex">
-                    <div className="left row">
+                    <div className="left row head-mobile">
                         <i className="fa fa-phone"></i>
                         <label> +88012 3456 7894</label>
                         <i className="fa fa-envelope"></i>

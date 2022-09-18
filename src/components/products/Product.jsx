@@ -23,7 +23,9 @@ const Product = ({ shopItems }) => {
                                         </div>
                                     </div>
                                     <div className="product-content  grid5">
-                                        <ProductCart shopItems={shopItems} />
+                                        {shopItems.map((item) => (
+                                            <ProductCart product={item} key={item.id} />
+                                        ))}
                                     </div>
                                 </div>
                             );

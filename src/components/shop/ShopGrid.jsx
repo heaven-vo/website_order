@@ -5,14 +5,14 @@ import Sdata from "./Sdata";
 const ShopGrid = () => {
     return (
         <>
-            <section className="Discount background ">
+            <section className="background ">
                 <div className="container">
                     <div style={{ display: "flex", justifyContent: "center", marginBottom: 30 }}>
                         <div>
                             <h2>Cửa Hàng Nổi Bật</h2>
                         </div>
                     </div>
-                    <div className="grid4">
+                    <div className="grid4 shop">
                         {Sdata.map((value, index) => {
                             return (
                                 <>

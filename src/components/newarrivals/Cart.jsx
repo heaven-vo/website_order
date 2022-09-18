@@ -1,22 +1,15 @@
 import React from "react";
-import Ndata from "./Ndata";
 
-const Cart = () => {
+const Cart = ({ product }) => {
     return (
         <>
-            <div className="content grid6 product">
-                {Ndata.map((val, index) => {
-                    return (
-                        <div className="box" key={index}>
-                            <div className="img">
-                                <img src={val.cover} alt="" />
-                            </div>
-                            <h4 style={{ fontSize: 15, color: "#666" }}>{val.shop}</h4>
-                            <h3 style={{ fontWeight: 600 }}>{val.name}</h3>
-                            <span>{val.price}.000đ</span>
-                        </div>
-                    );
-                })}
+            <div className="box" key={product.id}>
+                <div className="img">
+                    <img src={product.cover} alt="" />
+                </div>
+                <h4 style={{ fontSize: 15, color: "#666" }}>{product.shop}</h4>
+                <h3 style={{ fontWeight: 600 }}>{product.name}</h3>
+                <span>{product.price}.000đ</span>
             </div>
         </>
     );

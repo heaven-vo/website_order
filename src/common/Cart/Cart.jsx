@@ -100,7 +100,7 @@ const Cart = ({}) => {
                         </>
                     )}
                 </div>
-                <div className="container d_flex">
+                <div className="container d_flex cart-mobile">
                     <div className="cart-details">
                         {CartList.map((item) => {
                             const productQty = item.price * item.quantityCart;

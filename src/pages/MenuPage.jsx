@@ -37,7 +37,7 @@ export const MenuPage = () => {
                     </div>
                 </div>
                 <div className="container d_flex" style={{ marginTop: 30 }}>
-                    <div className="c_flex" style={{ gap: 20, flexWrap: "wrap" }}>
+                    <div className="c_flex" style={{ gap: 10, flexWrap: "wrap" }}>
                         <i class="fa-solid fa-filter"></i>
                         <span>Bộ Lọc</span>
                         <div style={{ justifyContent: "space-between", width: 230 }} className="f_flex dropdown">

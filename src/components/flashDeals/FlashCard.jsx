@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -23,17 +23,51 @@ export const SamplePrevArrow = (props) => {
         </div>
     );
 };
-const FlashCard = ({ productItems,}) => {
+const FlashCard = ({ productItems }) => {
     const [count, setCount] = useState(0);
-    const increment = () => {
-        setCount(count + 1);
-    };
+
     const settings = {
         dots: false,
         infinite: true,
         speed: 500,
         slidesToShow: 5,
         slidesToScroll: 1,
+        responsive: [
+            {
+                breakpoint: 1100,
+                settings: {
+                    slidesToShow: 4,
+                    slidesToScroll: 1,
+                    infinite: true,
+                },
+            },
+            {
+                breakpoint: 900,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    infinite: true,
+                },
+            },
+            {
+                breakpoint: 700,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                    infinite: true,
+                },
+            },
+            {
+                breakpoint: 450,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    nextArrow: null,
+                    prevArrow: null,
+                },
+            },
+        ],
         nextArrow: <SampleNextArrow />,
         prevArrow: <SamplePrevArrow />,
     };
@@ -43,7 +77,7 @@ const FlashCard = ({ productItems,}) => {
             <Slider {...settings}>
                 {productItems.map((productItems) => {
                     return (
-                        <div className="box" key={productItems.id}>
+                        <div className="" key={productItems.id} style={{ width: "100px !important" }}>
                             <div className="product mtop">
                                 <div className="img">
                                     {/* <span className='discount'>{productItems.discount}% Off</span> */}
