@@ -8,6 +8,7 @@ import Pdata from "./components/products/Pdata";
 import { FoodDetailPage } from "./pages/FoodDetailPage";
 import FoodPage from "./pages/FoodPage";
 import HomePage from "./pages/HomePages";
+import { MenuPage } from "./pages/MenuPage";
 import { ShopDetailPage } from "./pages/ShopDetailPage";
 import { ShopPage } from "./pages/ShopPage";
 
@@ -21,6 +22,9 @@ function App() {
             <Switch>
                 <Route path="/" exact>
                     <HomePage productItems={productItems} shopItems={shopItems} />
+                </Route>
+                <Route path="/menu" exact>
+                    <MenuPage/>
                 </Route>
                 <Route path="/food" exact>
                     <FoodPage shopItems={shopItems} />

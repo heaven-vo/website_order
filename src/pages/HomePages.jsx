@@ -8,16 +8,19 @@ import Product from "../components/products/Product"
 import Annocument from "../components/annocument/Annocument"
 import Wrapper from "../components/wrapper/Wrapper"
 import ShopSlide from "../components/shop/ShopSlide"
+import { ProductGrid } from "../components/products/ProductGrid"
 
 const HomePage = ({ productItems, shopItems }) => {
   return (
     <>
       <Home  />
-      <FlashDeals productItems={productItems}  />
-      <TopCate />
+      
+      <FlashDeals productItems={productItems} data={shopItems}  />
+      <ProductGrid label="Hôm Nay Nấu Gì?"/>
       <NewArrivals />
+      <TopCate />
       <ShopSlide />
-      <Product shopItems={shopItems}  />
+      {/* <Product shopItems={shopItems}  /> */}
       <Annocument />
       <Wrapper />
     </>

@@ -22,6 +22,9 @@ const Navbar = () => {
                                 <Link to="/">Khám Phá</Link>
                             </li>
                             <li>
+                                <Link to="/menu">Menu</Link>
+                            </li>
+                            <li>
                                 <Link to="/shop">Cửa Hàng</Link>
                             </li>
                             <li>

@@ -110,22 +110,22 @@ const ProductCart = ({ shopItems }) => {
             {products.map((item, index) => {
                 return (
                     <div className="box" key={index}>
-                        <div className="product mtop">
+                        <div className="product mtop" style={{ margin: 6 }}>
                             {/* <Link to="/food-detail"> */}
                             <div className="img">
                                 {/* <span className="discount">{item.discount}% Off</span> */}
                                 <img src={item.cover} alt="" />
                                 <div className="shop-product-like">
                                     <label style={{ opacity: item.quantityCart > 0 ? 1 : 0 }}>{item.quantityCart}</label> <br />
-                                    {item.isLike ? <i className="fa-solid fa-heart like cusor" style={{ opacity: 1}}></i> : <i className="fa-regular fa-heart cusor" ></i>}
+                                    {item.isLike ? <i className="fa-solid fa-heart like cusor" style={{ opacity: 1 }}></i> : <i className="fa-regular fa-heart cusor"></i>}
                                 </div>
                             </div>
                             {/* </Link> */}
-                            <div className="product-details">
+                            <div className="product-details" style={{marginTop:10}}>
                                 <Link to="/food-detail">
-                                    <h4 style={{ fontSize: 17, cursor: "pointer" }}>{item.name}</h4>{" "}
+                                    <h3 style={{ fontSize: 16, cursor: "pointer", fontWeight: 600 }}>{item.name}</h3>{" "}
                                 </Link>
-                                <div className="rate">
+                                <div className="rate" style={{marginTop:4}}>
                                     <i className="fa fa-star"></i>
                                     <i className="fa fa-star"></i>
                                     <i className="fa fa-star"></i>
@@ -133,7 +133,7 @@ const ProductCart = ({ shopItems }) => {
                                     <i className="fa fa-star"></i>
                                 </div>
 
-                                <div className="price">
+                                <div className="price" style={{marginTop:4}}>
                                     <h4>{item.price}.000đ </h4>
                                 </div>
                                 <div className="price">
