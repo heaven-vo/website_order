@@ -11,6 +11,24 @@ const TopCart = () => {
         slidesToShow: 4,
         slidesToScroll: 1,
         // autoplay: true,
+        responsive: [
+            {
+                breakpoint: 950,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    infinite: true,
+                },
+            },
+            {
+                breakpoint: 700,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                    infinite: true,
+                },
+            },
+        ],
     };
     return (
         <>
@@ -23,11 +41,11 @@ const TopCart = () => {
                                     {/* <span className="tleft">{value.para}</span>
                                     <span className="tright">{value.desc}</span> */}
                                 </div>
-                                <div className="img boxShadow" >
+                                <div className="img boxShadow">
                                     <img src={value.cover} alt="" />
                                 </div>
                                 <div>
-                                    <h4 className="product_category">{value.desc}</h4>
+                                    <h4 className="product_category">{value.name}</h4>
                                 </div>
                             </div>
                         </>

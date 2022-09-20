@@ -6,8 +6,8 @@ const ShopSlide = () => {
     <>
       <section className='Discount background '>
         <div className='container'>
-          <div className='heading d_flex'>
-            <div className='heading-left row  f_flex'>
+          <div className='heading c_flex'>
+            <div className='heading-left c_flex'>
               <h2>Cửa Hàng Nổi Bật</h2>
             </div>
             <div className='heading-right row '>

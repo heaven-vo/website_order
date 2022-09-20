@@ -25,19 +25,34 @@ export const MenuPage = () => {
     return (
         <>
             <section className="shop background">
-                <div className="container d_flex">
-                    <div className="f_flex" style={{ gap: 20, flexWrap: "wrap" }}>
+                {/* <div className="container d_flex">
+                    <div className="f_flex" style={{ gap: 20}}>
                         {menus.map((item) => {
                             return (
-                                <div className={`${isActive === item.menuId ? "menu-item-active" : "menu-item "} cusor`} onClick={() => setIsActive(item.menuId)}>
+                                <div className={`${isActive === item.menuId ? "menu-item-active" : "menu-item "} cusor center_flex category-item`} onClick={() => setIsActive(item.menuId)}>
                                     <span>{item.menuName}</span>
                                 </div>
                             );
                         })}
                     </div>
-                </div>
+                </div> */}
+                <div className="container d_flex category-list category-list-menu" style={{ marginBottom: 25 }}>
+                            <div className="f_flex" style={{ gap: 20,  }}>
+                                {menus.map((item) => {
+                                    return (
+                                        <div
+                                            className={`${isActive === item.menuId ? "menu-item-active" : "menu-item "} cusor center_flex category-item`}
+                                            style={{  }}
+                                            onClick={() => setIsActive(item.menuId)}
+                                        >
+                                            <span>{item.menuName}</span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
                 <div className="container d_flex" style={{ marginTop: 30 }}>
-                    <div className="c_flex" style={{ gap: 20, flexWrap: "wrap" }}>
+                    <div className="c_flex" style={{ gap: 10, flexWrap: "wrap" }}>
                         <i class="fa-solid fa-filter"></i>
                         <span>Bộ Lọc</span>
                         <div style={{ justifyContent: "space-between", width: 230 }} className="f_flex dropdown">

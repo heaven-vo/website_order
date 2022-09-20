@@ -3,7 +3,7 @@ import { caculatorVND } from "../../constants/Caculator";
 import { LOCALSTORAGE_NAME } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 import "./style.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Rodal from "rodal";
 
 const Cart = ({}) => {
@@ -11,7 +11,7 @@ const Cart = ({}) => {
     const [totalPrice, setTotalPrice] = useState(0);
     const [CartList, setCartList] = useState([]);
     const [visible, setVisible] = useState(false);
-
+    let history = useHistory();
     useEffect(() => {
         var total = 0;
         Cart?.map((item) => {
@@ -100,7 +100,7 @@ const Cart = ({}) => {
                         </>
                     )}
                 </div>
-                <div className="container d_flex">
+                <div className="container d_flex cart-mobile" style={{ gap: 10 }}>
                     <div className="cart-details">
                         {CartList.map((item) => {
                             const productQty = item.price * item.quantityCart;
@@ -111,7 +111,7 @@ const Cart = ({}) => {
                                         <img src={item.cover} alt="" />
                                     </div>
                                     <div className="cart-details">
-                                        <div style={{ paddingLeft: 30 }}>
+                                        <div className="cart-details-info" style={{ paddingLeft: 30 }}>
                                             <h3>{item.name}</h3>
                                             <span style={{ fontSize: 15, color: "rgb(160,160,160)" }}>{item.shop}</span>
                                             <h4>
@@ -144,37 +144,51 @@ const Cart = ({}) => {
                         })}
                     </div>
 
-                    {CartList.length !== 0 && (
-                        <div className="cart-total product" style={{ marginBottom: 50 }}>
-                            <div style={{ marginBottom: 50 }}>
-                                <h2>Tổng Tiền Hàng</h2>
-                                <div className=" d_flex" style={{ marginBottom: 10 }}>
-                                    <h4>Tiền Hàng :</h4>
-                                    <span style={{ fontSize: 18, fontWeight: 600 }}>{caculatorVND(totalPrice)}.000đ</span>
+                    <div className="cart-total">
+                        {CartList.length !== 0 && (
+                            <>
+                                <div className="product" style={{ margin: "0 10px 15px 10px" }}>
+                                    <div>
+                                        <h2>Tổng Tiền Hàng</h2>
+                                        <div className=" d_flex" style={{ marginBottom: 10 }}>
+                                            <h4>Tiền Hàng :</h4>
+                                            <span style={{ fontSize: 18, fontWeight: 600 }}>{caculatorVND(totalPrice)}.000đ</span>
+                                        </div>
+                                        <div className=" d_flex" style={{ marginBottom: 10 }}>
+                                            <h4>Phí Giao Hàng :</h4>
+                                            <span style={{ fontSize: 18, fontWeight: 600 }}>10.000đ</span>
+                                        </div>
+                                        <div className=" d_flex">
+                                            <h4>Tổng Cộng :</h4>
+                                            <h3>{caculatorVND(totalPrice + 10)}.000đ</h3>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className=" d_flex" style={{ marginBottom: 10 }}>
-                                    <h4>Phí Giao Hàng :</h4>
-                                    <span style={{ fontSize: 18, fontWeight: 600 }}>10.000đ</span>
+                                <div className="product" style={{ margin: "0 10px 20px 10px", background: "#d9edf7", border: "1px solid #d9edf7" }}>
+                                    <div>
+                                        <h1 style={{ fontSize: 15, marginBottom: 7 }}>Chính Sách Mua Hàng</h1>
+                                        <span style={{ fontSize: 14, fontWeight: 400 }}>
+                                            Hiện chúng tôi chỉ áp dụng thanh toán với đơn hàng có giá trị tối thiểu <span style={{ fontWeight: 700 }}>50.000₫</span> trở lên.
+                                        </span>
+                                    </div>
                                 </div>
-                                <div className=" d_flex">
-                                    <h4>Tổng Cộng :</h4>
-                                    <h3>{caculatorVND(totalPrice + 10)}.000đ</h3>
-                                </div>
-                            </div>
-                            <div style={{ textAlign: "center", width: "100%", height: 50, borderRadius: "0.375rem", alignItems: "center" }} className="center_flex btn-hover">
-                                <span onClick={() => {}} style={{ fontWeight: 600, fontSize: 16 }}>
-                                    Thanh Toán
-                                </span>
-                            </div>
-                            <div>
+                                {/* <div>
                                 <Rodal height={150} visible={visible} onClose={() => setVisible(false)}>
                                     <div>
                                         <span style={{ fontSize: 16 }}>Bạn Có Chắc Muốn Xóa Sản Phẩm Này Khỏi Giỏ Hàng</span>
                                     </div>
                                 </Rodal>
-                            </div>
-                        </div>
-                    )}
+                            </div> */}
+                                <div
+                                    style={{ textAlign: "center", margin: "0 10px 0 10px", width: "calc(100% - 20px)", height: 50, borderRadius: "0.375rem", alignItems: "center" }}
+                                    className="center_flex btn-hover"
+                                    onClick={() => history.push("/checkout")}
+                                >
+                                    <span style={{ fontWeight: 600, fontSize: 16 }}>Thanh Toán</span>
+                                </div>
+                            </>
+                        )}
+                    </div>
                 </div>
             </section>
         </>

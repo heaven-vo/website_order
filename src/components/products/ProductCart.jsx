@@ -49,13 +49,10 @@ import { Link } from "react-router-dom";
 import { LOCALSTORAGE_NAME } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 
-const ProductCart = ({ shopItems }) => {
+const ProductCart = ({ product }) => {
     const { setCart, listProducts, setlistProducts } = useContext(AppContext);
     const [count, setCount] = useState(0);
-    const [products, setProducts] = useState([]);
-    const increment = () => {
-        setCount(count + 1);
-    };
+
     // Thêm giỏ hàng
     const AddCart = (product) => {
         let isQuantity = false;
@@ -102,51 +99,46 @@ const ProductCart = ({ shopItems }) => {
         // Cập nhật lại danh sách sản phẩm hiện tại với số lượng vừa được cập nhật
         setlistProducts([...newProduts]);
     };
-    useEffect(() => {
-        setProducts(listProducts);
-    }, [listProducts]);
+    
     return (
         <>
-            {products.map((item, index) => {
-                return (
-                    <div className="box" key={index}>
-                        <div className="product mtop" style={{ margin: 6 }}>
-                            {/* <Link to="/food-detail"> */}
-                            <div className="img">
-                                {/* <span className="discount">{item.discount}% Off</span> */}
-                                <img src={item.cover} alt="" />
-                                <div className="shop-product-like">
-                                    <label style={{ opacity: item.quantityCart > 0 ? 1 : 0 }}>{item.quantityCart}</label> <br />
-                                    {item.isLike ? <i className="fa-solid fa-heart like cusor" style={{ opacity: 1 }}></i> : <i className="fa-regular fa-heart cusor"></i>}
-                                </div>
-                            </div>
-                            {/* </Link> */}
-                            <div className="product-details" style={{marginTop:10}}>
-                                <Link to="/food-detail">
-                                    <h3 style={{ fontSize: 16, cursor: "pointer", fontWeight: 600 }}>{item.name}</h3>{" "}
-                                </Link>
-                                <div className="rate" style={{marginTop:4}}>
-                                    <i className="fa fa-star"></i>
-                                    <i className="fa fa-star"></i>
-                                    <i className="fa fa-star"></i>
-                                    <i className="fa fa-star"></i>
-                                    <i className="fa fa-star"></i>
-                                </div>
-
-                                <div className="price" style={{marginTop:4}}>
-                                    <h4>{item.price}.000đ </h4>
-                                </div>
-                                <div className="price">
-                                    <span style={{ color: "#666", fontSize: 15 }}>{item.weight} </span>
-                                    <button onClick={() => AddCart(item)}>
-                                        <i className="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
+            <div className="box" key={product.id}>
+                <div className="product mtop" style={{ margin: 6 }}>
+                    {/* <Link to="/food-detail"> */}
+                    <div className="img">
+                        {/* <span className="discount">{item.discount}% Off</span> */}
+                        <img src={product.cover || ""} alt="" />
+                        <div className="shop-product-like">
+                            <label style={{ opacity: product.quantityCart > 0 ? 1 : 0 }}>{product.quantityCart}</label> <br />
+                            {product.isLike ? <i className="fa-solid fa-heart like cusor" style={{ opacity: 1 }}></i> : <i className="fa-regular fa-heart cusor"></i>}
                         </div>
                     </div>
-                );
-            })}
+                    {/* </Link> */}
+                    <div className="product-details" style={{ marginTop: 10, lineHeight: "1.5em" }}>
+                        <span style={{ fontSize: 13, color: "#666" }}>{product.shop}</span>
+                        <Link to="/food-detail">
+                            <h3 style={{ fontSize: 16, cursor: "pointer", fontWeight: 600 }}>{product.name}</h3>{" "}
+                        </Link>
+                        {/* <div className="rate" style={{ marginTop: 4 }}>
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                        </div> */}
+
+                        <div className="price">
+                            <h4>{product.price}.000đ </h4>
+                        </div>
+                        <div className="price">
+                            <span style={{ color: "#666", fontSize: 14 }}>{product.weight} </span>
+                            <button onClick={() => AddCart(product)}>
+                                <i className="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </>
     );
 };

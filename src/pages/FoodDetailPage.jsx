@@ -50,8 +50,8 @@ export const FoodDetailPage = () => {
     return (
         <>
             <section className="background">
-                <div className="container " style={{ background: "#fff", borderRadius: 10 }}>
-                    <div className="d_flex shop-detail" style={{ padding: "10px 25px" }}>
+                <div className="container non-radius" style={{ background: "#fff", borderRadius: 10 }}>
+                    <div className="d_flex food-detail" style={{ padding: "10px 25px" }}>
                         <div className="food-detail-left" style={{ padding: 50 }}>
                             <img
                                 src="https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/food%2Fba-ri-b-thumbnail2x.jpg?alt=media&token=3d9c0460-5a19-4cf0-bf22-b3e48b57b0a0"
@@ -59,19 +59,19 @@ export const FoodDetailPage = () => {
                             />
                         </div>
                         <div className="food-detail-right">
-                            <div className="rate" style={{ color: "#e94560", marginBottom: 10 }}>
+                            {/* <div className="rate" style={{ color: "#e94560", marginBottom: 10 }}>
                                 <i className="fa fa-star"></i>
                                 <i className="fa fa-star"></i>
                                 <i className="fa fa-star"></i>
                                 <i className="fa fa-star"></i>
                                 <i className="fa fa-star" style={{ color: "rgb(102, 102, 102)" }}></i>
-                            </div>
+                            </div> */}
                             <h2>Thịt Bò Văn Dương</h2>
                             <h4 style={{ fontWeight: 500, color: "rgb(102, 102, 102)" }}>SKU : 9AF49D</h4>
                             <h3 style={{ color: "#e94560", marginTop: 15 }}>300.000đ</h3>
                             <h4 style={{ marginBottom: 20, fontSize: 14, fontWeight: 400, color: "#666666" }}>500g</h4>
                             <div
-                                className="d_flex"
+                                className="d_flex food-detail-info"
                                 style={{
                                     justifyContent: "start",
                                     marginRight: 150,
@@ -81,7 +81,7 @@ export const FoodDetailPage = () => {
                                     borderBottom: "1px solid rgb(230,230,230)",
                                 }}
                             >
-                                <div style={{ width: 140 }}>
+                                <div className="food-detail-shop" style={{ width: 140 }}>
                                     <img
                                         width={"100%"}
                                         src="https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/shop%2FSTORE-COVER-dark2x.png?alt=media&token=a9efb823-35df-4bdf-a4ce-3dea24cf21e9"
@@ -98,7 +98,7 @@ export const FoodDetailPage = () => {
                                 liệu để nấu thịt kho hột vịt. Thịt heo ba rọi có thể dùng điện thoại quét mã QR trên tem sản phẩm để kiểm tra nguồn gốc.
                             </p>
 
-                            <div className="f_flex" style={{ gap: 40, marginBottom: 25 }}>
+                            <div className="f_flex food-detail-btn" style={{ gap: 40, marginBottom: 25 }}>
                                 <div style={{ border: "1px solid rgb(160,160,160)", textAlign: "center", width: 170, height: 50, borderRadius: "0.375rem", alignItems: "center" }} className="f_flex">
                                     <div
                                         onClick={() => setcountQuantity(countQuantity - 1)}
@@ -107,7 +107,7 @@ export const FoodDetailPage = () => {
                                     >
                                         <i className="fa fa-minus"></i>
                                     </div>
-                                    <span style={{ width: "6rem", fontWeight: 600 }}>{countQuantity}</span>
+                                    <span style={{ width: "6rem", fontWeight: 600, fontSize: 14 }}>{countQuantity}00g</span>
                                     <div
                                         onClick={() => setcountQuantity(countQuantity + 1)}
                                         style={{ width: "6rem", borderLeft: "1px solid rgb(160,160,160)", height: "100%" }}
@@ -116,7 +116,7 @@ export const FoodDetailPage = () => {
                                         <i className="fa fa-plus"></i>
                                     </div>
                                 </div>
-                                <div style={{ textAlign: "center", width: 200, height: 50, borderRadius: "0.375rem", alignItems: "center" }} className="center_flex btn-hover">
+                                <div style={{ textAlign: "center", width: 300, height: 50, borderRadius: "0.375rem", alignItems: "center" }} className="center_flex btn-hover">
                                     <span onClick={()=> AddCart()} style={{ fontWeight: 600, fontSize: 16 }}>Thêm Giỏ Hàng</span>
                                 </div>
                             </div>
@@ -153,7 +153,7 @@ export const FoodDetailPage = () => {
                     </div>
                 </div>
             </section>
-            <section className="shop background">
+            {/* <section className="shop background">
                 <div className="container">
                     <div className="heading d_flex">
                         <div className="heading f_flex">
@@ -166,7 +166,7 @@ export const FoodDetailPage = () => {
                     </div>
                     <RecommendProduct />
                 </div>
-            </section>
+            </section> */}
         </>
     );
 };

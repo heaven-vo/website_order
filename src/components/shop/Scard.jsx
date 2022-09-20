@@ -8,11 +8,28 @@ import "../newarrivals/style.css";
 const Scard = () => {
     const settings = {
         dots: false,
-        infinite: false,
+        infinite: true,
         slidesToShow: 4,
         slidesToScroll: 4,
         rows: 2,
-        // autoplay: true,
+        responsive: [
+          
+            {
+                breakpoint: 950,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                },
+            },
+            {
+                breakpoint: 700,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                },
+            },
+        ],
+        autoplay: true,
     };
     return (
         <>
@@ -24,7 +41,7 @@ const Scard = () => {
                                 <div className="img">
                                     <img src={value.cover} alt="" width="100%" />
                                 </div>
-                                <h4 style={{ textAlign: "center", marginTop: 15, }}>{value.name}</h4>
+                                <h4 style={{ textAlign: "center", marginTop: 15 }}>{value.name}</h4>
                                 {/* <span>{value.price}</span> */}
                             </div>
                         </>
