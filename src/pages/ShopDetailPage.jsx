@@ -42,7 +42,9 @@ export const ShopDetailPage = ({ shopItems }) => {
                                         </div>
                                     </div>
                                     <div className="product-content  grid6" style={{ gridGap: 0 }}>
-                                        <ProductCart shopItems={shopItems} />
+                                        {shopItems.map((item) => {
+                                            return <ProductCart product={item} key={item.id} />;
+                                        })}
                                     </div>
                                 </div>
                             );

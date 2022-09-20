@@ -29,7 +29,7 @@ export const MenuPage = () => {
                     <div className="f_flex" style={{ gap: 20, flexWrap: "wrap" }}>
                         {menus.map((item) => {
                             return (
-                                <div className={`${isActive === item.menuId ? "menu-item-active" : "menu-item "} cusor`} onClick={() => setIsActive(item.menuId)}>
+                                <div className={`${isActive === item.menuId ? "menu-item-active" : "menu-item "} cusor center_flex`} onClick={() => setIsActive(item.menuId)}>
                                     <span>{item.menuName}</span>
                                 </div>
                             );

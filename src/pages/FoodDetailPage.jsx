@@ -59,13 +59,13 @@ export const FoodDetailPage = () => {
                             />
                         </div>
                         <div className="food-detail-right">
-                            <div className="rate" style={{ color: "#e94560", marginBottom: 10 }}>
+                            {/* <div className="rate" style={{ color: "#e94560", marginBottom: 10 }}>
                                 <i className="fa fa-star"></i>
                                 <i className="fa fa-star"></i>
                                 <i className="fa fa-star"></i>
                                 <i className="fa fa-star"></i>
                                 <i className="fa fa-star" style={{ color: "rgb(102, 102, 102)" }}></i>
-                            </div>
+                            </div> */}
                             <h2>Thịt Bò Văn Dương</h2>
                             <h4 style={{ fontWeight: 500, color: "rgb(102, 102, 102)" }}>SKU : 9AF49D</h4>
                             <h3 style={{ color: "#e94560", marginTop: 15 }}>300.000đ</h3>

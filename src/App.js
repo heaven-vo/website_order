@@ -16,6 +16,7 @@ import { ShopPage } from "./pages/ShopPage";
 import Drawer from "react-modern-drawer";
 import "react-modern-drawer/dist/index.css";
 import { DrawerContent } from "./common/header/Drawer";
+import { CheckoutPage } from "./pages/CheckoutPage";
 
 function App() {
     const { productItems } = Data;
@@ -72,6 +73,9 @@ function App() {
                 </Route>
                 <Route path="/cart" exact>
                     <Cart />
+                </Route>
+                <Route path="/checkout" exact>
+                    <CheckoutPage />
                 </Route>
             </Switch>
             <Footer />

@@ -114,24 +114,24 @@ const ProductCart = ({ product }) => {
                         </div>
                     </div>
                     {/* </Link> */}
-                    <div className="product-details" style={{ marginTop: 10 }}>
+                    <div className="product-details" style={{ marginTop: 10, lineHeight: "1.5em" }}>
                         <span style={{ fontSize: 13, color: "#666" }}>{product.shop}</span>
                         <Link to="/food-detail">
                             <h3 style={{ fontSize: 16, cursor: "pointer", fontWeight: 600 }}>{product.name}</h3>{" "}
                         </Link>
-                        <div className="rate" style={{ marginTop: 4 }}>
+                        {/* <div className="rate" style={{ marginTop: 4 }}>
                             <i className="fa fa-star"></i>
                             <i className="fa fa-star"></i>
                             <i className="fa fa-star"></i>
                             <i className="fa fa-star"></i>
                             <i className="fa fa-star"></i>
-                        </div>
+                        </div> */}
 
-                        <div className="price" style={{ marginTop: 4 }}>
+                        <div className="price">
                             <h4>{product.price}.000đ </h4>
                         </div>
                         <div className="price">
-                            <span style={{ color: "#666", fontSize: 15 }}>{product.weight} </span>
+                            <span style={{ color: "#666", fontSize: 14 }}>{product.weight} </span>
                             <button onClick={() => AddCart(product)}>
                                 <i className="fa fa-plus"></i>
                             </button>

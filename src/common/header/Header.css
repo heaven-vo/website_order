@@ -136,6 +136,9 @@ header ul li a:hover {
 .drawer__wrapper {
     margin-top: 10px;
 }
+.drawer__wrapper h4{
+    font-size: 15px;
+}
 .drawer__wrapper__item {
     font-size: 16px;
     text-transform: uppercase;
@@ -161,10 +164,15 @@ header ul li a:hover {
     background-color: #ffe1e6
 }
 .drawer__category__wrapper {
-    transition: all 0.4s ease-in-out;
     overflow: hidden;
+    transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out ;
+    -moz-transition:  all 0.4s ease-in-out  ;
+    
+
 }
 .drawer__category__list {
+    
     margin-top: 10px;
     font-weight: 400;
     /* text-transform: uppercase; */
@@ -177,7 +185,7 @@ header ul li a:hover {
     padding-bottom: 15px;
     padding-top: 15px;
     list-style: none;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .border__top {

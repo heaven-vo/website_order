@@ -90,13 +90,13 @@ const FlashCard = ({ productItems }) => {
                                 <div className="product-details">
                                     <span style={{ fontSize: 15, color: "#666" }}>{productItems.shop}</span>
                                     <h4>{productItems.name}</h4>
-                                    <div className="rate">
+                                    {/* <div className="rate">
                                         <i className="fa fa-star"></i>
                                         <i className="fa fa-star"></i>
                                         <i className="fa fa-star"></i>
                                         <i className="fa fa-star"></i>
                                         <i className="fa fa-star"></i>
-                                    </div>
+                                    </div> */}
                                     <div className="price">
                                         <h4>{productItems.price}.000đ </h4>
                                         {/* step : 3  

@@ -9,7 +9,7 @@ const Cart = ({ product }) => {
                 </div>
                 <h4 style={{ fontSize: 15, color: "#666" }}>{product.shop}</h4>
                 <h3 style={{ fontWeight: 600 }}>{product.name}</h3>
-                <span>{product.price}.000đ</span>
+                <span style={{ fontWeight: 600, color: "#e94560" }}>{product.price}.000đ</span>
             </div>
         </>
     );
