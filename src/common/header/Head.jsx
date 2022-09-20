@@ -1,6 +1,8 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 const Head = () => {
+    let history = useHistory();
     return (
         <>
             <section className="head">
@@ -16,7 +18,7 @@ const Head = () => {
                         {/* <span>Đơn Hàng</span> */}
                         <label>Đơn Hàng</label>
                         {/* <span>🏳️‍⚧️</span> */}
-                        <label>
+                        <label onClick={()=> history.push("/login")}>
                             Đăng Xuất <i style={{ marginLeft: 5 }} className="fa-solid fa-right-from-bracket"></i>
                         </label>
                     </div>

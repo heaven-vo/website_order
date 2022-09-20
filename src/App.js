@@ -1,6 +1,8 @@
 import { useContext, useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
 import "./App.css";
+import "./util.css";
+import "../src/pages/responsive.css";
 import Cart from "./common/Cart/Cart";
 import Footer from "./common/footer/Footer";
 import Header from "./common/header/Header";
@@ -17,6 +19,7 @@ import Drawer from "react-modern-drawer";
 import "react-modern-drawer/dist/index.css";
 import { DrawerContent } from "./common/header/Drawer";
 import { CheckoutPage } from "./pages/CheckoutPage";
+import { LoginPage } from "./pages/LoginPage";
 
 function App() {
     const { productItems } = Data;
@@ -55,6 +58,9 @@ function App() {
             <Switch>
                 <Route path="/" exact>
                     <HomePage productItems={productItems} shopItems={shopItems} />
+                </Route>
+                <Route path="/login" exact>
+                    <LoginPage />
                 </Route>
                 <Route path="/menu" exact>
                     <MenuPage />
