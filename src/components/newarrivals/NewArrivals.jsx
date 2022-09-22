@@ -15,7 +15,7 @@ const NewArrivals = () => {
                             <img src="https://img.icons8.com/glyph-neue/64/26e07f/new.png" />
                             <h2>Bán Chạy </h2>
                         </div>
-                        <div className="heading-right row ">
+                        <div className="heading-right  ">
                             <span>Xem Tất Cả</span>
                             <i className="fa-solid fa-caret-right"></i>
                         </div>

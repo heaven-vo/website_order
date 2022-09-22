@@ -36,7 +36,7 @@ export const ShopDetailPage = ({ shopItems }) => {
                                         <div className="heading-left row  f_flex">
                                             <h2>Thịt Tươi Sống</h2>
                                         </div>
-                                        <div className="heading-right row ">
+                                        <div className="heading-right  ">
                                             <span>Xem tất cả</span>
                                             <i className="fa-solid fa-caret-right"></i>
                                         </div>

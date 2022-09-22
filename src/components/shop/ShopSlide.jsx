@@ -10,7 +10,7 @@ const ShopSlide = () => {
             <div className='heading-left c_flex'>
               <h2>Cửa Hàng Nổi Bật</h2>
             </div>
-            <div className='heading-right row '>
+            <div className='heading-right  '>
               <span>Xem tất cả</span>
               <i className='fa-solid fa-caret-right'></i>
             </div>

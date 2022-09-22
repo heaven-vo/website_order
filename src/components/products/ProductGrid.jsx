@@ -19,7 +19,7 @@ export const ProductGrid = ({ label, shopItems }) => {
                                 <div className="heading-left   f_flex">
                                     <h2>{label ? label : ""}</h2>
                                 </div>
-                                <div className="heading-right row " style={{ display: label ? "block" : "none" }}>
+                                <div className="heading-right  " style={{ display: label ? "block" : "none" }}>
                                     <span>Xem tất cả</span>
                                     <i className="fa-solid fa-caret-right"></i>
                                 </div>

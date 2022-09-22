@@ -1,5 +1,9 @@
 /* ----------responsive--------- */
 @media (max-width: 1440px) {
+    /* .container {
+        
+        padding: 0 16px;
+    } */
     .flash-responsive {
         padding: 0 20px;
     }
@@ -59,6 +63,14 @@
 }
 
 @media (max-width: 950px) {
+    .shop-detail{
+        flex-direction: column;
+        padding: 0px 10px;
+        gap: 20px;
+    }
+    .shop-detail-left, .shop-detail-right{
+        width: 100% !important;
+    }
     .food-detail-btn {
         gap: 10px !important;
     }
@@ -139,7 +151,7 @@
     }
     .food-detail {
         flex-direction: column;
-        padding: 10px 16px !important;
+        padding: 10px 10px !important;
     }
     .food-detail-shop {
         width: 120px !important;

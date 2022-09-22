@@ -41,7 +41,7 @@ const Product = ({ shopItems }) => {
                                         <div className="heading-left   f_flex">
                                             <h2>Tops Market</h2>
                                         </div>
-                                        <div className="heading-right row ">
+                                        <div className="heading-right  ">
                                             <span>Xem tất cả</span>
                                             <i className="fa-solid fa-caret-right"></i>
                                         </div>
