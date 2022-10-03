@@ -162,6 +162,20 @@
     .order-total > div:first-child > span {
         font-size: 16px !important;
     }
+    .order-detail-text-price {
+        font-size: 17px !important;
+    }
+    .order-detail-total-text {
+        font-size: 15px !important;
+    }
+    .order-detail-total {
+        padding: 10px 5px 10px 10px;
+    }
+    .order-detail-total > div {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
     .order-img {
         width: 100px !important;
     }
@@ -188,7 +202,7 @@
     }
 
     .order-btn {
-        width: 120px !important;
+        width: 140px !important;
         height: 45px !important;
     }
     .order-text-price {

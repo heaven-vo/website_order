@@ -4,9 +4,9 @@ import { useHistory } from "react-router-dom";
 import { AppContext } from "../../context/AppProvider";
 import ProductCart from "./ProductCart";
 
-export const ProductGrid = ({ label, data, labelImg, isLoading }) => {
-    const { setCart, setlistProducts, mobileMode } = useContext(AppContext);
-    const [products, setProducts] = useState([]);
+export const ProductGrid = ({ filtter, label, data, labelImg, cateId, isLoading, isViewAll }) => {
+    const { setCart, setlistProducts, mobileMode, menu } = useContext(AppContext);
+    // const [products, setProducts] = useState([]);
     // useEffect(() => {
     //     setProducts(listProducts);
     // }, [listProducts]);
@@ -30,14 +30,15 @@ export const ProductGrid = ({ label, data, labelImg, isLoading }) => {
                                     )}
                                     {isLoading ? <Skeleton height={43} width={150} borderRadius={8} style={{ margin: 0 }} /> : <h2>{label ? label : ""}</h2>}
                                 </div>
-                                {isLoading ? (
-                                    <Skeleton height={43} width={110} borderRadius={8} style={{ margin: 0 }} />
-                                ) : (
-                                    <div className="heading-right  " style={{ display: label ? "block" : "none" }} onClick={() => history.push("/")}>
-                                        <span>Xem tất cả</span>
-                                        <i className="fa-solid fa-caret-right"></i>
-                                    </div>
-                                )}
+                                {isViewAll &&
+                                    (isLoading ? (
+                                        <Skeleton height={43} width={110} borderRadius={8} style={{ margin: 0 }} />
+                                    ) : (
+                                        <div className="heading-right  " style={{ display: label ? "block" : "none" }} onClick={() => history.push(`/menu/${menu}/${filtter}/${cateId}`)}>
+                                            <span>Xem tất cả</span>
+                                            <i className="fa-solid fa-caret-right"></i>
+                                        </div>
+                                    ))}
                             </div>
                             <div className="product-content  grid6">
                                 {data.map((item, index) => {
@@ -54,10 +55,11 @@ export const ProductGrid = ({ label, data, labelImg, isLoading }) => {
                                 })}
                             </div>
                         </div>
-                        {mobileMode && !isLoading && (
+                        {isViewAll && mobileMode && !isLoading && (
                             <div
                                 style={{ textAlign: "center", margin: "0 5px", height: 45, borderRadius: "0.375rem", alignItems: "center", border: "1px solid var(--secondary)" }}
                                 className="center_flex "
+                                onClick={() => history.push(`/menu/${menu}/${filtter}/${cateId}`)}
                             >
                                 <span onClick={() => {}} style={{ fontWeight: 600, fontSize: 15, color: "var(--secondary)" }}>
                                     Xem thêm sản phẩm

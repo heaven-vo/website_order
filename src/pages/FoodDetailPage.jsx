@@ -17,7 +17,7 @@ export const FoodDetailPage = () => {
     useEffect(() => {
         setIsHeader(false);
         setIsLoadingCircle(true);
-        let productId = location.pathname.trim().split("/")[3];
+        let productId = location.pathname.trim().split("/")[2];
         if (productId) {
             getProductDetail(productId)
                 .then((res) => {

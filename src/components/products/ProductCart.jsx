@@ -130,7 +130,7 @@ const ProductCart = ({ product }) => {
                         className="img"
                         onClick={() => {
                             setIsHeader(false);
-                            history.push(`/menu/${menu}/${product.id}`);
+                            history.push(`/menu/${product.id}`);
                         }}
                     >
                         {/* <span className="discount">{item.discount}% Off</span> */}
@@ -152,7 +152,7 @@ const ProductCart = ({ product }) => {
                             style={{ fontSize: 16, cursor: "pointer", fontWeight: 600 }}
                             onClick={() => {
                                 setIsHeader(false);
-                                history.push("/food-detail");
+                                history.push(`/menu/${product.id}`);
                             }}
                         >
                             {pro.name}

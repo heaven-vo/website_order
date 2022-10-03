@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { caculatorVND } from "../constants/Caculator";
+import { IMAGE_NOTFOUND } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
 export const CheckoutPage = () => {
@@ -21,9 +22,9 @@ export const CheckoutPage = () => {
     useEffect(() => {
         var total = 0;
         Cart?.map((item) => {
-            return (total = item.price * item.quantityCart + total);
+            return (total = item.pricePerPack * item.quantityCart + total);
         });
-        setTotalPrice(total);
+        setTotalPrice(total / 1000);
         setCartList(Cart);
     }, [Cart]);
     const hanldeSubmit = () => {
@@ -107,23 +108,23 @@ export const CheckoutPage = () => {
                                 <h2 style={{ fontSize: 20 }}>Giỏ Hàng</h2>
                             </div>
                             {CartList.map((item) => {
-                                const productQty = item.price * item.quantityCart;
+                                const productQty = item.pricePerPack * item.quantityCart;
 
                                 return (
                                     <div className="checkout-list  d_flex" key={item.id}>
                                         <div className="img">
-                                            <img src={item.cover} alt="" />
+                                            <img src={item.image || IMAGE_NOTFOUND} alt="" />
                                         </div>
                                         <div className="cart-details" style={{ width: "90%" }}>
                                             <div className="cart-details-info" style={{ paddingLeft: 10 }}>
                                                 <div>
                                                     <h3>{item.name}</h3>
-                                                    <span style={{ fontSize: 15, color: "rgb(160,160,160)" }}>{item.shop}</span>
+                                                    <span style={{ fontSize: 14, color: "rgb(160,160,160)" }}>{item.storeName}</span>
                                                 </div>
                                                 <h4>
-                                                    {item.price}.000đ * {item.quantityCart}
-                                                    <span>=</span>
-                                                    <span>{productQty}.000đ</span>
+                                                    {item.pricePerPack / 1000 + ".000đ"} * {item.quantityCart}
+                                                    {/* <span>=</span> */}
+                                                    {/* <span>{productQty / 1000 + ".000đ"}</span> */}
                                                 </h4>
                                             </div>
                                         </div>

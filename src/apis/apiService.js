@@ -20,3 +20,18 @@ export const getProductDetail = (id) => {
         "Content-Type": "application/json",
     });
 };
+
+//https://deliveryvhgp-webapi.azurewebsites.net/api/v1/menus/1/products/byCategoryId?categoryId=4&page=1&pageSize=10
+export const getListProductByCateId = (menuId, cateId, page, size) => {
+    return axios.get(`${BASE_URL}${MENU}/${menuId}/${PRODUCT}/byCategoryId?categoryId=${cateId}&page=${page}&pageSize=${size}`, {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+    });
+};
+//https://deliveryvhgp-webapi.azurewebsites.net/api/v1/menus/1/products/byStoreId?storeId=s4&page=1&pageSize=10
+export const getListProductByStoreId = (menuId, cateId, page, size) => {
+    return axios.get(`${BASE_URL}${MENU}/${menuId}/${PRODUCT}/byStoreId?storeId=${cateId}&page=${page}&pageSize=${size}`, {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+    });
+};

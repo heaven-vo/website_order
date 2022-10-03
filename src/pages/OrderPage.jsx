@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useContext } from "react";
+import { useHistory } from "react-router-dom";
 import { AppContext } from "../context/AppProvider";
 
 export const OrderPage = () => {
@@ -13,12 +14,12 @@ export const OrderPage = () => {
             setIsHeader(true);
         };
     }, [setIsHeaderOrder, setIsHeader]);
-
+    let history = useHistory();
     return (
         <>
             <section className="background" style={{ paddingTop: 10, paddingBottom: 10 }}>
-                <div className="container non-radius" style={{  borderRadius: 10 }}>
-                    <div style={{flexDirection: "column", gap: 20}} className="f_flex">
+                <div className="container non-radius" style={{ borderRadius: 10 }}>
+                    <div style={{ flexDirection: "column", gap: 20 }} className="f_flex">
                         {[1, 2].map((item) => {
                             return (
                                 <div className="order-wrapper">
@@ -93,9 +94,14 @@ export const OrderPage = () => {
                                             </span>
                                         </div>
                                         <div>
-                                            <div style={{ textAlign: "center", width: 200, height: 50, borderRadius: "0.375rem", alignItems: "center" }} className="center_flex btn-hover order-btn">
-                                                <span onClick={() => {}} style={{ fontWeight: 600, fontSize: 16 }}>
-                                                    Mua Lại
+                                            <div style={{ textAlign: "center", width: 230, height: 50, borderRadius: "0.375rem", alignItems: "center" }} className="center_flex btn-hover order-btn">
+                                                <span
+                                                    onClick={() => {
+                                                        history.push(`/order/${"123"}`);
+                                                    }}
+                                                    style={{ fontWeight: 600, fontSize: 16 }}
+                                                >
+                                                    Xem chi tiết
                                                 </span>
                                             </div>
                                         </div>

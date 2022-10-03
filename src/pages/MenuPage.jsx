@@ -320,7 +320,7 @@ export const MenuPage = () => {
                 <div className="f_flex" style={{ gap: 5, width: "100%", alignItems: "start", justifyContent: "space-between", flexDirection: "column" }}>
                     {isLoadingPage ? <Skeleton height={mobileMode ? 18 : 21} width={mobileMode ? widthScreen : 380} /> : <span className="menu-text-detail">{description}</span>}
 
-                    <div className="center_flex" style={{ gap: 15, justifyContent: "space-between", width: "100%" }}>
+                    {/* <div className="center_flex" style={{ gap: 15, justifyContent: "space-between", width: "100%" }}>
                         {isLoadingPage ? <Skeleton height={mobileMode ? 30 : 38} width={230} /> : <h3 className="menu-text-title">{title}</h3>}
                         {isLoadingPage ? (
                             <Skeleton height={23} width={81} borderRadius={3} />
@@ -341,7 +341,7 @@ export const MenuPage = () => {
                                 </div>
                             )
                         )}
-                    </div>
+                    </div> */}
                     <section className="TopCate  " style={{ width: "100%" }}>
                         <div className="container" style={{ padding: 0 }}>
                             {isLoadingPage ? (
@@ -497,7 +497,7 @@ export const MenuPage = () => {
                                 //     <ProductGrid data={menu.listProducts || []} label={menu.name} labelImg={menu.img || IMAGE_NOTFOUND} />
                                 // </ReactCSSTransitionGroup>
 
-                                <ProductGrid data={menu.listProducts || []} label={menu.name} labelImg={menu.img || IMAGE_NOTFOUND} />
+                                <ProductGrid filtter={filtter} data={menu.listProducts || []} label={menu.name} cateId={menu.id} labelImg={menu.img || IMAGE_NOTFOUND} isViewAll={true} />
                             );
                         } else return true;
                     })}

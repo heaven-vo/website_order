@@ -38,7 +38,7 @@
 .cart-items .cart-details h4 {
     font-size: 15px;
     font-weight: 400;
-    margin-top: 40px;
+    margin-top: 0px;
     color: grey;
 }
 .cart-items h4 span {
@@ -69,16 +69,15 @@
     color: var(--secondary);
     transition: 0.5s all;
 }
-.incCart:hover{
-    background: rgb(3 0 71 / 9%);;
-   
+.incCart:hover {
+    background: rgb(3 0 71 / 9%);
 }
 .desCart {
     background: #f6f9fc;
     transition: 0.5s all;
 }
-.desCart:hover{
-    background: rgb(3 0 71 / 9%);;
+.desCart:hover {
+    background: rgb(3 0 71 / 9%);
 }
 .cart-total h4 {
     font-size: 15px;
