@@ -21,6 +21,7 @@ import { DrawerContent } from "./common/header/Drawer";
 import { CheckoutPage } from "./pages/CheckoutPage";
 import { LoginPage } from "./pages/LoginPage";
 import { OrderPage } from "./pages/OrderPage";
+import { NotFoundPage } from "./pages/NotFoundPage";
 
 function App() {
     const { productItems } = Data;
@@ -66,13 +67,16 @@ function App() {
                 <Route path="/menu" exact>
                     <HomePage productItems={productItems} shopItems={shopItems} />
                 </Route>
+                <Route path="/categories/:id" exact>
+                    <HomePage productItems={productItems} />
+                </Route>
                 {/* <Route path="/food" exact>
                     <FoodPage shopItems={shopItems} />
                 </Route> */}
                 <Route path="/order" exact>
                     <OrderPage />
                 </Route>
-                <Route path="/food-detail" exact>
+                <Route path="/menu/:menu/:id" exact>
                     <FoodDetailPage />
                 </Route>
                 <Route path="/shop-detail" exact>
@@ -83,6 +87,9 @@ function App() {
                 </Route>
                 <Route path="/checkout" exact>
                     <CheckoutPage />
+                </Route>
+                <Route path="*">
+                    <NotFoundPage />
                 </Route>
             </Switch>
             <Footer />

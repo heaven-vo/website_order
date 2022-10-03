@@ -1,11 +1,14 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
+import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import Countdown from "react-countdown";
 import Skeleton from "react-loading-skeleton";
 import Slider from "react-slick";
+import { getMenuByMode } from "../apis/apiService";
 import Mdata from "../components/MainPage/Mdata";
 import Pdata from "../components/products/Pdata";
 import { ProductGrid } from "../components/products/ProductGrid";
+import { CATE_FITLER, IMAGE_NOTFOUND, IMAGE_NOTFOUND_v2, STORE_FILTER } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
 const categorys = [
@@ -55,26 +58,6 @@ const categorys = [
         categoryName: "Trà sữa",
         img: "https://nhuhoaphat.com/wp-content/uploads/2022/03/Tai-ngay-milk-tea-hinh-nen-tra-sua-cute-moi-nhat-2022.png",
     },
-    // {
-    //     id: 1,
-    //     categoryName: "Mì-Bún-Phở",
-    //     img: "https://thumbs.dreamstime.com/b/vietnamese-pho-soup-illustration-97217112.jpg",
-    // },
-    // {
-    //     id: 2,
-    //     categoryName: "Cơm",
-    //     img: "https://luabbq.com/upload/sanpham/abc-removebg-preview-1531.png",
-    // },
-    // {
-    //     id: 1,
-    //     categoryName: "Mì-Bún-Phở",
-    //     img: "https://thumbs.dreamstime.com/b/vietnamese-pho-soup-illustration-97217112.jpg",
-    // },
-    // {
-    //     id: 2,
-    //     categoryName: "Cơm",
-    //     img: "https://luabbq.com/upload/sanpham/abc-removebg-preview-1531.png",
-    // },
 ];
 
 export const MenuPage = () => {
@@ -83,22 +66,54 @@ export const MenuPage = () => {
     // let timeEnd2 = 13.55;
     // let timeEnd3 = 13.56;
     const { menu, mobileMode, setIsHeaderOrder, setIsHeader } = useContext(AppContext);
-    const [isActive, setIsActive] = useState(1);
-    const [checked, setChecked] = useState(false);
-    const [isLoadingPage, setIsLoadingPage] = useState(false);
+    const [filtter, setFilter] = useState(CATE_FITLER);
+    // const [checked, setChecked] = useState(false);
+    const [isLoadingPage, setIsLoadingPage] = useState(true);
+    const [isLoadingProduct, setIsLoadingProduct] = useState(true);
+    const [menuProduct, setMenuProduct] = useState([]);
+    const [menuCategory, setMenuCategory] = useState([]);
+    // const [menuCategory, setMenuCategory] = useState([]);
     const [widthScreen, setWidthScreen] = useState(window.innerWidth - 100);
     useEffect(() => {
+        setIsLoadingPage(true);
         setIsHeaderOrder(false);
         setIsHeader(true);
-        axios
-            .get(`https://deliveryvhgp-webapi.azurewebsites.net/api/v1/storeCategories?pageIndex=1&pageSize=10`)
-            .then((res) => {
-                const persons = res.data;
-                console.log(persons);
-            })
-            .catch((error) => console.log(error));
-    }, [setIsHeaderOrder, setIsHeader]);
+        setTimeout(() => {
+            getMenu(menu, filtter, 1, 10);
+        }, 1);
+    }, [setIsHeaderOrder, setIsHeader, menu]);
 
+    useEffect(() => {
+        setIsLoadingProduct(true);
+
+        setTimeout(() => {
+            getMenu(menu, filtter, 1, 10);
+        }, 1);
+    }, [filtter]);
+    const getMenu = (menu, filtter, pageInd, size) => {
+        setMenuProduct([]);
+        setMenuCategory([]);
+        getMenuByMode(menu, filtter, pageInd, size)
+            .then((res) => {
+                if (res.data) {
+                    const menu = res.data;
+                    setMenuProduct(menu);
+                    setMenuCategory(menu.listCategoryStoreInMenus);
+                } else {
+                    setMenuProduct([]);
+                    setMenuCategory([]);
+                }
+                setIsLoadingPage(false);
+                setIsLoadingProduct(false);
+            })
+            .catch((error) => {
+                console.log(error);
+                setIsLoadingPage(false);
+                setIsLoadingProduct(false);
+                setMenuProduct([]);
+                setMenuCategory([]);
+            });
+    };
     useEffect(() => {
         function handleResize() {
             console.log(widthScreen);
@@ -180,10 +195,10 @@ export const MenuPage = () => {
     };
 
     const settingCaategory = {
-        dots: false,
+        dots: true,
         infinite: false,
-        slidesToShow: 8,
-        slidesToScroll: 8,
+        slidesToShow: menuCategory?.length <= 8 ? menuCategory?.length : 8,
+        slidesToScroll: menuCategory?.length <= 8 ? menuCategory?.length : 8,
         autoplay: false,
         appendDots: (dots) => {
             return <ul style={{ margin: "0px" }}>{dots}</ul>;
@@ -193,11 +208,11 @@ export const MenuPage = () => {
                 breakpoint: 700,
                 settings: {
                     slidesToShow: 4,
-                    slidesToScroll: 1,
-                    slidesPerRow: 1,
+                    slidesToScroll: 4,
+                    // slidesPerRow: 1,
                     dots: true,
                     // infinite: true,
-                    rows: 2,
+                    rows: 1,
                 },
             },
         ],
@@ -338,7 +353,7 @@ export const MenuPage = () => {
                                     {Mdata.map((value, index) => {
                                         return (
                                             <>
-                                                <div className="box product" key={index} style={{ padding: 0, background: "none", boxShadow: "none", margin: 0 }}>
+                                                <div className="box product" key={index} style={{ padding: 0, background: "none", boxShadow: "none", margin: 0, transition: "1s all" }}>
                                                     <div className="nametop d_flex"></div>
                                                     <div className="slide-img" style={{ height: 600, borderRadius: 5 }}>
                                                         <img src={value.cover} alt="" style={{ objectFit: "cover", width: "100%", borderRadius: 5 }} />
@@ -371,7 +386,7 @@ export const MenuPage = () => {
     return (
         <>
             <section className="shop background back-white" style={{ padding: "5px 0" }}>
-                <div className="container d_flex" style={{ padding: "10px 10px", flexDirection: "column", gap: 15 }}>
+                <div className="container d_flex" style={{ padding: "10px 10px 20px 10px", flexDirection: "column", gap: 10 }}>
                     <div className="">{render()}</div>
                     {/* <div className="c_flex" style={{ gap: 3, flexWrap: "wrap" }}>
                         <div className="f_flex" style={{ gap: 15, width: "100%", alignItems: "center", justifyContent: "space-between" }}>
@@ -392,51 +407,41 @@ export const MenuPage = () => {
                         </div>
                         <span className="menu-text-detail">Gọi là có - nhận đơn và xử lý giao hàng ngay.</span>
                     </div> */}
-                    <div className="cateogry-menu">
-                        <Slider {...settingCaategory}>
-                            {categorys.map((cate, index) => {
-                                return (
-                                    <div key={index} className="cateogry-menu-wrapper ">
-                                        <div className="cateogry-menu-img">
-                                            <img src={cate.img} alt="" />
-                                        </div>
-                                        <span className="cateogry-menu-text">{cate.categoryName}</span>
-                                    </div>
-                                );
-                            })}
-                        </Slider>
-                    </div>
                     <div className="c_flex" style={{ gap: 10, marginTop: 0, width: "100%" }}>
                         <div style={{ width: "100%" }}>
-                            <div className="search-menu" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                                <div style={{ height: "100%" }}>
-                                    <i class="fa-solid fa-magnifying-glass" style={{ fontSize: 20, marginTop: 3 }}></i>
-                                </div>
-                                <input type="search" name="" id="" style={{ flex: 1 }} placeholder="Tìm sản phẩm" />
-                            </div>
                             {isLoadingPage ? (
-                                <Skeleton borderRadius={5} height={37} />
+                                <Skeleton borderRadius={5} height={50} style={{ marginTop: 10 }} />
                             ) : (
-                                <div className=" f_flex category-list" style={{ marginBottom: 0, display: "flex", alignItems: "center", gap: 10 }}>
+                                <div className="search-menu" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                                    <div style={{ height: "100%" }}>
+                                        <i class="fa-solid fa-magnifying-glass" style={{ fontSize: 20, marginTop: 3 }}></i>
+                                    </div>
+                                    <input type="search" name="" id="" style={{ flex: 1 }} placeholder="Tìm sản phẩm" />
+                                </div>
+                            )}
+                            {isLoadingPage ? (
+                                <Skeleton borderRadius={5} height={37} style={{ marginTop: 10 }} />
+                            ) : (
+                                <div className=" f_flex category-list" style={{ marginBottom: 0, display: "flex", alignItems: "center", gap: 10, paddingTop: 10 }}>
                                     <h4 for="1" style={{ fontSize: 18 }}>
                                         Lọc Theo:
                                     </h4>
                                     <div className="f_flex" style={{ gap: 0, justifyContent: "start" }}>
                                         <div
-                                            className={`${isActive === 1 ? "menu-item-active" : "menu-item "} cusor center_flex `}
+                                            className={`${filtter === 1 ? "menu-item-active" : "menu-item "} cusor center_flex `}
                                             style={{ borderTopLeftRadius: 10, borderBottomLeftRadius: 10, gap: 10 }}
                                         >
-                                            <input type="radio" name="filter" id="1" value={"1"} onClick={() => setIsActive(1)} checked={isActive === 1} />
-                                            <label for="1" onClick={() => setIsActive(1)}>
+                                            <input type="radio" name="filter" id="1" value={"1"} onClick={() => setFilter(CATE_FITLER)} checked={filtter === CATE_FITLER} />
+                                            <label for="1" onClick={() => setFilter(CATE_FITLER)}>
                                                 Danh Mục
                                             </label>
                                         </div>
                                         <div
-                                            className={`${isActive === 2 ? "menu-item-active" : "menu-item "} cusor center_flex `}
+                                            className={`${filtter === 2 ? "menu-item-active" : "menu-item "} cusor center_flex `}
                                             style={{ borderTopRightRadius: 10, borderBottomRightRadius: 10, gap: 10 }}
                                         >
-                                            <input type="radio" name="filter" id="2" value={"2"} onClick={() => setIsActive(2)} checked={isActive === 2} />
-                                            <label for="2" onClick={() => setIsActive(2)}>
+                                            <input type="radio" name="filter" id="2" value={"2"} onClick={() => setFilter(STORE_FILTER)} checked={filtter === STORE_FILTER} />
+                                            <label for="2" onClick={() => setFilter(STORE_FILTER)}>
                                                 Cửa Hàng
                                             </label>
                                         </div>
@@ -445,6 +450,27 @@ export const MenuPage = () => {
                             )}
                         </div>
                     </div>
+                    {isLoadingPage ? (
+                        <Skeleton borderRadius={5} height={87} style={{ marginBottom: 5 }} />
+                    ) : menuCategory && menuCategory.length > 0 ? (
+                        <div className="cateogry-menu">
+                            <Slider {...settingCaategory}>
+                                {menuCategory &&
+                                    menuCategory.map((cate, index) => {
+                                        return (
+                                            <div key={index} className="cateogry-menu-wrapper ">
+                                                <div className="cateogry-menu-img">
+                                                    <img src={cate.img || "https://thumbs.dreamstime.com/b/vietnamese-pho-soup-illustration-97217112.jpg"} alt="" />
+                                                </div>
+                                                <span className="cateogry-menu-text">{cate.name}</span>
+                                            </div>
+                                        );
+                                    })}
+                            </Slider>
+                        </div>
+                    ) : (
+                        ""
+                    )}
                 </div>
                 {/* <div className="container d_flex" style={{ marginTop: 30 }}>
                     <div className="c_flex" style={{ gap: 10, flexWrap: "wrap" }}>
@@ -461,8 +487,66 @@ export const MenuPage = () => {
                         </div>
                     </div>
                 </div> */}
-                <ProductGrid data={shopItems} isLoading={isLoadingPage} label="Mì-Bún-Phở" labelImg="https://thumbs.dreamstime.com/b/vietnamese-pho-soup-illustration-97217112.jpg" />
-                <ProductGrid data={shopItems} isLoading={!isLoadingPage} label="Cơm" labelImg="https://luabbq.com/upload/sanpham/abc-removebg-preview-1531.png" />
+
+                {!isLoadingPage &&
+                    !isLoadingProduct &&
+                    menuProduct.listCategoryStoreInMenus?.map((menu) => {
+                        if (menu.listProducts.length > 0) {
+                            return (
+                                // <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={500} transitionLeaveTimeout={500}>
+                                //     <ProductGrid data={menu.listProducts || []} label={menu.name} labelImg={menu.img || IMAGE_NOTFOUND} />
+                                // </ReactCSSTransitionGroup>
+
+                                <ProductGrid data={menu.listProducts || []} label={menu.name} labelImg={menu.img || IMAGE_NOTFOUND} />
+                            );
+                        } else return true;
+                    })}
+                {isLoadingPage || isLoadingProduct ? (
+                    <section className="shop" style={{ background: "#f6f9fc", padding: "25px 0 40px 0" }}>
+                        <div className="container d_flex">
+                            <div className="contentWidth" style={{ marginLeft: 0 }}>
+                                <div style={{ marginBottom: 20 }}>
+                                    <div className="heading d_flex" style={{ alignItems: "center" }}>
+                                        <div className="heading-left  center_flex">
+                                            <div style={{ marginRight: 5 }}>
+                                                <Skeleton height={45} width={45} borderRadius={50} />
+                                            </div>
+
+                                            <Skeleton height={43} width={150} borderRadius={8} style={{ margin: 0 }} />
+                                        </div>
+
+                                        <Skeleton height={43} width={110} borderRadius={8} style={{ margin: 0 }} />
+                                    </div>
+                                    <div className="product-content  grid6">
+                                        {[1, 2, 3, 4].map((item, index) => {
+                                            if (mobileMode && index > 6) {
+                                                return true;
+                                            }
+                                            return (
+                                                <div style={{ margin: 6 }}>
+                                                    <Skeleton height={272} borderRadius={8} style={{ margin: 0 }} />
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                ) : !menuProduct.listCategoryStoreInMenus || menuProduct.listCategoryStoreInMenus.length === 0 ? (
+                    <section className="shop" style={{ background: "#f6f9fc", padding: "25px 0 40px 0" }}>
+                        <div className="container center_flex">
+                            <div className="contentWidth  center_flex" style={{ marginLeft: 0, flexDirection: "column", gap: 10 }}>
+                                <i class="fa-solid fa-box-open" style={{ fontSize: 40, color: "var(--primary)" }}></i>
+                                <span>Hiện không có sản phẩm nào!!</span>
+                            </div>
+                        </div>
+                    </section>
+                ) : (
+                    ""
+                )}
+
+                {/* <ProductGrid data={shopItems} isLoading={!isLoadingPage} label="Cơm" labelImg="https://luabbq.com/upload/sanpham/abc-removebg-preview-1531.png" /> */}
             </section>
         </>
     );

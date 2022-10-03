@@ -13,7 +13,7 @@ export default function AppProvider({ children }) {
     const [isOpenDrawer, setIsOpenDrawer] = useState(false);
     const [isHeader, setIsHeader] = useState(true);
     const [isHeaderOrder, setIsHeaderOrder] = useState(false);
-    const { productItems } = Data;
+    // const { productItems } = Data;
     useEffect(() => {
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_NAME))) {
             localStorage.setItem(LOCALSTORAGE_NAME, JSON.stringify([]));
@@ -21,17 +21,17 @@ export default function AppProvider({ children }) {
         } else {
             const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_NAME));
             setCart([...CartList]);
-            for (let index = 0; index < CartList.length; index++) {
-                const ind = productItems.findIndex((obj) => {
-                    return obj.id === CartList[index].id;
-                });
-                productItems[ind].quantityCart = CartList[index].quantityCart;
-            }
+            // for (let index = 0; index < CartList.length; index++) {
+            //     const ind = productItems.findIndex((obj) => {
+            //         return obj.id === CartList[index].id;
+            //     });
+            //     productItems[ind].quantityCart = CartList[index].quantityCart;
+            // }
         }
         // getListCategory().then((res) => {});
 
-        setlistProducts(productItems);
-    }, [productItems]);
+        // setlistProducts(productItems);
+    }, []);
 
     return (
         <AppContext.Provider

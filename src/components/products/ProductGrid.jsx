@@ -1,22 +1,23 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import Skeleton from "react-loading-skeleton";
-import Box from "../../common/Loading/Box";
+import { useHistory } from "react-router-dom";
 import { AppContext } from "../../context/AppProvider";
 import ProductCart from "./ProductCart";
 
-export const ProductGrid = ({ label, shopItems, labelImg, isLoading }) => {
-    const { setCart, listProducts, setlistProducts, mobileMode } = useContext(AppContext);
+export const ProductGrid = ({ label, data, labelImg, isLoading }) => {
+    const { setCart, setlistProducts, mobileMode } = useContext(AppContext);
     const [products, setProducts] = useState([]);
-    useEffect(() => {
-        setProducts(listProducts);
-    }, [listProducts]);
+    // useEffect(() => {
+    //     setProducts(listProducts);
+    // }, [listProducts]);
+    let history = useHistory();
     return (
         <>
             <section className="shop" style={{ background: "#f6f9fc", padding: "25px 0 40px 0" }}>
                 <div className="container d_flex">
                     <div className="contentWidth" style={{ marginLeft: 0 }}>
                         <div style={{ marginBottom: 20 }}>
-                            <div className="heading d_flex">
+                            <div className="heading d_flex" style={{ alignItems: "center" }}>
                                 <div className="heading-left  center_flex">
                                     {isLoading ? (
                                         <div style={{ marginRight: 5 }}>
@@ -32,14 +33,14 @@ export const ProductGrid = ({ label, shopItems, labelImg, isLoading }) => {
                                 {isLoading ? (
                                     <Skeleton height={43} width={110} borderRadius={8} style={{ margin: 0 }} />
                                 ) : (
-                                    <div className="heading-right  " style={{ display: label ? "block" : "none" }}>
+                                    <div className="heading-right  " style={{ display: label ? "block" : "none" }} onClick={() => history.push("/")}>
                                         <span>Xem tất cả</span>
                                         <i className="fa-solid fa-caret-right"></i>
                                     </div>
                                 )}
                             </div>
                             <div className="product-content  grid6">
-                                {products.map((item, index) => {
+                                {data.map((item, index) => {
                                     if (mobileMode && index > 6) {
                                         return true;
                                     }
@@ -53,7 +54,7 @@ export const ProductGrid = ({ label, shopItems, labelImg, isLoading }) => {
                                 })}
                             </div>
                         </div>
-                        {mobileMode && (
+                        {mobileMode && !isLoading && (
                             <div
                                 style={{ textAlign: "center", margin: "0 5px", height: 45, borderRadius: "0.375rem", alignItems: "center", border: "1px solid var(--secondary)" }}
                                 className="center_flex "

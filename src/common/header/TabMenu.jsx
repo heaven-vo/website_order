@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { AppContext } from "../../context/AppProvider";
 export const TabMenu = () => {
     const [tab, setTab] = useState(1);
-    const { setMenu } = useContext(AppContext);
+    const { setMenu, menu } = useContext(AppContext);
     const tabList = [
         {
             tabName: "Đặt Món",
@@ -23,16 +24,22 @@ export const TabMenu = () => {
             imgActive: "./images/icons/dathang-active.png",
         },
     ];
+    let history = useHistory();
     const changeMenu = (id) => {
         setMenu(id);
         setTab(id);
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth",
+        });
     };
     return (
         <>
             <div className="tab center_flex">
                 {tabList.map((item) => {
                     return (
-                        <div className={`tab-item center_flex ${item.id === tab && "tab-active"}`} onClick={() => changeMenu(item.id)}>
+                        <div className={`tab-item center_flex ${item.id === menu && "tab-active"}`} onClick={() => changeMenu(item.id)}>
                             <div className="c_flex" style={{ flexDirection: "column", gap: 2 }}>
                                 <div style={{ width: 45, height: 45 }}>
                                     {tab === item.id ? (
