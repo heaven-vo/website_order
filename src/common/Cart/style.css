@@ -42,7 +42,7 @@
     color: grey;
 }
 .cart-items h4 span {
-    color: #e94560;
+    color: var(--secondary);
     margin-left: 20px;
     font-weight: 500;
 }
@@ -66,7 +66,7 @@
 .incCart {
     background: none;
     border: 1px solid rgb(3 0 71 / 9%);
-    color: #e94560;
+    color: var(--secondary);
     transition: 0.5s all;
 }
 .incCart:hover{
@@ -87,17 +87,17 @@
 .cart-total h3 {
     font-size: 20px;
     font-weight: 500;
-    color: #e94560;
+    color: var(--secondary);
 }
 .cart-total h2 {
     font-size: 18px;
     margin-bottom: 20px;
     border-bottom: 1px solid rgb(3 0 71 / 9%);
     padding-bottom: 10px;
-    color: #e94560;
+    color: var(--secondary);
 }
 .no-items {
-    color: #e94560;
+    color: var(--secondary);
     font-size: 18px;
     margin-top: 30px;
     height: 130px;

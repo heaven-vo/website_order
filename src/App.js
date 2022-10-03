@@ -20,11 +20,12 @@ import "react-modern-drawer/dist/index.css";
 import { DrawerContent } from "./common/header/Drawer";
 import { CheckoutPage } from "./pages/CheckoutPage";
 import { LoginPage } from "./pages/LoginPage";
+import { OrderPage } from "./pages/OrderPage";
 
 function App() {
     const { productItems } = Data;
     const { shopItems } = Pdata;
-    const { setMobileMode, isOpenDrawer, setIsOpenDrawer } = useContext(AppContext);
+    const { setMobileMode, isOpenDrawer, setIsOpenDrawer, isHeader, mobileMode } = useContext(AppContext);
     useEffect(() => {
         function handleResize() {
             if (window.innerWidth <= 700) {
@@ -57,19 +58,19 @@ function App() {
             </Drawer>
             <Switch>
                 <Route path="/" exact>
-                    <HomePage productItems={productItems} shopItems={shopItems} />
+                    <MenuPage />
                 </Route>
                 <Route path="/login" exact>
                     <LoginPage />
                 </Route>
                 <Route path="/menu" exact>
-                    <MenuPage />
+                    <HomePage productItems={productItems} shopItems={shopItems} />
                 </Route>
-                <Route path="/food" exact>
+                {/* <Route path="/food" exact>
                     <FoodPage shopItems={shopItems} />
-                </Route>
-                <Route path="/shop" exact>
-                    <ShopPage />
+                </Route> */}
+                <Route path="/order" exact>
+                    <OrderPage />
                 </Route>
                 <Route path="/food-detail" exact>
                     <FoodDetailPage />

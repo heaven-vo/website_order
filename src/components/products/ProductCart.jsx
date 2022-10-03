@@ -45,14 +45,14 @@
 //export default ProductCart
 
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { LOCALSTORAGE_NAME } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 
 const ProductCart = ({ product }) => {
-    const { setCart, listProducts, setlistProducts } = useContext(AppContext);
+    const { setCart, listProducts, setlistProducts, setIsHeader } = useContext(AppContext);
     const [count, setCount] = useState(0);
-
+    let history = useHistory();
     // Thêm giỏ hàng
     const AddCart = (product) => {
         let isQuantity = false;
@@ -99,26 +99,45 @@ const ProductCart = ({ product }) => {
         // Cập nhật lại danh sách sản phẩm hiện tại với số lượng vừa được cập nhật
         setlistProducts([...newProduts]);
     };
-    
+
     return (
         <>
             <div className="box" key={product.id}>
                 <div className="product mtop" style={{ margin: 6 }}>
                     {/* <Link to="/food-detail"> */}
-                    <div className="img">
+                    <div
+                        className="img"
+                        onClick={() => {
+                            setIsHeader(false);
+                            history.push("/food-detail");
+                        }}
+                    >
                         {/* <span className="discount">{item.discount}% Off</span> */}
-                        <img src={product.cover || ""} alt="" />
+                        <img
+                            src={
+                                product.cover || "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/food%2Ftopic-2.webp?alt=media&token=54a5086f-f2ea-4009-9479-28624019703e"
+                            }
+                            alt=""
+                        />
                         <div className="shop-product-like">
                             <label style={{ opacity: product.quantityCart > 0 ? 1 : 0 }}>{product.quantityCart}</label> <br />
-                            {product.isLike ? <i className="fa-solid fa-heart like cusor" style={{ opacity: 1 }}></i> : <i className="fa-regular fa-heart cusor"></i>}
+                            {/* {product.isLike ? <i className="fa-solid fa-heart like cusor" style={{ opacity: 1 }}></i> : <i className="fa-regular fa-heart cusor"></i>} */}
                         </div>
                     </div>
                     {/* </Link> */}
-                    <div className="product-details" style={{ marginTop: 10, lineHeight: "1.5em" }}>
+                    <div className="product-details" style={{ lineHeight: "1.4em" }}>
                         <span style={{ fontSize: 13, color: "#666" }}>{product.shop}</span>
-                        <Link to="/food-detail">
-                            <h3 style={{ fontSize: 16, cursor: "pointer", fontWeight: 600 }}>{product.name}</h3>{" "}
-                        </Link>
+
+                        <h3
+                            style={{ fontSize: 16, cursor: "pointer", fontWeight: 600 }}
+                            onClick={() => {
+                                setIsHeader(false);
+                                history.push("/food-detail");
+                            }}
+                        >
+                            {product.name}
+                        </h3>
+
                         {/* <div className="rate" style={{ marginTop: 4 }}>
                             <i className="fa fa-star"></i>
                             <i className="fa fa-star"></i>
@@ -129,13 +148,16 @@ const ProductCart = ({ product }) => {
 
                         <div className="price">
                             <h4>{product.price}.000đ </h4>
-                        </div>
-                        <div className="price">
-                            <span style={{ color: "#666", fontSize: 14 }}>{product.weight} </span>
                             <button onClick={() => AddCart(product)}>
                                 <i className="fa fa-plus"></i>
                             </button>
                         </div>
+                        {/* <div className="price">
+                            <span style={{ color: "#666", fontSize: 14 }}>{product.weight} </span>
+                            <button onClick={() => AddCart(product)}>
+                                <i className="fa fa-plus"></i>
+                            </button>
+                        </div> */}
                     </div>
                 </div>
             </div>

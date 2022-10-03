@@ -63,12 +63,13 @@
 }
 
 @media (max-width: 950px) {
-    .shop-detail{
+    .shop-detail {
         flex-direction: column;
         padding: 0px 10px;
         gap: 20px;
     }
-    .shop-detail-left, .shop-detail-right{
+    .shop-detail-left,
+    .shop-detail-right {
         width: 100% !important;
     }
     .food-detail-btn {
@@ -146,6 +147,120 @@
 }
 
 @media (max-width: 700px) {
+    /* -------------------------- */
+    .order-wrapper img {
+        width: 100%;
+    }
+    .order {
+        margin: 10px 5px;
+        padding: 5px 0px;
+        border-top: 1px solid rgb(230, 230, 230);
+    }
+    .order-total > div:first-child {
+        font-size: 14px;
+    }
+    .order-total > div:first-child > span {
+        font-size: 16px !important;
+    }
+    .order-img {
+        width: 100px !important;
+    }
+    .order-store-title {
+        font-size: 16px;
+    }
+    .order-store > div > div > span {
+        font-size: 13px;
+    }
+    .order-store > div > div > i {
+        font-size: 14px;
+    }
+    .order-store-status {
+        display: none;
+    }
+    .order-store {
+        padding: 10px 5px 5px 5px;
+    }
+    .order-total {
+        flex-direction: row;
+        padding: 10px 5px 5px 5px;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .order-btn {
+        width: 120px !important;
+        height: 45px !important;
+    }
+    .order-text-price {
+        color: var(--secondary);
+        text-transform: uppercase;
+        font-size: 14px;
+    }
+    .order-text-name {
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 24px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+    .order-text-cate {
+        line-height: 20px;
+        font-size: 0.8rem;
+        color: rgb(120, 120, 120);
+    }
+    .order-text-count {
+        line-height: 20px;
+        font-size: 0.8rem;
+    }
+
+    .cateogry-menu-wrapper {
+       /* padding-right: 10px; */
+         padding-top: 10px;
+         padding-bottom: 5px;
+    }
+    .cateogry-menu-img {
+        width: 45px;
+        height: 45px;
+    }
+    .cateogry-menu-img img {
+      
+    }
+    .cateogry-menu-text {
+       
+    }
+    .cateogry-menu-text {
+        font-size: 0.75rem;
+    }
+    /* --------------- */
+    .shop .product .img {
+        height: 180px !important;
+    }
+    .slide-img {
+        height: 180px !important;
+        object-fit: cover;
+    }
+    .product-details h3 {
+        font-size: 15px !important;
+    }
+    /* ------------- Menu ------------- */
+    .menu-text-countdown {
+        color: #e94560;
+    }
+    .menu-text-title {
+        font-size: 1.5rem;
+    }
+    .menu-text-detail {
+        font-size: 1rem;
+        font-weight: 400;
+        color: rgb(120, 120, 120);
+    }
+    .count-down > div {
+        background-color: #333333;
+    }
     .non-radius {
         border-radius: 0px !important;
     }
@@ -167,10 +282,10 @@
         width: 100%;
         padding: 0px !important;
     }
-    .food-detail-btn > div:first-child{
+    .food-detail-btn > div:first-child {
         width: 35% !important;
     }
-   
+
     .category-item {
         min-width: 200px;
         width: 100%;
@@ -231,7 +346,7 @@
         padding: 0 10px;
     }
     .background {
-        padding: 20px 0;
+        padding: 0px 0;
     }
     .product-content {
         grid-template-columns: repeat(3, 1fr);
@@ -247,7 +362,7 @@
     }
     .flash-responsive h1,
     .heading .heading-left h2 {
-        font-size: 1.15em;
+        font-size: 1.3em;
     }
     .flash-responsive .heading img {
         width: 35px;
@@ -262,11 +377,14 @@
     .flash {
         padding: 20px 0 !important;
     }
-    .header {
+    /* .header {
         display: none;
-    }
+    } */
     .search-box {
         display: none;
+    }
+    .search {
+        padding: 0px !important;
     }
     .icon-search {
         display: block;
@@ -285,7 +403,7 @@
     }
 }
 @media (max-width: 500px) {
-    .food-detail-btn > div:first-child{
+    .food-detail-btn > div:first-child {
         width: 45% !important;
     }
     .wrap-login100 {
@@ -314,7 +432,8 @@
         grid-template-columns: repeat(2, 1fr);
     }
     .search {
-        padding: 15px 0 !important;
+        /* padding: 15px 0 !important; */
+        /* padding: 15px 0 0 0 !important; */
     }
     .search.active {
         height: unset !important;

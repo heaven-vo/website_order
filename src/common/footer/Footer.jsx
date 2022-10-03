@@ -12,7 +12,7 @@ const Footer = () => {
             <footer>
                 <div className="container grid4">
                     <div className="box">
-                        <h1>Bonik</h1>
+                        <h1 style={{color:"var(--primary)"}}>VinhomeGP</h1>
                         <p>
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Auctor libero id et, in gravida. Sit diam duis mauris nulla cursus. Erat et lectus vel ut sollicitudin elit at
                             amet.

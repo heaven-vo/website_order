@@ -4,7 +4,7 @@ import { caculatorVND } from "../constants/Caculator";
 import { AppContext } from "../context/AppProvider";
 
 export const CheckoutPage = () => {
-    const { mobileMode, Cart } = useContext(AppContext);
+    const { setIsHeaderOrder, setIsHeader, Cart } = useContext(AppContext);
     const [CartList, setCartList] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [paymentType, setpaymentType] = useState(1);
@@ -13,6 +13,11 @@ export const CheckoutPage = () => {
     const handleChangePaymentType = (type) => {
         setpaymentType(type);
     };
+    useEffect(() => {
+        setIsHeaderOrder(false);
+        setIsHeader(false);
+    }, [setIsHeaderOrder, setIsHeader]);
+
     useEffect(() => {
         var total = 0;
         Cart?.map((item) => {
@@ -90,7 +95,7 @@ export const CheckoutPage = () => {
                                         style={{ textAlign: "center", margin: "0 10px 0 10px", width: "calc(100% - 20px)", height: 50, borderRadius: "0.375rem", alignItems: "center" }}
                                         className="center_flex btn-hover"
                                     >
-                                        <span style={{ fontWeight: 600, fontSize: 16 }}>Thanh Toán</span>
+                                        <span style={{ fontWeight: 700, fontSize: 16 }}>Thanh Toán</span>
                                     </div>
                                 </div>
                             </>
@@ -155,7 +160,7 @@ export const CheckoutPage = () => {
                             style={{ textAlign: "center", margin: "0 10px 0 10px", width: "calc(100% - 20px)", height: 50, borderRadius: "0.375rem", alignItems: "center" }}
                             className="center_flex btn-hover"
                         >
-                            <span style={{ fontWeight: 600, fontSize: 16 }}>Thanh Toán</span>
+                            <span style={{ fontWeight: 700, fontSize: 16 }}>Thanh Toán</span>
                         </div>
                     </div>
                 </div>

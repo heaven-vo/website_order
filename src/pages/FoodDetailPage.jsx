@@ -1,14 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import Pdata from "../components/products/Pdata";
 import { RecommendProduct } from "../components/products/RecommendProduct";
 import { LOCALSTORAGE_NAME } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
 export const FoodDetailPage = () => {
-    const { setCart } = useContext(AppContext);
+    const { setCart, setIsHeader } = useContext(AppContext);
     const [countQuantity, setcountQuantity] = useState(1);
     const { shopItems } = Pdata;
-    
+    let history = useHistory();
+    useEffect(() => {
+        setIsHeader(false);
+        return () => {
+            setIsHeader(true);
+        };
+    }, [setIsHeader]);
 
     const AddCart = () => {
         let isQuantity = false;
@@ -36,7 +43,7 @@ export const FoodDetailPage = () => {
                     price: shopItems[1].price,
                     weight: shopItems[1].weight,
                     shop: shopItems[1].shop,
-                    name: shopItems[1].name
+                    name: shopItems[1].name,
                 },
             ];
             setCart(carts);
@@ -68,7 +75,7 @@ export const FoodDetailPage = () => {
                             </div> */}
                             <h2>Thịt Bò Văn Dương</h2>
                             <h4 style={{ fontWeight: 500, color: "rgb(102, 102, 102)" }}>SKU : 9AF49D</h4>
-                            <h3 style={{ color: "#e94560", marginTop: 15 }}>300.000đ</h3>
+                            <h3 style={{ color: "var(--primary)", marginTop: 15 }}>300.000đ</h3>
                             <h4 style={{ marginBottom: 20, fontSize: 14, fontWeight: 400, color: "#666666" }}>500g</h4>
                             <div
                                 className="d_flex food-detail-info"
@@ -81,7 +88,7 @@ export const FoodDetailPage = () => {
                                     borderBottom: "1px solid rgb(230,230,230)",
                                 }}
                             >
-                                <div className="food-detail-shop" style={{ width: 140 }}>
+                                <div className="food-detail-shop" style={{ width: 140 }} onClick={() => history.push("/shop-detail")}>
                                     <img
                                         width={"100%"}
                                         src="https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/shop%2FSTORE-COVER-dark2x.png?alt=media&token=a9efb823-35df-4bdf-a4ce-3dea24cf21e9"
@@ -117,7 +124,9 @@ export const FoodDetailPage = () => {
                                     </div>
                                 </div>
                                 <div style={{ textAlign: "center", width: 300, height: 50, borderRadius: "0.375rem", alignItems: "center" }} className="center_flex btn-hover">
-                                    <span onClick={()=> AddCart()} style={{ fontWeight: 600, fontSize: 16 }}>Thêm Giỏ Hàng</span>
+                                    <span onClick={() => AddCart()} style={{ fontWeight: 600, fontSize: 16 }}>
+                                        Thêm Giỏ Hàng
+                                    </span>
                                 </div>
                             </div>
 

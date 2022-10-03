@@ -7,11 +7,18 @@ import { Link, useHistory } from "react-router-dom";
 import Rodal from "rodal";
 
 const Cart = ({}) => {
-    const { Cart, setCart, listProducts, setlistProducts } = useContext(AppContext);
+    const { Cart, setCart, listProducts, setlistProducts , setIsHeaderOrder, setIsHeader} = useContext(AppContext);
     const [totalPrice, setTotalPrice] = useState(0);
     const [CartList, setCartList] = useState([]);
     const [visible, setVisible] = useState(false);
     let history = useHistory();
+    useEffect(() => {
+        setIsHeaderOrder(false);
+        setIsHeader(false);
+
+     
+    }, [setIsHeaderOrder, setIsHeader]);
+
     useEffect(() => {
         var total = 0;
         Cart?.map((item) => {
@@ -91,7 +98,7 @@ const Cart = ({}) => {
                                 </h1>
                                 <Link to="/">
                                     <div style={{ textAlign: "center", width: "100%", height: 50, borderRadius: "0.375rem", alignItems: "center" }} className="center_flex btn-hover">
-                                        <span onClick={() => {}} style={{ fontWeight: 600, fontSize: 16 }}>
+                                        <span onClick={() => {}} style={{ fontWeight: 700, fontSize: 16 }}>
                                             Quay lại
                                         </span>
                                     </div>
@@ -184,7 +191,7 @@ const Cart = ({}) => {
                                     className="center_flex btn-hover"
                                     onClick={() => history.push("/checkout")}
                                 >
-                                    <span style={{ fontWeight: 600, fontSize: 16 }}>Thanh Toán</span>
+                                    <span style={{ fontWeight: 700, fontSize: 16 }}>Thanh Toán</span>
                                 </div>
                             </>
                         )}

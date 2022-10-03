@@ -1,10 +1,20 @@
 import React from "react";
+import { useEffect } from "react";
+import { useContext } from "react";
 import ProductCart from "../components/products/ProductCart";
+import { AppContext } from "../context/AppProvider";
 
 export const ShopDetailPage = ({ shopItems }) => {
+    const { setCart, setIsHeader } = useContext(AppContext);
+    useEffect(() => {
+        setIsHeader(false);
+        return () => {
+            setIsHeader(true);
+        };
+    }, [setIsHeader]);
     return (
         <>
-            <section className="background" style={{ background: "#fff" }}>
+            <section className="background" style={{ background: "#fff", paddingTop: 20 }}>
                 <div className="container">
                     <div className="d_flex shop-detail">
                         <div className="shop-detail-left">
@@ -26,7 +36,7 @@ export const ShopDetailPage = ({ shopItems }) => {
                     </div>
                 </div>
             </section>
-            <section className="shop background">
+            {/* <section className="shop background">
                 <div className="container">
                     <div className="contentWidth">
                         {[1, 2].map((item) => {
@@ -51,7 +61,7 @@ export const ShopDetailPage = ({ shopItems }) => {
                         })}
                     </div>
                 </div>
-            </section>
+            </section> */}
         </>
     );
 };
