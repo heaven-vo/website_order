@@ -85,7 +85,7 @@ const FlashCard = ({ productItems }) => {
                                     <div className="product-count">
                                         <label>{count}</label> <br />
                                     </div>
-                                    <div className="product-like">{productItems.isLike ? <i className="fa-solid fa-heart like"></i> : <i className="fa-regular fa-heart"></i>}</div>
+                                    {/* <div className="product-like">{productItems.isLike ? <i className="fa-solid fa-heart like"></i> : <i className="fa-regular fa-heart"></i>}</div> */}
                                 </div>
                                 <div className="product-details">
                                     <span style={{ fontSize: 15, color: "#666" }}>{productItems.shop}</span>

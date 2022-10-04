@@ -12,7 +12,7 @@ const TopCate = () => {
                             <i className="fa-solid fa-border-all"></i>
                             <h2>Loại Thực Phẩm</h2>
                         </div>
-                        <div className="heading-right row ">
+                        <div className="heading-right  ">
                             <span>Xem tất cả</span>
                             <i className="fa-solid fa-caret-right"></i>
                         </div>

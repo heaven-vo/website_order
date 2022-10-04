@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { caculatorVND } from "../constants/Caculator";
+import { IMAGE_NOTFOUND } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
 export const CheckoutPage = () => {
-    const { mobileMode, Cart } = useContext(AppContext);
+    const { setIsHeaderOrder, setIsHeader, Cart } = useContext(AppContext);
     const [CartList, setCartList] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [paymentType, setpaymentType] = useState(1);
@@ -14,11 +15,16 @@ export const CheckoutPage = () => {
         setpaymentType(type);
     };
     useEffect(() => {
+        setIsHeaderOrder(false);
+        setIsHeader(false);
+    }, [setIsHeaderOrder, setIsHeader]);
+
+    useEffect(() => {
         var total = 0;
         Cart?.map((item) => {
-            return (total = item.price * item.quantityCart + total);
+            return (total = item.pricePerPack * item.quantityCart + total);
         });
-        setTotalPrice(total);
+        setTotalPrice(total / 1000);
         setCartList(Cart);
     }, [Cart]);
     const hanldeSubmit = () => {
@@ -67,10 +73,10 @@ export const CheckoutPage = () => {
                                             <option value="5">S005</option>
                                         </select>
                                     </div>
-                                    <div className="checkout-total-info">
+                                    {/* <div className="checkout-total-info">
                                         <h3>Phòng</h3>
                                         <input type="text" name="" id="" />
-                                    </div>
+                                    </div> */}
                                     <div className="checkout-total-info">
                                         <h3>Ghi Chú</h3>
                                         <textarea type="text" name="" id="" />
@@ -90,7 +96,7 @@ export const CheckoutPage = () => {
                                         style={{ textAlign: "center", margin: "0 10px 0 10px", width: "calc(100% - 20px)", height: 50, borderRadius: "0.375rem", alignItems: "center" }}
                                         className="center_flex btn-hover"
                                     >
-                                        <span style={{ fontWeight: 600, fontSize: 16 }}>Thanh Toán</span>
+                                        <span style={{ fontWeight: 700, fontSize: 16 }}>Thanh Toán</span>
                                     </div>
                                 </div>
                             </>
@@ -102,23 +108,23 @@ export const CheckoutPage = () => {
                                 <h2 style={{ fontSize: 20 }}>Giỏ Hàng</h2>
                             </div>
                             {CartList.map((item) => {
-                                const productQty = item.price * item.quantityCart;
+                                const productQty = item.pricePerPack * item.quantityCart;
 
                                 return (
                                     <div className="checkout-list  d_flex" key={item.id}>
                                         <div className="img">
-                                            <img src={item.cover} alt="" />
+                                            <img src={item.image || IMAGE_NOTFOUND} alt="" />
                                         </div>
                                         <div className="cart-details" style={{ width: "90%" }}>
                                             <div className="cart-details-info" style={{ paddingLeft: 10 }}>
                                                 <div>
                                                     <h3>{item.name}</h3>
-                                                    <span style={{ fontSize: 15, color: "rgb(160,160,160)" }}>{item.shop}</span>
+                                                    <span style={{ fontSize: 14, color: "rgb(160,160,160)" }}>{item.storeName}</span>
                                                 </div>
                                                 <h4>
-                                                    {item.price}.000đ * {item.quantityCart}
-                                                    <span>=</span>
-                                                    <span>{productQty}.000đ</span>
+                                                    {item.pricePerPack / 1000 + ".000đ"} * {item.quantityCart}
+                                                    {/* <span>=</span> */}
+                                                    {/* <span>{productQty / 1000 + ".000đ"}</span> */}
                                                 </h4>
                                             </div>
                                         </div>
@@ -155,7 +161,7 @@ export const CheckoutPage = () => {
                             style={{ textAlign: "center", margin: "0 10px 0 10px", width: "calc(100% - 20px)", height: 50, borderRadius: "0.375rem", alignItems: "center" }}
                             className="center_flex btn-hover"
                         >
-                            <span style={{ fontWeight: 600, fontSize: 16 }}>Thanh Toán</span>
+                            <span style={{ fontWeight: 700, fontSize: 16 }}>Thanh Toán</span>
                         </div>
                     </div>
                 </div>

@@ -55,25 +55,27 @@ export const DrawerContent = () => {
                     <h4>Khám Phá</h4>
                 </div>
             </Link>
-            <Link to={"/menu"} onClick={() => setIsOpenDrawer(false)}>
+            {/* <Link to={"/menu"} onClick={() => setIsOpenDrawer(false)}>
                 <div className="drawer__wrapper__item">
                     <h4>Thực Đơn</h4>
                 </div>
-            </Link>
-            <Link to={"/shop"} onClick={() => setIsOpenDrawer(false)}>
+            </Link> */}
+            {/* <Link to={"/shop"} onClick={() => setIsOpenDrawer(false)}>
                 <div className="drawer__wrapper__item">
                     <h4>Cửa Hàng</h4>
                 </div>
-            </Link>
-            <Link to={"/food"} onClick={() => setIsOpenDrawer(false)}>
+            </Link> */}
+            <Link to={"/order"} onClick={() => setIsOpenDrawer(false)}>
                 <div className="drawer__wrapper__item">
-                    <h4>Thực Phẩm</h4>
+                    <h4>Đơn Hàng</h4>
                 </div>
             </Link>
-            <div className="drawer__wrapper__item">
-                <h4>Đăng nhập</h4>
-                <div>{/* <FontAwesomeIcon className="header__Mobile__menu__icon" style={{ fontSize: 14 }} icon={faSignIn} /> */}</div>
-            </div>
+            <Link to={"/login"} onClick={() => setIsOpenDrawer(false)}>
+                <div className="drawer__wrapper__item">
+                    <h4>Đăng nhập</h4>
+                </div>
+            </Link>
+           
             <div className="drawer__wrapper__item">
                 <h4>Đăng xuất</h4>
                 <div>

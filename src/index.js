@@ -5,6 +5,7 @@ import App from "./App";
 import ScrollToTop from "./components/wrapper/ScrollToTop ";
 import AppProvider from "./context/AppProvider";
 import 'rodal/lib/rodal.css';
+import 'react-loading-skeleton/dist/skeleton.css'
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>

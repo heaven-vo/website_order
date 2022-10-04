@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import { AppContext } from "../../context/AppProvider";
+import { TabMenu } from "./TabMenu";
+import { TabMenuOrder } from "./TabMenuOrder";
 
 const Navbar = () => {
     // Toogle Menu
+    const { mobileMode, isHeaderOrder, isHeader } = useContext(AppContext);
     const [MobileMenu, setMobileMenu] = useState(false);
     return (
         <>
-            <header className="header">
+            <div className="header boxShadow">
                 <div className="container d_flex">
                     {/* <div className='catgrories d_flex'>
             <span className='fa-solid fa-border-all'></span>
@@ -15,33 +19,25 @@ const Navbar = () => {
             </h4>
           </div> */}
 
-                    <div className="navlink">
-                        <ul className={MobileMenu ? "nav-links-MobileMenu" : "link f_flex capitalize"} onClick={() => setMobileMenu(false)}>
-                            {/*<ul className='link f_flex uppercase {MobileMenu ? "nav-links-MobileMenu" : "nav-links"} onClick={() => setMobileMenu(false)}'>*/}
-                            <li>
-                                <Link to="/">Khám Phá</Link>
-                            </li>
-                            <li>
-                                <Link to="/menu">Menu</Link>
-                            </li>
-                            <li>
-                                <Link to="/shop">Cửa Hàng</Link>
-                            </li>
-                            <li>
-                                <Link to="/food">Thực Phẩm</Link>
-                            </li>
-                            <li>
-                                <Link to="/favorite">Yêu Thích</Link>
-                            </li>
-                      
-                        </ul>
+                    {!isHeaderOrder ? (
+                        <div className="" style={{ width: "100%" }}>
+                            {!mobileMode && isHeader && (
+                                <div className="container-mobile" style={{ justifyContent: "center", borderTop: "1px solid rgb(240,240,240)", padding: 0 }}>
+                                    <TabMenu />
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="" style={{ width: "100%" }}>
+                            <div className="container-mobile cusor" style={{ justifyContent: "center", borderTop: "1px solid rgb(240,240,240)", padding: 0 }}>
+                                <TabMenuOrder />
+                            </div>
+                        </div>
+                    )}
 
-                        <button className="toggle" onClick={() => setMobileMenu(!MobileMenu)}>
-                            {MobileMenu ? <i className="fas fa-times close home-btn"></i> : <i className="fas fa-bars open"></i>}
-                        </button>
-                    </div>
+                    
                 </div>
-            </header>
+            </div>
         </>
     );
 };
