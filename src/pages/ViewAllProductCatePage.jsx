@@ -13,6 +13,8 @@ export const ViewAllProductCatePage = () => {
     const { setIsHeader, menu } = useContext(AppContext);
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
     const [products, setProducts] = useState([]);
+    const [title, setTitle] = useState("");
+    const [img, setImg] = useState("");
     let location = useLocation();
     useEffect(() => {
         let cateId = location.pathname.trim().split("/")[4];
@@ -22,7 +24,12 @@ export const ViewAllProductCatePage = () => {
         getListProductByCateId(menuId, cateId, 1, 100)
             .then((res) => {
                 if (res.data) {
-                    const productList = res.data;
+                    const category = res.data;
+                    const productList = category.listProducts || [];
+                    const title = category.name;
+                    setTitle(title);
+                    const image = category.image;
+                    setImg(image);
                     // let newProduct =
                     // if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_NAME))) {
                     //     localStorage.setItem(LOCALSTORAGE_NAME, JSON.stringify([]));
@@ -35,15 +42,14 @@ export const ViewAllProductCatePage = () => {
                     //     }
                     // }
                     setProducts(productList);
-                    setTimeout(() => {
-                        setIsLoadingCircle(false);
-                    }, 500);
+                    setIsLoadingCircle(false);
                 } else {
                     setIsLoadingCircle(false);
                 }
             })
             .catch((error) => {
                 console.log(error);
+                setProducts([]);
                 setIsLoadingCircle(false);
             });
         return () => {
@@ -65,7 +71,7 @@ export const ViewAllProductCatePage = () => {
     return (
         <div>
             <Loading isLoading={isLoadingCircle} />
-            {!isLoadingCircle && <ProductGrid data={products || []} label={"Bánh Kẹo"} cateId={""} labelImg={IMAGE_NOTFOUND} isViewAll={false} />}
+            {!isLoadingCircle && <ProductGrid data={products || []} label={title || ""} cateId={""} labelImg={img || IMAGE_NOTFOUND} isViewAll={false} />}
         </div>
     );
 };

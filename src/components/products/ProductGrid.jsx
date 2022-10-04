@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import Skeleton from "react-loading-skeleton";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { AppContext } from "../../context/AppProvider";
 import ProductCart from "./ProductCart";
 
@@ -13,6 +13,8 @@ export const ProductGrid = ({ filtter, label, data, labelImg, cateId, isLoading,
     let history = useHistory();
     return (
         <>
+            {" "}
+            {}
             <section className="shop" style={{ background: "#f6f9fc", padding: "25px 0 40px 0" }}>
                 <div className="container d_flex">
                     <div className="contentWidth" style={{ marginLeft: 0 }}>
@@ -40,20 +42,44 @@ export const ProductGrid = ({ filtter, label, data, labelImg, cateId, isLoading,
                                         </div>
                                     ))}
                             </div>
-                            <div className="product-content  grid6">
-                                {data.map((item, index) => {
-                                    if (mobileMode && index > 6) {
-                                        return true;
-                                    }
-                                    return isLoading ? (
-                                        <div style={{ margin: 6 }}>
-                                            <Skeleton height={272} borderRadius={8} style={{ margin: 0 }} />
+                            {data.length > 0 ? (
+                                <div className="product-content  grid6">
+                                    {data.length > 0 &&
+                                        data.map((item, index) => {
+                                            if (mobileMode && index > 6) {
+                                                return true;
+                                            }
+                                            return isLoading ? (
+                                                <div style={{ margin: 6 }}>
+                                                    <Skeleton height={272} borderRadius={8} style={{ margin: 0 }} />
+                                                </div>
+                                            ) : (
+                                                <ProductCart product={item} key={index} />
+                                            );
+                                        })}
+                                </div>
+                            ) : (
+                                <section className="shop" style={{ background: "#f6f9fc", padding: "50px 0 40px 0" }}>
+                                    <div className="container collumn_flex" style={{ width: "300px" }}>
+                                        <div className="contentWidth  center_flex" style={{ marginLeft: 0, flexDirection: "column", gap: 10 }}>
+                                            {/* <i class="fa-solid fa-box-open" style={{ fontSize: 40, color: "var(--primary)" }}></i> */}
+                                            <img src="/images/fish-bones.png" style={{ width: 80 }} alt="" />
+                                            <span style={{ fontSize: "1.1rem" }}>Hiện không có sản phẩm nào!!</span>
                                         </div>
-                                    ) : (
-                                        <ProductCart product={item} key={index} />
-                                    );
-                                })}
-                            </div>
+
+                                        <div style={{ textAlign: "center", marginTop: 0, height: 50, borderRadius: "0.375rem", alignItems: "center" }} className="center_flex cusor">
+                                            <span
+                                                onClick={() => {
+                                                    history.push("/");
+                                                }}
+                                                style={{ fontWeight: 700, fontSize: 16, color: "var(--primary)" }}
+                                            >
+                                                Quay lại
+                                            </span>
+                                        </div>
+                                    </div>
+                                </section>
+                            )}
                         </div>
                         {isViewAll && mobileMode && !isLoading && (
                             <div

@@ -27,7 +27,7 @@ export const OrderPage = () => {
                                         <div className="order-store">
                                             <span className="order-store-title">Fresh Saigon</span>
                                             <div className="f_flex" style={{ gap: 15 }}>
-                                                <div className="c_flex" style={{ color: "var(--primary)", gap: 10 }}>
+                                                <div className="c_flex" style={{ color: "green", gap: 10 }}>
                                                     <i class="fa-solid fa-truck-fast"></i>
                                                     <span>Thành Công</span>
                                                 </div>
@@ -38,12 +38,12 @@ export const OrderPage = () => {
                                             </div>
                                         </div>
                                         <div className="order" style={{}}>
-                                            <div className="order-img" style={{ width: 150 }}>
+                                            <div className="order-img" style={{ width: 130 }}>
                                                 <img src="https://dl.airtable.com/.attachments/1bb802dde8400e5fcebaf931620da443/9265bcad/Mix-Celery-Juice-thumbnail2x.jpg" alt="" />
                                             </div>
                                             <div style={{ flex: 1, flexDirection: "column" }} className="f_flex">
                                                 <span className="order-text-name">Hỗn Hợp Cần Tây</span>
-                                                <span className="order-text-cate">Nước Uống</span>
+                                                {/* <span className="order-text-cate">Nước Uống</span> */}
                                                 <span className="order-text-count">1 Chai</span>
                                             </div>
                                             <div>
@@ -51,7 +51,7 @@ export const OrderPage = () => {
                                             </div>
                                         </div>
                                         <div className="order" style={{}}>
-                                            <div className="order-img" style={{ width: 150 }}>
+                                            <div className="order-img" style={{ width: 130 }}>
                                                 <img
                                                     src="https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/food%2Fba-ri-b-thumbnail2x.jpg?alt=media&token=3d9c0460-5a19-4cf0-bf22-b3e48b57b0a0"
                                                     alt=""
@@ -59,7 +59,7 @@ export const OrderPage = () => {
                                             </div>
                                             <div style={{ flex: 1, flexDirection: "column" }} className="f_flex">
                                                 <span className="order-text-name">Thịt Bò Văn Dương</span>
-                                                <span className="order-text-cate">Thịt Tươi Sống</span>
+                                                {/* <span className="order-text-cate">Thịt Tươi Sống</span> */}
                                                 <span className="order-text-count">0.5Kg</span>
                                             </div>
                                             <div>
@@ -67,7 +67,7 @@ export const OrderPage = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div>
+                                    {/* <div>
                                         <div className="order-store">
                                             <span className="order-store-title">Hai San Hoang Gia</span>
                                         </div>
@@ -85,7 +85,7 @@ export const OrderPage = () => {
                                                 <span className="order-text-price">199.000đ</span>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                     <div className="order-total">
                                         <div>
                                             Tổng số tiền:{" "}
@@ -94,15 +94,14 @@ export const OrderPage = () => {
                                             </span>
                                         </div>
                                         <div>
-                                            <div style={{ textAlign: "center", width: 230, height: 50, borderRadius: "0.375rem", alignItems: "center" }} className="center_flex btn-hover order-btn">
-                                                <span
-                                                    onClick={() => {
-                                                        history.push(`/order/${"123"}`);
-                                                    }}
-                                                    style={{ fontWeight: 600, fontSize: 16 }}
-                                                >
-                                                    Xem chi tiết
-                                                </span>
+                                            <div
+                                                onClick={() => {
+                                                    history.push(`/order/${"123"}`);
+                                                }}
+                                                style={{ textAlign: "center", width: 230, height: 50, borderRadius: "0.375rem", alignItems: "center" }}
+                                                className="center_flex btn-hover order-btn"
+                                            >
+                                                <span style={{ fontWeight: 600, fontSize: 15 }}>Xem chi tiết</span>
                                             </div>
                                         </div>
                                     </div>

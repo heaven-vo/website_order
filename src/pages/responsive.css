@@ -148,13 +148,23 @@
 
 @media (max-width: 700px) {
     /* -------------------------- */
+    .order-wrapper {
+        padding: 10px;
+        border-radius: 0.375rem;
+    }
+    .order-detail-container {
+        /* padding: 0px; */
+    }
     .order-wrapper img {
         width: 100%;
     }
+    .order-detail-info {
+        margin-top: 0px;
+    }
     .order {
-        margin: 10px 5px;
+        margin: 5px 5px;
         padding: 5px 0px;
-        border-top: 1px solid rgb(230, 230, 230);
+        /* border-top: 1px solid rgb(230, 230, 230); */
     }
     .order-total > div:first-child {
         font-size: 14px;
@@ -165,11 +175,14 @@
     .order-detail-text-price {
         font-size: 17px !important;
     }
+    .order-detail-total-titlte {
+        color: #000 !important;
+    }
     .order-detail-total-text {
         font-size: 15px !important;
     }
     .order-detail-total {
-        padding: 10px 5px 10px 10px;
+        padding: 5px 5px 5px 0px;
     }
     .order-detail-total > div {
         display: flex;
@@ -177,7 +190,7 @@
         width: 100%;
     }
     .order-img {
-        width: 100px !important;
+        width: 70px !important;
     }
     .order-store-title {
         font-size: 16px;
@@ -203,11 +216,11 @@
 
     .order-btn {
         width: 140px !important;
-        height: 45px !important;
+        height: 40px !important;
     }
     .order-text-price {
-        color: var(--secondary);
-        text-transform: uppercase;
+        /* color: var(--secondary); */
+        /* text-transform: uppercase; */
         font-size: 14px;
     }
     .order-text-name {

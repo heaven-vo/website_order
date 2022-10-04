@@ -83,8 +83,8 @@ const ProductCart = ({ product }) => {
         // Tạo 1 giỏ hàng mới và tăng số lượng sản phẩm dựa theo ID
         let newCarts = CartList?.map((item) => {
             if (item.id === pro.id) {
-                item.quantityCart = item.quantityCart + 1;
-                setPro({ ...pro, quantityCart: pro.quantityCart + 1 });
+                item.quantityCart = item.quantityCart + pro.minimumDeIn;
+                setPro({ ...pro, quantityCart: pro.quantityCart + pro.minimumDeIn });
                 isQuantity = true;
             }
             return item;
@@ -103,10 +103,10 @@ const ProductCart = ({ product }) => {
                 ...CartList,
                 {
                     ...pro,
-                    quantityCart: 1,
+                    quantityCart: pro.minimumDeIn,
                 },
             ];
-            setPro({ ...pro, quantityCart: 1 });
+            setPro({ ...pro, quantityCart: pro.minimumDeIn });
             // Cập nhật lại Giỏ hàng ở Provider
             setCart(carts);
             // Cập nhật giỏ hàng ỏ local storage

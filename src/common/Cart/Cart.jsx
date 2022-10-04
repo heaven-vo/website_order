@@ -92,7 +92,7 @@ const Cart = ({}) => {
                         <>
                             <div>
                                 <div className="center_flex">
-                                    <img src="https://bizweb.sapocdn.net/100/419/232/themes/809377/assets/empty-cart.png?1662538039841" style={{ width: 250 }} alt="" />
+                                    <img src="/images/empty-cart.png" style={{ width: 250 }} alt="" />
                                 </div>
 
                                 <h1 className=" " style={{ textAlign: "center", fontSize: 15, marginBottom: 40, marginTop: 5, fontWeight: 400, color: "rgba(0, 0, 0, 0.5)" }}>

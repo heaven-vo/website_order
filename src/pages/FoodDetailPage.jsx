@@ -36,9 +36,8 @@ export const FoodDetailPage = () => {
                             }
                         }
                         setProduct({ ...newProduct });
-                        setTimeout(() => {
-                            setIsLoadingCircle(false);
-                        }, 1000);
+
+                        setIsLoadingCircle(false);
                     } else {
                         setProduct({});
                         setIsLoadingCircle(false);

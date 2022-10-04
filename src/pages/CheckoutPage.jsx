@@ -73,10 +73,10 @@ export const CheckoutPage = () => {
                                             <option value="5">S005</option>
                                         </select>
                                     </div>
-                                    <div className="checkout-total-info">
+                                    {/* <div className="checkout-total-info">
                                         <h3>Phòng</h3>
                                         <input type="text" name="" id="" />
-                                    </div>
+                                    </div> */}
                                     <div className="checkout-total-info">
                                         <h3>Ghi Chú</h3>
                                         <textarea type="text" name="" id="" />

@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import Countdown from "react-countdown";
 import Skeleton from "react-loading-skeleton";
+import { useHistory } from "react-router-dom";
 import Slider from "react-slick";
 import { getMenuByMode } from "../apis/apiService";
 import Mdata from "../components/MainPage/Mdata";
@@ -74,6 +75,7 @@ export const MenuPage = () => {
     const [menuCategory, setMenuCategory] = useState([]);
     // const [menuCategory, setMenuCategory] = useState([]);
     const [widthScreen, setWidthScreen] = useState(window.innerWidth - 100);
+    let history = useHistory();
     useEffect(() => {
         setIsLoadingPage(true);
         setIsHeaderOrder(false);
@@ -86,9 +88,7 @@ export const MenuPage = () => {
     useEffect(() => {
         setIsLoadingProduct(true);
 
-        setTimeout(() => {
-            getMenu(menu, filtter, 1, 10);
-        }, 1);
+        getMenu(menu, filtter, 1, 10);
     }, [filtter]);
     const getMenu = (menu, filtter, pageInd, size) => {
         setMenuProduct([]);
@@ -383,6 +383,9 @@ export const MenuPage = () => {
                 return menuTitle("Điểm Tâm Sáng", "Gọi là có - nhận đơn và xử lý giao hàng ngay.", 950000, true);
         }
     };
+    const hanldeViewAll = (cateId) => {
+        history.push(`/menu/${menu}/${filtter}/${cateId}`);
+    };
     return (
         <>
             <section className="shop background back-white" style={{ padding: "5px 0" }}>
@@ -458,7 +461,7 @@ export const MenuPage = () => {
                                 {menuCategory &&
                                     menuCategory.map((cate, index) => {
                                         return (
-                                            <div key={index} className="cateogry-menu-wrapper ">
+                                            <div key={index} className="cateogry-menu-wrapper " onClick={() => hanldeViewAll(cate.id)}>
                                                 <div className="cateogry-menu-img">
                                                     <img src={cate.img || "https://thumbs.dreamstime.com/b/vietnamese-pho-soup-illustration-97217112.jpg"} alt="" />
                                                 </div>
@@ -537,8 +540,9 @@ export const MenuPage = () => {
                     <section className="shop" style={{ background: "#f6f9fc", padding: "25px 0 40px 0" }}>
                         <div className="container center_flex">
                             <div className="contentWidth  center_flex" style={{ marginLeft: 0, flexDirection: "column", gap: 10 }}>
-                                <i class="fa-solid fa-box-open" style={{ fontSize: 40, color: "var(--primary)" }}></i>
-                                <span>Hiện không có sản phẩm nào!!</span>
+                                {/* <i class="fa-solid fa-box-open" style={{ fontSize: 40, color: "var(--primary)" }}></i> */}
+                                <img src="/images/fish-bones.png" style={{ width: 80 }} alt="" />
+                                <span style={{ fontSize: "1.1rem" }}>Hiện không có sản phẩm nào!!</span>
                             </div>
                         </div>
                     </section>
