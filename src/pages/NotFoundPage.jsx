@@ -5,14 +5,13 @@ import { useHistory } from "react-router-dom";
 import { AppContext } from "../context/AppProvider";
 
 export const NotFoundPage = () => {
-    const { setIsHeaderOrder, setIsHeader } = useContext(AppContext);
+    const { setIsHeaderOrder } = useContext(AppContext);
 
     let history = useHistory();
 
     useEffect(() => {
         setIsHeaderOrder(false);
-        setIsHeader(false);
-    }, [setIsHeaderOrder, setIsHeader]);
+    }, [setIsHeaderOrder]);
 
     return (
         <div style={{ marginTop: 50 }}>

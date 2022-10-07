@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { Link, useHistory } from "react-router-dom";
 import { AppContext } from "../../context/AppProvider";
-import ProductCart from "./ProductCart";
+import { ProductCart } from "./ProductCart";
 
 export const ProductGrid = ({ filtter, label, data, labelImg, cateId, isLoading, isViewAll }) => {
     const { setCart, setlistProducts, mobileMode, menu } = useContext(AppContext);
@@ -13,15 +13,13 @@ export const ProductGrid = ({ filtter, label, data, labelImg, cateId, isLoading,
     let history = useHistory();
     return (
         <>
-            {" "}
-            {}
-            <section className="shop" style={{ background: "#f6f9fc", padding: "25px 0 40px 0" }}>
+            <section className="shop" style={{ padding: "85px 15px 0px 15px" }}>
                 <div className="container d_flex">
                     <div className="contentWidth" style={{ marginLeft: 0 }}>
                         <div style={{ marginBottom: 20 }}>
                             <div className="heading d_flex" style={{ alignItems: "center" }}>
                                 <div className="heading-left  center_flex">
-                                    {isLoading ? (
+                                    {/* {isLoading ? (
                                         <div style={{ marginRight: 5 }}>
                                             <Skeleton height={45} width={45} borderRadius={50} />
                                         </div>
@@ -30,7 +28,7 @@ export const ProductGrid = ({ filtter, label, data, labelImg, cateId, isLoading,
                                             <img style={{ borderRadius: 50, objectFit: "cover", width: "100%", height: "100%" }} src={labelImg} alt="" />
                                         </div>
                                     )}
-                                    {isLoading ? <Skeleton height={43} width={150} borderRadius={8} style={{ margin: 0 }} /> : <h2>{label ? label : ""}</h2>}
+                                    {isLoading ? <Skeleton height={43} width={150} borderRadius={8} style={{ margin: 0 }} /> : <h2>{label ? label : ""}</h2>} */}
                                 </div>
                                 {isViewAll &&
                                     (isLoading ? (
@@ -51,7 +49,7 @@ export const ProductGrid = ({ filtter, label, data, labelImg, cateId, isLoading,
                                             }
                                             return isLoading ? (
                                                 <div style={{ margin: 6 }}>
-                                                    <Skeleton height={272} borderRadius={8} style={{ margin: 0 }} />
+                                                    <Skeleton height={272} key={index} borderRadius={8} style={{ margin: 0 }} />
                                                 </div>
                                             ) : (
                                                 <ProductCart product={item} key={index} />
@@ -67,10 +65,10 @@ export const ProductGrid = ({ filtter, label, data, labelImg, cateId, isLoading,
                                             <span style={{ fontSize: "1.1rem" }}>Hiện không có sản phẩm nào!!</span>
                                         </div>
 
-                                        <div style={{ textAlign: "center", marginTop: 0, height: 50, borderRadius: "0.375rem", alignItems: "center" }} className="center_flex cusor">
+                                        <div style={{ textAlign: "center", marginTop: 0, height: 50, borderRadius: "0.5rem", alignItems: "center" }} className="center_flex cusor">
                                             <span
                                                 onClick={() => {
-                                                    history.push("/");
+                                                    history.goBack();
                                                 }}
                                                 style={{ fontWeight: 700, fontSize: 16, color: "var(--primary)" }}
                                             >
@@ -83,7 +81,7 @@ export const ProductGrid = ({ filtter, label, data, labelImg, cateId, isLoading,
                         </div>
                         {isViewAll && mobileMode && !isLoading && (
                             <div
-                                style={{ textAlign: "center", margin: "0 5px", height: 45, borderRadius: "0.375rem", alignItems: "center", border: "1px solid var(--secondary)" }}
+                                style={{ textAlign: "center", margin: "0 5px", height: 45, borderRadius: "0.5rem", alignItems: "center", border: "1px solid var(--secondary)" }}
                                 className="center_flex "
                                 onClick={() => history.push(`/menu/${menu}/${filtter}/${cateId}`)}
                             >

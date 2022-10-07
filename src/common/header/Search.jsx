@@ -12,51 +12,50 @@ const Search = () => {
     const [isMenu, setIsmenu] = useState(false);
     const [ScrollUp, setScrollUp] = useState(false);
 
-    useEffect(() => {
-        var scrollBefore = 0;
-        window.addEventListener("scroll", function (e) {
-            // console.log(mobileMode);
-            if (!mobileMode) {
-                const search = document.querySelector(".search");
-                search.classList.toggle("active", window.scrollY > 300);
-            }
-            // } else if (mobileMode) {
-            //     if (window.scrollY > 200) {
-            //         setIsmenu(true);
-            //     } else {
-            //         setIsmenu(false);
-            //     }
-            // }
-            const scrolled = window.scrollY;
-            if (scrollBefore > scrolled) {
-                // console.log("ScrollUP");
-                scrollBefore = scrolled;
-                setScrollUp(true);
-                //Desired action
-            } else {
-                scrollBefore = scrolled;
-                // console.log("ScrollDOWN");
-                setScrollUp(false);
-                //Desired action
-            }
-            if (window.scrollY > 300) {
-                setIsmenu(true);
-            } else {
-                setIsmenu(false);
-            }
-        });
-        return () => {};
-    }, []);
+    // useEffect(() => {
+    //     var scrollBefore = 0;
+    //     window.addEventListener("scroll", function (e) {
+    //         // console.log(mobileMode);
+    //         if (!mobileMode) {
+    //             const search = document.querySelector(".search");
+    //             search.classList.toggle("active", window.scrollY > 300);
+    //         }
+    //         // } else if (mobileMode) {
+    //         //     if (window.scrollY > 200) {
+    //         //         setIsmenu(true);
+    //         //     } else {
+    //         //         setIsmenu(false);
+    //         //     }
+    //         // }
+    //         const scrolled = window.scrollY;
+    //         if (scrollBefore > scrolled) {
+    //             // console.log("ScrollUP");
+    //             scrollBefore = scrolled;
+    //             setScrollUp(true);
+    //             //Desired action
+    //         } else {
+    //             scrollBefore = scrolled;
+    //             // console.log("ScrollDOWN");
+    //             setScrollUp(false);
+    //             //Desired action
+    //         }
+    //         if (window.scrollY > 300) {
+    //             setIsmenu(true);
+    //         } else {
+    //             setIsmenu(false);
+    //         }
+    //     });
+    //     return () => {};
+    // }, []);
 
     const openDrawer = () => {
         setIsOpenDrawer(true);
         document.body.style.overflow = "hidden";
         document.body.style.touchAction = "none";
     };
-    console.log(isMenu);
     return (
         <>
-            <section className="search ">
+            <section className="search container ">
                 <div className="container c_flex header-main" style={{ padding: "15px 10px 10px 10px" }}>
                     <div className="logo width c_flex" style={{ gap: 16 }}>
                         {mobileMode && (

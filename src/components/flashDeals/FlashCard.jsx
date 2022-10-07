@@ -8,7 +8,7 @@ export const SampleNextArrow = (props) => {
     return (
         <div className="control-btn" onClick={onClick}>
             <button className="next">
-                <i className="fa fa-long-arrow-alt-right"></i>
+                <i className="fa-solid fa-arrow-right"></i>
             </button>
         </div>
     );
@@ -18,7 +18,7 @@ export const SamplePrevArrow = (props) => {
     return (
         <div className="control-btn" onClick={onClick}>
             <button className="prev">
-                <i className="fa fa-long-arrow-alt-left"></i>
+                <i className="fa-solid fa-arrow-left"></i>
             </button>
         </div>
     );

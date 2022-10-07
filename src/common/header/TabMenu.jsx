@@ -39,7 +39,7 @@ export const TabMenu = () => {
             <div className="tab center_flex">
                 {tabList.map((item) => {
                     return (
-                        <div className={`tab-item center_flex ${item.id === menu && "tab-active"}`} onClick={() => changeMenu(item.id)}>
+                        <div key={item.id} className={`tab-item center_flex ${item.id === menu && "tab-active"}`} onClick={() => changeMenu(item.id)}>
                             <div className="c_flex" style={{ flexDirection: "column", gap: 2 }}>
                                 <div style={{ width: 45, height: 45 }}>
                                     {tab === item.id ? (

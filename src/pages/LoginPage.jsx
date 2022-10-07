@@ -1,76 +1,87 @@
 import React from "react";
+import { useState } from "react";
 import { useContext } from "react";
 import { useEffect } from "react";
 import { AppContext } from "../context/AppProvider";
 
 export const LoginPage = () => {
-    const { setIsHeaderOrder, setIsHeader, Cart } = useContext(AppContext);
+    const { setIsHeaderOrder, setHeaderInfo, setisCartMain } = useContext(AppContext);
+    const [phone, setPhone] = useState("");
     useEffect(() => {
         setIsHeaderOrder(false);
-        setIsHeader(false);
-    }, [setIsHeaderOrder, setIsHeader]);
+        setHeaderInfo({ isSearchHeader: false, title: "Đăng nhập" });
+        setisCartMain(false);
+    }, [setIsHeaderOrder, setHeaderInfo, setisCartMain]);
     return (
-        <section className="background" style={{ paddingTop: 0 }}>
-            <div className="container " style={{ borderRadius: 10 }}>
+        <section className="background back-white" style={{ paddingTop: 90, height: "100vh" }}>
+            <div className="container login-wrapper" style={{ borderRadius: 10, background: "#fff" }}>
                 <div class="limiter">
-                    <div class="container-login100">
-                        <div class="wrap-login100" style={{ padding: "40px 55px 40px 55px" }}>
-                            <form class="login100-form validate-form">
-                                <h3 class="login100-form-title " style={{ paddingBottom: 49, fontSize: 30 }}>
-                                    Đăng Nhập
-                                </h3>
-
-                                <div class="wrap-input100 validate-input " style={{ marginBottom: 23 }} data-validate="Username is reauired">
-                                    <h4 class="">Gmail / Số điện thoại</h4>
-                                    <input class="input100" type="text" name="username" placeholder="Gmail / Số điện thoại" />
-                                    <span class="focus-input100" data-symbol="&#xf206;"></span>
-                                </div>
-
-                                <div class="wrap-input100 validate-input" data-validate="Password is required">
-                                    <h4 class="">Mật khẩu</h4>
-                                    <input class="input100" type="password" name="pass" placeholder="Mật khẩu" />
-                                    <span class="focus-input100" data-symbol="&#xf190;"></span>
-                                </div>
-
-                                <div class="text-right" style={{ paddingTop: 8, paddingBottom: 31 }}>
-                                    <a href="#" className="hover">
-                                        Quên mật khẩu?
-                                    </a>
-                                </div>
-
-                                <div class="container-login100-form-btn">
-                                    <div class="wrap-login100-form-btn">
-                                        <div class="login100-form-bgbtn"></div>
-                                        <button class="login100-form-btn btn-hover">Đăng Nhập</button>
-                                    </div>
-                                </div>
-
-                                <div class="txt1 text-center" style={{ paddingTop: 30, paddingBottom: 20 }}>
-                                    <span>Hoặc đăng nhập với</span>
-                                </div>
-
-                                <div class="flex-c-m">
-                                    <a href="#" class="login100-social-item bg1">
-                                        <i class="fa-brands fa-facebook-f"></i>
-                                    </a>
-
-                                    <a href="#" class="login100-social-item bg2">
-                                        <i class="fa-brands fa fa-twitter"></i>
-                                    </a>
-
-                                    <a href="#" class="login100-social-item bg3">
-                                        <i class="fa-brands fa fa-google"></i>
-                                    </a>
-                                </div>
-
-                                <div class="flex-col-c p-t-155" style={{ paddingTop: 30 }}>
-                                    <span class="txt1 p-b-17">Bạn chưa có tài khoản?</span>
-
-                                    <a href="#" class="txt2" style={{ color: "#ea4335" }}>
-                                        Đăng Ký
-                                    </a>
-                                </div>
-                            </form>
+                    <div class="center_flex" style={{ flexDirection: "column" }}>
+                        <div class="" style={{ padding: "15px 0" }}>
+                            <span className="login-logo">VinGP Deliver </span>
+                        </div>
+                        <div class="" style={{}}>
+                            <span className="login-hello">___ Xin Chào ___</span>
+                        </div>
+                        <div class="f_flex login-text" style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", padding: "30px 0", gap: 5 }}>
+                            <span>Gửi mã xác nhận</span>
+                            <span>Có thể bỏ qua nếu không nhận được OTP</span>
+                            <span>sau vài giây</span>
+                        </div>
+                        <div>
+                            <input
+                                onChange={(e) => {
+                                    setPhone(e.target.value);
+                                }}
+                                type="text"
+                                value={phone}
+                                placeholder="Số điện thoại"
+                                style={{ border: "1px solid rgb(200,200,200)", width: " 300px", borderRadius: 4, padding: "10px 10px", lineHeight: "1rem", fontSize: "1rem", marginBottom: 20 }}
+                            />
+                        </div>
+                        <div>
+                            {phone.length > 8 && phone.length < 12 ? (
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                    }}
+                                    style={{
+                                        flex: 1,
+                                        padding: 18,
+                                        width: 180,
+                                        fontSize: "1rem",
+                                        cursor: "pointer",
+                                        fontWeight: 700,
+                                        borderRadius: 10,
+                                        background: "var(--primary)",
+                                        textTransform: "uppercase",
+                                        transition: "0.5s all",
+                                    }}
+                                >
+                                    Gửi mã OTP
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                    }}
+                                    style={{
+                                        flex: 1,
+                                        padding: 18,
+                                        width: 180,
+                                        fontSize: "1rem",
+                                        cursor: "pointer",
+                                        fontWeight: 700,
+                                        borderRadius: 10,
+                                        background: "#f5f5f5",
+                                        color: "rgba(0,0,0,.25)",
+                                        textTransform: "uppercase",
+                                        transition: "0.5s all",
+                                    }}
+                                >
+                                    Gửi mã OTP
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
