@@ -20,12 +20,13 @@ const Product = ({ shopItems }) => {
                     <Catg />
                     <div className="contentWidth">
                         <div className="container d_flex category-list" style={{ marginBottom: 25 }}>
-                            <div className="f_flex" style={{ gap: 20,  }}>
-                                {data.map((item) => {
+                            <div className="f_flex" style={{ gap: 20 }}>
+                                {data.map((item, index) => {
                                     return (
                                         <div
+                                            key={index}
                                             className={`${isActive === item.id ? "menu-item-active" : "menu-item "} cusor center_flex category-item`}
-                                            style={{  }}
+                                            style={{}}
                                             onClick={() => setIsActive(item.id)}
                                         >
                                             <span>{item.cateName}</span>

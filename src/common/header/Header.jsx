@@ -1,19 +1,18 @@
-import React from "react"
-import "./Header.css"
-import Head from "./Head"
-import Search from "./Search"
-import Navbar from "./Navbar"
-import { TabMenu } from "./TabMenu"
+import React, { useContext } from "react";
+import { AppContext } from "../../context/AppProvider";
+import Head from "./Head";
+import "./Header.css";
+import Navbar from "./Navbar";
 
 const Header = ({ CartItem }) => {
-  return (
-    <>
-      {/* <Head /> */}
-      <Search/>
-      
-      <Navbar />
-    </>
-  )
-}
+    const { isHeaderHome } = useContext(AppContext);
+    return (
+        <>
+            {isHeaderHome ? <Head /> : <Navbar />}
 
-export default Header
+            {/* <Navbar /> */}
+        </>
+    );
+};
+
+export default Header;

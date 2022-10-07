@@ -1,15 +1,13 @@
-import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
-import Countdown from "react-countdown";
 import Skeleton from "react-loading-skeleton";
 import { useHistory } from "react-router-dom";
 import Slider from "react-slick";
 import { getMenuByMode } from "../apis/apiService";
+import { SampleNextArrow, SamplePrevArrow } from "../components/flashDeals/FlashCard";
 import Mdata from "../components/MainPage/Mdata";
 import Pdata from "../components/products/Pdata";
-import { ProductGrid } from "../components/products/ProductGrid";
-import { CATE_FITLER, IMAGE_NOTFOUND, IMAGE_NOTFOUND_v2, STORE_FILTER } from "../constants/Variable";
+import { ProductSlide } from "../components/products/ProductSlide";
+import { CATE_FITLER, IMAGE_NOTFOUND, STORE_FILTER } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
 const categorys = [
@@ -66,63 +64,82 @@ export const MenuPage = () => {
     // let timeEnd1 = 13.54;
     // let timeEnd2 = 13.55;
     // let timeEnd3 = 13.56;
-    const { menu, mobileMode, setIsHeaderOrder, setIsHeader } = useContext(AppContext);
+    const { menu, mobileMode, setIsHeaderOrder, setHeaderInfo } = useContext(AppContext);
     const [filtter, setFilter] = useState(CATE_FITLER);
     // const [checked, setChecked] = useState(false);
     const [isLoadingPage, setIsLoadingPage] = useState(true);
-    const [isLoadingProduct, setIsLoadingProduct] = useState(true);
+    const [isLoadingProduct, setIsLoadingProduct] = useState(false);
     const [menuProduct, setMenuProduct] = useState([]);
     const [menuCategory, setMenuCategory] = useState([]);
+    const [menuEmpty, setMenuEmpty] = useState(false);
     // const [menuCategory, setMenuCategory] = useState([]);
     const [widthScreen, setWidthScreen] = useState(window.innerWidth - 100);
     let history = useHistory();
     useEffect(() => {
         setIsLoadingPage(true);
         setIsHeaderOrder(false);
-        setIsHeader(true);
         setTimeout(() => {
             getMenu(menu, filtter, 1, 10);
         }, 1);
-    }, [setIsHeaderOrder, setIsHeader, menu]);
-
-    useEffect(() => {
+    }, [setIsHeaderOrder, menu]);
+    const hanldeChangeFilter = (fil) => {
+        setFilter(fil);
         setIsLoadingProduct(true);
+        getMenu(menu, fil, 1, 10);
+    };
+    // useEffect(() => {
+    //     setIsLoadingProduct(true);
 
-        getMenu(menu, filtter, 1, 10);
-    }, [filtter]);
+    //     getMenu(menu, filtter, 1, 10);
+    // }, [filtter]);
     const getMenu = (menu, filtter, pageInd, size) => {
-        setMenuProduct([]);
-        setMenuCategory([]);
-        getMenuByMode(menu, filtter, pageInd, size)
-            .then((res) => {
-                if (res.data) {
-                    const menu = res.data;
-                    setMenuProduct(menu);
-                    setMenuCategory(menu.listCategoryStoreInMenus);
-                } else {
+        // setMenuCategory([]);
+        console.log({ menu, filtter });
+        if (menu !== "0") {
+            getMenuByMode(menu, filtter, pageInd, size)
+                .then((res) => {
+                    console.log(res);
+                    if (res.data) {
+                        const menu = res.data;
+                        setMenuProduct(menu);
+                        setMenuCategory(menu.listCategoryStoreInMenus);
+                        console.log(menu.listCategoryStoreInMenus.length);
+                        if (menu.listCategoryStoreInMenus.length > 0) {
+                            setMenuEmpty(false);
+                        } else {
+                            setMenuEmpty(true);
+                        }
+                    } else {
+                        setMenuProduct([]);
+                        setMenuCategory([]);
+                        setMenuEmpty(true);
+                        console.log("ok");
+                    }
+                    setIsLoadingPage(false);
+                    setIsLoadingProduct(false);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setIsLoadingPage(false);
+                    setIsLoadingProduct(false);
                     setMenuProduct([]);
                     setMenuCategory([]);
-                }
-                setIsLoadingPage(false);
-                setIsLoadingProduct(false);
-            })
-            .catch((error) => {
-                console.log(error);
-                setIsLoadingPage(false);
-                setIsLoadingProduct(false);
-                setMenuProduct([]);
-                setMenuCategory([]);
-            });
+                    setMenuEmpty([]);
+                });
+        }
     };
     useEffect(() => {
+        setHeaderInfo({ isSearchHeader: true, title: "" });
         function handleResize() {
-            console.log(widthScreen);
             setWidthScreen(window.innerWidth - 100);
         }
 
         window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, [widthScreen]);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+            setHeaderInfo({});
+        };
+    }, [setHeaderInfo, widthScreen]);
     // const [timeEnd, setTimeEnd] = useState(timeEnd1);
     // const [timeCount, setTimeCount] = useState(1);
     // const [isStop, setIsStop] = useState(false);
@@ -167,7 +184,7 @@ export const MenuPage = () => {
     const settings = {
         dots: false,
         infinite: true,
-        slidesToShow: mobileMode ? 1 : 2,
+        slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
 
@@ -197,12 +214,16 @@ export const MenuPage = () => {
     const settingCaategory = {
         dots: true,
         infinite: false,
-        slidesToShow: menuCategory?.length <= 8 ? menuCategory?.length : 8,
-        slidesToScroll: menuCategory?.length <= 8 ? menuCategory?.length : 8,
+        slidesToShow: menuCategory?.length <= 6 ? menuCategory?.length : 6,
+        slidesToScroll: menuCategory?.length <= 6 ? menuCategory?.length : 6,
         autoplay: false,
+        swipeToSlide: false,
+        swipe: false,
         appendDots: (dots) => {
             return <ul style={{ margin: "0px" }}>{dots}</ul>;
         },
+        nextArrow: <SampleNextArrow />,
+        prevArrow: <SamplePrevArrow />,
         responsive: [
             {
                 breakpoint: 700,
@@ -211,7 +232,9 @@ export const MenuPage = () => {
                     slidesToScroll: 4,
                     // slidesPerRow: 1,
                     dots: true,
-                    // infinite: true,
+                    swipe: true,
+                    nextArrow: "",
+                    prevArrow: "",
                     rows: 1,
                 },
             },
@@ -346,17 +369,20 @@ export const MenuPage = () => {
                         <div className="container" style={{ padding: 0 }}>
                             {isLoadingPage ? (
                                 <div style={{ height: "100%" }}>
-                                    <Skeleton borderRadius={5} height={177} />
+                                    <Skeleton borderRadius={5} height={mobileMode ? 180 : 300} style={{ margin: "0 5px" }} />
                                 </div>
                             ) : (
                                 <Slider {...settings}>
                                     {Mdata.map((value, index) => {
                                         return (
                                             <>
-                                                <div className="box product" key={index} style={{ padding: 0, background: "none", boxShadow: "none", margin: 0, transition: "1s all" }}>
-                                                    <div className="nametop d_flex"></div>
-                                                    <div className="slide-img" style={{ height: 600, borderRadius: 5 }}>
-                                                        <img src={value.cover} alt="" style={{ objectFit: "cover", width: "100%", borderRadius: 5 }} />
+                                                <div
+                                                    className="box product"
+                                                    key={index}
+                                                    style={{ padding: 0, background: "none", borderRadius: "0.5rem", boxShadow: "none", margin: 0, transition: "1s all" }}
+                                                >
+                                                    <div className="slide-img" style={{ borderRadius: "0.5rem", overflow: "hidden" }}>
+                                                        <img src={value.cover} alt="" style={{ objectFit: "cover", width: "100%", borderRadius: "0.5rem" }} />
                                                     </div>
                                                 </div>
                                             </>
@@ -388,8 +414,8 @@ export const MenuPage = () => {
     };
     return (
         <>
-            <section className="shop background back-white" style={{ padding: "5px 0" }}>
-                <div className="container d_flex" style={{ padding: "10px 10px 20px 10px", flexDirection: "column", gap: 10 }}>
+            <section className="shop background back-white" style={{}}>
+                <div className="container d_flex back-white " style={{ padding: "10px 15px 20px 15px", flexDirection: "column", gap: 10 }}>
                     <div className="">{render()}</div>
                     {/* <div className="c_flex" style={{ gap: 3, flexWrap: "wrap" }}>
                         <div className="f_flex" style={{ gap: 15, width: "100%", alignItems: "center", justifyContent: "space-between" }}>
@@ -412,7 +438,7 @@ export const MenuPage = () => {
                     </div> */}
                     <div className="c_flex" style={{ gap: 10, marginTop: 0, width: "100%" }}>
                         <div style={{ width: "100%" }}>
-                            {isLoadingPage ? (
+                            {/* {isLoadingPage ? (
                                 <Skeleton borderRadius={5} height={50} style={{ marginTop: 10 }} />
                             ) : (
                                 <div className="search-menu" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -421,12 +447,12 @@ export const MenuPage = () => {
                                     </div>
                                     <input type="search" name="" id="" style={{ flex: 1 }} placeholder="Tìm sản phẩm" />
                                 </div>
-                            )}
+                            )} */}
                             {isLoadingPage ? (
                                 <Skeleton borderRadius={5} height={37} style={{ marginTop: 10 }} />
                             ) : (
                                 <div className=" f_flex category-list" style={{ marginBottom: 0, display: "flex", alignItems: "center", gap: 10, paddingTop: 10 }}>
-                                    <h4 for="1" style={{ fontSize: 18 }}>
+                                    <h4 htmlFor="1" style={{ fontSize: 18 }}>
                                         Lọc Theo:
                                     </h4>
                                     <div className="f_flex" style={{ gap: 0, justifyContent: "start" }}>
@@ -434,8 +460,18 @@ export const MenuPage = () => {
                                             className={`${filtter === 1 ? "menu-item-active" : "menu-item "} cusor center_flex `}
                                             style={{ borderTopLeftRadius: 10, borderBottomLeftRadius: 10, gap: 10 }}
                                         >
-                                            <input type="radio" name="filter" id="1" value={"1"} onClick={() => setFilter(CATE_FITLER)} checked={filtter === CATE_FITLER} />
-                                            <label for="1" onClick={() => setFilter(CATE_FITLER)}>
+                                            <input
+                                                type="radio"
+                                                name="filter"
+                                                id="1"
+                                                value={"1"}
+                                                onClick={() => {
+                                                    hanldeChangeFilter(CATE_FITLER);
+                                                }}
+                                                onChange={() => {}}
+                                                checked={filtter === CATE_FITLER}
+                                            />
+                                            <label htmlFor="1" onClick={() => hanldeChangeFilter(CATE_FITLER)}>
                                                 Danh Mục
                                             </label>
                                         </div>
@@ -443,8 +479,16 @@ export const MenuPage = () => {
                                             className={`${filtter === 2 ? "menu-item-active" : "menu-item "} cusor center_flex `}
                                             style={{ borderTopRightRadius: 10, borderBottomRightRadius: 10, gap: 10 }}
                                         >
-                                            <input type="radio" name="filter" id="2" value={"2"} onClick={() => setFilter(STORE_FILTER)} checked={filtter === STORE_FILTER} />
-                                            <label for="2" onClick={() => setFilter(STORE_FILTER)}>
+                                            <input
+                                                onChange={() => {}}
+                                                type="radio"
+                                                name="filter"
+                                                id="2"
+                                                value={"2"}
+                                                onClick={() => hanldeChangeFilter(STORE_FILTER)}
+                                                checked={filtter === STORE_FILTER}
+                                            />
+                                            <label htmlFor="2" onClick={() => hanldeChangeFilter(STORE_FILTER)}>
                                                 Cửa Hàng
                                             </label>
                                         </div>
@@ -454,15 +498,15 @@ export const MenuPage = () => {
                         </div>
                     </div>
                     {isLoadingPage ? (
-                        <Skeleton borderRadius={5} height={87} style={{ marginBottom: 5 }} />
+                        <Skeleton borderRadius={5} height={122} style={{ marginBottom: 5 }} />
                     ) : menuCategory && menuCategory.length > 0 ? (
                         <div className="cateogry-menu">
                             <Slider {...settingCaategory}>
                                 {menuCategory &&
                                     menuCategory.map((cate, index) => {
                                         return (
-                                            <div key={index} className="cateogry-menu-wrapper " onClick={() => hanldeViewAll(cate.id)}>
-                                                <div className="cateogry-menu-img">
+                                            <div key={index} className="cateogry-menu-wrapper ">
+                                                <div className="cateogry-menu-img" onClick={() => hanldeViewAll(cate.id)}>
                                                     <img src={cate.img || "https://thumbs.dreamstime.com/b/vietnamese-pho-soup-illustration-97217112.jpg"} alt="" />
                                                 </div>
                                                 <span className="cateogry-menu-text">{cate.name}</span>
@@ -493,19 +537,27 @@ export const MenuPage = () => {
 
                 {!isLoadingPage &&
                     !isLoadingProduct &&
-                    menuProduct.listCategoryStoreInMenus?.map((menu) => {
+                    menuProduct?.listCategoryStoreInMenus?.map((menu, index) => {
                         if (menu.listProducts.length > 0) {
                             return (
                                 // <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={500} transitionLeaveTimeout={500}>
                                 //     <ProductGrid data={menu.listProducts || []} label={menu.name} labelImg={menu.img || IMAGE_NOTFOUND} />
                                 // </ReactCSSTransitionGroup>
 
-                                <ProductGrid filtter={filtter} data={menu.listProducts || []} label={menu.name} cateId={menu.id} labelImg={menu.img || IMAGE_NOTFOUND} isViewAll={true} />
+                                <ProductSlide
+                                    key={index}
+                                    filtter={filtter}
+                                    data={[...menu.listProducts] || []}
+                                    label={menu.name}
+                                    cateId={menu.id}
+                                    labelImg={menu.img || IMAGE_NOTFOUND}
+                                    isViewAll={true}
+                                />
                             );
                         } else return true;
                     })}
                 {isLoadingPage || isLoadingProduct ? (
-                    <section className="shop" style={{ background: "#f6f9fc", padding: "25px 0 40px 0" }}>
+                    <section className="shop" style={{ padding: "0px 15px 0px 15px" }}>
                         <div className="container d_flex">
                             <div className="contentWidth" style={{ marginLeft: 0 }}>
                                 <div style={{ marginBottom: 20 }}>
@@ -518,16 +570,16 @@ export const MenuPage = () => {
                                             <Skeleton height={43} width={150} borderRadius={8} style={{ margin: 0 }} />
                                         </div>
 
-                                        <Skeleton height={43} width={110} borderRadius={8} style={{ margin: 0 }} />
+                                        {/* <Skeleton height={43} width={110} borderRadius={8} style={{ margin: 0 }} /> */}
                                     </div>
                                     <div className="product-content  grid6">
-                                        {[1, 2, 3, 4].map((item, index) => {
-                                            if (mobileMode && index > 6) {
+                                        {[1, 2, 3, 4, 5, 6].map((item, index) => {
+                                            if (mobileMode && index > 2) {
                                                 return true;
                                             }
                                             return (
-                                                <div style={{ margin: 6 }}>
-                                                    <Skeleton height={272} borderRadius={8} style={{ margin: 0 }} />
+                                                <div style={{ margin: 6 }} key={index}>
+                                                    <Skeleton height={220} width={140} borderRadius={8} style={{ margin: 0 }} />
                                                 </div>
                                             );
                                         })}
@@ -536,21 +588,19 @@ export const MenuPage = () => {
                             </div>
                         </div>
                     </section>
-                ) : !menuProduct.listCategoryStoreInMenus || menuProduct.listCategoryStoreInMenus.length === 0 ? (
-                    <section className="shop" style={{ background: "#f6f9fc", padding: "25px 0 40px 0" }}>
+                ) : (
+                    ""
+                )}
+                {menuEmpty && (
+                    <section className="shop" style={{ padding: "25px 0 40px 0" }}>
                         <div className="container center_flex">
                             <div className="contentWidth  center_flex" style={{ marginLeft: 0, flexDirection: "column", gap: 10 }}>
-                                {/* <i class="fa-solid fa-box-open" style={{ fontSize: 40, color: "var(--primary)" }}></i> */}
                                 <img src="/images/fish-bones.png" style={{ width: 80 }} alt="" />
                                 <span style={{ fontSize: "1.1rem" }}>Hiện không có sản phẩm nào!!</span>
                             </div>
                         </div>
                     </section>
-                ) : (
-                    ""
                 )}
-
-                {/* <ProductGrid data={shopItems} isLoading={!isLoadingPage} label="Cơm" labelImg="https://luabbq.com/upload/sanpham/abc-removebg-preview-1531.png" /> */}
             </section>
         </>
     );

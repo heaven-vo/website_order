@@ -25,18 +25,15 @@ export const DrawerContent = () => {
     ];
     return (
         <div className="drawer__wrapper">
-            <div className="drawer__wrapper__item" onClick={hanldeOpenCategory}>
+            {/* <div className="drawer__wrapper__item" onClick={hanldeOpenCategory}>
                 <h4>Danh mục thực phẩm</h4>
                 {isOpenCategory ? <i class="fa-solid fa-chevron-up"></i> : <i class="fa-solid fa-chevron-down"></i>}
-            </div>
-            <div
+            </div> */}
+            {/* <div
                 className="drawer__category__wrapper"
                 style={{
                     maxHeight: isOpenCategory ? "360px" : 0,
-                    // display: isOpenCategory ? "block" : "none",
-                    // opacity: isOpenCategory ? 1 : 0,
-                    // visibility: isOpenCategory ? "visible" : "hidden",
-                    // transform: isOpenCategory ? "translateY(0em)" : "translateY(-50em)",
+                   
                 }}
             >
                 <ul className="drawer__category__list">
@@ -49,9 +46,9 @@ export const DrawerContent = () => {
                     })}
                     <li onClick={() => handleSubmitCategory()}>{"Xem Tất Cả"}</li>
                 </ul>
-            </div>
+            </div> */}
             <Link to={"/"} onClick={() => setIsOpenDrawer(false)}>
-                <div className={`drawer__wrapper__item ${isOpenCategory && "border__top"}`}>
+                <div className={`drawer__wrapper__item`}>
                     <h4>Khám Phá</h4>
                 </div>
             </Link>
@@ -75,7 +72,7 @@ export const DrawerContent = () => {
                     <h4>Đăng nhập</h4>
                 </div>
             </Link>
-           
+
             <div className="drawer__wrapper__item">
                 <h4>Đăng xuất</h4>
                 <div>

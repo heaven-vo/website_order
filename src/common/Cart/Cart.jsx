@@ -1,21 +1,87 @@
 import React, { useContext, useEffect, useState } from "react";
-import { caculatorVND } from "../../constants/Caculator";
-import { IMAGE_NOTFOUND, LOCALSTORAGE_NAME } from "../../constants/Variable";
-import { AppContext } from "../../context/AppProvider";
-import "./style.css";
 import { Link, useHistory } from "react-router-dom";
+import { caculatorVND } from "../../constants/Caculator";
+import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME } from "../../constants/Variable";
+import { AppContext } from "../../context/AppProvider";
 import Rodal from "rodal";
+import Select from "react-select";
+import "./style.css";
 
 const Cart = ({}) => {
-    const { Cart, setCart, setlistProducts, setIsHeaderOrder, setIsHeader } = useContext(AppContext);
+    const { Cart, setCart, setHeaderInfo, setIsHeaderOrder, mobileMode, setisCartMain, isLogin, userInfo, setUserInfo } = useContext(AppContext);
     const [totalPrice, setTotalPrice] = useState(0);
     const [CartList, setCartList] = useState([]);
     const [visible, setVisible] = useState(false);
+    const [visiblePopupInfo, setVisiblePopupInfo] = useState(false);
+    const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);
+    const [fullName, setFullName] = useState("");
+    const [phone, setPhone] = useState("");
+    const [building, setBuilding] = useState("");
+    const [productRodal, setProductRodal] = useState("");
+    const [productRodalQuantity, setProductRodalQuantity] = useState(1);
+    const [isValidFullName, setIsValidFullname] = useState(false);
+    const [isValidPhone, setIsValidPhone] = useState(false);
+    const [isValidBuilding, setIsValidBuilding] = useState(false);
+    const [note, setNote] = useState("");
+    const handleSubmit = () => {
+        console.log(building);
+        let isValid = true;
+        if (fullName.length === 0 || phone.length === 0 || !building?.value) {
+            isValid = false;
+        }
+        if (!fullName && fullName.length === 0) {
+            setIsValidFullname(true);
+        } else {
+            setIsValidFullname(false);
+        }
+        if (!phone && phone.length === 0) {
+            setIsValidPhone(true);
+        } else {
+            setIsValidPhone(false);
+        }
+        if (!building && building.length === 0) {
+            setIsValidBuilding(true);
+        } else {
+            setIsValidBuilding(false);
+        }
+        if (isValid) {
+            setUserInfo({ fullName, phone, building, note });
+            setVisiblePopupInfo(false);
+        }
+    };
+    const options = [
+        { value: "1", label: "S1.01" },
+        { value: "2", label: "S1.02" },
+        { value: "3", label: "S1.03" },
+        { value: "4", label: "S1.04" },
+    ];
     let history = useHistory();
     useEffect(() => {
+        // if (Cart.length === 0) {
+        //     history.push("/");
+        // }
+
+        return () => {};
+    }, [Cart, history]);
+
+    useEffect(() => {
+        // setUser(userInfo);
+        setFullName(userInfo.fullName || "");
+        setPhone(userInfo.phone || "");
+        setBuilding(userInfo.building || "");
+        setNote(userInfo.note || "");
+    }, [userInfo]);
+    useEffect(() => {
         setIsHeaderOrder(false);
-        setIsHeader(false);
-    }, [setIsHeaderOrder, setIsHeader]);
+        setHeaderInfo({ isSearchHeader: false, title: "Đơn hàng của bạn" });
+        setisCartMain(false);
+        // setIsHeader(false);
+        return () => {
+            if (Cart.length > 0) {
+                setisCartMain(true);
+            }
+        };
+    }, [setIsHeaderOrder, setHeaderInfo, setisCartMain, Cart.length]);
 
     useEffect(() => {
         var total = 0;
@@ -28,13 +94,14 @@ const Cart = ({}) => {
 
     // Tăng số lượng sản phẩm trong giỏ hàng
     const increaseQty = (id) => {
+        setProductRodalQuantity(productRodalQuantity + 1);
         // Tạo 1 giỏ hàng mới và tăng số lượng sản phẩm dựa theo ID
-        let newCarts = CartList?.map((item) => {
-            if (item.id === id) {
-                item.quantityCart = item.quantityCart + 1;
-            }
-            return item;
-        });
+        // let newCarts = CartList?.map((item) => {
+        //     if (item.id === id) {
+        //         item.quantityCart = item.quantityCart + 1;
+        //     }
+        //     return item;
+        // });
         // Tạo 1 mảng sản phẩm mới từ mảng cũ kèm theo tăng số lượng sản phẩm theo ID
         // let newProduts = listProducts?.map((item) => {
         //     if (item.id === id) {
@@ -43,25 +110,26 @@ const Cart = ({}) => {
         //     return item;
         // });
         // Cập nhật lại Giỏ hàng ở Provider
-        setCart([...newCarts]);
+        // setCart([...newCarts]);
         // Cập nhật giỏ hàng ỏ local storage
-        localStorage.setItem(LOCALSTORAGE_NAME, JSON.stringify([...newCarts]));
+        // localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
         // Cập nhật lại danh sách sản phẩm hiện tại với số lượng vừa được cập nhật
         // setlistProducts([...newProduts]);
     };
 
     // Giảm số lượng sản phẩm trong giỏ hàng
     const decreaseQty = (id) => {
-        let isDelete = false;
-        let newCarts = CartList?.map((item) => {
-            if (item.id === id && item.quantityCart > 1) {
-                item.quantityCart = item.quantityCart - 1;
-            } else if (item.id === id && item.quantityCart <= 1) {
-                deleteCartItem(item.id);
-                isDelete = true;
-            }
-            return item;
-        });
+        setProductRodalQuantity(productRodalQuantity - 1);
+        // let isDelete = false;
+        // let newCarts = CartList?.map((item) => {
+        //     if (item.id === id && item.quantityCart > 1) {
+        //         item.quantityCart = item.quantityCart - 1;
+        //     } else if (item.id === id && item.quantityCart <= 1) {
+        //         deleteCartItem(item.id);
+        //         isDelete = true;
+        //     }
+        //     return item;
+        // });
         // let newProduts = listProducts?.map((item) => {
         //     if (item.id === id) {
         //         item.quantityCart = item.quantityCart - 1;
@@ -70,133 +138,371 @@ const Cart = ({}) => {
         // });
         // Cập nhật lại danh sách sản phẩm hiện tại với số lượng vừa được cập nhật
         // setlistProducts([...newProduts]);
-        if (!isDelete) {
-            setCart([...newCarts]);
-            localStorage.setItem(LOCALSTORAGE_NAME, JSON.stringify([...newCarts]));
-        }
+        // if (!isDelete) {
+        //     setCart([...newCarts]);
+        //     localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
+        // }
     };
-
+    const updateCart = (id) => {
+        let newCarts = CartList?.map((item) => {
+            if (item.id === id) {
+                item.quantityCart = productRodalQuantity;
+            }
+            return item;
+        });
+        // Cập nhật lại Giỏ hàng ở Provider
+        setCart([...newCarts]);
+        // Cập nhật giỏ hàng ỏ local storage
+        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
+        setVisiblePopupQuantity(false);
+    };
     const deleteCartItem = (id) => {
         let newCarts = CartList?.filter((item) => item.id !== id);
         // let newProduts = listProducts?.filter((item) => item.id !== id);
         // Cập nhật lại danh sách sản phẩm hiện tại với số lượng vừa được cập nhật
         // setlistProducts([...newProduts]);
         setCart([...newCarts]);
-        localStorage.setItem(LOCALSTORAGE_NAME, JSON.stringify([...newCarts]));
+        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
+        setVisiblePopupQuantity(false);
     };
     return (
         <>
-            <section className="cart-items">
-                <div className="container center_flex">
-                    {CartList.length === 0 && (
-                        <>
-                            <div>
-                                <div className="center_flex">
-                                    <img src="/images/empty-cart.png" style={{ width: 250 }} alt="" />
-                                </div>
+            <Rodal
+                height={470}
+                width={mobileMode ? 350 : 400}
+                visible={visiblePopupInfo}
+                onClose={() => {
+                    setVisiblePopupInfo(false);
+                    // setIsValid(true);
+                    setIsValidBuilding(false);
+                    setIsValidFullname(false);
+                    setIsValidPhone(false);
+                }}
+                style={{ borderRadius: 10 }}
+            >
+                <div style={{ borderBottom: "1px solid rgb(220,220,220)", paddingBottom: "10px" }}>
+                    <span style={{ fontSize: 16, fontWeight: 700 }}>Nơi nhận</span>
+                </div>
+                <div style={{ padding: "10px 0 10px 0" }}>
+                    <span style={{ fontSize: 16, fontWeight: 700 }}>Building (Tòa nhà)</span>
+                </div>
+                <Select options={options} placeholder="Tòa nhà" onChange={(e) => setBuilding(e)} value={building} />
+                {isValidBuilding && (
+                    <div className="input-validate">
+                        <span>Địa chỉ không được để trống</span>
+                    </div>
+                )}
+                <div style={{ padding: "10px 0 10px 0" }}>
+                    <span style={{ fontSize: 16, fontWeight: 700 }}>Tên người nhận</span>
+                </div>
+                <div style={{ width: " 100%" }}>
+                    <input
+                        onChange={(e) => {
+                            setFullName(e.target.value);
+                        }}
+                        value={fullName}
+                        type="text"
+                        style={{ border: "1px solid rgb(200,200,200)", width: " 100%", borderRadius: 4, padding: "10px 10px", lineHeight: "1rem", fontSize: "1rem" }}
+                    />
+                </div>
+                {isValidFullName && (
+                    <div className="input-validate">
+                        <span>Tên không được để trống</span>
+                    </div>
+                )}
+                <div style={{ padding: "10px 0 10px 0" }}>
+                    <span style={{ fontSize: 16, fontWeight: 700 }}>Số điện thoại nhận hàng</span>
+                </div>
+                <div style={{ width: " 100%" }}>
+                    <input
+                        onChange={(e) => {
+                            setPhone(e.target.value);
+                        }}
+                        value={phone}
+                        type="text"
+                        style={{ border: "1px solid rgb(200,200,200)", width: " 100%", borderRadius: 4, padding: "10px 10px", lineHeight: "1rem", fontSize: "1rem" }}
+                    />
+                </div>
+                {isValidPhone && (
+                    <div className="input-validate">
+                        <span>Số điện thoại không được để trống</span>
+                    </div>
+                )}
+                <div style={{ padding: "10px 0 10px 0" }}>
+                    <span style={{ fontSize: 16, fontWeight: 700 }}>Lưu ý đặc biệt</span>
+                </div>
+                <div style={{ width: " 100%" }}>
+                    <input
+                        onChange={(e) => {
+                            setNote(e.target.value);
+                        }}
+                        value={note}
+                        type="text"
+                        placeholder="Ví dụ: Không hành ..."
+                        style={{ border: "1px solid rgb(200,200,200)", width: " 100%", borderRadius: 4, padding: "10px 10px", lineHeight: "1rem", fontSize: "1rem" }}
+                    />
+                </div>
+                <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 25, gap: 15 }}>
+                    <button
+                        style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10 }}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setVisiblePopupInfo(false);
+                        }}
+                    >
+                        Đóng
+                    </button>
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handleSubmit();
+                        }}
+                        style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)" }}
+                    >
+                        OK
+                    </button>
+                </div>
+            </Rodal>
+            <Rodal
+                height={250}
+                width={mobileMode ? 350 : 400}
+                visible={visiblePopupQuantity}
+                onClose={() => {
+                    setVisiblePopupQuantity(false);
+                }}
+                style={{ borderRadius: 10 }}
+            >
+                <div style={{ borderBottom: "1px solid rgb(220,220,220)", paddingBottom: "10px" }}>
+                    <span style={{ fontSize: 16, fontWeight: 700 }}>Cập nhật giỏ hàng</span>
+                </div>
 
-                                <h1 className=" " style={{ textAlign: "center", fontSize: 15, marginBottom: 40, marginTop: 5, fontWeight: 400, color: "rgba(0, 0, 0, 0.5)" }}>
-                                    Vui lòng thêm sản phẩm vào giỏ
-                                </h1>
-                                <Link to="/">
-                                    <div style={{ textAlign: "center", width: "100%", height: 50, borderRadius: "0.375rem", alignItems: "center" }} className="center_flex btn-hover">
-                                        <span onClick={() => {}} style={{ fontWeight: 700, fontSize: 16 }}>
-                                            Quay lại
-                                        </span>
-                                    </div>
-                                </Link>
-                            </div>
-                        </>
+                <div style={{ padding: "10px 0 5px 0", textAlign: "center" }}>
+                    <span className="cart-quantity-name" style={{ fontSize: 16, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)" }}>
+                        {productRodal.name}
+                    </span>
+                </div>
+                <div style={{ padding: "0px 0 10px 0", textAlign: "center" }}>
+                    <span style={{ fontSize: 16, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)" }}>{productRodal.pricePerPack / 1000 + ".000đ"}</span>
+                </div>
+                {/* <div className="cartControl d_flex">
+                            <button className="incCart" onClick={() => increaseQty(productRodal.id)}>
+                                <i className="fa-solid fa-plus"></i>
+                            </button>
+                            <button className="desCart" onClick={() => decreaseQty(productRodal.id)}>
+                                <i className="fa-solid fa-minus"></i>
+                            </button>
+                        </div> */}
+                <div className="center_flex ">
+                    <div className="center_flex cart-quantity" style={{ width: " 100%" }}>
+                        <div
+                            style={{ color: productRodalQuantity > 0 ? "" : "rgba(0,0,0,.25)" }}
+                            className="center_flex cart-quantity-minus"
+                            onClick={() => {
+                                if (productRodalQuantity > 0) {
+                                    decreaseQty(productRodal.id);
+                                }
+                            }}
+                        >
+                            <i className="fa-solid fa-minus"></i>
+                        </div>
+                        <div className="center_flex cart-quantity-text">
+                            <span>{productRodalQuantity}</span>
+                        </div>
+                        <div className="center_flex cart-quantity-plus" onClick={() => increaseQty(productRodal.id)}>
+                            <i className="fa-solid fa-plus"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 15 }}>
+                    {productRodalQuantity > 0 ? (
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                updateCart(productRodal?.id);
+                            }}
+                            style={{ flex: 1, padding: 14, fontSize: "1.2em", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", transition: "0.3s all" }}
+                        >
+                            Cập nhật giỏ hàng
+                        </button>
+                    ) : (
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                deleteCartItem(productRodal?.id);
+                            }}
+                            style={{ flex: 1, padding: 14, fontSize: "1.2em", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--red)", color: "#fff", transition: "0.3s all" }}
+                        >
+                            Xóa
+                        </button>
                     )}
                 </div>
-                <div className="container d_flex cart-mobile" style={{ gap: 10 }}>
-                    <div className="cart-details">
-                        {CartList.map((item) => {
-                            const productQty = item.pricePerPack * item.quantityCart;
-
-                            return (
-                                <div className="cart-list product d_flex" key={item.id}>
-                                    <div className="img">
-                                        <img src={item.image || IMAGE_NOTFOUND} alt="" />
-                                    </div>
-                                    <div className="cart-details c_flex">
-                                        <div className="cart-details-info" style={{ paddingLeft: 30 }}>
-                                            <h3>{item.name}</h3>
-                                            <span style={{ fontSize: 15, color: "rgb(160,160,160)" }}>{item.shop}</span>
-                                            <h4>
-                                                {item.pricePerPack / 1000 + ".000đ"} * {item.quantityCart}
-                                                <span>=</span>
-                                                <span>{productQty / 1000 + ".000đ"}</span>
-                                            </h4>
-                                        </div>
-                                    </div>
-                                    <div className="cart-items-function">
-                                        <div className="removeCart">
-                                            <button className="removeCart cusor" onClick={() => deleteCartItem(item.id)}>
-                                                <i className="fa-solid fa-xmark"></i>
-                                            </button>
-                                        </div>
-
-                                        <div className="cartControl d_flex">
-                                            <button className="incCart" onClick={() => increaseQty(item.id)}>
-                                                <i className="fa-solid fa-plus"></i>
-                                            </button>
-                                            <button className="desCart" onClick={() => decreaseQty(item.id)}>
-                                                <i className="fa-solid fa-minus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div className="cart-item-price"></div>
-                                </div>
-                            );
-                        })}
+            </Rodal>
+            <section className="cart-items">
+                <div className="">
+                    <div style={{ margin: "15px 15px 5px 15px" }}>
+                        <span style={{ color: "rgba(0,0,0,.4)", fontWeight: 700 }}>Giao đến</span>
                     </div>
+                    <div className="checkout-content">
+                        <div className="checkout-content-item">
+                            <h2>{userInfo.building?.label || ""} Vinhomes GP </h2>
+                        </div>
+                        <div className="checkout-content-item">
+                            <span>Thời gian giao hàng</span>
+                            <span>Giao nhanh 30 phút</span>
+                        </div>
+                        <div className="checkout-content-item">
+                            <span>Thời gian giao hàng dự kiến</span>
+                            <span>17:59 - 18:09</span>
+                        </div>
+                        <div className="checkout-content-item">
+                            <span>Được giao từ</span>
+                            <span>{Cart.length > 0 ? Cart[0].storeName : "Không có"}</span>
+                        </div>
+                    </div>
+                    <div className="c_flex" style={{ margin: "15px 15px 5px 15px" }}>
+                        <span style={{ color: "rgba(0,0,0,.4)", fontWeight: 700 }}>Thông tin người nhận</span>
+                        <span onClick={() => history.push("/login")} style={{ color: "#1890ff", fontWeight: 700, cursor: "pointer", fontSize: 15 }}>
+                            Đăng nhập
+                        </span>
+                    </div>
+                    <div
+                        className="checkout-content"
+                        onClick={() => {
+                            setVisiblePopupInfo(true);
+                            setFullName(userInfo.fullName || "");
+                            setPhone(userInfo.phone || "");
+                            setBuilding(userInfo.building || "");
+                            setIsValidBuilding(false);
+                            setIsValidFullname(false);
+                            setIsValidPhone(false);
+                        }}
+                    >
+                        <div className="f_flex checkout-content-icon-wrapper" style={{ alignItems: "center", gap: 15 }}>
+                            <div className="checkout-content-icon">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div className="checkout-content-item">
+                                <h4>Tên người nhận</h4>
+                                <span>{userInfo.fullName}</span>
+                            </div>
+                        </div>
+                        <div className="f_flex checkout-content-icon-wrapper" style={{ alignItems: "center", gap: 15 }}>
+                            <div className="checkout-content-icon">
+                                <i class="fa-solid fa-mobile-screen-button"></i>
+                            </div>
+                            <div className="checkout-content-item">
+                                <h4>Số điện thoại nhận hàng</h4>
+                                <span>{userInfo.phone}</span>
+                            </div>
+                        </div>
+                        <div className="f_flex checkout-content-icon-wrapper" style={{ alignItems: "center", gap: 15 }}>
+                            <div className="checkout-content-icon">
+                                <i class="fa-regular fa-clipboard"></i>
+                            </div>
+                            <div className="checkout-content-item">
+                                <h4>Lưu ý đặc biệt</h4>
+                                <span>{userInfo.note?.length > 0 ? userInfo.note : "Không có"}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style={{ margin: "15px 15px 5px 15px" }}>
+                        <span style={{ color: "rgba(0,0,0,.4)", fontWeight: 700 }}>Tóm tắt đơn hàng</span>
+                    </div>
+                    <div className="checkout-content">
+                        {Cart.map((item) => (
+                            <div className="checkout-product-cart" key={item.id}>
+                                <div className="c_flex">
+                                    <div className="checkout-product-image">
+                                        <img src={IMAGE_NOTFOUND} alt="" />
+                                    </div>
+                                    <div
+                                        className="center_flex checkout-product-quantity-count"
+                                        onClick={() => {
+                                            setVisiblePopupQuantity(true);
+                                            setProductRodalQuantity(item.quantityCart);
+                                            setProductRodal(item);
+                                        }}
+                                    >
+                                        <span>{item.quantityCart}x</span>
+                                    </div>
+                                    <div className="checkout-product-info">
+                                        <div className="checkout-product-name">{item.name}</div>
+                                        <div className="checkout-product-quantity">
+                                            <div
+                                                className="cartControl "
+                                                onClick={() => {
+                                                    setVisiblePopupQuantity(true);
+                                                    setProductRodal(item);
+                                                    setProductRodalQuantity(item.quantityCart);
+                                                }}
+                                            >
+                                                <p className="cusor">Chỉnh sửa</p>
+                                                {/* <button className="desCart" onClick={() => decreaseQty(item.id)}>
+                                                    <i className="fa-solid fa-minus"></i>
+                                                </button>
+                                                <span>{item.quantityCart}</span>
+                                                <button className="incCart" onClick={() => increaseQty(item.id)}>
+                                                    <i className="fa-solid fa-plus"></i>
+                                                </button> */}
+                                            </div>
+                                            {/* <div>-</div>
+                                        <div>1</div>
+                                        <div>+</div> */}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="checkout-product-price">
+                                    <span>{item.pricePerPack / 1000 + ".000đ"}</span>
+                                </div>
+                            </div>
+                        ))}
+                        <div className="c_flex">
+                            <span>Tiền hàng</span>
+                            <span style={{ fontWeight: 600 }}>{Cart.length > 0 ? totalPrice / 1000 + ".000đ" : "0đ"}</span>
+                        </div>
+                        <div className="c_flex">
+                            <span>Phí giao hàng</span>
+                            <span style={{ fontWeight: 600 }}>{Cart.length > 0 ? "15.000đ" : "0đ"}</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-                    <div className="cart-total">
-                        {CartList.length !== 0 && (
-                            <>
-                                <div className="product" style={{ margin: "0 10px 15px 10px" }}>
-                                    <div>
-                                        <h2>Tổng Tiền Hàng</h2>
-                                        <div className=" d_flex" style={{ marginBottom: 10 }}>
-                                            <h4>Tiền Hàng :</h4>
-                                            <span style={{ fontSize: 18, fontWeight: 600 }}>{caculatorVND(totalPrice / 1000 + ".000đ")}</span>
-                                        </div>
-                                        <div className=" d_flex" style={{ marginBottom: 10 }}>
-                                            <h4>Phí Giao Hàng :</h4>
-                                            <span style={{ fontSize: 18, fontWeight: 600 }}>10.000đ</span>
-                                        </div>
-                                        <div className=" d_flex">
-                                            <h4>Tổng Cộng :</h4>
-                                            <h3 style={{ color: "var(--primary)" }}>{caculatorVND(totalPrice / 1000 + 10 + ".000đ")}</h3>
-                                        </div>
-                                    </div>
+            <section className="header-white container" style={{ bottom: 0 }}>
+                <div className="container checkout-container" style={{ padding: "", display: "flex", flexDirection: "column" }}>
+                    <div className=" " style={{}}>
+                        <div className="f_flex" style={{ flexDirection: "row" }}>
+                            <div className="checkout-text-payment" style={{ padding: 0 }}>
+                                <img src="/images/money.png" alt="" />
+                                <span>Tiền Mặt</span>
+                            </div>
+                        </div>
+                        <div className="c_flex" style={{ flexDirection: "row", gap: 2, width: "100%" }}>
+                            <div className="f_flex" style={{ flexDirection: "column", gap: 2 }}>
+                                <div className="checkout-text" style={{ padding: 0 }}>
+                                    <span>Tổng cộng:</span>
                                 </div>
-                                <div className="product" style={{ margin: "0 10px 20px 10px", background: "#d9edf7", border: "1px solid #d9edf7" }}>
-                                    <div>
-                                        <h1 style={{ fontSize: 15, marginBottom: 7 }}>Chính Sách Mua Hàng</h1>
-                                        <span style={{ fontSize: 14, fontWeight: 400 }}>
-                                            Hiện chúng tôi chỉ áp dụng thanh toán với đơn hàng có giá trị tối thiểu <span style={{ fontWeight: 700 }}>30.000₫</span> trở lên.
-                                        </span>
+                                {!isLogin && (
+                                    <div className="checkout-text-require" style={{ padding: 0 }}>
+                                        <span>Đăng nhập để đặt hàng</span>
                                     </div>
-                                </div>
-                                {/* <div>
-                                <Rodal height={150} visible={visible} onClose={() => setVisible(false)}>
-                                    <div>
-                                        <span style={{ fontSize: 16 }}>Bạn Có Chắc Muốn Xóa Sản Phẩm Này Khỏi Giỏ Hàng</span>
-                                    </div>
-                                </Rodal>
-                            </div> */}
-                                <div
-                                    style={{ textAlign: "center", margin: "0 10px 0 10px", width: "calc(100% - 20px)", height: 50, borderRadius: "0.375rem", alignItems: "center" }}
-                                    className="center_flex btn-hover"
-                                    onClick={() => history.push("/checkout")}
-                                >
-                                    <span style={{ fontWeight: 700, fontSize: 16 }}>Thanh Toán</span>
-                                </div>
-                            </>
-                        )}
+                                )}
+                            </div>
+                            <div className="checkout-text-price">
+                                <span>{(totalPrice + 15000) / 1000 + ".000"}đ</span>
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            disabled={!isLogin}
+                            style={{ textAlign: "center", width: "100%", height: 45, borderRadius: "0.5rem", alignItems: "center", backgroundColor: !isLogin ? "#f5f5f5" : "var(--primary)" }}
+                            className="center_flex checkout-btn"
+                        >
+                            <span onClick={() => {}} style={{ fontWeight: 700, fontSize: 18 }}>
+                                Đặt hàng
+                            </span>
+                        </button>
                     </div>
                 </div>
             </section>

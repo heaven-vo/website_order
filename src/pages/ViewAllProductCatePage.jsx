@@ -1,16 +1,12 @@
-import React from "react";
-import { useContext } from "react";
-import { useEffect } from "react";
-import { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { getListProductByCateId } from "../apis/apiService";
 import Loading from "../common/Loading/Loading";
-import { ProductGrid } from "../components/products/ProductGrid";
-import { IMAGE_NOTFOUND } from "../constants/Variable";
+import { ProductList } from "../components/products/ProductList";
 import { AppContext } from "../context/AppProvider";
 
 export const ViewAllProductCatePage = () => {
-    const { setIsHeader, menu } = useContext(AppContext);
+    const { setHeaderInfo } = useContext(AppContext);
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
     const [products, setProducts] = useState([]);
     const [title, setTitle] = useState("");
@@ -20,7 +16,7 @@ export const ViewAllProductCatePage = () => {
         let cateId = location.pathname.trim().split("/")[4];
         let menuId = location.pathname.trim().split("/")[2];
         setIsLoadingCircle(true);
-        setIsHeader(false);
+        // setIsHeader(false);
         getListProductByCateId(menuId, cateId, 1, 100)
             .then((res) => {
                 if (res.data) {
@@ -31,10 +27,10 @@ export const ViewAllProductCatePage = () => {
                     const image = category.image;
                     setImg(image);
                     // let newProduct =
-                    // if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_NAME))) {
-                    //     localStorage.setItem(LOCALSTORAGE_NAME, JSON.stringify([]));
+                    // if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
+                    //     localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
                     // } else {
-                    //     const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_NAME));
+                    //     const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
                     //     for (let index = 0; index < CartList.length; index++) {
                     //         if (CartList[index].id === newProduct.id) {
                     //             newProduct = { ...newProduct, quantityCart: CartList[index].quantityCart };
@@ -42,6 +38,7 @@ export const ViewAllProductCatePage = () => {
                     //     }
                     // }
                     setProducts(productList);
+                    setHeaderInfo({ isSearchHeader: false, title: title });
                     setIsLoadingCircle(false);
                 } else {
                     setIsLoadingCircle(false);
@@ -54,8 +51,9 @@ export const ViewAllProductCatePage = () => {
             });
         return () => {
             setIsLoadingCircle(false);
+            setHeaderInfo({});
         };
-    }, [location.pathname, setIsHeader]);
+    }, [location.pathname, setHeaderInfo]);
 
     useEffect(() => {
         if (!isLoadingCircle) {
@@ -71,7 +69,8 @@ export const ViewAllProductCatePage = () => {
     return (
         <div>
             <Loading isLoading={isLoadingCircle} />
-            {!isLoadingCircle && <ProductGrid data={products || []} label={title || ""} cateId={""} labelImg={img || IMAGE_NOTFOUND} isViewAll={false} />}
+            <ProductList data={products || []} />
+            {/* {!isLoadingCircle && <ProductGrid data={products || []} label={title || ""} cateId={""} labelImg={img || IMAGE_NOTFOUND} isViewAll={false} />} */}
         </div>
     );
 };

@@ -5,7 +5,7 @@ import { IMAGE_NOTFOUND } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
 export const CheckoutPage = () => {
-    const { setIsHeaderOrder, setIsHeader, Cart } = useContext(AppContext);
+    const { setIsHeaderOrder, Cart } = useContext(AppContext);
     const [CartList, setCartList] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [paymentType, setpaymentType] = useState(1);
@@ -16,8 +16,8 @@ export const CheckoutPage = () => {
     };
     useEffect(() => {
         setIsHeaderOrder(false);
-        setIsHeader(false);
-    }, [setIsHeaderOrder, setIsHeader]);
+        // setIsHeader(false);
+    }, [setIsHeaderOrder]);
 
     useEffect(() => {
         var total = 0;
@@ -85,7 +85,7 @@ export const CheckoutPage = () => {
                                 <div className="c_flex mobile-active">
                                     <div
                                         onClick={() => history.push("/cart")}
-                                        style={{ textAlign: "center", margin: "0 10px 0 10px", width: "calc(100% - 20px)", height: 50, borderRadius: "0.375rem", alignItems: "center" }}
+                                        style={{ textAlign: "center", margin: "0 10px 0 10px", width: "calc(100% - 20px)", height: 50, borderRadius: "0.5rem", alignItems: "center" }}
                                         className="f_flex btn-hover-none"
                                     >
                                         <i class="fa-solid fa-arrow-left-long"></i>
@@ -93,7 +93,7 @@ export const CheckoutPage = () => {
                                     </div>
                                     <div
                                         onClick={() => hanldeSubmit()}
-                                        style={{ textAlign: "center", margin: "0 10px 0 10px", width: "calc(100% - 20px)", height: 50, borderRadius: "0.375rem", alignItems: "center" }}
+                                        style={{ textAlign: "center", margin: "0 10px 0 10px", width: "calc(100% - 20px)", height: 50, borderRadius: "0.5rem", alignItems: "center" }}
                                         className="center_flex btn-hover"
                                     >
                                         <span style={{ fontWeight: 700, fontSize: 16 }}>Thanh Toán</span>
@@ -150,7 +150,7 @@ export const CheckoutPage = () => {
                     <div className="c_flex mobile-inactive">
                         <div
                             onClick={() => history.push("/cart")}
-                            style={{ textAlign: "center", margin: "0 10px 0 10px", width: "calc(100% - 20px)", height: 50, borderRadius: "0.375rem", alignItems: "center" }}
+                            style={{ textAlign: "center", margin: "0 10px 0 10px", width: "calc(100% - 20px)", height: 50, borderRadius: "0.5rem", alignItems: "center" }}
                             className="f_flex btn-hover-none"
                         >
                             <i class="fa-solid fa-arrow-left-long"></i>
@@ -158,7 +158,7 @@ export const CheckoutPage = () => {
                         </div>
                         <div
                             onClick={() => hanldeSubmit()}
-                            style={{ textAlign: "center", margin: "0 10px 0 10px", width: "calc(100% - 20px)", height: 50, borderRadius: "0.375rem", alignItems: "center" }}
+                            style={{ textAlign: "center", margin: "0 10px 0 10px", width: "calc(100% - 20px)", height: 50, borderRadius: "0.5rem", alignItems: "center" }}
                             className="center_flex btn-hover"
                         >
                             <span style={{ fontWeight: 700, fontSize: 16 }}>Thanh Toán</span>

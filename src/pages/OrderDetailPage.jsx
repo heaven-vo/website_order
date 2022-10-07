@@ -3,11 +3,12 @@ import { useHistory } from "react-router-dom";
 import { AppContext } from "../context/AppProvider";
 
 export const OrderDetailPage = () => {
-    const { setIsHeaderOrder, setIsHeader, mobileMode } = useContext(AppContext);
+    const { setIsHeaderOrder, mobileMode, setisCartMain, setHeaderInfo } = useContext(AppContext);
     useEffect(() => {
         setIsHeaderOrder(false);
-        setIsHeader(false);
-    }, [setIsHeaderOrder, setIsHeader]);
+
+        setHeaderInfo({ isSearchHeader: false, title: "Chi tiết đơn hàng" });
+    }, [setIsHeaderOrder, setHeaderInfo]);
     let history = useHistory();
     const productListComponent = () => {
         return (
@@ -18,7 +19,7 @@ export const OrderDetailPage = () => {
                         <div className="f_flex" style={{ gap: 15 }}></div>
                     </div>
                     <div className="order" style={{}}>
-                        <div className="order-img" style={{ width: 150 }}>
+                        <div className="order-img" style={{}}>
                             <img src="https://dl.airtable.com/.attachments/1bb802dde8400e5fcebaf931620da443/9265bcad/Mix-Celery-Juice-thumbnail2x.jpg" alt="" />
                         </div>
                         <div style={{ flex: 1, flexDirection: "column" }} className="f_flex">
@@ -31,7 +32,7 @@ export const OrderDetailPage = () => {
                         </div>
                     </div>
                     <div className="order" style={{}}>
-                        <div className="order-img" style={{ width: 150 }}>
+                        <div className="order-img" style={{}}>
                             <img
                                 src="https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/food%2Fba-ri-b-thumbnail2x.jpg?alt=media&token=3d9c0460-5a19-4cf0-bf22-b3e48b57b0a0"
                                 alt=""
@@ -74,19 +75,19 @@ export const OrderDetailPage = () => {
         );
     };
     return (
-        <section className="background" style={{ paddingTop: 20, paddingBottom: 10 }}>
+        <section className="background" style={{ paddingTop: 70, paddingBottom: 70 }}>
             <div className="container non-radius" style={{ borderRadius: 10, padding: 0, background: "#fff" }}>
                 <div style={{ flexDirection: "column" }} className="f_flex">
-                    <div className="" style={{ display: mobileMode ? "block" : "flex" }}>
-                        {mobileMode ? orderInfoComponent() : productListComponent()}
+                    <div className="" style={{ display: "block" }}>
+                        {orderInfoComponent()}
 
-                        {mobileMode ? <div style={{ height: "10px", background: "#f6f9fc" }}></div> : <div style={{ width: "10px", background: "#f6f9fc" }}></div>}
-                        {mobileMode ? productListComponent() : orderInfoComponent()}
+                        {<div style={{ height: "10px", background: "#f6f9fc" }}></div>}
+                        {productListComponent()}
                     </div>
-                    {mobileMode ? <div style={{ height: "10px", background: "#f6f9fc" }}></div> : ""}
-                    <div className="" style={{ display: mobileMode ? "block" : "flex" }}>
+                    {<div style={{ height: "10px", background: "#f6f9fc" }}></div>}
+                    <div className="" style={{ display: "block" }}>
                         <div style={{ flex: 0.65, background: "#f6f9fc" }}></div>
-                        {mobileMode ? "" : <div style={{ width: "10px", background: "#f6f9fc" }}></div>}
+                        {/* {mobileMode ? "" : <div style={{ width: "10px", background: "#f6f9fc" }}></div>} */}
                         <div className="order-wrapper order-detail-container" style={{ flex: 0.35 }}>
                             <h3 style={{ fontSize: mobileMode ? "1rem" : "1.3rem", paddingBottom: 10 }}>Chi tiết thanh toán</h3>
 
@@ -135,19 +136,18 @@ export const OrderDetailPage = () => {
                     </div>
                 </div>
             </div>
-            {mobileMode && (
-                <div className="container" style={{ marginTop: 10, padding: "0 10px" }}>
-                    <div
-                        onClick={() => {
-                            history.push(`/order`);
-                        }}
-                        style={{ textAlign: "center", width: "100%", height: 50, borderRadius: "0.375rem", alignItems: "center" }}
-                        className="center_flex btn-hover "
-                    >
-                        <span style={{ fontWeight: 600, fontSize: 15 }}>Trở lại</span>
-                    </div>
+
+            <div className="container" style={{ marginTop: 10, padding: "0 10px" }}>
+                <div
+                    onClick={() => {
+                        history.push(`/order`);
+                    }}
+                    style={{ textAlign: "center", width: "100%", height: 50, borderRadius: "0.5rem", alignItems: "center" }}
+                    className="center_flex btn-hover "
+                >
+                    <span style={{ fontWeight: 600, fontSize: 15 }}>Trở lại</span>
                 </div>
-            )}
+            </div>
         </section>
     );
 };
