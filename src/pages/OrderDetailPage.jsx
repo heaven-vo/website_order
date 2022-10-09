@@ -157,11 +157,11 @@ export const OrderDetailPage = () => {
                                                     <span className="order-text-count">{item.quantity}x</span>
                                                 </div>
                                                 <div style={{ flex: 1, flexDirection: "column" }} className="f_flex">
-                                                    <span className="order-text-name">Hây</span>
+                                                    <span className="order-text-name">{item.productName}</span>
                                                     {/* <span className="order-text-cate">Nước Uống</span> */}
                                                 </div>
                                                 <div>
-                                                    <span className="order-text-price">20.000đ</span>
+                                                    <span className="order-text-price">{item.price}</span>
                                                 </div>
                                             </div>
                                         );

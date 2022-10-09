@@ -88,13 +88,11 @@ const Cart = ({}) => {
         postOrder(order)
             .then((res) => {
                 if (res.data) {
-                    setTimeout(() => {
-                        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-                        setCart([]);
-                        setisLoadingOrder(false);
+                    localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+                    setCart([]);
+                    setisLoadingOrder(false);
 
-                        history.push("/order");
-                    }, 2000);
+                    history.push("/order");
                 }
             })
             .catch((error) => {
