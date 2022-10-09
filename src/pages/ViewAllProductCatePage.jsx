@@ -8,8 +8,9 @@ import { AppContext } from "../context/AppProvider";
 export const ViewAllProductCatePage = () => {
     const { setHeaderInfo } = useContext(AppContext);
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
-    const [products, setProducts] = useState([]);
+    const [products, setProducts] = useState(null);
     const [title, setTitle] = useState("");
+    const [reload, setReload] = useState(false);
     const [img, setImg] = useState("");
     let location = useLocation();
     useEffect(() => {
@@ -17,6 +18,15 @@ export const ViewAllProductCatePage = () => {
         let menuId = location.pathname.trim().split("/")[2];
         setIsLoadingCircle(true);
         // setIsHeader(false);
+        getListProductByFilter(menuId, cateId);
+        return () => {
+            setIsLoadingCircle(false);
+            setHeaderInfo({});
+        };
+    }, [location.pathname, setHeaderInfo]);
+    //
+
+    const getListProductByFilter = (menuId, cateId) => {
         getListProductByCateId(menuId, cateId, 1, 100)
             .then((res) => {
                 if (res.data) {
@@ -49,12 +59,12 @@ export const ViewAllProductCatePage = () => {
                 setProducts([]);
                 setIsLoadingCircle(false);
             });
-        return () => {
-            setIsLoadingCircle(false);
-            setHeaderInfo({});
-        };
-    }, [location.pathname, setHeaderInfo]);
-
+    };
+    const hanldeReLoad = () => {
+        let cateId = location.pathname.trim().split("/")[4];
+        let menuId = location.pathname.trim().split("/")[2];
+        getListProductByFilter(menuId, cateId, 1, 100);
+    };
     useEffect(() => {
         if (!isLoadingCircle) {
             document.body.style.overflow = "auto";
@@ -69,7 +79,24 @@ export const ViewAllProductCatePage = () => {
     return (
         <div>
             <Loading isLoading={isLoadingCircle} />
-            <ProductList data={products || []} />
+            <div className={`loading-spin ${!isLoadingCircle && "loading-spin-done"}`}></div>
+            <ProductList
+                data={products !== null ? products : []}
+                filter={1}
+                reLoad={() => {
+                    hanldeReLoad();
+                }}
+            />
+            {products?.length === 0 && (
+                <section className="shop" style={{ padding: "25px 0 40px 0" }}>
+                    <div className="container center_flex">
+                        <div className="contentWidth  center_flex" style={{ marginLeft: 0, flexDirection: "column", gap: 10 }}>
+                            <img src="/images/fish-bones.png" style={{ width: 80 }} alt="" />
+                            <span style={{ fontSize: "1.1rem" }}>Hiện không có sản phẩm nào!!</span>
+                        </div>
+                    </div>
+                </section>
+            )}
             {/* {!isLoadingCircle && <ProductGrid data={products || []} label={title || ""} cateId={""} labelImg={img || IMAGE_NOTFOUND} isViewAll={false} />} */}
         </div>
     );

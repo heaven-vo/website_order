@@ -7,9 +7,10 @@ import { AppContext } from "../../context/AppProvider";
 import { SampleNextArrow, SamplePrevArrow } from "../flashDeals/FlashCard";
 import { ProductCart } from "./ProductCart";
 
-export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading, isViewAll }) => {
+export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading, isViewAll, reLoad }) => {
     const { setCart, setisCartMain, mobileMode, menu } = useContext(AppContext);
     const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);
+    const [visiblePopupOutOfStore, setVisiblePopupOutOfStore] = useState(false);
     const [productRodal, setProductRodal] = useState({});
     const [indexRodal, setIndexRodal] = useState({});
     const [slideShow, setslideShow] = useState(1);
@@ -23,11 +24,39 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
 
         return () => {};
     }, [data, slideShow]);
-    const hanldeRodal = (child) => {
+
+    const hanldeRodalQuantity = (child) => {
         console.log(child);
         setVisiblePopupQuantity(child.rodal);
         setProductRodal(child.product);
         setIndexRodal(child.index);
+    };
+    const hanldeRodalOutOfStore = (child) => {
+        console.log(child);
+        setVisiblePopupOutOfStore(child.rodal);
+        setProductRodal(child.product);
+        setIndexRodal(child.index);
+    };
+
+    const AddCart = () => {
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+        }
+        // const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+        const carts = [
+            {
+                ...productRodal,
+                quantityCart: 1,
+            },
+        ];
+        // setisProductCart(true);
+        // setisCartMain(true);
+        // setProductRodalQuantity(productRodalQuantity + 1);
+        setVisiblePopupOutOfStore(false);
+        itemsRef.current[indexRodal].isQuantity();
+        setCart(carts);
+        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
+        reLoad();
     };
     const deleteCartItem = () => {
         // console.log(productRodal);
@@ -138,6 +167,70 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                     </button>
                 </div>
             </Rodal>
+            <Rodal
+                height={200}
+                width={mobileMode ? 350 : 400}
+                visible={visiblePopupOutOfStore}
+                onClose={() => {
+                    setVisiblePopupOutOfStore(false);
+                }}
+                style={{ borderRadius: 10 }}
+            >
+                <div style={{ paddingBottom: "10px", textAlign: "center", paddingTop: 12 }}>
+                    <span style={{ fontSize: 17, fontWeight: 700 }}>Bạn muốn đặt món ở cửa hàng này?</span>
+                </div>
+                <div style={{ padding: "10px 0 5px 0", textAlign: "center" }}>
+                    <span className="" style={{ fontSize: 15, fontWeight: 500, textAlign: "center", color: "rgb(150,150,150)" }}>
+                        Nhưng những món bạn đã chọn từ cửa hàng trước sẽ bị xóa khỏi giỏ hàng nhé.
+                    </span>
+                </div>
+
+                <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 10 }}>
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setVisiblePopupOutOfStore(false);
+                        }}
+                        style={{
+                            flex: 1,
+                            padding: 14,
+                            fontSize: "1.1em",
+                            height: 45,
+                            cursor: "pointer",
+                            fontWeight: 700,
+                            borderRadius: 10,
+                            background: "#aab2bd",
+                            color: "#fff",
+                            transition: "0.3s all",
+                        }}
+                    >
+                        Hủy
+                    </button>
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            AddCart();
+                            // setisProductCartRodal(false);
+                            // setIsOpenRodal(false);
+                            // deleteCartItem();
+                        }}
+                        style={{
+                            flex: 1,
+                            padding: 14,
+                            fontSize: "1.1em",
+                            height: 45,
+                            cursor: "pointer",
+                            fontWeight: 700,
+                            borderRadius: 10,
+                            background: "var(--primary)",
+                            color: "#fff",
+                            transition: "0.3s all",
+                        }}
+                    >
+                        Tiếp tục
+                    </button>
+                </div>
+            </Rodal>
             <section className="shop product-slide" style={{ padding: "15px 15px 0px 15px" }}>
                 <div className="container d_flex">
                     <div className="contentWidth" style={{ marginLeft: 0 }}>
@@ -170,7 +263,16 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                             </div>
                             <Slider {...settingProductSlide}>
                                 {data.map((value, index) => {
-                                    return <ProductCart ref={(el) => (itemsRef.current[index] = el)} index={index} openRodal={(e) => hanldeRodal(e)} product={value} key={index} />;
+                                    return (
+                                        <ProductCart
+                                            ref={(el) => (itemsRef.current[index] = el)}
+                                            index={index}
+                                            openRodalOutOfStore={(e) => hanldeRodalOutOfStore(e)}
+                                            openRodal={(e) => hanldeRodalQuantity(e)}
+                                            product={value}
+                                            key={index}
+                                        />
+                                    );
                                 })}
                                 {slideShow > 3 && (
                                     <div className="">

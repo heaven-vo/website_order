@@ -6,9 +6,11 @@ import { AppContext } from "../../context/AppProvider";
 import Rodal from "rodal";
 import Select from "react-select";
 import "./style.css";
+import Loading from "../Loading/Loading";
+import { postOrder } from "../../apis/apiService";
 
 const Cart = ({}) => {
-    const { Cart, setCart, setHeaderInfo, setIsHeaderOrder, mobileMode, setisCartMain, isLogin, userInfo, setUserInfo } = useContext(AppContext);
+    const { Cart, setCart, setHeaderInfo, setIsHeaderOrder, mobileMode, setisCartMain, auth, userInfo, setUserInfo } = useContext(AppContext);
     const [totalPrice, setTotalPrice] = useState(0);
     const [CartList, setCartList] = useState([]);
     const [visible, setVisible] = useState(false);
@@ -22,9 +24,10 @@ const Cart = ({}) => {
     const [isValidFullName, setIsValidFullname] = useState(false);
     const [isValidPhone, setIsValidPhone] = useState(false);
     const [isValidBuilding, setIsValidBuilding] = useState(false);
+    const [isLoadingOrder, setisLoadingOrder] = useState(false);
+    const [payment, setPayment] = useState({});
     const [note, setNote] = useState("");
     const handleSubmit = () => {
-        console.log(building);
         let isValid = true;
         if (fullName.length === 0 || phone.length === 0 || !building?.value) {
             isValid = false;
@@ -50,20 +53,55 @@ const Cart = ({}) => {
         }
     };
     const options = [
-        { value: "1", label: "S1.01" },
-        { value: "2", label: "S1.02" },
-        { value: "3", label: "S1.03" },
-        { value: "4", label: "S1.04" },
+        { value: "b1", label: "S013" },
+        { value: "b2", label: "S014" },
+        { value: "b3", label: "S015" },
+        { value: "b4", label: "S016" },
+        { value: "b5", label: "S017" },
     ];
     let history = useHistory();
-    useEffect(() => {
-        // if (Cart.length === 0) {
-        //     history.push("/");
-        // }
+    const hanldeOrder = () => {
+        setisLoadingOrder(true);
+        let userId = auth.userId;
+        let productOrders = Cart.map((item) => {
+            return { productInMenuId: item.productMenuId, quantity: item.quantityCart.toString() };
+        });
+        let order = {
+            customerId: userId,
+            type: "",
+            total: totalPrice + 15000,
+            storeId: Cart.length > 0 && Cart[0].storeId,
+            buildingId: building.value,
+            note: note,
+            fullName: fullName,
+            phoneNumber: phone,
+            shipCost: 15000,
+            durationId: "1",
+            orderDetail: [...productOrders],
+            payments: [
+                {
+                    type: "Tiền mặt",
+                },
+            ],
+        };
+        console.log({ order });
+        postOrder(order)
+            .then((res) => {
+                if (res.data) {
+                    setTimeout(() => {
+                        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+                        setCart([]);
+                        setisLoadingOrder(false);
 
-        return () => {};
-    }, [Cart, history]);
-
+                        history.push("/order");
+                    }, 2000);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                setisLoadingOrder(false);
+            });
+    };
     useEffect(() => {
         // setUser(userInfo);
         setFullName(userInfo.fullName || "");
@@ -95,53 +133,11 @@ const Cart = ({}) => {
     // Tăng số lượng sản phẩm trong giỏ hàng
     const increaseQty = (id) => {
         setProductRodalQuantity(productRodalQuantity + 1);
-        // Tạo 1 giỏ hàng mới và tăng số lượng sản phẩm dựa theo ID
-        // let newCarts = CartList?.map((item) => {
-        //     if (item.id === id) {
-        //         item.quantityCart = item.quantityCart + 1;
-        //     }
-        //     return item;
-        // });
-        // Tạo 1 mảng sản phẩm mới từ mảng cũ kèm theo tăng số lượng sản phẩm theo ID
-        // let newProduts = listProducts?.map((item) => {
-        //     if (item.id === id) {
-        //         item.quantityCart = item.quantityCart + 1;
-        //     }
-        //     return item;
-        // });
-        // Cập nhật lại Giỏ hàng ở Provider
-        // setCart([...newCarts]);
-        // Cập nhật giỏ hàng ỏ local storage
-        // localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
-        // Cập nhật lại danh sách sản phẩm hiện tại với số lượng vừa được cập nhật
-        // setlistProducts([...newProduts]);
     };
 
     // Giảm số lượng sản phẩm trong giỏ hàng
     const decreaseQty = (id) => {
         setProductRodalQuantity(productRodalQuantity - 1);
-        // let isDelete = false;
-        // let newCarts = CartList?.map((item) => {
-        //     if (item.id === id && item.quantityCart > 1) {
-        //         item.quantityCart = item.quantityCart - 1;
-        //     } else if (item.id === id && item.quantityCart <= 1) {
-        //         deleteCartItem(item.id);
-        //         isDelete = true;
-        //     }
-        //     return item;
-        // });
-        // let newProduts = listProducts?.map((item) => {
-        //     if (item.id === id) {
-        //         item.quantityCart = item.quantityCart - 1;
-        //     }
-        //     return item;
-        // });
-        // Cập nhật lại danh sách sản phẩm hiện tại với số lượng vừa được cập nhật
-        // setlistProducts([...newProduts]);
-        // if (!isDelete) {
-        //     setCart([...newCarts]);
-        //     localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
-        // }
     };
     const updateCart = (id) => {
         let newCarts = CartList?.map((item) => {
@@ -168,7 +164,7 @@ const Cart = ({}) => {
     return (
         <>
             <Rodal
-                height={470}
+                height={isValidFullName || isValidPhone ? 510 : 470}
                 width={mobileMode ? 350 : 400}
                 visible={visiblePopupInfo}
                 onClose={() => {
@@ -219,7 +215,7 @@ const Cart = ({}) => {
                             setPhone(e.target.value);
                         }}
                         value={phone}
-                        type="text"
+                        type="number"
                         style={{ border: "1px solid rgb(200,200,200)", width: " 100%", borderRadius: 4, padding: "10px 10px", lineHeight: "1rem", fontSize: "1rem" }}
                     />
                 </div>
@@ -282,7 +278,7 @@ const Cart = ({}) => {
                     </span>
                 </div>
                 <div style={{ padding: "0px 0 10px 0", textAlign: "center" }}>
-                    <span style={{ fontSize: 16, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)" }}>{productRodal.pricePerPack / 1000 + ".000đ"}</span>
+                    <span style={{ fontSize: 16, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)" }}>{productRodal.pricePerPack + "đ"}</span>
                 </div>
                 {/* <div className="cartControl d_flex">
                             <button className="incCart" onClick={() => increaseQty(productRodal.id)}>
@@ -338,6 +334,7 @@ const Cart = ({}) => {
                     )}
                 </div>
             </Rodal>
+            <Loading isLoading={isLoadingOrder} />
             <section className="cart-items">
                 <div className="">
                     <div style={{ margin: "15px 15px 5px 15px" }}>
@@ -362,9 +359,11 @@ const Cart = ({}) => {
                     </div>
                     <div className="c_flex" style={{ margin: "15px 15px 5px 15px" }}>
                         <span style={{ color: "rgba(0,0,0,.4)", fontWeight: 700 }}>Thông tin người nhận</span>
-                        <span onClick={() => history.push("/login")} style={{ color: "#1890ff", fontWeight: 700, cursor: "pointer", fontSize: 15 }}>
-                            Đăng nhập
-                        </span>
+                        {!auth.isLogin && (
+                            <span onClick={() => history.push("/login")} style={{ color: "#1890ff", fontWeight: 700, cursor: "pointer", fontSize: 15 }}>
+                                Đăng nhập
+                            </span>
+                        )}
                     </div>
                     <div
                         className="checkout-content"
@@ -453,13 +452,13 @@ const Cart = ({}) => {
                                     </div>
                                 </div>
                                 <div className="checkout-product-price">
-                                    <span>{item.pricePerPack / 1000 + ".000đ"}</span>
+                                    <span>{item.pricePerPack + "đ"}</span>
                                 </div>
                             </div>
                         ))}
                         <div className="c_flex">
                             <span>Tiền hàng</span>
-                            <span style={{ fontWeight: 600 }}>{Cart.length > 0 ? totalPrice / 1000 + ".000đ" : "0đ"}</span>
+                            <span style={{ fontWeight: 600 }}>{Cart.length > 0 ? totalPrice + "đ" : "0đ"}</span>
                         </div>
                         <div className="c_flex">
                             <span>Phí giao hàng</span>
@@ -483,25 +482,33 @@ const Cart = ({}) => {
                                 <div className="checkout-text" style={{ padding: 0 }}>
                                     <span>Tổng cộng:</span>
                                 </div>
-                                {!isLogin && (
+                                {!auth.isLogin && (
                                     <div className="checkout-text-require" style={{ padding: 0 }}>
                                         <span>Đăng nhập để đặt hàng</span>
                                     </div>
                                 )}
                             </div>
                             <div className="checkout-text-price">
-                                <span>{(totalPrice + 15000) / 1000 + ".000"}đ</span>
+                                <span>{totalPrice + 15000 + "đ"}</span>
                             </div>
                         </div>
                         <button
+                            onClick={() => {
+                                hanldeOrder();
+                            }}
                             type="button"
-                            disabled={!isLogin}
-                            style={{ textAlign: "center", width: "100%", height: 45, borderRadius: "0.5rem", alignItems: "center", backgroundColor: !isLogin ? "#f5f5f5" : "var(--primary)" }}
+                            disabled={!auth.isLogin || isLoadingOrder}
+                            style={{
+                                textAlign: "center",
+                                width: "100%",
+                                height: 45,
+                                borderRadius: "0.5rem",
+                                alignItems: "center",
+                                backgroundColor: !auth.isLogin || isLoadingOrder ? "#f5f5f5" : "var(--primary)",
+                            }}
                             className="center_flex checkout-btn"
                         >
-                            <span onClick={() => {}} style={{ fontWeight: 700, fontSize: 18 }}>
-                                Đặt hàng
-                            </span>
+                            <span style={{ fontWeight: 700, fontSize: 18 }}>Đặt hàng</span>
                         </button>
                     </div>
                 </div>

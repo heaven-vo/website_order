@@ -13,6 +13,7 @@ export const FoodDetailPage = () => {
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
     const [product, setProduct] = useState({});
     const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);
+    const [visiblePopupOutOfStore, setVisiblePopupOutOfStore] = useState(false);
     const [productRodalQuantity, setProductRodalQuantity] = useState(0);
     const [isProductCart, setisProductCart] = useState(true);
     const { shopItems } = Pdata;
@@ -115,6 +116,21 @@ export const FoodDetailPage = () => {
         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
     };
 
+    const checkOutOfStore = (product) => {
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+        }
+        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+
+        if (CartList.length > 0) {
+            if (CartList[0].storeId === product.storeId) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    };
     // Giảm số lượng sản phẩm trong giỏ hàng
     const decreaseQty = (id) => {
         setProductRodalQuantity(productRodalQuantity - 1);
@@ -131,23 +147,67 @@ export const FoodDetailPage = () => {
         setCart([...newCarts]);
         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
     };
-    const AddCart = () => {
-        let isQuantity = false;
+    // const AddCart = () => {
+    //     let isQuantity = false;
+    //     if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
+    //         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+    //     }
+    //     const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+    //     const carts = [
+    //         ...CartList,
+    //         {
+    //             ...product,
+    //             quantityCart: 1,
+    //         },
+    //     ];
+    //     setisCartMain(true);
+    //     setProductRodalQuantity(productRodalQuantity + 1);
+    //     setCart(carts);
+    //     localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
+    // };
+    const AddCartOutOfStore = () => {
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
             localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
         }
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+        // const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
         const carts = [
-            ...CartList,
             {
                 ...product,
                 quantityCart: 1,
             },
         ];
-        setisCartMain(true);
-        setProductRodalQuantity(productRodalQuantity + 1);
+        setVisiblePopupOutOfStore(false);
+
+        setisProductCart(true);
+        setProductRodalQuantity(1);
+        // itemsRef.current[indexRodal].isQuantity();
         setCart(carts);
         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
+        // reLoad();
+    };
+    const AddCart = () => {
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+        }
+        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+        if (!checkOutOfStore(product)) {
+            const carts = [
+                ...CartList,
+                {
+                    ...product,
+                    quantityCart: 1,
+                },
+            ];
+            setisProductCart(true);
+            setisCartMain(true);
+            setProductRodalQuantity(productRodalQuantity + 1);
+            setCart(carts);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
+        } else {
+            setVisiblePopupOutOfStore(true);
+            // openRodalOutOfStore({ rodal: true, product: product, index });
+            console.log("khac store");
+        }
     };
     const deleteCartItem = () => {
         const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
@@ -165,6 +225,71 @@ export const FoodDetailPage = () => {
     return (
         <>
             <Loading isLoading={isLoadingCircle} />
+            <Rodal
+                height={200}
+                width={mobileMode ? 350 : 400}
+                visible={visiblePopupOutOfStore}
+                onClose={() => {
+                    setVisiblePopupOutOfStore(false);
+                }}
+                style={{ borderRadius: 10 }}
+            >
+                <div style={{ paddingBottom: "10px", textAlign: "center", paddingTop: 12 }}>
+                    <span style={{ fontSize: 17, fontWeight: 700 }}>Bạn muốn đặt món ở cửa hàng này?</span>
+                </div>
+                <div style={{ padding: "10px 0 5px 0", textAlign: "center" }}>
+                    <span className="" style={{ fontSize: 15, fontWeight: 500, textAlign: "center", color: "rgb(150,150,150)" }}>
+                        Nhưng những món bạn đã chọn từ cửa hàng trước sẽ bị xóa khỏi giỏ hàng nhé.
+                    </span>
+                </div>
+
+                <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 10 }}>
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setVisiblePopupOutOfStore(false);
+                        }}
+                        style={{
+                            flex: 1,
+                            padding: 14,
+                            fontSize: "1.1em",
+                            height: 45,
+                            cursor: "pointer",
+                            fontWeight: 700,
+                            borderRadius: 10,
+                            background: "#aab2bd",
+                            color: "#fff",
+                            transition: "0.3s all",
+                        }}
+                    >
+                        Hủy
+                    </button>
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            AddCartOutOfStore();
+
+                            // setisProductCartRodal(false);
+                            // setIsOpenRodal(false);
+                            // deleteCartItem();
+                        }}
+                        style={{
+                            flex: 1,
+                            padding: 14,
+                            fontSize: "1.1em",
+                            height: 45,
+                            cursor: "pointer",
+                            fontWeight: 700,
+                            borderRadius: 10,
+                            background: "var(--primary)",
+                            color: "#fff",
+                            transition: "0.3s all",
+                        }}
+                    >
+                        Tiếp tục
+                    </button>
+                </div>
+            </Rodal>
             <Rodal
                 height={180}
                 width={mobileMode ? 350 : 400}
@@ -226,8 +351,9 @@ export const FoodDetailPage = () => {
                     </button>
                 </div>
             </Rodal>
+            <div className={`loading-spin ${!isLoadingCircle && "loading-spin-done"}`}></div>
             {!isLoadingCircle && product && (
-                <section className="" style={{ paddingTop: 60, paddingBottom: 100, background: "#fff" }}>
+                <section className="" style={{ paddingTop: 60, paddingBottom: 100, background: "#fff", transition: "1s all" }}>
                     <div className="container non-radius" style={{ borderRadius: 0, height: "100%" }}>
                         <div className="d_flex food-detail" style={{ padding: "10px 25px", flexDirection: "column" }}>
                             <div className="food-detail-left" style={{}}>
@@ -243,7 +369,7 @@ export const FoodDetailPage = () => {
                             </div> */}
                                 <h2>{product.name}</h2>
                                 {/* <h4 style={{ fontWeight: 500, color: "rgb(102, 102, 102)" }}>{product.id}</h4> */}
-                                <h3 style={{ color: "var(--primary)", fontSize: "1.5rem", marginTop: 10, marginBottom: 5, fontWeight: 600 }}>{product.pricePerPack / 1000 + ".000đ"}</h3>
+                                <h3 style={{ color: "var(--primary)", fontSize: "1.5rem", marginTop: 10, marginBottom: 5, fontWeight: 600 }}>{product.pricePerPack + "đ"}</h3>
                                 <h4 style={{ marginBottom: 15, fontSize: 14, fontWeight: 400, color: "#666666" }}>{product.packDescription}</h4>
                                 <h4 style={{ marginBottom: 15, fontSize: 15, fontWeight: 500, color: "#4db856", textTransform: "uppercase" }}>Giao nhanh 30 phút</h4>
                                 <div
@@ -301,7 +427,6 @@ export const FoodDetailPage = () => {
                                                 className="center_flex cart-quantity-add"
                                                 onClick={() => {
                                                     AddCart();
-                                                    setisProductCart(true);
                                                 }}
                                             >
                                                 Thêm

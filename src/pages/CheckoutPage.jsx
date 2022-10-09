@@ -122,7 +122,7 @@ export const CheckoutPage = () => {
                                                     <span style={{ fontSize: 14, color: "rgb(160,160,160)" }}>{item.storeName}</span>
                                                 </div>
                                                 <h4>
-                                                    {item.pricePerPack / 1000 + ".000đ"} * {item.quantityCart}
+                                                    {item.pricePerPack + "đ"} * {item.quantityCart}
                                                     {/* <span>=</span> */}
                                                     {/* <span>{productQty / 1000 + ".000đ"}</span> */}
                                                 </h4>

@@ -3,16 +3,21 @@ import { useHistory } from "react-router-dom";
 import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 
-export const ProductCart = React.forwardRef(({ product, openRodal, index }, ref) => {
+export const ProductCart = React.forwardRef(({ product, openRodal, index, openRodalOutOfStore }, ref) => {
     useImperativeHandle(ref, () => ({
         resetQuantity() {
             setisProductCart(false);
             setProductRodalQuantity(0);
         },
+        isQuantity() {
+            setisProductCart(true);
+            setProductRodalQuantity(1);
+        },
     }));
     const { setCart, menu, setisCartMain } = useContext(AppContext);
     const [productRodalQuantity, setProductRodalQuantity] = useState(0);
     const [isProductCart, setisProductCart] = useState(true);
+    // const [isOutOfStore, setisOutOfStore] = useState(false);
     // const [count, setCount] = useState(0);
     const [pro, setPro] = useState({});
     let history = useHistory();
@@ -71,25 +76,44 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index }, ref)
         setCart([...newCarts]);
         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
     };
+    const checkOutOfStore = (product) => {
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+        }
+        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
 
+        if (CartList.length > 0) {
+            if (CartList[0].storeId === product.storeId) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    };
     const AddCart = () => {
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
             localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
         }
         const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-        const carts = [
-            ...CartList,
-            {
-                ...product,
-                quantityCart: 1,
-            },
-        ];
-        setisCartMain(true);
-        setProductRodalQuantity(productRodalQuantity + 1);
-        setCart(carts);
-        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
+        if (!checkOutOfStore(product)) {
+            const carts = [
+                ...CartList,
+                {
+                    ...product,
+                    quantityCart: 1,
+                },
+            ];
+            setisProductCart(true);
+            setisCartMain(true);
+            setProductRodalQuantity(productRodalQuantity + 1);
+            setCart(carts);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
+        } else {
+            openRodalOutOfStore({ rodal: true, product: product, index });
+            console.log("khac store");
+        }
     };
-
     const increaseQty = () => {
         setProductRodalQuantity(productRodalQuantity + 1);
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
@@ -143,11 +167,11 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index }, ref)
                         </h3>
 
                         <div className="price">
-                            <h4 style={{ fontSize: 16, lineHeight: 1.5 }}>{pro.pricePerPack / 1000 + ".000"}đ</h4>
+                            <h4 style={{ fontSize: 16, lineHeight: 1.5 }}>{pro.pricePerPack + "đ"}</h4>
                         </div>
                         <div className="" style={{ paddingBottom: "0" }}>
                             {isProductCart ? (
-                                <div className="center_flex cart-quantity" style={{ width: " 100%", boxShadow: "0 4px 5px rgb(0 0 0 / 13%)" }}>
+                                <div className="center_flex cart-quantity" style={{ width: " 100%", boxShadow: "0 4px 5px rgb(0 0 0 / 13%)", minWidth: "unset" }}>
                                     <div
                                         style={{ color: productRodalQuantity > 0 ? "" : "rgba(0,0,0,.25)" }}
                                         className="center_flex cart-quantity-minus"
@@ -169,12 +193,11 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index }, ref)
                                     </div>
                                 </div>
                             ) : (
-                                <div className="center_flex cart-quantity" style={{ width: " 100%" }}>
+                                <div className="center_flex cart-quantity" style={{ width: " 100%", minWidth: "unset" }}>
                                     <div
                                         className="center_flex cart-quantity-add"
                                         onClick={() => {
                                             AddCart();
-                                            setisProductCart(true);
                                         }}
                                     >
                                         Thêm

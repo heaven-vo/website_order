@@ -19,8 +19,8 @@ const Navbar = () => {
                 <div className="container header-main" style={{ padding: "10px 15px 10px 15px", display: "flex", justifyContent: "center", alignItems: "self-start", flexDirection: "column" }}>
                     <div className="c_flex" style={{ width: "100%", justifyContent: "space-between" }}>
                         <div className="c_flex header-white-container">
-                            <div onClick={() => history.goBack()}>
-                                <i className="fa-solid fa-chevron-left header-white-icon-back"></i>
+                            <div>
+                                <i onClick={() => history.goBack()} className="fa-solid fa-chevron-left header-white-icon-back"></i>
                             </div>
                             <div className="f_flex" style={{ flexDirection: "column", gap: 2 }}>
                                 {headerInfo && headerInfo.isSearchHeader ? (

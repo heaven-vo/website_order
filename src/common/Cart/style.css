@@ -348,5 +348,6 @@
     border-radius: 5px;
     width: auto;
     margin-top: 5px;
+    min-width: 130px;
     max-width: 130px;
 }

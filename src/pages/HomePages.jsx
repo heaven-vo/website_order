@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useState } from "react";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import Slider from "react-slick";
@@ -6,10 +7,15 @@ import { AppContext } from "../context/AppProvider";
 
 const HomePage = ({ productItems, shopItems }) => {
     const { userInfo, setIsHeaderHome, setVisiblePopupInfo, mobileMode, menu, setMenu, setisCartMain, Cart } = useContext(AppContext);
+    const [isLoading, setIsLoading] = useState(true);
     let history = useHistory();
     useEffect(() => {
+        setIsLoading(true);
         setIsHeaderHome(true);
         setisCartMain(false);
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 200);
         return () => {
             setIsHeaderHome(false);
             if (Cart.length > 0) {
@@ -69,6 +75,7 @@ const HomePage = ({ productItems, shopItems }) => {
     };
     return (
         <>
+            <div className={`loading-spin ${!isLoading && "loading-spin-done"}`}></div>
             <div className="container" style={{ background: "var(--primary)" }}>
                 <section className="background container back-white home-menu" style={{ padding: "30px 15px 100px 15px" }}>
                     <div className="f_flex" style={{ gap: 15, width: "100%", flexWrap: "wrap" }}>

@@ -85,7 +85,7 @@ export const MenuPage = () => {
     const hanldeChangeFilter = (fil) => {
         setFilter(fil);
         setIsLoadingProduct(true);
-        getMenu(menu, fil, 1, 10);
+        getMenu(menu, fil, 1, 100);
     };
     // useEffect(() => {
     //     setIsLoadingProduct(true);
@@ -94,7 +94,6 @@ export const MenuPage = () => {
     // }, [filtter]);
     const getMenu = (menu, filtter, pageInd, size) => {
         // setMenuCategory([]);
-        console.log({ menu, filtter });
         if (menu !== "0") {
             getMenuByMode(menu, filtter, pageInd, size)
                 .then((res) => {
@@ -210,7 +209,9 @@ export const MenuPage = () => {
         //     },
         // ],
     };
-
+    const hanldeReLoad = () => {
+        getMenu(menu, filtter, 1, 100);
+    };
     const settingCaategory = {
         dots: true,
         infinite: false,
@@ -414,6 +415,7 @@ export const MenuPage = () => {
     };
     return (
         <>
+            <div className={`loading-spin ${!isLoadingPage && "loading-spin-done"}`}></div>
             <section className="shop background back-white" style={{}}>
                 <div className="container d_flex back-white " style={{ padding: "10px 15px 20px 15px", flexDirection: "column", gap: 10 }}>
                     <div className="">{render()}</div>
@@ -552,6 +554,9 @@ export const MenuPage = () => {
                                     cateId={menu.id}
                                     labelImg={menu.img || IMAGE_NOTFOUND}
                                     isViewAll={true}
+                                    reLoad={() => {
+                                        hanldeReLoad();
+                                    }}
                                 />
                             );
                         } else return true;

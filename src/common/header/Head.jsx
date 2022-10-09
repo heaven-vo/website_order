@@ -8,7 +8,7 @@ import { useContext } from "react";
 import { useEffect } from "react";
 import { LOCALSTORAGE_USER_NAME } from "../../constants/Variable";
 const Head = () => {
-    const { userInfo, setUserInfo, setVisiblePopupInfo, visiblePopupInfo, mobileMode, menu, setMenu } = useContext(AppContext);
+    const { userInfo, setUserInfo, setVisiblePopupInfo, visiblePopupInfo, mobileMode, menu, setMenu, buildings } = useContext(AppContext);
     // const [visible, setVisible] = useState(false);
     const [fullName, setFullName] = useState("ok");
     const [phone, setPhone] = useState("");
@@ -27,12 +27,10 @@ const Head = () => {
         setBuilding(userInfo.building || "");
         setMenu(0);
     }, [setMenu, userInfo]);
-    const options = [
-        { value: "1", label: "S1.01" },
-        { value: "2", label: "S1.02" },
-        { value: "3", label: "S1.03" },
-        { value: "4", label: "S1.04" },
-    ];
+    const options = buildings.map((building) => {
+        return { value: building.id, label: building.name };
+    });
+
     useEffect(() => {
         if (!visiblePopupInfo) {
             document.body.style.overflow = "auto";
@@ -81,7 +79,7 @@ const Head = () => {
     return (
         <>
             <Rodal
-                height={470}
+                height={isValidFullName || isValidPhone || isValidBuilding ? 450 : 390}
                 width={mobileMode ? 350 : 400}
                 visible={visiblePopupInfo}
                 onClose={() => {
@@ -93,73 +91,77 @@ const Head = () => {
                 }}
                 style={{ borderRadius: 10 }}
             >
-                <div style={{ borderBottom: "1px solid rgb(220,220,220)", paddingBottom: "10px" }}>
-                    <span style={{ fontSize: 16, fontWeight: 700 }}>Nơi nhận</span>
-                </div>
-                <div style={{ padding: "10px 0 10px 0" }}>
-                    <span style={{ fontSize: 16, fontWeight: 700 }}>Building (Tòa nhà)</span>
-                </div>
-                <Select options={options} placeholder="Tòa nhà" onChange={(e) => setBuilding(e)} value={building} />
-                {isValidBuilding && (
-                    <div className="input-validate">
-                        <span>Địa chỉ không được để trống</span>
+                <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%" }}>
+                    <div>
+                        <div style={{ borderBottom: "1px solid rgb(220,220,220)", paddingBottom: "10px" }}>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>Nơi nhận</span>
+                        </div>
+                        <div style={{ padding: "10px 0 10px 0" }}>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>Building (Tòa nhà)</span>
+                        </div>
+                        <Select options={options} placeholder="Tòa nhà" onChange={(e) => setBuilding(e)} value={building} />
+                        {isValidBuilding && (
+                            <div className="input-validate">
+                                <span>Địa chỉ không được để trống</span>
+                            </div>
+                        )}
+                        <div style={{ padding: "10px 0 10px 0" }}>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>Tên người nhận</span>
+                        </div>
+                        <div style={{ width: " 100%" }}>
+                            <input
+                                onChange={(e) => {
+                                    setFullName(e.target.value);
+                                }}
+                                value={fullName}
+                                type="text"
+                                style={{ border: "1px solid rgb(200,200,200)", width: " 100%", borderRadius: 4, padding: "10px 10px", lineHeight: "1rem", fontSize: "1rem" }}
+                            />
+                        </div>
+                        {isValidFullName && (
+                            <div className="input-validate">
+                                <span>Tên không được để trống</span>
+                            </div>
+                        )}
+                        <div style={{ padding: "10px 0 10px 0" }}>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>Số điện thoại nhận hàng</span>
+                        </div>
+                        <div style={{ width: " 100%" }}>
+                            <input
+                                onChange={(e) => {
+                                    setPhone(e.target.value);
+                                }}
+                                value={phone}
+                                type="number"
+                                style={{ border: "1px solid rgb(200,200,200)", width: " 100%", borderRadius: 4, padding: "10px 10px", lineHeight: "1rem", fontSize: "1rem" }}
+                            />
+                        </div>
+                        {isValidPhone && (
+                            <div className="input-validate">
+                                <span>Số điện thoại không được để trống</span>
+                            </div>
+                        )}
                     </div>
-                )}
-                <div style={{ padding: "10px 0 10px 0" }}>
-                    <span style={{ fontSize: 16, fontWeight: 700 }}>Tên người nhận</span>
-                </div>
-                <div style={{ width: " 100%" }}>
-                    <input
-                        onChange={(e) => {
-                            setFullName(e.target.value);
-                        }}
-                        value={fullName}
-                        type="text"
-                        style={{ border: "1px solid rgb(200,200,200)", width: " 100%", borderRadius: 4, padding: "10px 10px", lineHeight: "1rem", fontSize: "1rem" }}
-                    />
-                </div>
-                {isValidFullName && (
-                    <div className="input-validate">
-                        <span>Tên không được để trống</span>
+                    <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 25, gap: 15 }}>
+                        <button
+                            style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10 }}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setVisiblePopupInfo(false);
+                            }}
+                        >
+                            Đóng
+                        </button>
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleSubmit();
+                            }}
+                            style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)" }}
+                        >
+                            OK
+                        </button>
                     </div>
-                )}
-                <div style={{ padding: "10px 0 10px 0" }}>
-                    <span style={{ fontSize: 16, fontWeight: 700 }}>Số điện thoại nhận hàng</span>
-                </div>
-                <div style={{ width: " 100%" }}>
-                    <input
-                        onChange={(e) => {
-                            setPhone(e.target.value);
-                        }}
-                        value={phone}
-                        type="text"
-                        style={{ border: "1px solid rgb(200,200,200)", width: " 100%", borderRadius: 4, padding: "10px 10px", lineHeight: "1rem", fontSize: "1rem" }}
-                    />
-                </div>
-                {isValidPhone && (
-                    <div className="input-validate">
-                        <span>Số điện thoại không được để trống</span>
-                    </div>
-                )}
-                <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 25, gap: 15 }}>
-                    <button
-                        style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10 }}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            setVisiblePopupInfo(false);
-                        }}
-                    >
-                        Đóng
-                    </button>
-                    <button
-                        onClick={(e) => {
-                            e.preventDefault();
-                            handleSubmit();
-                        }}
-                        style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)" }}
-                    >
-                        OK
-                    </button>
                 </div>
             </Rodal>
             <section className="search container ">

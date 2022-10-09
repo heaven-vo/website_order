@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { LOCALSTORAGE_CART_NAME, LOCALSTORAGE_USER_NAME } from "../constants/Variable";
+import { getBuildings } from "../apis/apiService";
+import { LOCALSTORAGE_CART_NAME, LOCALSTORAGE_USER_LOGIN, LOCALSTORAGE_USER_NAME } from "../constants/Variable";
 
 export const AppContext = React.createContext();
 
 export default function AppProvider({ children }) {
     const [listProducts, setlistProducts] = useState([]);
     const [menu, setMenu] = useState("0");
+    const [orderStatus, setOrderStatus] = useState("0");
     const [menuOrder, setMenuOrder] = useState(1);
     const [mobileMode, setMobileMode] = useState(window.innerWidth < 700 ? true : false);
     const [Cart, setCart] = useState([]);
@@ -17,10 +19,24 @@ export default function AppProvider({ children }) {
     const [visiblePopupInfo, setVisiblePopupInfo] = useState(false);
     const [isCartMain, setisCartMain] = useState(true);
     const [headerInfo, setHeaderInfo] = useState({});
-    const [isLogin, setisLogin] = useState(false);
+    const [buildings, setBuildings] = useState([]);
+    const [auth, setAuth] = useState({});
     let location = useLocation();
     let history = useHistory();
     // const { productItems } = Data;
+    useEffect(() => {
+        getBuildings(1, 100)
+            .then((res) => {
+                if (res.data) {
+                    const building = res.data;
+                    setBuildings(building);
+                } else {
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [location.pathname]);
     useEffect(() => {
         let menuId = location.pathname.trim().split("/")[2];
         setMenu(menuId);
@@ -41,8 +57,18 @@ export default function AppProvider({ children }) {
     }, [history]);
 
     useEffect(() => {
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_USER_LOGIN))) {
+            setAuth({ userId: "", isLogin: false, userPhone: "" });
+            localStorage.setItem(LOCALSTORAGE_USER_LOGIN, JSON.stringify({ userId: "", isLogin: false, userPhone: "" }));
+        } else {
+            const auth = JSON.parse(localStorage.getItem(LOCALSTORAGE_USER_LOGIN));
+            setAuth({ ...auth });
+        }
+        return () => {};
+    }, [history]);
+
+    useEffect(() => {
         const checkout = location.pathname.trim().split("/")[1];
-        console.log({ checkout });
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
             localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
             setCart([]);
@@ -56,7 +82,6 @@ export default function AppProvider({ children }) {
                     setisCartMain(true);
                 }
             } else {
-                console.log("ok");
                 setisCartMain(false);
             }
             if (checkout === "checkout") {
@@ -81,8 +106,8 @@ export default function AppProvider({ children }) {
                 setIsOpenDrawer,
                 menu,
                 setMenu,
-                // isHeader,
-                // setIsHeader,
+                buildings,
+                setBuildings,
                 isHeaderOrder,
                 setIsHeaderOrder,
                 menuOrder,
@@ -97,8 +122,8 @@ export default function AppProvider({ children }) {
                 setHeaderInfo,
                 isCartMain,
                 setisCartMain,
-                isLogin,
-                setisLogin,
+                auth,
+                setAuth,
             }}
         >
             {children}
