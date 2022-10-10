@@ -28,7 +28,7 @@ import "./util.css";
 function App() {
     const { productItems } = Data;
     const { shopItems } = Pdata;
-    const { setMobileMode, isOpenDrawer, setIsOpenDrawer, isCartMain } = useContext(AppContext);
+    const { setMobileMode, isOpenDrawer, setIsOpenDrawer, isCartMain, menu } = useContext(AppContext);
     useEffect(() => {
         function handleResize() {
             if (window.innerWidth <= 700) {
@@ -55,62 +55,64 @@ function App() {
             document.body.style.touchAction = "auto";
         }
     }, [isCartMain]);
-
+    console.log({ menu });
     const toggleDrawer = () => {
         setIsOpenDrawer((prevState) => !prevState);
     };
 
     return (
-        <div className="main">
-            <Header />
-            <Drawer size={300} open={isOpenDrawer} duration={300} onClose={toggleDrawer} zIndex={9999} direction="right" className="drawer__container">
-                <DrawerContent />
-            </Drawer>
-            <Switch>
-                <Route path="/" exact>
-                    <HomePage />
-                </Route>
-                <Route path="/login" exact>
-                    <LoginPage />
-                </Route>
+        <div className="root center_flex">
+            <div className="main">
+                <Header />
+                <Drawer size={300} open={isOpenDrawer} duration={300} onClose={toggleDrawer} zIndex={9999} direction="right" className="drawer__container">
+                    <DrawerContent />
+                </Drawer>
+                <Switch>
+                    <Route path="/" exact>
+                        <HomePage />
+                    </Route>
+                    <Route path="/login" exact>
+                        <LoginPage />
+                    </Route>
 
-                <Route path="/menu/:id" exact>
-                    <MenuPage />
-                </Route>
+                    <Route path="/menu/:id" exact>
+                        <MenuPage />
+                    </Route>
 
-                {/* <Route path="/categories/:id" exact>
+                    {/* <Route path="/categories/:id" exact>
                     <HomePage productItems={productItems} />
                 </Route> */}
-                <Route path="/menu/:menu/store/:store" exact>
-                    <ViewAllProductStorePage />
-                </Route>
-                <Route path="/menu/:menu/cate/:cate" exact>
-                    <ViewAllProductCatePage />
-                </Route>
-                <Route path="/order" exact>
-                    <OrderPage />
-                </Route>
-                <Route path="/order/:order" exact>
-                    <OrderDetailPage />
-                </Route>
-                <Route path="/menu/:menuId/:id" exact>
-                    <FoodDetailPage />
-                </Route>
-                <Route path="/shop-detail" exact>
-                    <ShopDetailPage shopItems={shopItems} />
-                </Route>
-                <Route path="/checkout" exact>
-                    <Cart />
-                </Route>
-                <Route path="/checkout2" exact>
-                    <CheckoutPage />
-                </Route>
-                <Route path="*">
-                    <NotFoundPage />
-                </Route>
-            </Switch>
-            {isCartMain && <CartMain />}
-            <Footer />
+                    <Route path="/menu/:menu/store/:store" exact>
+                        <ViewAllProductStorePage />
+                    </Route>
+                    <Route path="/menu/:menu/cate/:cate" exact>
+                        <ViewAllProductCatePage />
+                    </Route>
+                    <Route path="/order" exact>
+                        <OrderPage />
+                    </Route>
+                    <Route path="/order/:order" exact>
+                        <OrderDetailPage />
+                    </Route>
+                    <Route path="/menu/:menuId/:id" exact>
+                        <FoodDetailPage />
+                    </Route>
+                    <Route path="/shop-detail" exact>
+                        <ShopDetailPage shopItems={shopItems} />
+                    </Route>
+                    <Route path="/checkout" exact>
+                        <Cart />
+                    </Route>
+                    <Route path="/checkout2" exact>
+                        <CheckoutPage />
+                    </Route>
+                    <Route path="*">
+                        <NotFoundPage />
+                    </Route>
+                </Switch>
+                {isCartMain && <CartMain />}
+                <Footer />
+            </div>
         </div>
     );
 }

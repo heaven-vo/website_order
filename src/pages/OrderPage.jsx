@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import { getListOrder } from "../apis/apiService";
 import { TabMenuOrder } from "../common/header/TabMenuOrder";
 import Loading from "../common/Loading/Loading";
+import { caculatorVND } from "../constants/Caculator";
 import { getStatusColor, getStatusName, IMAGE_NOTFOUND_v2 } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
@@ -100,7 +101,10 @@ export const OrderPage = () => {
                                         <div className="center_flex" style={{ background: getStatusColor(item.statusId), borderRadius: "20px", padding: "7px 13px" }}>
                                             <span className="order-store-status">{getStatusName(item.statusId)}</span>
                                         </div>
-                                        <span className="order-store-title">{item.total}đ</span>
+                                        <span className="order-store-title" style={{ display: "flex", gap: 3 }}>
+                                            {caculatorVND(item.total)}
+                                            <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
+                                        </span>
                                     </div>
                                 </div>
                             );
@@ -131,7 +135,10 @@ export const OrderPage = () => {
                                         <div className="center_flex" style={{ background: getStatusColor(item.statusId), borderRadius: "20px", padding: "7px 13px" }}>
                                             <span className="order-store-status">{getStatusName(item.statusId)}</span>
                                         </div>
-                                        <span className="order-store-title">{item.total}đ</span>
+                                        <span className="order-store-title" style={{ display: "flex", gap: 3 }}>
+                                            {caculatorVND(item.total)}
+                                            <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
+                                        </span>
                                     </div>
                                 </div>
                             );

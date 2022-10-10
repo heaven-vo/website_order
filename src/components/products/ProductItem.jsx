@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import { LOCALSTORAGE_CART_NAME } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 import { useHistory } from "react-router-dom";
+import { caculatorVND } from "../../constants/Caculator";
 
 export const ProductItem = React.forwardRef(({ product, openRodal, index, filter, openRodalOutOfStore }, ref) => {
     useImperativeHandle(ref, () => ({
@@ -19,7 +20,7 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
     }));
     let history = useHistory();
 
-    const { setCart, setisCartMain, menu } = useContext(AppContext);
+    const { setCart, setisCartMain, menu, mobileMode } = useContext(AppContext);
     const [productRodalQuantity, setProductRodalQuantity] = useState(0);
     const [isProductCart, setisProductCart] = useState(true);
     // const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);
@@ -180,7 +181,10 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                     </div>
                 </div>
                 <div className="product-list-price">
-                    <span>{product.pricePerPack + "đ"}</span>
+                    <span style={{ display: "flex", gap: 3, fontSize: mobileMode ? "15px" : "16px" }}>
+                        {caculatorVND(product.pricePerPack)}
+                        <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
+                    </span>
                 </div>
             </div>
         </>

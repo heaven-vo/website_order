@@ -8,7 +8,7 @@ import { useContext } from "react";
 import { useEffect } from "react";
 import { LOCALSTORAGE_USER_NAME } from "../../constants/Variable";
 const Head = () => {
-    const { userInfo, setUserInfo, setVisiblePopupInfo, visiblePopupInfo, mobileMode, menu, setMenu, buildings } = useContext(AppContext);
+    const { userInfo, setUserInfo, setVisiblePopupInfo, visiblePopupInfo, mobileMode, menu, setMenu, buildings, setIsOpenDrawer } = useContext(AppContext);
     // const [visible, setVisible] = useState(false);
     const [fullName, setFullName] = useState("ok");
     const [phone, setPhone] = useState("");
@@ -19,7 +19,11 @@ const Head = () => {
     const [isValidPhone, setIsValidPhone] = useState(false);
     const [isValidBuilding, setIsValidBuilding] = useState(false);
     let history = useHistory();
-
+    const openDrawer = () => {
+        setIsOpenDrawer(true);
+        document.body.style.overflow = "hidden";
+        document.body.style.touchAction = "none";
+    };
     useEffect(() => {
         setUser(userInfo);
         setFullName(userInfo.fullName || "");
@@ -165,21 +169,32 @@ const Head = () => {
                 </div>
             </Rodal>
             <section className="search container ">
-                <div className="container f_flex " style={{ padding: "10px 10px 10px 10px", flexDirection: "column" }}>
+                <div className="container f_flex " style={{ padding: "15px", flexDirection: "column" }}>
                     <div style={{ padding: "0 0 5px 0", color: "#000", fontWeight: 600 }}>
                         <span>Giao đến:</span>
                     </div>
-                    <div className="search-box f_flex">
-                        <i class="fa-solid fa-location-dot" style={{ color: "var(--primary)" }}></i>
-                        <input
-                            type="text"
-                            placeholder="Nhập địa chỉ giao hàng"
-                            onClick={() => setVisiblePopupInfo(true)}
-                            disabled={visiblePopupInfo}
-                            value={user.building?.label || ""}
-                            readOnly={true}
-                            style={{ borderTopRightRadius: "50%", borderBottomRightRadius: "50%", cursor: "pointer" }}
-                        />
+                    <div className="c_flex" style={{ gap: 20 }}>
+                        <div className="search-box f_flex">
+                            <i class="fa-solid fa-location-dot" style={{ color: "var(--primary)" }}></i>
+                            <input
+                                type="text"
+                                placeholder="Nhập địa chỉ giao hàng"
+                                onClick={() => setVisiblePopupInfo(true)}
+                                disabled={visiblePopupInfo}
+                                value={user.building?.label || ""}
+                                readOnly={true}
+                                style={{ borderTopRightRadius: "50%", borderBottomRightRadius: "50%", cursor: "pointer" }}
+                            />
+                        </div>
+                        <div>
+                            <i
+                                className="fas fa-bars cusor"
+                                onClick={() => {
+                                    openDrawer();
+                                }}
+                                style={{ fontSize: 25, color: "#fff", flex: 1 }}
+                            ></i>
+                        </div>
                     </div>
                     <div className="header-home-container">
                         <div className="heaader-home-img">

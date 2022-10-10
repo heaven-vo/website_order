@@ -3,10 +3,12 @@ import { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { getOrderDetail } from "../apis/apiService";
 import Loading from "../common/Loading/Loading";
+import { caculatorVND } from "../constants/Caculator";
+import { getStatusColor, getStatusName, STATUS_ORDER } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
 export const OrderDetailPage = () => {
-    const { setIsHeaderOrder, mobileMode, setisCartMain, setHeaderInfo } = useContext(AppContext);
+    const { setIsHeaderOrder, mobileMode, setisCartMain, setHeaderInfo, menu } = useContext(AppContext);
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
     const [orderInfo, setOrderInfo] = useState({});
     const [productOrder, setproductOrder] = useState([]);
@@ -47,6 +49,40 @@ export const OrderDetailPage = () => {
         } else {
             return "--";
         }
+    };
+    const getStatusCancel = (statusList) => {
+        let cancel = false;
+        for (let index = 0; index < statusList.length; index++) {
+            const element = statusList[index];
+            if (element && element.name === STATUS_ORDER[4].compare) {
+                cancel = true;
+            }
+        }
+        return cancel;
+    };
+    // statusOrder[1] ? (statusOrder[1].name === STATUS_ORDER[1].compare ? 1 : 0.3) : 0.3
+    const getOpacity = (status) => {
+        let opacity = 0;
+        if (status && status.name) {
+            if (status.name === STATUS_ORDER[0].compare || status.name === STATUS_ORDER[1].compare || status.name === STATUS_ORDER[2].compare || status.name === STATUS_ORDER[3].compare) {
+                opacity = 1;
+            } else {
+                opacity = 0.3;
+            }
+        } else {
+            opacity = 0.3;
+        }
+        return opacity;
+    };
+    //{statusOrder[0] ? (statusOrder[0].name === STATUS_ORDER[0].compare ? getTimeOrder(statusOrder[0].time) : "--") : "--"}
+    const validStatus = (status) => {
+        let statusTime = "--";
+        if (status && status.name) {
+            if (status.name === STATUS_ORDER[0].compare || status.name === STATUS_ORDER[1].compare || status.name === STATUS_ORDER[2].compare || status.name === STATUS_ORDER[3].compare) {
+                statusTime = getTimeOrder(statusOrder[0].time);
+            }
+        }
+        return statusTime;
     };
     return (
         <>
@@ -92,51 +128,60 @@ export const OrderDetailPage = () => {
                             {<div style={{ height: "10px", background: "#f6f9fc" }}></div>}
                             {/* {productListComponent()} */}
                             <div className="order-wrapper" style={{ flex: 0.65 }}>
-                                <h3 style={{ fontSize: mobileMode ? "1rem" : "1.3rem" }}>Tiến độ</h3>
+                                <h3 style={{ fontSize: mobileMode ? "1rem" : "1.3rem", display: "flex", alignItems: "center", gap: 20 }}>
+                                    Tiến độ
+                                    {getStatusCancel(statusOrder) && (
+                                        <div className="center_flex" style={{ background: getStatusColor("5"), borderRadius: "20px", padding: "7px 18px" }}>
+                                            <span className="order-store-status" style={{ fontSize: 15 }}>
+                                                {getStatusName("5")}
+                                            </span>
+                                        </div>
+                                    )}
+                                </h3>
                                 <div className="f_flex" style={{ gap: 20 }}>
                                     <div className="f_flex" style={{ gap: 13, padding: "30px 10px 10px 10px", flexDirection: "column", alignItems: "center" }}>
-                                        <div style={{ opacity: statusOrder[0] ? 1 : 0.3 }}>
+                                        <div style={{ opacity: getOpacity(statusOrder[0]) }}>
                                             <i class="fa-regular fa-circle-dot" style={{ color: "var(--primary)" }}></i>
                                         </div>
-                                        <div className="line" style={{ opacity: statusOrder[1] ? 1 : 0.3 }}></div>
-                                        <div style={{ opacity: statusOrder[1] ? 1 : 0.3 }}>
+                                        <div className="line" style={{ opacity: getOpacity(statusOrder[1]) }}></div>
+                                        <div style={{ opacity: getOpacity(statusOrder[1]) }}>
                                             <i class="fa-regular fa-circle-dot" style={{ color: "var(--primary)" }}></i>
                                         </div>
-                                        <div className="line" style={{ opacity: statusOrder[2] ? 1 : 0.3 }}></div>
-                                        <div style={{ opacity: statusOrder[2] ? 1 : 0.3 }}>
+                                        <div className="line" style={{ opacity: getOpacity(statusOrder[2]) }}></div>
+                                        <div style={{ opacity: getOpacity(statusOrder[2]) }}>
                                             <i class="fa-regular fa-circle-dot" style={{ color: "var(--primary)" }}></i>
                                         </div>
-                                        <div className="line" style={{ opacity: statusOrder[3] ? 1 : 0.3 }}></div>
-                                        <div style={{ opacity: statusOrder[3] ? 1 : 0.3 }}>
+                                        <div className="line" style={{ opacity: getOpacity(statusOrder[3]) }}></div>
+                                        <div style={{ opacity: getOpacity(statusOrder[3]) }}>
                                             <i class="fa-regular fa-circle-dot" style={{ color: "var(--primary)" }}></i>
                                         </div>
                                     </div>
                                     <div className="f_flex" style={{ gap: 25, padding: "10px 10px", flexDirection: "column" }}>
-                                        <div className="f_flex status-icon" style={{ opacity: statusOrder[0] ? 1 : 0.3 }}>
+                                        <div className="f_flex status-icon" style={{ opacity: getOpacity(statusOrder[0]) }}>
                                             <img src="/images/orders.png" alt="" style={{ width: 38, height: 38 }} />
-                                            <div className="f_flex" style={{ flexDirection: "column" }}>
-                                                <span className="status-info-time">{statusOrder[0] ? getTimeOrder(statusOrder[0].time) : "--"}</span>
+                                            <div className="f_flex" style={{ flexDirection: "column", paddingLeft: 4 }}>
+                                                <span className="status-info-time">{validStatus(statusOrder[0])}</span>
                                                 <span className="status-info-name">Đặt hàng thành công</span>
                                             </div>
                                         </div>
-                                        <div className="f_flex status-icon" style={{ opacity: statusOrder[1] ? 1 : 0.3 }}>
+                                        <div className="f_flex status-icon" style={{ opacity: getOpacity(statusOrder[1]) }}>
                                             <img src="/images/confirm-order.png" alt="" style={{ width: 42, height: 42 }} />
                                             <div className="f_flex" style={{ flexDirection: "column" }}>
-                                                <span className="status-info-time">{statusOrder[1] ? statusOrder[1].time : "--"}</span>
+                                                <span className="status-info-time">{validStatus(statusOrder[1])}</span>
                                                 <span className="status-info-name">Đang chuẩn bị</span>
                                             </div>
                                         </div>
-                                        <div className="f_flex status-icon" style={{ opacity: statusOrder[2] ? 1 : 0.3 }}>
+                                        <div className="f_flex status-icon" style={{ opacity: getOpacity(statusOrder[2]) }}>
                                             <img src="/images/delivery.png" alt="" style={{ width: 38, height: 38 }} />
-                                            <div className="f_flex" style={{ flexDirection: "column" }}>
-                                                <span className="status-info-time">{statusOrder[2] ? statusOrder[2].time : "--"}</span>
+                                            <div className="f_flex" style={{ flexDirection: "column", paddingLeft: 4 }}>
+                                                <span className="status-info-time">{validStatus(statusOrder[2])}</span>
                                                 <span className="status-info-name">Đang giao</span>
                                             </div>
                                         </div>
-                                        <div className="f_flex status-icon" style={{ opacity: statusOrder[3] ? 1 : 0.3 }}>
+                                        <div className="f_flex status-icon" style={{ opacity: getOpacity(statusOrder[3]) }}>
                                             <img src="/images/yes.png" alt="" style={{ width: 38, height: 38 }} />
-                                            <div className="f_flex" style={{ flexDirection: "column" }}>
-                                                <span className="status-info-time">{statusOrder[3] ? statusOrder[3].time : "--"}</span>
+                                            <div className="f_flex" style={{ flexDirection: "column", paddingLeft: 4 }}>
+                                                <span className="status-info-time">{validStatus(statusOrder[3])}</span>
                                                 <span className="status-info-name">Hoàn thành</span>
                                             </div>
                                         </div>
@@ -161,7 +206,10 @@ export const OrderDetailPage = () => {
                                                     {/* <span className="order-text-cate">Nước Uống</span> */}
                                                 </div>
                                                 <div>
-                                                    <span className="order-text-price">{item.price}</span>
+                                                    <span className="order-text-price" style={{ display: "flex", alignItems: "center", gap: 3 }}>
+                                                        {caculatorVND(item.price)}
+                                                        <span style={{ fontSize: mobileMode ? "0.8rem" : "0.9rem", fontWeight: 500 }}>₫</span>
+                                                    </span>
                                                 </div>
                                             </div>
                                         );
@@ -174,7 +222,7 @@ export const OrderDetailPage = () => {
                             <div style={{ flex: 0.65, background: "#f6f9fc" }}></div>
                             {/* {mobileMode ? "" : <div style={{ width: "10px", background: "#f6f9fc" }}></div>} */}
                             <div className="order-wrapper order-detail-container" style={{ flex: 0.35 }}>
-                                <h3 style={{ fontSize: mobileMode ? "1rem" : "1.3rem", paddingBottom: 10 }}>Chi tiết thanh toán</h3>
+                                <h3 style={{ fontSize: mobileMode ? "1.1rem" : "1.3rem", paddingBottom: 10 }}>Chi tiết thanh toán</h3>
 
                                 {/* <div className="order-detail-total">
                                     <div className="order-detail-total-titlte">
@@ -186,25 +234,51 @@ export const OrderDetailPage = () => {
                                 </div> */}
                                 <div className="order-detail-total">
                                     <div className="order-detail-total-titlte">
-                                        Tổng tiền hàng:
+                                        Hình thức thanh toán:
                                         <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10 }}>
-                                            {orderInfo.total - orderInfo.shipCost || "--"}
+                                            {orderInfo.paymentName || "--"}
                                         </span>
                                     </div>
                                 </div>
                                 <div className="order-detail-total">
                                     <div className="order-detail-total-titlte">
-                                        Phí vận chuyển:
+                                        Hình thức giao hàng:
                                         <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10 }}>
-                                            {orderInfo.shipCost || "--"}
+                                            {"--"}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="order-detail-total">
+                                    <div className="order-detail-total-titlte">
+                                        Người giao hàng:
+                                        <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10 }}>
+                                            {"--"}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="order-detail-total">
+                                    <div className="order-detail-total-titlte">
+                                        Liên hệ người giao hàng:
+                                        <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10 }}>
+                                            {"--"}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="order-detail-total">
+                                    <div className="order-detail-total-titlte">
+                                        Tổng tiền hàng:
+                                        <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10, display: "flex", alignItems: "center", gap: 3 }}>
+                                            {caculatorVND(orderInfo.total - orderInfo.shipCost) || "--"}
+                                            <span style={{ fontSize: mobileMode ? "0.8rem" : "0.9rem", fontWeight: 500 }}>₫</span>
                                         </span>
                                     </div>
                                 </div>
                                 <div className="order-detail-total" style={{ paddingBottom: 15 }}>
                                     <div className="order-detail-total-titlte">
-                                        Hình thức thanh toán:
-                                        <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10 }}>
-                                            {orderInfo.paymentName || "--"}
+                                        Phí vận chuyển:
+                                        <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10, display: "flex", alignItems: "center", gap: 3 }}>
+                                            {caculatorVND(orderInfo.shipCost) || "--"}
+                                            <span style={{ fontSize: mobileMode ? "0.8rem" : "0.9rem", fontWeight: 500 }}>₫</span>
                                         </span>
                                     </div>
                                 </div>
@@ -212,8 +286,12 @@ export const OrderDetailPage = () => {
                                 <div className="order-detail-total" style={{ borderTop: "1px solid rgb(230, 230, 230)", paddingTop: 15 }}>
                                     <div className="order-detail-total-titlte">
                                         <span style={{ fontWeight: 700, color: "#000", fontSize: mobileMode ? "16px" : "18px" }}>Tổng cộng:</span>
-                                        <span className="order-detail-text-price" style={{ fontWeight: 700, marginLeft: 10, color: "#000", fontSize: mobileMode ? "16px" : "18px" }}>
-                                            {orderInfo.total || "--"}
+                                        <span
+                                            className="order-detail-text-price"
+                                            style={{ fontWeight: 700, marginLeft: 10, color: "#000", fontSize: mobileMode ? "16px" : "18px", display: "flex", gap: 3 }}
+                                        >
+                                            {caculatorVND(orderInfo.total) || "--"}
+                                            <span style={{ fontSize: mobileMode ? "0.9rem" : ".95rem", fontWeight: 700 }}>₫</span>
                                         </span>
                                     </div>
                                 </div>
@@ -222,17 +300,17 @@ export const OrderDetailPage = () => {
                     </div>
                 </div>
 
-                {/* <div className="container" style={{ marginTop: 10, padding: "0 10px" }}>
+                <div className="container" style={{ marginTop: 10, padding: "0 10px" }}>
                     <div
                         onClick={() => {
-                            history.push(`/order`);
+                            history.push(`/menu/${menu}`);
                         }}
                         style={{ textAlign: "center", width: "100%", height: 50, borderRadius: "0.5rem", alignItems: "center" }}
                         className="center_flex btn-hover "
                     >
-                        <span style={{ fontWeight: 600, fontSize: 15 }}>Trở lại</span>
+                        <span style={{ fontWeight: 600, fontSize: mobileMode ? 16 : 18 }}>Tiếp tục mua hàng</span>
                     </div>
-                </div> */}
+                </div>
             </section>
         </>
     );

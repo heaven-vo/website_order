@@ -1,15 +1,16 @@
 // @flow
 import * as React from "react";
-import { Link } from "react-router-dom";
-import { LOCALSTORAGE_USER_LOGIN } from "../../constants/Variable";
+import { Link, useHistory } from "react-router-dom";
+import { caculatorVND } from "../../constants/Caculator";
+import { getStatusColor, getStatusName, LOCALSTORAGE_USER_LOGIN } from "../../constants/Variable";
 // import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../context/AppProvider";
 // import "./Drawer.scss";
 export const DrawerContent = () => {
     // const history = useNavigate();
-    const { setIsOpenDrawer, auth, setAuth } = React.useContext(AppContext);
+    const { setIsOpenDrawer, auth, setAuth, orderDrawer } = React.useContext(AppContext);
     const [isOpenCategory, setisOpenCategory] = React.useState(false);
-
+    let history = useHistory();
     const data = [
         { id: 1, cateImg: "./images/category/cat-1.png", cateName: "Trứng & Sữa" },
         { id: 2, cateImg: "./images/category/cat-2.png", cateName: "Thịt Tươi Sống" },
@@ -63,6 +64,54 @@ export const DrawerContent = () => {
                             <h4>Đăng xuất</h4>
                         </div>
                     </Link>
+                    {orderDrawer.length > 0 && (
+                        <>
+                            <div style={{ padding: "20px 10px 10px 10px" }}>
+                                <span style={{ fontWeight: 700 }}>
+                                    Bạn có <span style={{ color: "var(--primary)" }}>{orderDrawer?.length || "0"}</span> đơn hàng{" "}
+                                </span>
+                            </div>
+                            {orderDrawer.map((item, index) => {
+                                return (
+                                    <div
+                                        className="box cusor"
+                                        key={index}
+                                        style={{ width: "100%", padding: "0px 5px 7px 5px" }}
+                                        onClick={() => {
+                                            history.push(`/order/${item.id}`);
+                                            setIsOpenDrawer(false);
+                                        }}
+                                    >
+                                        <div className="product mtop" style={{ margin: 5 }}>
+                                            <div className="order-wrapper f_flex" style={{ justifyContent: "space-between", padding: "5px", margin: 0 }}>
+                                                <div className="f_flex order-info" style={{ gap: 15 }}>
+                                                    <div className="order-store cusor" style={{ justifyContent: "flex-start" }}>
+                                                        <span className="order-store-title" style={{ fontSize: "15px", paddingBottom: 0 }}>
+                                                            {item.storeName}
+                                                        </span>
+                                                        <span className="order-store-time" style={{ fontSize: "14px" }}>
+                                                            {item.time}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div className="f_flex order-status-wrapper" style={{ flexDirection: "column", gap: 10, width: 115 }}>
+                                                    <div className="center_flex" style={{ background: getStatusColor(item.statusId), borderRadius: "20px", padding: "7px 13px" }}>
+                                                        <span className="order-store-status" style={{ fontSize: "12px" }}>
+                                                            {getStatusName(item.statusId)}
+                                                        </span>
+                                                    </div>
+                                                    <span className="order-store-title" style={{ display: "flex", gap: 3, fontSize: "16px" }}>
+                                                        {caculatorVND(item.total)}
+                                                        <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </>
+                    )}
                 </>
             ) : (
                 <Link to={"/login"} onClick={() => setIsOpenDrawer(false)}>

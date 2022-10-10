@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { getBuildings } from "../apis/apiService";
+import { getBuildings, getListOrder } from "../apis/apiService";
 import { LOCALSTORAGE_CART_NAME, LOCALSTORAGE_USER_LOGIN, LOCALSTORAGE_USER_NAME } from "../constants/Variable";
 
 export const AppContext = React.createContext();
@@ -20,6 +20,7 @@ export default function AppProvider({ children }) {
     const [isCartMain, setisCartMain] = useState(true);
     const [headerInfo, setHeaderInfo] = useState({});
     const [buildings, setBuildings] = useState([]);
+    const [orderDrawer, setOrdersDrawer] = useState([]);
     const [auth, setAuth] = useState({});
     let location = useLocation();
     let history = useHistory();
@@ -39,7 +40,9 @@ export default function AppProvider({ children }) {
     }, [location.pathname]);
     useEffect(() => {
         let menuId = location.pathname.trim().split("/")[2];
-        setMenu(menuId);
+        if (location.pathname.trim().split("/") && location.pathname.trim().split("/")[1] === "menu") {
+            setMenu(menuId);
+        }
     }, [location.pathname]);
     useEffect(() => {
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_USER_NAME))) {
@@ -63,6 +66,19 @@ export default function AppProvider({ children }) {
         } else {
             const auth = JSON.parse(localStorage.getItem(LOCALSTORAGE_USER_LOGIN));
             setAuth({ ...auth });
+            getListOrder(auth.userId, 1, 3)
+                .then((res) => {
+                    if (res.data) {
+                        let orders = res.data;
+                        orders = orders.filter((item) => item.statusId !== "4" || item.statusId !== "5");
+                        console.log(orders);
+                        setOrdersDrawer(orders || []);
+                    } else {
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
         return () => {};
     }, [history]);
@@ -124,6 +140,8 @@ export default function AppProvider({ children }) {
                 setisCartMain,
                 auth,
                 setAuth,
+                orderDrawer,
+                setOrdersDrawer,
             }}
         >
             {children}

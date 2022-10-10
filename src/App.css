@@ -7,14 +7,17 @@
 }
 .main {
     background-color: #fff;
-    box-shadow: 0 5px 15px rgb(0 0 0 / 5%);
-    max-width: 50em;
+    max-width: 48em;
     margin: auto;
-    height: 100vh;
+    height: 90%;
+    width: 100%;
     min-height: auto;
     position: relative;
     overflow-y: auto;
     overflow-x: hidden;
+    min-height: auto;
+    box-shadow: 0 5px 15px rgb(0 0 0 / 40%);
+    border-radius: 10px;
     /* scrollbar-width: none; */
     /* overflow: hidden; */
     /* background-color: #fff;
@@ -22,11 +25,24 @@
     flex-direction: column; */
     /* justify-content: space-between; */
 }
+.section-main {
+    /* height: 100%; */
+    /* margin: auto; */
+    border-radius: 10px !important;
+}
 .main::-webkit-scrollbar {
     display: none;
 }
 .content {
     margin-top: 50px;
+}
+.root {
+    overflow: hidden;
+    background: url("../public/images/Background4.png") no-repeat;
+    background-size: cover;
+    height: 100vh;
+    width: 100%;
+    /* width: 100vh; */
 }
 :root {
     /* #ffaa4c */
@@ -55,7 +71,7 @@ body {
     z-index: 1;
     /* max-width: 70%; */
     /* min-width: 85em; */
-    max-width: 50em;
+    max-width: 48em;
     margin: auto;
     /* padding: 0 5px; */
 }
@@ -110,7 +126,7 @@ button {
 .slide-img {
     height: 300px;
     object-fit: cover;
-    padding: 0 7px;
+    /* padding: 0 7px; */
 }
 .shop .product .img {
     height: 120px !important;
@@ -501,7 +517,7 @@ td {
     cursor: pointer;
 }
 .btn-hover {
-    background-color: var(--secondary);
+    background-color: var(--primary);
     cursor: pointer;
     transition: 0.5s all;
     color: #fff;
@@ -518,7 +534,7 @@ td {
     color: var(--primary);
 }
 .btn-hover:hover {
-    background-color: rgba(0, 30, 108, 0.8);
+    background-color: rgb(236, 155, 61);
 }
 
 .menu-item {
@@ -987,7 +1003,7 @@ iframe {
 }
 .order-store-title {
     font-weight: 600;
-    padding-bottom: 10px;
+    padding-bottom: 5px;
     font-size: 18px;
     line-height: 1.6rem;
 }

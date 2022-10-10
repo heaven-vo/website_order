@@ -186,7 +186,7 @@ export const MenuPage = () => {
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
-
+        fade: true,
         appendDots: (dots) => {
             return <ul style={{ margin: "0px" }}>{dots}</ul>;
         },
@@ -383,7 +383,7 @@ export const MenuPage = () => {
                                                     style={{ padding: 0, background: "none", borderRadius: "0.5rem", boxShadow: "none", margin: 0, transition: "1s all" }}
                                                 >
                                                     <div className="slide-img" style={{ borderRadius: "0.5rem", overflow: "hidden" }}>
-                                                        <img src={value.cover} alt="" style={{ objectFit: "cover", width: "100%", borderRadius: "0.5rem" }} />
+                                                        <img src={value.cover} alt="" style={{ objectFit: "cover", width: "100%", height: "100%", borderRadius: "0.5rem" }} />
                                                     </div>
                                                 </div>
                                             </>

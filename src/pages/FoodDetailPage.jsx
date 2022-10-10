@@ -4,6 +4,7 @@ import Rodal from "rodal";
 import { getProductDetail } from "../apis/apiService";
 import Loading from "../common/Loading/Loading";
 import Pdata from "../components/products/Pdata";
+import { caculatorVND } from "../constants/Caculator";
 import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
@@ -369,7 +370,11 @@ export const FoodDetailPage = () => {
                             </div> */}
                                 <h2>{product.name}</h2>
                                 {/* <h4 style={{ fontWeight: 500, color: "rgb(102, 102, 102)" }}>{product.id}</h4> */}
-                                <h3 style={{ color: "var(--primary)", fontSize: "1.5rem", marginTop: 10, marginBottom: 5, fontWeight: 600 }}>{product.pricePerPack + "đ"}</h3>
+                                <div style={{ color: "var(--primary)", fontSize: "1.5rem", marginTop: 10, marginBottom: 5, fontWeight: 600, display: "flex", alignItems: "center", gap: 5 }}>
+                                    {caculatorVND(product.pricePerPack)}
+                                    <span style={{ fontSize: "1.2rem" }}>₫</span>
+                                </div>
+
                                 <h4 style={{ marginBottom: 15, fontSize: 14, fontWeight: 400, color: "#666666" }}>{product.packDescription}</h4>
                                 <h4 style={{ marginBottom: 15, fontSize: 15, fontWeight: 500, color: "#4db856", textTransform: "uppercase" }}>Giao nhanh 30 phút</h4>
                                 <div

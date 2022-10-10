@@ -27,30 +27,35 @@ export const STATUS_ORDER = [
         statusName: "Chờ xác nhận",
         color: "rgba(0,0,0,.4)",
         img: "",
+        compare: "CreateOrder",
     },
     {
         id: "2",
         statusName: "Đang chuẩn bị",
         color: "var(--primary)",
         img: "",
+        compare: "ShopAccept",
     },
     {
         id: "3",
         statusName: "Đang giao",
         color: "#077E8C",
         img: "",
+        compare: "Shipping",
     },
     {
         id: "4",
         statusName: "Hoàn thành",
         color: "#52b65b",
         img: "",
+        compare: "Done",
     },
     {
         id: "5",
         statusName: "Đã hủy",
         color: "#e94560",
         img: "",
+        compare: "Cancel",
     },
 ];
 
