@@ -4,7 +4,6 @@ import Rodal from "rodal";
 import { getProductDetail } from "../apis/apiService";
 import Loading from "../common/Loading/Loading";
 import Pdata from "../components/products/Pdata";
-import { caculatorVND } from "../constants/Caculator";
 import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
@@ -261,6 +260,7 @@ export const FoodDetailPage = () => {
                             background: "#aab2bd",
                             color: "#fff",
                             transition: "0.3s all",
+                            WebkitTransition: "0.3s all",
                         }}
                     >
                         Hủy
@@ -285,6 +285,7 @@ export const FoodDetailPage = () => {
                             background: "var(--primary)",
                             color: "#fff",
                             transition: "0.3s all",
+                            WebkitTransition: "0.3s all",
                         }}
                     >
                         Tiếp tục
@@ -326,6 +327,7 @@ export const FoodDetailPage = () => {
                             background: "#aab2bd",
                             color: "#fff",
                             transition: "0.3s all",
+                            WebkitTransition: "0.3s all",
                         }}
                     >
                         Không
@@ -346,6 +348,7 @@ export const FoodDetailPage = () => {
                             background: "var(--primary)",
                             color: "#fff",
                             transition: "0.3s all",
+                            WebkitTransition: "0.3s all",
                         }}
                     >
                         OK
@@ -354,7 +357,7 @@ export const FoodDetailPage = () => {
             </Rodal>
             <div className={`loading-spin ${!isLoadingCircle && "loading-spin-done"}`}></div>
             {!isLoadingCircle && product && (
-                <section className="" style={{ paddingTop: 60, paddingBottom: 100, background: "#fff", transition: "1s all" }}>
+                <section className="" style={{ paddingTop: 60, paddingBottom: 100, background: "#fff", transition: "1s all", WebkitTransition: "1s all" }}>
                     <div className="container non-radius" style={{ borderRadius: 0, height: "100%" }}>
                         <div className="d_flex food-detail" style={{ padding: "10px 25px", flexDirection: "column" }}>
                             <div className="food-detail-left" style={{}}>
@@ -368,10 +371,10 @@ export const FoodDetailPage = () => {
                                 <i className="fa fa-star"></i>
                                 <i className="fa fa-star" style={{ color: "rgb(102, 102, 102)" }}></i>
                             </div> */}
-                                <h2>{product.name}</h2>
+                                <h3>{product.name}</h3>
                                 {/* <h4 style={{ fontWeight: 500, color: "rgb(102, 102, 102)" }}>{product.id}</h4> */}
                                 <div style={{ color: "var(--primary)", fontSize: "1.5rem", marginTop: 10, marginBottom: 5, fontWeight: 600, display: "flex", alignItems: "center", gap: 5 }}>
-                                    {caculatorVND(product.pricePerPack)}
+                                    {product.pricePerPack?.toLocaleString()}
                                     <span style={{ fontSize: "1.2rem" }}>₫</span>
                                 </div>
 
@@ -402,7 +405,7 @@ export const FoodDetailPage = () => {
                                         <span style={{ color: "rgb(160,160,160)", fontWeight: 400, fontSize: 15 }}>{product.slogan}</span>
                                     </div>
                                 </div>
-                                <p style={{ color: "#666666", padding: "20px 0" }}>{product.description}</p>
+                                <p style={{ color: "#666666", padding: "20px 0", fontSize: "15px" }}>{product.description}</p>
                                 <div className="" style={{ paddingBottom: "15px" }}>
                                     {isProductCart ? (
                                         <div className="center_flex cart-quantity" style={{ width: " 100%", boxShadow: "0 4px 5px rgb(0 0 0 / 13%)" }}>

@@ -286,7 +286,7 @@ const Cart = ({}) => {
                 </div>
                 <div style={{ padding: "0px 0 10px 0", textAlign: "center" }}>
                     <span style={{ fontSize: 16, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)", display: "flex", gap: 3, justifyContent: "center" }}>
-                        {caculatorVND(productRodal.pricePerPack)}
+                        {productRodal.pricePerPack?.toLocaleString}
                         <span style={{ fontSize: "0.9rem", fontWeight: 700 }}>₫</span>
                     </span>
                 </div>
@@ -329,6 +329,7 @@ const Cart = ({}) => {
                                 borderRadius: 10,
                                 background: "var(--primary)",
                                 transition: "0.3s all",
+                                WebkitTransition: "0.3s all",
                             }}
                         >
                             Cập nhật giỏ hàng
@@ -349,6 +350,7 @@ const Cart = ({}) => {
                                 background: "var(--red)",
                                 color: "#fff",
                                 transition: "0.3s all",
+                                WebkitTransition: "0.3s all",
                             }}
                         >
                             Xóa
@@ -539,7 +541,7 @@ const Cart = ({}) => {
                                         </div>
                                         <div className="checkout-product-price">
                                             <span style={{ display: "flex", gap: 3 }}>
-                                                {caculatorVND(item.pricePerPack)}
+                                                {item.pricePerPack.toLocaleString()}
                                                 <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
                                             </span>
                                         </div>
@@ -548,14 +550,14 @@ const Cart = ({}) => {
                                 <div className="c_flex">
                                     <span>Tiền hàng</span>
                                     <span style={{ fontWeight: 600, display: "flex", gap: 3 }}>
-                                        {caculatorVND(Cart.length > 0 ? totalPrice : 0)}
+                                        {Cart.length > 0 ? totalPrice.toLocaleString() : 0}
                                         <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
                                     </span>
                                 </div>
                                 <div className="c_flex">
                                     <span>Phí giao hàng</span>
                                     <span style={{ fontWeight: 600, display: "flex", gap: 3 }}>
-                                        {caculatorVND(Cart.length > 0 ? 15000 : 0)}
+                                        {"15.000"}
                                         <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
                                     </span>
                                 </div>
@@ -584,7 +586,7 @@ const Cart = ({}) => {
                                     </div>
                                     <div className="checkout-text-price">
                                         <span style={{ display: "flex", gap: 3, alignItems: "center" }}>
-                                            {caculatorVND(totalPrice + 15000)}
+                                            {(totalPrice + 15000).toLocaleString()}
                                             <span style={{ fontSize: "1rem", fontWeight: 700 }}>₫</span>
                                         </span>
                                     </div>

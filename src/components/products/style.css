@@ -17,6 +17,7 @@
     padding: 5px 10px;
     transition: 0.5s;
     border-radius: 5px;
+    -webkit-transition: 0.5s all;
 }
 .shop .category img {
     width: auto;
@@ -53,7 +54,8 @@
     object-fit: contain;
 }
 .shop .product {
-    transition: 0.5s;
+    transition: 0.5s all;
+    -webkit-transition: 0.5s all;
 }
 .shop .product:hover {
     box-shadow: rgb(43 52 69 / 15%) 0px 4px 16px;

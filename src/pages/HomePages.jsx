@@ -138,7 +138,11 @@ const HomePage = ({ productItems, shopItems }) => {
                         {banner.map((value, index) => {
                             return (
                                 <>
-                                    <div className="" key={index} style={{ padding: "30px 0 0 0", background: "none", boxShadow: "none", margin: 0, borderRadius: "0.5rem", transition: "1s all" }}>
+                                    <div
+                                        className=""
+                                        key={index}
+                                        style={{ padding: "30px 0 0 0", background: "none", boxShadow: "none", margin: 0, borderRadius: "0.5rem", transition: "1s all", WebkitTransition: "1s all" }}
+                                    >
                                         <div className="nametop d_flex"></div>
                                         <div className="slide-img" style={{ borderRadius: 5 }}>
                                             <img src={value.cover} alt="" style={{ objectFit: "contain", width: "100%", height: "100%", borderRadius: "0.5rem" }} />

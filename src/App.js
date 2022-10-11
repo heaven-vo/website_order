@@ -12,7 +12,6 @@ import Header from "./common/header/Header";
 import Data from "./components/Data";
 import Pdata from "./components/products/Pdata";
 import { AppContext } from "./context/AppProvider";
-import { CheckoutPage } from "./pages/CheckoutPage";
 import { FoodDetailPage } from "./pages/FoodDetailPage";
 import HomePage from "./pages/HomePages";
 import { LoginPage } from "./pages/LoginPage";
@@ -37,6 +36,9 @@ function App() {
                 setMobileMode(false);
             }
         }
+        let vh = window.innerHeight * 0.01;
+
+        document.documentElement.style.setProperty("--vh", `${vh}px`);
 
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
@@ -62,7 +64,7 @@ function App() {
 
     return (
         <div className="root center_flex">
-            <div className="main">
+            <div className="main" id="main">
                 <Header />
                 <Drawer size={300} open={isOpenDrawer} duration={300} onClose={toggleDrawer} zIndex={9999} direction="right" className="drawer__container">
                     <DrawerContent />
@@ -103,9 +105,9 @@ function App() {
                     <Route path="/checkout" exact>
                         <Cart />
                     </Route>
-                    <Route path="/checkout2" exact>
+                    {/* <Route path="/checkout2" exact>
                         <CheckoutPage />
-                    </Route>
+                    </Route> */}
                     <Route path="*">
                         <NotFoundPage />
                     </Route>

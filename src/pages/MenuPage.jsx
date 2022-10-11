@@ -255,6 +255,7 @@ export const MenuPage = () => {
                             fontSize: "0.9rem",
                             padding: "2px 4px",
                             transition: "all 0.3s",
+                            WebkitTransition: "0.3s all",
                             borderRadius: 3,
                         }}
                     >
@@ -269,6 +270,7 @@ export const MenuPage = () => {
                             fontSize: "0.9rem",
                             padding: "2px 4px",
                             transition: "all 0.3s",
+                            WebkitTransition: "0.3s all",
                             borderRadius: 3,
                         }}
                     >
@@ -283,6 +285,7 @@ export const MenuPage = () => {
                             fontSize: "0.9rem",
                             padding: "2px 4px",
                             transition: "all 0.3s",
+                            WebkitTransition: "0.3s all",
                             borderRadius: 3,
                         }}
                     >
@@ -301,6 +304,7 @@ export const MenuPage = () => {
                             fontSize: "0.9rem",
                             padding: "2px 4px",
                             transition: "all 0.3s",
+                            WebkitTransition: "0.3s all",
                             borderRadius: 3,
                         }}
                     >
@@ -315,6 +319,7 @@ export const MenuPage = () => {
                             fontSize: "0.9rem",
                             padding: "2px 4px",
                             transition: "all 0.3s",
+                            WebkitTransition: "0.3s all",
                             borderRadius: 3,
                         }}
                     >
@@ -329,6 +334,7 @@ export const MenuPage = () => {
                             fontSize: "0.9rem",
                             padding: "2px 4px",
                             transition: "all 0.3s",
+                            WebkitTransition: "0.3s all",
                             borderRadius: 3,
                         }}
                     >

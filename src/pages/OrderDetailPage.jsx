@@ -1,9 +1,7 @@
-import React, { useContext, useEffect } from "react";
-import { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { getOrderDetail } from "../apis/apiService";
 import Loading from "../common/Loading/Loading";
-import { caculatorVND } from "../constants/Caculator";
 import { getStatusColor, getStatusName, STATUS_ORDER } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
@@ -15,6 +13,12 @@ export const OrderDetailPage = () => {
     const [statusOrder, setStatusOrder] = useState([]);
     let location = useLocation();
     useEffect(() => {
+        let doc = document.getElementById("main");
+        doc.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth",
+        });
         let orderId = location.pathname.trim().split("/")[2];
         console.log(orderId);
         setIsLoadingCircle(true);
@@ -34,6 +38,7 @@ export const OrderDetailPage = () => {
             .catch((error) => {
                 console.log(error);
             });
+
         setTimeout(() => {
             setIsLoadingCircle(false);
         }, 500);
@@ -207,7 +212,7 @@ export const OrderDetailPage = () => {
                                                 </div>
                                                 <div>
                                                     <span className="order-text-price" style={{ display: "flex", alignItems: "center", gap: 3 }}>
-                                                        {caculatorVND(item.price)}
+                                                        {item.price?.toLocaleString()}
                                                         <span style={{ fontSize: mobileMode ? "0.8rem" : "0.9rem", fontWeight: 500 }}>₫</span>
                                                     </span>
                                                 </div>
@@ -268,7 +273,7 @@ export const OrderDetailPage = () => {
                                     <div className="order-detail-total-titlte">
                                         Tổng tiền hàng:
                                         <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10, display: "flex", alignItems: "center", gap: 3 }}>
-                                            {caculatorVND(orderInfo.total - orderInfo.shipCost) || "--"}
+                                            {(orderInfo.total - orderInfo.shipCost).toLocaleString() || "--"}
                                             <span style={{ fontSize: mobileMode ? "0.8rem" : "0.9rem", fontWeight: 500 }}>₫</span>
                                         </span>
                                     </div>
@@ -277,7 +282,7 @@ export const OrderDetailPage = () => {
                                     <div className="order-detail-total-titlte">
                                         Phí vận chuyển:
                                         <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10, display: "flex", alignItems: "center", gap: 3 }}>
-                                            {caculatorVND(orderInfo.shipCost) || "--"}
+                                            {orderInfo.shipCost?.toLocaleString() || "--"}
                                             <span style={{ fontSize: mobileMode ? "0.8rem" : "0.9rem", fontWeight: 500 }}>₫</span>
                                         </span>
                                     </div>
@@ -290,7 +295,7 @@ export const OrderDetailPage = () => {
                                             className="order-detail-text-price"
                                             style={{ fontWeight: 700, marginLeft: 10, color: "#000", fontSize: mobileMode ? "16px" : "18px", display: "flex", gap: 3 }}
                                         >
-                                            {caculatorVND(orderInfo.total) || "--"}
+                                            {orderInfo.total?.toLocaleString() || "--"}
                                             <span style={{ fontSize: mobileMode ? "0.9rem" : ".95rem", fontWeight: 700 }}>₫</span>
                                         </span>
                                     </div>

@@ -91,7 +91,8 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                 breakpoint: 700,
                 settings: {
                     slidesToShow: data.length >= 2 ? 2 : 1,
-                    // slidesToScroll: data.length,
+                    slidesToScroll: 1,
+                    swipeToSlide: true,
                     // slidesPerRow: 1,
                     swipe: true,
                     nextArrow: "",
@@ -139,6 +140,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                             background: "#aab2bd",
                             color: "#fff",
                             transition: "0.3s all",
+                            WebkitTransition: "0.3s all",
                         }}
                     >
                         Không
@@ -161,6 +163,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                             background: "var(--primary)",
                             color: "#fff",
                             transition: "0.3s all",
+                            WebkitTransition: "0.3s all",
                         }}
                     >
                         OK
@@ -202,6 +205,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                             background: "#aab2bd",
                             color: "#fff",
                             transition: "0.3s all",
+                            WebkitTransition: "0.3s all",
                         }}
                     >
                         Hủy
@@ -225,6 +229,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                             background: "var(--primary)",
                             color: "#fff",
                             transition: "0.3s all",
+                            WebkitTransition: "0.3s all",
                         }}
                     >
                         Tiếp tục

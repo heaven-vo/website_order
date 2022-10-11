@@ -101,6 +101,7 @@ export const ProductList = ({ data, filter, reLoad }) => {
                             background: "#aab2bd",
                             color: "#fff",
                             transition: "0.3s all",
+                            WebkitTransition: "0.3s all",
                         }}
                     >
                         Hủy
@@ -124,6 +125,7 @@ export const ProductList = ({ data, filter, reLoad }) => {
                             background: "var(--primary)",
                             color: "#fff",
                             transition: "0.3s all",
+                            WebkitTransition: "0.3s all",
                         }}
                     >
                         Tiếp tục
@@ -154,7 +156,18 @@ export const ProductList = ({ data, filter, reLoad }) => {
                             e.preventDefault();
                             setVisiblePopupQuantity(false);
                         }}
-                        style={{ flex: 1, padding: 14, fontSize: "1.2em", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "#aab2bd", color: "#fff", transition: "0.3s all" }}
+                        style={{
+                            flex: 1,
+                            padding: 14,
+                            fontSize: "1.2em",
+                            cursor: "pointer",
+                            fontWeight: 700,
+                            borderRadius: 10,
+                            background: "#aab2bd",
+                            color: "#fff",
+                            transition: "0.3s all",
+                            WebkitTransition: "0.3s all",
+                        }}
                     >
                         Không
                     </button>
@@ -163,7 +176,18 @@ export const ProductList = ({ data, filter, reLoad }) => {
                             e.preventDefault();
                             deleteCartItem();
                         }}
-                        style={{ flex: 1, padding: 14, fontSize: "1.2em", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", color: "#fff", transition: "0.3s all" }}
+                        style={{
+                            flex: 1,
+                            padding: 14,
+                            fontSize: "1.2em",
+                            cursor: "pointer",
+                            fontWeight: 700,
+                            borderRadius: 10,
+                            background: "var(--primary)",
+                            color: "#fff",
+                            transition: "0.3s all",
+                            WebkitTransition: "0.3s all",
+                        }}
                     >
                         OK
                     </button>
@@ -172,6 +196,10 @@ export const ProductList = ({ data, filter, reLoad }) => {
             <div className="product-list-wrapper" style={{ paddingTop: 55, paddingBottom: 100, background: "#fff" }}>
                 <div className="back-white c_flex" style={{ padding: "0px 15px", alignItems: "self-start", flexDirection: "column" }}>
                     {data.map((item, index) => {
+                        let isBorderBottom = true;
+                        if (index === 0 || index === data.length - 1) {
+                            isBorderBottom = false;
+                        }
                         return (
                             <ProductItem
                                 ref={(el) => (itemsRef.current[index] = el)}
@@ -181,6 +209,7 @@ export const ProductList = ({ data, filter, reLoad }) => {
                                 openRodal={(e) => hanldeRodal(e)}
                                 key={index}
                                 filter={filter}
+                                isBorderBottom={isBorderBottom}
                             />
                         );
                     })}

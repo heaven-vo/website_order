@@ -1,7 +1,6 @@
 // @flow
 import * as React from "react";
 import { Link, useHistory } from "react-router-dom";
-import { caculatorVND } from "../../constants/Caculator";
 import { getStatusColor, getStatusName, LOCALSTORAGE_USER_LOGIN } from "../../constants/Variable";
 // import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../context/AppProvider";
@@ -101,7 +100,7 @@ export const DrawerContent = () => {
                                                         </span>
                                                     </div>
                                                     <span className="order-store-title" style={{ display: "flex", gap: 3, fontSize: "16px" }}>
-                                                        {caculatorVND(item.total)}
+                                                        {item.total?.toLocaleString()}
                                                         <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
                                                     </span>
                                                 </div>

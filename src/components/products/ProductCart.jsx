@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useImperativeHandle, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { caculatorVND } from "../../constants/Caculator";
 import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 
@@ -169,7 +168,7 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
 
                         <div className="price">
                             <h4 style={{ fontSize: 16, lineHeight: 1.5, display: "flex", alignItems: "center", gap: 3 }}>
-                                {caculatorVND(product.pricePerPack)}
+                                {product.pricePerPack?.toLocaleString()}
                                 <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
                             </h4>
                         </div>

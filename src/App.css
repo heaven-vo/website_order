@@ -5,6 +5,7 @@
     margin: 0;
     box-sizing: border-box;
 }
+
 .main {
     background-color: #fff;
     max-width: 48em;
@@ -177,6 +178,7 @@ button {
 }
 .category .box {
     transition: 0.5s;
+    -webkit-transition: 0.5 all;
     padding: 0 20px;
 }
 .category .box:hover {
@@ -298,6 +300,7 @@ button {
     color: var(--secondary);
     font-size: 20px;
     transition: 0.5s;
+    -webkit-transition: 0.5 all;
     border: 1px solid rgb(3 0 71 / 9%);
     width: 35px;
     height: 35px;
@@ -315,6 +318,7 @@ button {
     margin: 8px;
     opacity: 1;
     transition: 0.5s;
+    -webkit-transition: 0.5 all;
 }
 .shop-product-like label {
     background-color: var(--secondary);
@@ -328,6 +332,7 @@ button {
     margin: 10px 3px;
     opacity: 0;
     transition: 0.5s;
+    -webkit-transition: 0.5 all;
 }
 .shop .product:hover .shop-product-like i {
     opacity: 1;
@@ -359,6 +364,7 @@ button {
     margin: 9px;
     opacity: 1;
     transition: 0.5s;
+    -webkit-transition: 0.5 all;
 }
 .product-count label {
     background-color: var(--secondary);
@@ -413,6 +419,7 @@ button {
     font-size: 20px;
     transition: 0.5s;
     color: var(--primary);
+    -webkit-transition: 0.5 all;
 }
 .control-btn .prev:hover,
 .control-btn .next:hover {
@@ -520,6 +527,7 @@ td {
     background-color: var(--primary);
     cursor: pointer;
     transition: 0.5s all;
+    -webkit-transition: 0.5 all;
     color: #fff;
     font-weight: 600;
 }
@@ -542,6 +550,7 @@ td {
     padding: 7px 10px;
 
     transition: 0.5s;
+    -webkit-transition: 0.5 all;
     min-height: 40px;
     min-width: 110px;
 }
@@ -568,6 +577,7 @@ td {
     /* background-color: var(--secondary); */
 
     transition: 0.5s;
+    -webkit-transition: 0.5 all;
 }
 .menu-item-active label {
     color: var(--secondary);
@@ -633,6 +643,7 @@ td {
     -webkit-font-smoothing: inherit;
     box-shadow: 0 0 0 1px #d9d9d9;
     transition: all 0.2s ease-out;
+    -webkit-transition: 0.2s all;
     background-color: white;
     color: #333333;
     border-radius: 8px;
@@ -649,6 +660,7 @@ td {
     -webkit-font-smoothing: inherit;
     box-shadow: 0 0 0 1px #d9d9d9;
     transition: all 0.2s ease-out;
+    -webkit-transition: 0.2s all;
     background-color: white;
     color: #333333;
     border-radius: 8px;
@@ -663,6 +675,7 @@ td {
     -webkit-appearance: none;
     -webkit-font-smoothing: inherit;
     transition: all 0.2s ease-out;
+    -webkit-transition: 0.2s all;
     display: block;
     width: 100%;
     border-radius: 8px;
@@ -678,6 +691,7 @@ textarea {
     border: 1px solid #d9d9d9;
     /* box-shadow: 0 0 0 1px #d9d9d9; */
     transition: all 0.2s ease-out;
+    -webkit-transition: 0.2s all;
     background-color: white;
     color: #333333;
     border-radius: 4px;
@@ -1144,6 +1158,7 @@ iframe {
 .example-enter-active {
     opacity: 1;
     transition: opacity 500ms ease-out;
+    -webkit-transition: opacity 500ms ease-out;
 }
 
 .example-leave {
@@ -1153,6 +1168,7 @@ iframe {
 .example-leave-active {
     opacity: 0.01;
     transition: opacity 300ms ease-out;
+    -webkit-transition: opacity 500ms ease-out;
 }
 
 .remove-btn {
@@ -1165,6 +1181,7 @@ iframe {
 .item-enter-active {
     opacity: 1;
     transition: opacity 500ms ease-in;
+    -webkit-transition: opacity 500ms ease-out;
 }
 .item-exit {
     opacity: 1;
@@ -1172,6 +1189,7 @@ iframe {
 .item-exit-active {
     opacity: 0;
     transition: opacity 500ms ease-in;
+    -webkit-transition: opacity 500ms ease-out;
 }
 
 /* ----------------order - detail */
@@ -1230,6 +1248,7 @@ iframe {
     flex: 1;
     border-radius: 0.5rem;
     transition: 0.3s all;
+    -webkit-transition: 0.3s all;
     cursor: pointer;
     padding: 15px 10px;
 }
@@ -1263,13 +1282,18 @@ iframe {
     left: 0;
     top: 0;
     background-color: #fff;
-    transition: 0.8s all;
+    /* transition: 0.8s all;
+    -webkit-transition: 0.8s all;
+    -moz-transition: 0.8s all; */
     opacity: 1;
     z-index: 1;
 }
 .loading-spin-done {
     opacity: 0;
     pointer-events: none;
+    transition: 0.8s all;
+    -webkit-transition: 0.8s all;
+    -moz-transition: 0.8s all;
     /* width: 0px;
     height: 0px; */
     /* top: 100%;

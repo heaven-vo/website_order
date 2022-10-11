@@ -1,13 +1,9 @@
-import { useContext } from "react";
-import { useState } from "react";
-import { useImperativeHandle } from "react";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useImperativeHandle, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { LOCALSTORAGE_CART_NAME } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
-import { useHistory } from "react-router-dom";
-import { caculatorVND } from "../../constants/Caculator";
 
-export const ProductItem = React.forwardRef(({ product, openRodal, index, filter, openRodalOutOfStore }, ref) => {
+export const ProductItem = React.forwardRef(({ product, openRodal, index, filter, openRodalOutOfStore, isBorderBottom }, ref) => {
     useImperativeHandle(ref, () => ({
         resetQuantity() {
             setisProductCart(false);
@@ -118,7 +114,7 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
     };
     return (
         <>
-            <div key={product.id} className="c_flex" style={{ borderBottom: "1px solid #f0f0f0", width: "100%", padding: "12px 0" }}>
+            <div key={product.id} className="c_flex" style={{ borderBottom: isBorderBottom ? "1px solid #f0f0f0" : "none", width: "100%", padding: "12px 0" }}>
                 <div className="product-list-info">
                     <div
                         className="product-list-img"
@@ -182,7 +178,7 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                 </div>
                 <div className="product-list-price">
                     <span style={{ display: "flex", gap: 3, fontSize: mobileMode ? "15px" : "16px" }}>
-                        {caculatorVND(product.pricePerPack)}
+                        {product.pricePerPack?.toLocaleString()}
                         <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
                     </span>
                 </div>
