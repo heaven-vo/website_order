@@ -320,15 +320,15 @@
         padding-bottom: 5px;
     }
     .cateogry-menu-img {
-        width: 50px !important;
-        height: 50px !important;
+        width: 55px !important;
+        height: 55px !important;
     }
     .cateogry-menu-img img {
     }
     .cateogry-menu-text {
     }
     .cateogry-menu-text {
-        font-size: 0.75rem;
+        font-size: 0.75rem !important;
     }
     /* --------------- */
     .shop .product .img {

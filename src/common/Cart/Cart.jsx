@@ -286,7 +286,7 @@ const Cart = ({}) => {
                 </div>
                 <div style={{ padding: "0px 0 10px 0", textAlign: "center" }}>
                     <span style={{ fontSize: 16, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)", display: "flex", gap: 3, justifyContent: "center" }}>
-                        {productRodal.pricePerPack?.toLocaleString}
+                        {productRodal.pricePerPack?.toLocaleString()}
                         <span style={{ fontSize: "0.9rem", fontWeight: 700 }}>₫</span>
                     </span>
                 </div>
@@ -501,12 +501,13 @@ const Cart = ({}) => {
                                     <div className="checkout-product-cart" key={item.id}>
                                         <div className="c_flex">
                                             <div className="checkout-product-image">
-                                                <img src={IMAGE_NOTFOUND} alt="" />
+                                                <img src={item.image || IMAGE_NOTFOUND} alt="" />
                                             </div>
                                             <div
                                                 className="center_flex checkout-product-quantity-count"
                                                 onClick={() => {
                                                     setVisiblePopupQuantity(true);
+
                                                     setProductRodalQuantity(item.quantityCart);
                                                     setProductRodal(item);
                                                 }}

@@ -1116,6 +1116,7 @@ iframe {
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 1;
+    font-size: 15px;
     line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
@@ -1129,13 +1130,14 @@ iframe {
 }
 .cateogry-menu-img {
     cursor: pointer;
-    border-radius: 50%;
-    width: 80px;
-    height: 80px;
+    border-radius: 20%;
+    width: 70px;
+    height: 70px;
     margin: auto;
 }
 .cateogry-menu-img img {
-    border-radius: 50%;
+    padding: 5px;
+    border-radius: 20%;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -1300,4 +1302,11 @@ iframe {
     bottom: 0; */
     /* top: 0;
     /* display: none; */
+}
+.flash {
+    background: #f6f9fc;
+    padding: 50px 0;
+}
+.like {
+    color: red;
 }

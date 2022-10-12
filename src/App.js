@@ -23,7 +23,8 @@ import { ShopDetailPage } from "./pages/ShopDetailPage";
 import { ViewAllProductCatePage } from "./pages/ViewAllProductCatePage";
 import { ViewAllProductStorePage } from "./pages/ViewAllProductStorePage";
 import "./util.css";
-
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 function App() {
     const { productItems } = Data;
     const { shopItems } = Pdata;

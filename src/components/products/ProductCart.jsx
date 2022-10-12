@@ -148,7 +148,7 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
                             style={{
                                 height: "100%",
                                 width: "100%",
-                                objectFit: "contain",
+                                objectFit: "cover",
                             }}
                         />
                     </div>

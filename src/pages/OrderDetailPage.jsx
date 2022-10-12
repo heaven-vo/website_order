@@ -201,8 +201,9 @@ export const OrderDetailPage = () => {
                                         <div className="f_flex" style={{ gap: 15 }}></div>
                                     </div>
                                     {productOrder.map((item, index) => {
+                                        console.log(item);
                                         return (
-                                            <div className="order" style={{}}>
+                                            <div className="order" key={index} style={{}}>
                                                 <div className="" style={{}}>
                                                     <span className="order-text-count">{item.quantity}x</span>
                                                 </div>

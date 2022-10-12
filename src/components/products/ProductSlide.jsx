@@ -4,9 +4,28 @@ import Slider from "react-slick";
 import Rodal from "rodal";
 import { LOCALSTORAGE_CART_NAME } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
-import { SampleNextArrow, SamplePrevArrow } from "../flashDeals/FlashCard";
 import { ProductCart } from "./ProductCart";
 
+export const SampleNextArrow = (props) => {
+    const { onClick } = props;
+    return (
+        <div className="control-btn" onClick={onClick}>
+            <button className="next">
+                <i className="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    );
+};
+export const SamplePrevArrow = (props) => {
+    const { onClick } = props;
+    return (
+        <div className="control-btn" onClick={onClick}>
+            <button className="prev">
+                <i className="fa-solid fa-arrow-left"></i>
+            </button>
+        </div>
+    );
+};
 export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading, isViewAll, reLoad }) => {
     const { setCart, setisCartMain, mobileMode, menu } = useContext(AppContext);
     const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);

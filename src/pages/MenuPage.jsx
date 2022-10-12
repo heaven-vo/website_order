@@ -3,10 +3,7 @@ import Skeleton from "react-loading-skeleton";
 import { useHistory } from "react-router-dom";
 import Slider from "react-slick";
 import { getMenuByMode } from "../apis/apiService";
-import { SampleNextArrow, SamplePrevArrow } from "../components/flashDeals/FlashCard";
-import Mdata from "../components/MainPage/Mdata";
-import Pdata from "../components/products/Pdata";
-import { ProductSlide } from "../components/products/ProductSlide";
+import { ProductSlide, SampleNextArrow, SamplePrevArrow } from "../components/products/ProductSlide";
 import { CATE_FITLER, IMAGE_NOTFOUND, STORE_FILTER } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
@@ -58,7 +55,27 @@ const categorys = [
         img: "https://nhuhoaphat.com/wp-content/uploads/2022/03/Tai-ngay-milk-tea-hinh-nen-tra-sua-cute-moi-nhat-2022.png",
     },
 ];
-
+const Mdata = [
+    {
+        id: 1,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "/images/Buoisang_Banner-min.jpg",
+    },
+    {
+        id: 2,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "/images/banner-combo-mon-an-1200x600-finail.jpg",
+    },
+    {
+        id: 3,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "/images/panner.jpg",
+    },
+];
+export default Mdata;
 export const MenuPage = () => {
     // let date = new Date();
     // let timeEnd1 = 13.54;
@@ -167,8 +184,6 @@ export const MenuPage = () => {
     //     setTimeCount(time);
     //     // console.log("Xong");
     // };
-
-    const { shopItems } = Pdata;
 
     // function getTimeStamp(input) {
     //     var parts = input.trim().split(" ");
@@ -515,7 +530,7 @@ export const MenuPage = () => {
                                         return (
                                             <div key={index} className="cateogry-menu-wrapper ">
                                                 <div className="cateogry-menu-img" onClick={() => hanldeViewAll(cate.id)}>
-                                                    <img src={cate.img || "https://thumbs.dreamstime.com/b/vietnamese-pho-soup-illustration-97217112.jpg"} alt="" />
+                                                    <img src={cate.image || "https://thumbs.dreamstime.com/b/vietnamese-pho-soup-illustration-97217112.jpg"} alt="" />
                                                 </div>
                                                 <span className="cateogry-menu-text">{cate.name}</span>
                                             </div>
@@ -558,7 +573,7 @@ export const MenuPage = () => {
                                     data={[...menu.listProducts] || []}
                                     label={menu.name}
                                     cateId={menu.id}
-                                    labelImg={menu.img || IMAGE_NOTFOUND}
+                                    labelImg={menu.image || IMAGE_NOTFOUND}
                                     isViewAll={true}
                                     reLoad={() => {
                                         hanldeReLoad();
