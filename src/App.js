@@ -25,6 +25,7 @@ import { ViewAllProductStorePage } from "./pages/ViewAllProductStorePage";
 import "./util.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import MessengerCustomerChat from "react-messenger-customer-chat/lib/MessengerCustomerChat";
 function App() {
     const { productItems } = Data;
     const { shopItems } = Pdata;
@@ -65,6 +66,10 @@ function App() {
 
     return (
         <div className="root center_flex">
+            <MessengerCustomerChat pageId="100083337097834" appId="437264958531394" />,
+            <div className="logo-backround">
+                <img style={{ width: "100%", height: "100%", objectFit: "contain" }} src="/images/logo.jpg" alt="" />
+            </div>
             <div className="main" id="main">
                 <Header />
                 <Drawer size={300} open={isOpenDrawer} duration={300} onClose={toggleDrawer} zIndex={9999} direction="right" className="drawer__container">

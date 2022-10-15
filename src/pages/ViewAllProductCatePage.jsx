@@ -6,7 +6,7 @@ import { ProductList } from "../components/products/ProductList";
 import { AppContext } from "../context/AppProvider";
 
 export const ViewAllProductCatePage = () => {
-    const { setHeaderInfo } = useContext(AppContext);
+    const { setHeaderInfo, menuIdProvider } = useContext(AppContext);
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
     const [products, setProducts] = useState(null);
     const [title, setTitle] = useState("");
@@ -15,10 +15,11 @@ export const ViewAllProductCatePage = () => {
     let location = useLocation();
     useEffect(() => {
         let cateId = location.pathname.trim().split("/")[4];
-        let menuId = location.pathname.trim().split("/")[2];
+        // let menuId = location.pathname.trim().split("/")[2];
+        console.log({ menuIdProvider });
         setIsLoadingCircle(true);
         // setIsHeader(false);
-        getListProductByFilter(menuId, cateId);
+        getListProductByFilter(menuIdProvider, cateId);
         return () => {
             setIsLoadingCircle(false);
             setHeaderInfo({});

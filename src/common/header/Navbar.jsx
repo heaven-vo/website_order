@@ -5,19 +5,26 @@ import { LOCALSTORAGE_USER_NAME } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 import { TabMenuOrder } from "./TabMenuOrder";
 import Select from "react-select";
+import { getApartment } from "../../apis/apiService";
 
 const Navbar = () => {
     // Toogle Menu
-    const { userInfo, setIsOpenDrawer, headerInfo, isHeaderOrder, setVisiblePopupInfo, visiblePopupInfo, setUserInfo, mobileMode, buildings } = useContext(AppContext);
+    const { userInfo, setIsOpenDrawer, headerInfo, isHeaderOrder, setVisiblePopupInfo, visiblePopupInfo, setUserInfo, mobileMode, buildings, areaProvider } = useContext(AppContext);
     // const [MobileMenu, setMobileMenu] = useState(false);
     const [fullName, setFullName] = useState("");
     const [phone, setPhone] = useState("");
     const [building, setBuilding] = useState("");
     const [user, setUser] = useState({});
+    const [area, setArea] = useState("");
+    const [apartment, setApartment] = useState("");
+    const [apartmentList, setApartmentList] = useState([]);
+    const [buldingList, setBuldingList] = useState([]);
     // const [isValid, setIsValid] = useState(false);
     const [isValidFullName, setIsValidFullname] = useState(false);
     const [isValidPhone, setIsValidPhone] = useState(false);
     const [isValidBuilding, setIsValidBuilding] = useState(false);
+    const [isValidArea, setIsValidArea] = useState(false);
+    const [isValidApartment, setIsValidApartment] = useState(false);
     let history = useHistory();
     const openDrawer = () => {
         setIsOpenDrawer(true);
@@ -29,7 +36,36 @@ const Navbar = () => {
         setFullName(userInfo.fullName || "");
         setPhone(userInfo.phone || "");
         setBuilding(userInfo.building || "");
+        setApartment(userInfo.apartment || "");
+        setArea(userInfo.area || "");
     }, [userInfo]);
+
+    useEffect(() => {
+        if (area) {
+            getApartment(area.value)
+                .then((res) => {
+                    if (res.data) {
+                        const apart = res.data;
+                        setApartmentList(apart.listCluster);
+                        if (apartment) {
+                            for (let index = 0; index < apart.listCluster.length; index++) {
+                                const element = apart.listCluster[index];
+                                if (element.id === apartment.value) {
+                                    setBuldingList(element.listBuilding);
+                                }
+                            }
+                        }
+                    } else {
+                        setApartmentList([]);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setApartmentList([]);
+                });
+        }
+    }, [apartment, area]);
+
     const handleSubmit = () => {
         console.log(building);
         let isValid = true;
@@ -51,24 +87,40 @@ const Navbar = () => {
         } else {
             setIsValidBuilding(false);
         }
+        if (!apartment && apartment.length === 0) {
+            setIsValidApartment(true);
+        } else {
+            setIsValidApartment(false);
+        }
+        if (!area && area.length === 0) {
+            setIsValidArea(true);
+        } else {
+            setIsValidArea(false);
+        }
         if (isValid) {
             setVisiblePopupInfo(false);
             if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_USER_NAME))) {
                 localStorage.setItem(LOCALSTORAGE_USER_NAME, JSON.stringify([]));
                 setUserInfo({});
             } else {
-                localStorage.setItem(LOCALSTORAGE_USER_NAME, JSON.stringify({ fullName, phone, building }));
-                setUserInfo({ fullName, phone, building });
+                localStorage.setItem(LOCALSTORAGE_USER_NAME, JSON.stringify({ fullName, phone, building, area, apartment }));
+                setUserInfo({ fullName, phone, building, area, apartment });
             }
         }
     };
-    const options = buildings.map((building) => {
+    const optionsBuilding = buldingList.map((building) => {
         return { value: building.id, label: building.name };
+    });
+    const optionsApartment = apartmentList.map((building) => {
+        return { value: building.id, label: building.name };
+    });
+    const optionArea = areaProvider.map((area) => {
+        return { value: area.id, label: area.name };
     });
     return (
         <>
             <Rodal
-                height={isValidFullName || isValidPhone || isValidBuilding ? 450 : 390}
+                height={isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea ? 630 : 540}
                 width={mobileMode ? 350 : 400}
                 visible={visiblePopupInfo}
                 onClose={() => {
@@ -86,12 +138,53 @@ const Navbar = () => {
                             <span style={{ fontSize: 16, fontWeight: 700 }}>Nơi nhận</span>
                         </div>
                         <div style={{ padding: "10px 0 10px 0" }}>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>Khu vực</span>
+                        </div>
+                        <Select
+                            options={optionArea}
+                            placeholder="Khu vực"
+                            onChange={(e) => {
+                                setArea(e);
+                                setApartment("");
+                                setBuilding("");
+                            }}
+                            value={area}
+                        />
+                        {isValidArea && (
+                            <div className="input-validate">
+                                <span>Khu vực không được để trống</span>
+                            </div>
+                        )}
+                        <div style={{ padding: "10px 0 10px 0" }}>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>Cụm tòa nhà</span>
+                        </div>
+                        <Select
+                            options={optionsApartment}
+                            placeholder="Tòa nhà"
+                            onChange={(e) => {
+                                setApartment(e);
+                                setBuilding("");
+                                for (let index = 0; index < apartmentList.length; index++) {
+                                    const element = apartmentList[index];
+                                    if (element.id === e.value) {
+                                        setBuldingList(element.listBuilding);
+                                    }
+                                }
+                            }}
+                            value={apartment}
+                        />
+                        {isValidApartment && (
+                            <div className="input-validate">
+                                <span>Cụm tòa nhà không được để trống</span>
+                            </div>
+                        )}
+                        <div style={{ padding: "10px 0 10px 0" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>Building (Tòa nhà)</span>
                         </div>
-                        <Select options={options} placeholder="Tòa nhà" onChange={(e) => setBuilding(e)} value={building} />
+                        <Select options={optionsBuilding} placeholder="Tòa nhà" onChange={(e) => setBuilding(e)} value={building} />
                         {isValidBuilding && (
                             <div className="input-validate">
-                                <span>Địa chỉ không được để trống</span>
+                                <span>Tòa nhà không được để trống</span>
                             </div>
                         )}
                         <div style={{ padding: "10px 0 10px 0" }}>

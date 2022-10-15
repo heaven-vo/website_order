@@ -498,12 +498,13 @@
         height: 110px !important;
     }
     .header-home-container span {
-        font-size: 1.5rem !important;
-        line-height: 2.2rem !important;
+        font-size: 1.4rem !important;
+        line-height: 1.8rem !important;
     }
     .header-home-container p {
+        margin-top: 5px;
         font-size: 0.9rem !important;
-        line-height: 1rem !important;
+        line-height: 1.3rem !important;
     }
     .search-box {
         /* display: none; */

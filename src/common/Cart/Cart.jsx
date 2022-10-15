@@ -1,17 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { caculatorVND } from "../../constants/Caculator";
-import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME } from "../../constants/Variable";
+import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_USER_NAME } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 import Rodal from "rodal";
 import Select from "react-select";
 import "./style.css";
 import Loading from "../Loading/Loading";
-import { postOrder } from "../../apis/apiService";
+import { getApartment, postOrder } from "../../apis/apiService";
 import { CountDown } from "./CountDown";
 
 const Cart = ({}) => {
-    const { Cart, setCart, setHeaderInfo, setIsHeaderOrder, mobileMode, setisCartMain, auth, userInfo, setUserInfo } = useContext(AppContext);
+    const { Cart, setCart, setHeaderInfo, setIsHeaderOrder, mobileMode, setisCartMain, auth, userInfo, setUserInfo, areaProvider } = useContext(AppContext);
     const [totalPrice, setTotalPrice] = useState(0);
     const [CartList, setCartList] = useState([]);
     const [visible, setVisible] = useState(false);
@@ -21,6 +21,10 @@ const Cart = ({}) => {
     const [fullName, setFullName] = useState("");
     const [phone, setPhone] = useState("");
     const [building, setBuilding] = useState("");
+    const [area, setArea] = useState("");
+    const [apartment, setApartment] = useState("");
+    const [apartmentList, setApartmentList] = useState([]);
+    const [buldingList, setBuldingList] = useState([]);
     const [productRodal, setProductRodal] = useState("");
     const [productRodalQuantity, setProductRodalQuantity] = useState(1);
     const [isValidFullName, setIsValidFullname] = useState(false);
@@ -29,7 +33,16 @@ const Cart = ({}) => {
     const [isLoadingOrder, setisLoadingOrder] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [payment, setPayment] = useState({});
+    const [isValidArea, setIsValidArea] = useState(false);
+    const [isValidApartment, setIsValidApartment] = useState(false);
     const [note, setNote] = useState("");
+
+    useEffect(() => {
+        document.getElementById("main").style.overflow = "hidden";
+        return () => {
+            document.getElementById("main").style.overflow = "auto";
+        };
+    }, []);
     const handleSubmit = () => {
         let isValid = true;
         if (fullName.length === 0 || phone.length === 0 || !building?.value) {
@@ -50,18 +63,56 @@ const Cart = ({}) => {
         } else {
             setIsValidBuilding(false);
         }
+        if (!apartment && apartment.length === 0) {
+            setIsValidApartment(true);
+        } else {
+            setIsValidApartment(false);
+        }
+        if (!area && area.length === 0) {
+            setIsValidArea(true);
+        } else {
+            setIsValidArea(false);
+        }
         if (isValid) {
-            setUserInfo({ fullName, phone, building, note });
+            setUserInfo({ fullName, phone, building, note, area, apartment });
+            localStorage.setItem(LOCALSTORAGE_USER_NAME, JSON.stringify({ fullName, phone, building, area, note, apartment }));
             setVisiblePopupInfo(false);
         }
     };
-    const options = [
-        { value: "b1", label: "S013" },
-        { value: "b2", label: "S014" },
-        { value: "b3", label: "S015" },
-        { value: "b4", label: "S016" },
-        { value: "b5", label: "S017" },
-    ];
+    useEffect(() => {
+        if (area) {
+            getApartment(area.value)
+                .then((res) => {
+                    if (res.data) {
+                        const apart = res.data;
+                        setApartmentList(apart.listCluster);
+                        if (apartment) {
+                            for (let index = 0; index < apart.listCluster.length; index++) {
+                                const element = apart.listCluster[index];
+                                if (element.id === apartment.value) {
+                                    setBuldingList(element.listBuilding);
+                                }
+                            }
+                        }
+                    } else {
+                        setApartmentList([]);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setApartmentList([]);
+                });
+        }
+    }, [apartment, area]);
+    const optionsBuilding = buldingList.map((building) => {
+        return { value: building.id, label: building.name };
+    });
+    const optionsApartment = apartmentList.map((building) => {
+        return { value: building.id, label: building.name };
+    });
+    const optionArea = areaProvider.map((area) => {
+        return { value: area.id, label: area.name };
+    });
     let history = useHistory();
     const hanldeOrder = () => {
         setisLoadingOrder(true);
@@ -103,6 +154,7 @@ const Cart = ({}) => {
                 setisLoadingOrder(false);
             });
     };
+
     useEffect(() => {
         setTimeout(() => {
             setIsLoading(false);
@@ -112,6 +164,8 @@ const Cart = ({}) => {
         setPhone(userInfo.phone || "");
         setBuilding(userInfo.building || "");
         setNote(userInfo.note || "");
+        setApartment(userInfo.apartment || "");
+        setArea(userInfo.area || "");
     }, [userInfo]);
     useEffect(() => {
         setIsLoading(true);
@@ -171,7 +225,7 @@ const Cart = ({}) => {
         <>
             <div className={`loading-spin ${!isLoading && "loading-spin-done"}`}></div>
             <Rodal
-                height={isValidFullName || isValidPhone ? 510 : 470}
+                height={isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea ? 630 : 540}
                 width={mobileMode ? 350 : 400}
                 visible={visiblePopupInfo}
                 onClose={() => {
@@ -187,12 +241,53 @@ const Cart = ({}) => {
                     <span style={{ fontSize: 16, fontWeight: 700 }}>Nơi nhận</span>
                 </div>
                 <div style={{ padding: "10px 0 10px 0" }}>
+                    <span style={{ fontSize: 16, fontWeight: 700 }}>Khu vực</span>
+                </div>
+                <Select
+                    options={optionArea}
+                    placeholder="Khu vực"
+                    onChange={(e) => {
+                        setArea(e);
+                        setApartment("");
+                        setBuilding("");
+                    }}
+                    value={area}
+                />
+                {isValidArea && (
+                    <div className="input-validate">
+                        <span>Khu vực không được để trống</span>
+                    </div>
+                )}
+                <div style={{ padding: "10px 0 10px 0" }}>
+                    <span style={{ fontSize: 16, fontWeight: 700 }}>Cụm tòa nhà</span>
+                </div>
+                <Select
+                    options={optionsApartment}
+                    placeholder="Tòa nhà"
+                    onChange={(e) => {
+                        setApartment(e);
+                        setBuilding("");
+                        for (let index = 0; index < apartmentList.length; index++) {
+                            const element = apartmentList[index];
+                            if (element.id === e.value) {
+                                setBuldingList(element.listBuilding);
+                            }
+                        }
+                    }}
+                    value={apartment}
+                />
+                {isValidApartment && (
+                    <div className="input-validate">
+                        <span>Cụm tòa nhà không được để trống</span>
+                    </div>
+                )}
+                <div style={{ padding: "10px 0 10px 0" }}>
                     <span style={{ fontSize: 16, fontWeight: 700 }}>Building (Tòa nhà)</span>
                 </div>
-                <Select options={options} placeholder="Tòa nhà" onChange={(e) => setBuilding(e)} value={building} />
+                <Select options={optionsBuilding} placeholder="Tòa nhà" onChange={(e) => setBuilding(e)} value={building} />
                 {isValidBuilding && (
                     <div className="input-validate">
-                        <span>Địa chỉ không được để trống</span>
+                        <span>Tòa nhà không được để trống</span>
                     </div>
                 )}
                 <div style={{ padding: "10px 0 10px 0" }}>
@@ -231,7 +326,7 @@ const Cart = ({}) => {
                         <span>Số điện thoại không được để trống</span>
                     </div>
                 )}
-                <div style={{ padding: "10px 0 10px 0" }}>
+                {/* <div style={{ padding: "10px 0 10px 0" }}>
                     <span style={{ fontSize: 16, fontWeight: 700 }}>Lưu ý đặc biệt</span>
                 </div>
                 <div style={{ width: " 100%" }}>
@@ -244,7 +339,7 @@ const Cart = ({}) => {
                         placeholder="Ví dụ: Không hành ..."
                         style={{ border: "1px solid rgb(200,200,200)", width: " 100%", borderRadius: 4, padding: "10px 10px", lineHeight: "1rem", fontSize: "1rem" }}
                     />
-                </div>
+                </div> */}
                 <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 25, gap: 15 }}>
                     <button
                         style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10 }}
@@ -421,9 +516,9 @@ const Cart = ({}) => {
                 </div>
             </Rodal>
             <Loading isLoading={isLoadingOrder} />
-            <div className="cart-main" style={{ position: "relative" }}>
+            <div className="cart-main" style={{ position: "relative", overflow: "hidden" }}>
                 <div className="cart-main" style={{}}>
-                    <section className="cart-items" style={{}}>
+                    <section className="cart-items" style={{ overflow: "hidden" }}>
                         <div className="">
                             <div style={{ margin: "15px 15px 5px 15px" }}>
                                 <span style={{ color: "rgba(0,0,0,.4)", fontWeight: 700 }}>Giao đến</span>

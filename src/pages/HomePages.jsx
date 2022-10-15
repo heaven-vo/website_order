@@ -77,7 +77,7 @@ const HomePage = ({ productItems, shopItems }) => {
         <>
             <div className={`loading-spin ${!isLoading && "loading-spin-done"}`}></div>
             <div className="container" style={{ background: "var(--primary)" }}>
-                <section className="background container back-white home-menu" style={{ padding: "30px 15px 100px 15px" }}>
+                <section className="background container back-white home-menu" style={{ padding: "30px 15px 50px 15px" }}>
                     <div className="f_flex" style={{ gap: 15, width: "100%", flexWrap: "wrap" }}>
                         <div
                             style={{}}
@@ -95,7 +95,7 @@ const HomePage = ({ productItems, shopItems }) => {
                             <div className="home-menu-item-icon">
                                 <img src="./images/icons/datmon-active.png" alt="" />
                             </div>
-                            <span>Đặt Món</span>
+                            <span>Gọi đồ ăn</span>
                         </div>
                         <div
                             style={{}}
@@ -113,7 +113,7 @@ const HomePage = ({ productItems, shopItems }) => {
                             <div className="home-menu-item-icon">
                                 <img src="./images/icons/dicho-active.png" alt="" />
                             </div>
-                            <span>Đi Chợ</span>
+                            <span>Giao hàng</span>
                         </div>
                         <div
                             style={{}}

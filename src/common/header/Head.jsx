@@ -7,17 +7,24 @@ import { AppContext } from "../../context/AppProvider";
 import { useContext } from "react";
 import { useEffect } from "react";
 import { LOCALSTORAGE_USER_NAME } from "../../constants/Variable";
+import { getApartment } from "../../apis/apiService";
 const Head = () => {
-    const { userInfo, setUserInfo, setVisiblePopupInfo, visiblePopupInfo, mobileMode, menu, setMenu, buildings, setIsOpenDrawer } = useContext(AppContext);
+    const { userInfo, setUserInfo, setVisiblePopupInfo, visiblePopupInfo, mobileMode, menu, setMenu, buildings, setIsOpenDrawer, areaProvider } = useContext(AppContext);
     // const [visible, setVisible] = useState(false);
     const [fullName, setFullName] = useState("ok");
     const [phone, setPhone] = useState("");
     const [building, setBuilding] = useState("");
+    const [area, setArea] = useState("");
+    const [apartment, setApartment] = useState("");
+    const [apartmentList, setApartmentList] = useState([]);
+    const [buldingList, setBuldingList] = useState([]);
     const [user, setUser] = useState({});
     // const [isValid, setIsValid] = useState(false);
     const [isValidFullName, setIsValidFullname] = useState(false);
     const [isValidPhone, setIsValidPhone] = useState(false);
     const [isValidBuilding, setIsValidBuilding] = useState(false);
+    const [isValidArea, setIsValidArea] = useState(false);
+    const [isValidApartment, setIsValidApartment] = useState(false);
     let history = useHistory();
     const openDrawer = () => {
         setIsOpenDrawer(true);
@@ -29,10 +36,44 @@ const Head = () => {
         setFullName(userInfo.fullName || "");
         setPhone(userInfo.phone || "");
         setBuilding(userInfo.building || "");
+        setApartment(userInfo.apartment || "");
+        setArea(userInfo.area || "");
         setMenu(0);
     }, [setMenu, userInfo]);
-    const options = buildings.map((building) => {
+    useEffect(() => {
+        if (area) {
+            getApartment(area.value)
+                .then((res) => {
+                    if (res.data) {
+                        const apart = res.data;
+                        setApartmentList(apart.listCluster);
+                        if (apartment) {
+                            for (let index = 0; index < apart.listCluster.length; index++) {
+                                const element = apart.listCluster[index];
+                                if (element.id === apartment.value) {
+                                    setBuldingList(element.listBuilding);
+                                }
+                            }
+                        }
+                    } else {
+                        setApartmentList([]);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setApartmentList([]);
+                });
+        }
+    }, [apartment, area]);
+
+    const optionsBuilding = buldingList.map((building) => {
         return { value: building.id, label: building.name };
+    });
+    const optionsApartment = apartmentList.map((building) => {
+        return { value: building.id, label: building.name };
+    });
+    const optionArea = areaProvider.map((area) => {
+        return { value: area.id, label: area.name };
     });
 
     useEffect(() => {
@@ -46,7 +87,6 @@ const Head = () => {
         return () => {};
     }, [visiblePopupInfo]);
     const handleSubmit = () => {
-        console.log(building);
         let isValid = true;
         if (fullName.length === 0 || phone.length === 0 || !building?.value) {
             isValid = false;
@@ -66,14 +106,24 @@ const Head = () => {
         } else {
             setIsValidBuilding(false);
         }
+        if (!apartment && apartment.length === 0) {
+            setIsValidApartment(true);
+        } else {
+            setIsValidApartment(false);
+        }
+        if (!area && area.length === 0) {
+            setIsValidArea(true);
+        } else {
+            setIsValidArea(false);
+        }
         if (isValid) {
             setVisiblePopupInfo(false);
             if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_USER_NAME))) {
                 localStorage.setItem(LOCALSTORAGE_USER_NAME, JSON.stringify([]));
                 setUserInfo({});
             } else {
-                localStorage.setItem(LOCALSTORAGE_USER_NAME, JSON.stringify({ fullName, phone, building }));
-                setUserInfo({ fullName, phone, building });
+                localStorage.setItem(LOCALSTORAGE_USER_NAME, JSON.stringify({ fullName, phone, building, area, apartment }));
+                setUserInfo({ fullName, phone, building, area, apartment });
             }
             if (menu === 1 || menu === 2 || menu === 3) {
                 history.push(`/menu/${menu}`);
@@ -83,7 +133,7 @@ const Head = () => {
     return (
         <>
             <Rodal
-                height={isValidFullName || isValidPhone || isValidBuilding ? 450 : 390}
+                height={isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea ? 650 : 590}
                 width={mobileMode ? 350 : 400}
                 visible={visiblePopupInfo}
                 onClose={() => {
@@ -101,12 +151,53 @@ const Head = () => {
                             <span style={{ fontSize: 16, fontWeight: 700 }}>Nơi nhận</span>
                         </div>
                         <div style={{ padding: "10px 0 10px 0" }}>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>Khu vực</span>
+                        </div>
+                        <Select
+                            options={optionArea}
+                            placeholder="Khu vực"
+                            onChange={(e) => {
+                                setArea(e);
+                                setApartment("");
+                                setBuilding("");
+                            }}
+                            value={area}
+                        />
+                        {isValidArea && (
+                            <div className="input-validate">
+                                <span>Khu vực không được để trống</span>
+                            </div>
+                        )}
+                        <div style={{ padding: "10px 0 10px 0" }}>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>Cụm tòa nhà</span>
+                        </div>
+                        <Select
+                            options={optionsApartment}
+                            placeholder="Tòa nhà"
+                            onChange={(e) => {
+                                setApartment(e);
+                                setBuilding("");
+                                for (let index = 0; index < apartmentList.length; index++) {
+                                    const element = apartmentList[index];
+                                    if (element.id === e.value) {
+                                        setBuldingList(element.listBuilding);
+                                    }
+                                }
+                            }}
+                            value={apartment}
+                        />
+                        {isValidApartment && (
+                            <div className="input-validate">
+                                <span>Cụm tòa nhà không được để trống</span>
+                            </div>
+                        )}
+                        <div style={{ padding: "10px 0 10px 0" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>Building (Tòa nhà)</span>
                         </div>
-                        <Select options={options} placeholder="Tòa nhà" onChange={(e) => setBuilding(e)} value={building} />
+                        <Select options={optionsBuilding} placeholder="Tòa nhà" onChange={(e) => setBuilding(e)} value={building} />
                         {isValidBuilding && (
                             <div className="input-validate">
-                                <span>Địa chỉ không được để trống</span>
+                                <span>Tòa nhà không được để trống</span>
                             </div>
                         )}
                         <div style={{ padding: "10px 0 10px 0" }}>
@@ -201,9 +292,9 @@ const Head = () => {
                             <img src="/images/home.png" alt="" />
                         </div>
                         <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "start" }}>
-                            <span>VinGP Deliver </span>
+                            <span style={{ textTransform: "uppercase" }}>Cộng Đồng Chung Cư </span>
 
-                            <p>Nền tảng giao hàng nội khu Vinhomes Grand Park </p>
+                            <p>Dịch vụ tiện ích giao hàng tận nơi cho cư dân </p>
                         </div>
                     </div>
                 </div>

@@ -81,7 +81,7 @@ export const MenuPage = () => {
     // let timeEnd1 = 13.54;
     // let timeEnd2 = 13.55;
     // let timeEnd3 = 13.56;
-    const { menu, mobileMode, setIsHeaderOrder, setHeaderInfo } = useContext(AppContext);
+    const { menu, mobileMode, setIsHeaderOrder, setHeaderInfo, setMenuIdProvider } = useContext(AppContext);
     const [filtter, setFilter] = useState(CATE_FITLER);
     // const [checked, setChecked] = useState(false);
     const [isLoadingPage, setIsLoadingPage] = useState(true);
@@ -118,8 +118,8 @@ export const MenuPage = () => {
                     if (res.data) {
                         const menu = res.data;
                         setMenuProduct(menu);
+                        setMenuIdProvider(menu.id);
                         setMenuCategory(menu.listCategoryStoreInMenus);
-                        console.log(menu.listCategoryStoreInMenus.length);
                         if (menu.listCategoryStoreInMenus.length > 0) {
                             setMenuEmpty(false);
                         } else {

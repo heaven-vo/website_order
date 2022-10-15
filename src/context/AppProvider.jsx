@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { getBuildings, getListOrder } from "../apis/apiService";
+import { getAreas, getBuildings, getListOrder } from "../apis/apiService";
 import { LOCALSTORAGE_CART_NAME, LOCALSTORAGE_USER_LOGIN, LOCALSTORAGE_USER_NAME } from "../constants/Variable";
 
 export const AppContext = React.createContext();
@@ -8,6 +8,7 @@ export const AppContext = React.createContext();
 export default function AppProvider({ children }) {
     const [listProducts, setlistProducts] = useState([]);
     const [menu, setMenu] = useState("0");
+    const [menuIdProvider, setMenuIdProvider] = useState("0");
     const [orderStatus, setOrderStatus] = useState("0");
     const [menuOrder, setMenuOrder] = useState(1);
     const [mobileMode, setMobileMode] = useState(window.innerWidth < 700 ? true : false);
@@ -19,6 +20,8 @@ export default function AppProvider({ children }) {
     const [visiblePopupInfo, setVisiblePopupInfo] = useState(false);
     const [isCartMain, setisCartMain] = useState(true);
     const [headerInfo, setHeaderInfo] = useState({});
+    const [apartmentProvider, setApartmentProvider] = useState([]);
+    const [areaProvider, setAreaProvider] = useState([]);
     const [buildings, setBuildings] = useState([]);
     const [orderDrawer, setOrdersDrawer] = useState([]);
     const [auth, setAuth] = useState({});
@@ -26,11 +29,11 @@ export default function AppProvider({ children }) {
     let history = useHistory();
     // const { productItems } = Data;
     useEffect(() => {
-        getBuildings(1, 100)
+        getAreas(1, 100)
             .then((res) => {
                 if (res.data) {
-                    const building = res.data;
-                    setBuildings(building);
+                    const area = res.data;
+                    setAreaProvider(area);
                 } else {
                 }
             })
@@ -38,6 +41,7 @@ export default function AppProvider({ children }) {
                 console.log(error);
             });
     }, [location.pathname]);
+
     useEffect(() => {
         let menuId = location.pathname.trim().split("/")[2];
         if (location.pathname.trim().split("/") && location.pathname.trim().split("/")[1] === "menu") {
@@ -142,6 +146,12 @@ export default function AppProvider({ children }) {
                 setAuth,
                 orderDrawer,
                 setOrdersDrawer,
+                areaProvider,
+                setAreaProvider,
+                apartmentProvider,
+                setApartmentProvider,
+                menuIdProvider,
+                setMenuIdProvider,
             }}
         >
             {children}

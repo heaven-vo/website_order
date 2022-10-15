@@ -38,7 +38,7 @@ export const LoginPage = () => {
                 <div class="limiter">
                     <div class="center_flex" style={{ flexDirection: "column" }}>
                         <div class="" style={{ padding: "15px 0" }}>
-                            <span className="login-logo">VinGP Deliver </span>
+                            <span className="login-logo">Cộng Đồng Chung Cư </span>
                         </div>
                         <div class="" style={{}}>
                             <span className="login-hello">___ Xin Chào ___</span>

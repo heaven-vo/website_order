@@ -43,7 +43,19 @@
     background-size: cover;
     height: 100vh;
     width: 100%;
+    position: relative;
     /* width: 100vh; */
+}
+.logo-backround {
+    position: absolute;
+    top: 3%;
+    left: 2%;
+    width: 120px;
+    border-radius: 0.5rem;
+}
+.logo-backround img {
+    border-radius: 0.5rem;
+    /* border: 4px solid white; */
 }
 :root {
     /* #ffaa4c */
@@ -936,7 +948,8 @@ iframe {
     height: auto;
 }
 .login-logo {
-    font-family: "Coiny", cursive;
+    /* font-family: "Coiny", cursive; */
+    font-weight: 900;
     font-size: 2rem;
     color: var(--primary);
 }

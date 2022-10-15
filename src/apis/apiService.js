@@ -43,6 +43,22 @@ export const getBuildings = (page, size) => {
         "Content-Type": "application/json",
     });
 };
+
+//https://deliveryvhgp-webapi.azurewebsites.net/api/v1/areas?pageIndex=1&pageSize=20
+export const getAreas = (page, size) => {
+    return axios.get(`${BASE_URL}areas?pageIndex=${page}&pageSize=${size}`, {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+    });
+};
+
+//https://deliveryvhgp-webapi.azurewebsites.net/api/v1/areas?pageIndex=1&pageSize=20
+export const getApartment = (areaId) => {
+    return axios.get(`${BASE_URL}areas/ByAreaId?areaId=${areaId}`, {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+    });
+};
 //https://deliveryvhgp-webapi.azurewebsites.net/api/v1/orders/1/customers?pageIndex=1&pageSize=20
 export const getListOrder = (userId, page, size) => {
     return axios.get(`${BASE_URL}${ORDER}/${userId}/customers?pageIndex=${page}&pageSize=${size}`, {
