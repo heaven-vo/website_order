@@ -157,6 +157,7 @@ const Head = () => {
                             options={optionArea}
                             placeholder="Khu vực"
                             onChange={(e) => {
+                                console.log({ e });
                                 setArea(e);
                                 setApartment("");
                                 setBuilding("");

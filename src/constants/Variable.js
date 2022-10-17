@@ -1,6 +1,7 @@
 export const LOCALSTORAGE_CART_NAME = "Cart";
 export const LOCALSTORAGE_USER_NAME = "User";
 export const LOCALSTORAGE_USER_LOGIN = "Auth";
+export const LOCALSTORAGE_MODE = "Mode";
 export const CATE_FITLER = "cate";
 export const STORE_FILTER = "store";
 export const IMAGE_NOTFOUND = "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/food%2Ftopic-2.webp?alt=media&token=54a5086f-f2ea-4009-9479-28624019703e";

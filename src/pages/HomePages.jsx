@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import Slider from "react-slick";
+import { LOCALSTORAGE_MODE } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
 const HomePage = ({ productItems, shopItems }) => {
@@ -73,6 +74,13 @@ const HomePage = ({ productItems, shopItems }) => {
         //     },
         // ],
     };
+    // const setMenuLocalStorage = (modeid) => {
+    //     if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_MODE))) {
+    //         localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(modeid));
+    //     } else {
+    //         localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(modeid));
+    //     }
+    // };
     return (
         <>
             <div className={`loading-spin ${!isLoading && "loading-spin-done"}`}></div>
@@ -102,6 +110,7 @@ const HomePage = ({ productItems, shopItems }) => {
                             className="home-menu-item"
                             onClick={() => {
                                 setMenu(2);
+
                                 if (userInfo.building && userInfo.fullName && userInfo.phone) {
                                     setVisiblePopupInfo(false);
                                     history.push(`/menu/${2}`);

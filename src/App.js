@@ -26,10 +26,12 @@ import "./util.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import MessengerCustomerChat from "react-messenger-customer-chat/lib/MessengerCustomerChat";
+import SchedulePage from "./pages/SchedulePage";
+import Loading from "./common/Loading/Loading";
 function App() {
     const { productItems } = Data;
     const { shopItems } = Pdata;
-    const { setMobileMode, isOpenDrawer, setIsOpenDrawer, isCartMain, menu } = useContext(AppContext);
+    const { setMobileMode, isOpenDrawer, setIsOpenDrawer, isCartMain, isLoadingMain } = useContext(AppContext);
     useEffect(() => {
         function handleResize() {
             if (window.innerWidth <= 700) {
@@ -69,6 +71,7 @@ function App() {
                 <img style={{ width: "100%", height: "100%", objectFit: "contain" }} src="/images/logo.jpg" alt="" />
             </div>
             <div className="main" id="main">
+                <Loading isLoading={isLoadingMain} />
                 <Header />
                 <Drawer size={300} open={isOpenDrawer} duration={300} onClose={toggleDrawer} zIndex={9999} direction="right" className="drawer__container">
                     <DrawerContent />
@@ -108,6 +111,9 @@ function App() {
                     </Route>
                     <Route path="/checkout" exact>
                         <Cart />
+                    </Route>
+                    <Route path="/schedule" exact>
+                        <SchedulePage />
                     </Route>
                     {/* <Route path="/checkout2" exact>
                         <CheckoutPage />

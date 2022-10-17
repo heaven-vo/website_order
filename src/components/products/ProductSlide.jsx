@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Slider from "react-slick";
 import Rodal from "rodal";
-import { LOCALSTORAGE_CART_NAME } from "../../constants/Variable";
+import { LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 import { ProductCart } from "./ProductCart";
 
@@ -74,6 +74,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
         setVisiblePopupOutOfStore(false);
         itemsRef.current[indexRodal].isQuantity();
         setCart(carts);
+        localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(menu));
         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
         reLoad();
     };
@@ -82,6 +83,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
         const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
         let newCarts = CartList?.filter((item) => item.id !== productRodal.id);
         setCart([...newCarts]);
+        localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(menu));
         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
         setVisiblePopupQuantity(false);
         itemsRef.current[indexRodal].resetQuantity();
@@ -255,11 +257,11 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                     </button>
                 </div>
             </Rodal>
-            <section className="shop product-slide" style={{ padding: "15px 15px 0px 15px" }}>
+            <section className="shop product-slide" style={{ padding: "0px 0px 0px 0px" }}>
                 <div className="container d_flex">
                     <div className="contentWidth" style={{ marginLeft: 0 }}>
-                        <div style={{ marginBottom: 20 }}>
-                            <div className="f_flex" style={{ alignItems: "center", marginBottom: 10, gap: 10 }}>
+                        <div style={{}}>
+                            <div className="f_flex" style={{ padding: "30px 15px 15px 15px", alignItems: "center", gap: 10, background: "rgb(246, 249, 252)" }}>
                                 {/* {isLoading ? (
                                         <div style={{ marginRight: 5 }}>
                                             <Skeleton height={45} width={45} borderRadius={50} />
@@ -285,43 +287,45 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                                     <i class="fa-solid fa-chevron-right" style={{ fontSize: 18, marginTop: 5, marginLeft: 30 }}></i>
                                 </div>
                             </div>
-                            <Slider {...settingProductSlide}>
-                                {data.map((value, index) => {
-                                    return (
-                                        <ProductCart
-                                            ref={(el) => (itemsRef.current[index] = el)}
-                                            index={index}
-                                            openRodalOutOfStore={(e) => hanldeRodalOutOfStore(e)}
-                                            openRodal={(e) => hanldeRodalQuantity(e)}
-                                            product={value}
-                                            key={index}
-                                        />
-                                    );
-                                })}
-                                {slideShow > 3 && (
-                                    <div className="">
-                                        <div className="center_flex " style={{ flexDirection: "column", height: 220, marginLeft: 10 }}>
-                                            <div
-                                                className="center_flex cusor"
-                                                onClick={() => {
-                                                    history.push(`/menu/${menu}/${filtter}/${cateId}`);
-                                                }}
-                                                style={{ borderRadius: 50, border: "1px solid rgb(220,220,220)", width: 50, height: 50 }}
-                                            >
-                                                <i class="fa-solid fa-chevron-right" style={{ fontSize: 18 }}></i>
+                            <div style={{ padding: "15px 15px 15px 15px" }}>
+                                <Slider {...settingProductSlide}>
+                                    {data.map((value, index) => {
+                                        return (
+                                            <ProductCart
+                                                ref={(el) => (itemsRef.current[index] = el)}
+                                                index={index}
+                                                openRodalOutOfStore={(e) => hanldeRodalOutOfStore(e)}
+                                                openRodal={(e) => hanldeRodalQuantity(e)}
+                                                product={value}
+                                                key={index}
+                                            />
+                                        );
+                                    })}
+                                    {slideShow > 3 && (
+                                        <div className="">
+                                            <div className="center_flex " style={{ flexDirection: "column", height: 220, marginLeft: 10 }}>
+                                                <div
+                                                    className="center_flex cusor"
+                                                    onClick={() => {
+                                                        history.push(`/menu/${menu}/${filtter}/${cateId}`);
+                                                    }}
+                                                    style={{ borderRadius: 50, border: "1px solid rgb(220,220,220)", width: 50, height: 50 }}
+                                                >
+                                                    <i class="fa-solid fa-chevron-right" style={{ fontSize: 18 }}></i>
+                                                </div>
+                                                <span
+                                                    onClick={() => {
+                                                        history.push(`/menu/${menu}/${filtter}/${cateId}`);
+                                                    }}
+                                                    className="cusor"
+                                                >
+                                                    Xem tất cả
+                                                </span>
                                             </div>
-                                            <span
-                                                onClick={() => {
-                                                    history.push(`/menu/${menu}/${filtter}/${cateId}`);
-                                                }}
-                                                className="cusor"
-                                            >
-                                                Xem tất cả
-                                            </span>
                                         </div>
-                                    </div>
-                                )}
-                            </Slider>
+                                    )}
+                                </Slider>
+                            </div>
                         </div>
                     </div>
                 </div>

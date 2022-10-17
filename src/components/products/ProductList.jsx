@@ -2,12 +2,12 @@ import React, { useContext, useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
 import Rodal from "rodal";
-import { LOCALSTORAGE_CART_NAME } from "../../constants/Variable";
+import { LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 import { ProductItem } from "./ProductItem";
 
 export const ProductList = ({ data, filter, reLoad }) => {
-    const { setCart, mobileMode, setisCartMain } = useContext(AppContext);
+    const { setCart, mobileMode, setisCartMain, menu } = useContext(AppContext);
     const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);
     const [visiblePopupOutOfStore, setVisiblePopupOutOfStore] = useState(false);
     const [productRodal, setProductRodal] = useState({});
@@ -55,6 +55,7 @@ export const ProductList = ({ data, filter, reLoad }) => {
         setVisiblePopupOutOfStore(false);
         itemsRef.current[indexRodal].isQuantity();
         setCart(carts);
+        localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(menu));
         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
         reLoad();
     };

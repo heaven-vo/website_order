@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { caculatorVND } from "../../constants/Caculator";
-import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_USER_NAME } from "../../constants/Variable";
+import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE, LOCALSTORAGE_USER_NAME } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 import Rodal from "rodal";
 import Select from "react-select";
@@ -57,6 +57,30 @@ const Cart = ({}) => {
             document.getElementById("main").style.overflow = "auto";
         };
     }, []);
+    const hanldeschedule = () => {
+        let productOrders = Cart.map((item) => {
+            return { productInMenuId: item.productMenuId, quantity: item.quantityCart.toString(), productName: item.name, price: item.pricePerPack };
+        });
+        let order = {
+            customerId: "1",
+            type: "",
+            total: totalPrice + 15000,
+            storeId: Cart.length > 0 && Cart[0].storeId,
+            buildingId: building.value,
+            note: note,
+            fullName: fullName,
+            phoneNumber: phone,
+            shipCost: 15000,
+            durationId: "1",
+            orderDetail: [...productOrders],
+            payments: [
+                {
+                    type: "Tiền mặt",
+                },
+            ],
+        };
+        history.push("/schedule", { order });
+    };
     const handleSubmit = () => {
         let isValid = true;
         if (fullName.length === 0 || phone.length === 0 || !building?.value) {
@@ -190,7 +214,6 @@ const Cart = ({}) => {
         setArea(userInfo.area || "");
     }, [userInfo]);
     useEffect(() => {
-        setIsLoading(true);
         setIsHeaderOrder(false);
         setHeaderInfo({ isSearchHeader: false, title: "Đơn hàng của bạn" });
         setisCartMain(false);
@@ -240,12 +263,14 @@ const Cart = ({}) => {
         // Cập nhật lại danh sách sản phẩm hiện tại với số lượng vừa được cập nhật
         // setlistProducts([...newProduts]);
         setCart([...newCarts]);
+        console.log(isLoading);
+        setIsLoading(false);
         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
         setVisiblePopupQuantity(false);
     };
     return (
         <>
-            <div className={`loading-spin ${!isLoading && "loading-spin-done"}`}></div>
+            <div className={`loading-spin ${isLoading === false ? "loading-spin-done" : ""}`}></div>
             <Rodal
                 height={isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea ? 630 : 540}
                 width={mobileMode ? 350 : 400}
@@ -712,10 +737,11 @@ const Cart = ({}) => {
                                 <button
                                     onClick={() => {
                                         console.log(menu);
-                                        if (menu === 1) {
+                                        const Mode = JSON.parse(localStorage.getItem(LOCALSTORAGE_MODE));
+                                        if (Mode === "1") {
                                             setVisiblePopupComfirm(true);
-                                        } else if (menu === 2) {
-                                            history.push("/schedule");
+                                        } else if (Mode === "2") {
+                                            hanldeschedule();
                                         }
                                     }}
                                     type="button"

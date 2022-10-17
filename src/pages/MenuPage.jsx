@@ -4,6 +4,8 @@ import { useHistory } from "react-router-dom";
 import Slider from "react-slick";
 import { getMenuByMode } from "../apis/apiService";
 import { ProductSlide, SampleNextArrow, SamplePrevArrow } from "../components/products/ProductSlide";
+import ShopList from "../components/products/ShopList";
+import { ShopSlide } from "../components/products/ShopSlide";
 import { CATE_FITLER, IMAGE_NOTFOUND, STORE_FILTER } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
@@ -557,9 +559,34 @@ export const MenuPage = () => {
                         </div>
                     </div>
                 </div> */}
-
                 {!isLoadingPage &&
                     !isLoadingProduct &&
+                    menu === "1" &&
+                    menuProduct?.listCategoryStoreInMenus?.map((menu, index) => {
+                        if (menu.listProducts.length > 0) {
+                            return (
+                                // <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={500} transitionLeaveTimeout={500}>
+                                //     <ProductGrid data={menu.listProducts || []} label={menu.name} labelImg={menu.img || IMAGE_NOTFOUND} />
+                                // </ReactCSSTransitionGroup>
+
+                                <ShopSlide
+                                    key={index}
+                                    filtter={filtter}
+                                    data={[...menu.listProducts, ...menu.listProducts, ...menu.listProducts, ...menu.listProducts, ...menu.listProducts] || []}
+                                    label={menu.name}
+                                    cateId={menu.id}
+                                    labelImg={menu.image || IMAGE_NOTFOUND}
+                                    isViewAll={true}
+                                    reLoad={() => {
+                                        hanldeReLoad();
+                                    }}
+                                />
+                            );
+                        } else return true;
+                    })}
+                {!isLoadingPage &&
+                    !isLoadingProduct &&
+                    menu === "2" &&
                     menuProduct?.listCategoryStoreInMenus?.map((menu, index) => {
                         if (menu.listProducts.length > 0) {
                             return (
@@ -582,6 +609,15 @@ export const MenuPage = () => {
                             );
                         } else return true;
                     })}
+                {menu === "1" && (
+                    <>
+                        <div className="container-padding f_flex" style={{ alignItems: "end" }}>
+                            <span style={{ padding: "10px 15px 10px 15px", fontWeight: 700, fontSize: 17, color: "rgb(100, 100, 100)" }}>Quán ngon gần bạn</span>
+                        </div>
+                        <ShopList data={menuCategory.length > 0 && menuCategory} />;
+                    </>
+                )}
+
                 {isLoadingPage || isLoadingProduct ? (
                     <section className="shop" style={{ padding: "0px 15px 0px 15px" }}>
                         <div className="container d_flex">
