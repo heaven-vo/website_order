@@ -1,7 +1,7 @@
 .cart-items {
     background: #f6f9fc;
     height: auto;
-    padding: 70px 0 180px 0;
+    padding: 70px 0 280px 0;
 }
 
 .cart-items .cart-details {
@@ -358,6 +358,7 @@
 }
 .cart-footer {
     /* top: calc(100% - 200px); */
+    z-index: 2 !important;
     position: absolute !important;
     bottom: 0px;
 }

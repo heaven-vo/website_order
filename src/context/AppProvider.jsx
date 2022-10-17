@@ -15,6 +15,7 @@ export default function AppProvider({ children }) {
     const [Cart, setCart] = useState([]);
     const [userInfo, setUserInfo] = useState({});
     const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+    const [isCartFooter, setIsCartFooter] = useState(false);
     const [isHeaderHome, setIsHeaderHome] = useState(false);
     const [isHeaderOrder, setIsHeaderOrder] = useState(false);
     const [visiblePopupInfo, setVisiblePopupInfo] = useState(false);
@@ -152,6 +153,8 @@ export default function AppProvider({ children }) {
                 setApartmentProvider,
                 menuIdProvider,
                 setMenuIdProvider,
+                isCartFooter,
+                setIsCartFooter,
             }}
         >
             {children}

@@ -45,7 +45,6 @@ function App() {
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, [setMobileMode]);
-    console.log("load", isCartMain);
     useEffect(() => {
         if (!isOpenDrawer) {
             document.body.style.overflow = "auto";
@@ -59,7 +58,6 @@ function App() {
             document.body.style.touchAction = "auto";
         }
     }, [isCartMain]);
-    console.log({ menu });
     const toggleDrawer = () => {
         setIsOpenDrawer((prevState) => !prevState);
     };

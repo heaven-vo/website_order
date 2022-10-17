@@ -11,7 +11,7 @@ import { getApartment, postOrder } from "../../apis/apiService";
 import { CountDown } from "./CountDown";
 
 const Cart = ({}) => {
-    const { Cart, setCart, setHeaderInfo, setIsHeaderOrder, mobileMode, setisCartMain, auth, userInfo, setUserInfo, areaProvider } = useContext(AppContext);
+    const { Cart, setCart, setHeaderInfo, setIsHeaderOrder, mobileMode, setisCartMain, userInfo, setUserInfo, areaProvider, menu } = useContext(AppContext);
     const [totalPrice, setTotalPrice] = useState(0);
     const [CartList, setCartList] = useState([]);
     const [visible, setVisible] = useState(false);
@@ -30,7 +30,7 @@ const Cart = ({}) => {
     const [isValidFullName, setIsValidFullname] = useState(false);
     const [isValidPhone, setIsValidPhone] = useState(false);
     const [isValidBuilding, setIsValidBuilding] = useState(false);
-    const [isLoadingOrder, setisLoadingOrder] = useState(false);
+    const [isLoadingOrder, setisLoadingOrder] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const [payment, setPayment] = useState({});
     const [isValidArea, setIsValidArea] = useState(false);
@@ -38,7 +38,21 @@ const Cart = ({}) => {
     const [note, setNote] = useState("");
 
     useEffect(() => {
+        setisLoadingOrder(true);
         document.getElementById("main").style.overflow = "hidden";
+        document.getElementById("main").scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth",
+        });
+        setTimeout(() => {
+            setisLoadingOrder(false);
+        }, 500);
+        // document.getElementById("cart-main").scrollTo({
+        //     bottom: 0,
+        //     left: 0,
+        //     behavior: "smooth",
+        // });
         return () => {
             document.getElementById("main").style.overflow = "auto";
         };
@@ -116,12 +130,12 @@ const Cart = ({}) => {
     let history = useHistory();
     const hanldeOrder = () => {
         setisLoadingOrder(true);
-        let userId = auth.userId;
+        let userId = phone;
         let productOrders = Cart.map((item) => {
-            return { productInMenuId: item.productMenuId, quantity: item.quantityCart.toString() };
+            return { productInMenuId: item.productMenuId, quantity: item.quantityCart.toString(), productName: item.name, price: item.pricePerPack };
         });
         let order = {
-            customerId: userId,
+            customerId: "1",
             type: "",
             total: totalPrice + 15000,
             storeId: Cart.length > 0 && Cart[0].storeId,
@@ -146,7 +160,15 @@ const Cart = ({}) => {
                     setCart([]);
                     setisLoadingOrder(false);
 
-                    history.push("/order");
+                    history.push("/");
+                }
+                return res;
+            })
+            .then((res) => {
+                if (res.data) {
+                    console.log(res.data);
+                    const order = res.data;
+                    console.log(order.id);
                 }
             })
             .catch((error) => {
@@ -516,9 +538,9 @@ const Cart = ({}) => {
                 </div>
             </Rodal>
             <Loading isLoading={isLoadingOrder} />
-            <div className="cart-main" style={{ position: "relative", overflow: "hidden" }}>
+            <div id="cart-main" className="" style={{}}>
                 <div className="cart-main" style={{}}>
-                    <section className="cart-items" style={{ overflow: "hidden" }}>
+                    <section className="cart-items" style={{}}>
                         <div className="">
                             <div style={{ margin: "15px 15px 5px 15px" }}>
                                 <span style={{ color: "rgba(0,0,0,.4)", fontWeight: 700 }}>Giao đến</span>
@@ -540,14 +562,14 @@ const Cart = ({}) => {
                                     <span>{Cart.length > 0 ? Cart[0].storeName : "Không có"}</span>
                                 </div>
                             </div>
-                            <div className="c_flex" style={{ margin: "15px 15px 5px 15px" }}>
+                            {/* <div className="c_flex" style={{ margin: "15px 15px 5px 15px" }}>
                                 <span style={{ color: "rgba(0,0,0,.4)", fontWeight: 700 }}>Thông tin người nhận</span>
                                 {!auth.isLogin && (
                                     <span onClick={() => history.push("/login")} style={{ color: "#1890ff", fontWeight: 700, cursor: "pointer", fontSize: 15 }}>
                                         Đăng nhập
                                     </span>
                                 )}
-                            </div>
+                            </div> */}
                             <div
                                 className="checkout-content"
                                 onClick={() => {
@@ -674,11 +696,11 @@ const Cart = ({}) => {
                                         <div className="checkout-text" style={{ padding: 0 }}>
                                             <span style={{ fontSize: mobileMode ? "1rem" : "1.2rem" }}>Tổng cộng:</span>
                                         </div>
-                                        {!auth.isLogin && (
+                                        {/* {!auth.isLogin && (
                                             <div className="checkout-text-require" style={{ padding: 0 }}>
                                                 <span>Đăng nhập để đặt hàng</span>
                                             </div>
-                                        )}
+                                        )} */}
                                     </div>
                                     <div className="checkout-text-price">
                                         <span style={{ display: "flex", gap: 3, alignItems: "center" }}>
@@ -689,17 +711,22 @@ const Cart = ({}) => {
                                 </div>
                                 <button
                                     onClick={() => {
-                                        setVisiblePopupComfirm(true);
+                                        console.log(menu);
+                                        if (menu === 1) {
+                                            setVisiblePopupComfirm(true);
+                                        } else if (menu === 2) {
+                                            history.push("/schedule");
+                                        }
                                     }}
                                     type="button"
-                                    disabled={!auth.isLogin || isLoadingOrder}
+                                    disabled={isLoadingOrder}
                                     style={{
                                         textAlign: "center",
                                         width: "100%",
                                         height: 45,
                                         borderRadius: "0.5rem",
                                         alignItems: "center",
-                                        backgroundColor: !auth.isLogin || isLoadingOrder ? "#f5f5f5" : "var(--primary)",
+                                        backgroundColor: isLoadingOrder ? "#f5f5f5" : "var(--primary)",
                                     }}
                                     className="center_flex checkout-btn"
                                 >

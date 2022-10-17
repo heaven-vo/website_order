@@ -267,7 +267,9 @@ const Navbar = () => {
                                             <div className="header-white-img">
                                                 <img src="/images/location.png" alt="" />
                                             </div>
-                                            <h4 className="header-white-building">{userInfo.building?.label}, Vinhomes Grand Park</h4>
+                                            <h4 className="header-white-building">
+                                                {userInfo.building?.label}, {userInfo.area?.label}
+                                            </h4>
                                         </div>
                                     </>
                                 ) : (

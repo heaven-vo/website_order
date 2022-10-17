@@ -27,6 +27,7 @@ export const OrderPage = () => {
                 } else {
                 }
             })
+
             .catch((error) => {
                 console.log(error);
             });
