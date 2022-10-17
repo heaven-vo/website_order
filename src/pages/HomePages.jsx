@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useState } from "react";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import Slider from "react-slick";
@@ -6,10 +7,15 @@ import { AppContext } from "../context/AppProvider";
 
 const HomePage = ({ productItems, shopItems }) => {
     const { userInfo, setIsHeaderHome, setVisiblePopupInfo, mobileMode, menu, setMenu, setisCartMain, Cart } = useContext(AppContext);
+    const [isLoading, setIsLoading] = useState(true);
     let history = useHistory();
     useEffect(() => {
+        setIsLoading(true);
         setIsHeaderHome(true);
         setisCartMain(false);
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 200);
         return () => {
             setIsHeaderHome(false);
             if (Cart.length > 0) {
@@ -69,8 +75,9 @@ const HomePage = ({ productItems, shopItems }) => {
     };
     return (
         <>
+            <div className={`loading-spin ${!isLoading && "loading-spin-done"}`}></div>
             <div className="container" style={{ background: "var(--primary)" }}>
-                <section className="background container back-white home-menu" style={{ padding: "30px 15px 100px 15px" }}>
+                <section className="background container back-white home-menu" style={{ padding: "30px 15px 50px 15px" }}>
                     <div className="f_flex" style={{ gap: 15, width: "100%", flexWrap: "wrap" }}>
                         <div
                             style={{}}
@@ -88,7 +95,7 @@ const HomePage = ({ productItems, shopItems }) => {
                             <div className="home-menu-item-icon">
                                 <img src="./images/icons/datmon-active.png" alt="" />
                             </div>
-                            <span>Đặt Món</span>
+                            <span>Gọi đồ ăn</span>
                         </div>
                         <div
                             style={{}}
@@ -106,7 +113,7 @@ const HomePage = ({ productItems, shopItems }) => {
                             <div className="home-menu-item-icon">
                                 <img src="./images/icons/dicho-active.png" alt="" />
                             </div>
-                            <span>Đi Chợ</span>
+                            <span>Giao hàng</span>
                         </div>
                         <div
                             style={{}}
@@ -131,7 +138,11 @@ const HomePage = ({ productItems, shopItems }) => {
                         {banner.map((value, index) => {
                             return (
                                 <>
-                                    <div className="" key={index} style={{ padding: "30px 0 0 0", background: "none", boxShadow: "none", margin: 0, borderRadius: "0.5rem", transition: "1s all" }}>
+                                    <div
+                                        className=""
+                                        key={index}
+                                        style={{ padding: "30px 0 0 0", background: "none", boxShadow: "none", margin: 0, borderRadius: "0.5rem", transition: "1s all", WebkitTransition: "1s all" }}
+                                    >
                                         <div className="nametop d_flex"></div>
                                         <div className="slide-img" style={{ borderRadius: 5 }}>
                                             <img src={value.cover} alt="" style={{ objectFit: "contain", width: "100%", height: "100%", borderRadius: "0.5rem" }} />

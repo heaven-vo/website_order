@@ -9,10 +9,15 @@ const Footer = () => {
     const [isActiveThird, setIsActiveThird] = useState(false);
     return (
         <>
-            <footer style={{ display: isHeaderHome ? "block" : "none" }}>
+            <footer style={{ display: isHeaderHome ? "block" : "none", paddingBottom: 80 }}>
                 <div className="background container grid4 back-white">
+                    <div className="center_flex">
+                        <div className="footer-logo">
+                            <img style={{ width: "100%", height: "100%", objectFit: "contain" }} src="/images/logo_remove.png" alt="" />
+                        </div>
+                    </div>
                     <div className="box">
-                        <h1 style={{ color: "var(--primary)" }}>VinGP Deliver</h1>
+                        {/* <h1 style={{ color: "var(--primary)" }}>Cộng Đồng Chung Cư</h1> */}
                         <p>Tải ứng dụng nhận ngay các ưu đãi chỉ dành riêng cho bạn.</p>
                         <div className="icon f_flex" style={{ justifyContent: "center", gap: 15, padding: 10 }}>
                             <div className=" centen_flex footer-icon">
@@ -65,7 +70,7 @@ const Footer = () => {
                             {/* {!mobileMode && <h2>Liên Hệ Với Chúng Tôi</h2>} */}
                             <li>Vinhomes Grand Park Quận 9 – Thành Phố Thủ Đức </li>
                             <li>Email: support.help@gmail.com</li>
-                            <li>Phone: +035 1123 456 </li>
+                            <li>Hotline: +1900 </li>
                         </ul>
                     </div>
                 </div>

@@ -13,7 +13,7 @@ import { AppContext } from "../context/AppProvider";
 export const ViewAllProductStorePage = () => {
     const { setHeaderInfo } = useContext(AppContext);
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
-    const [products, setProducts] = useState([]);
+    const [products, setProducts] = useState(null);
     const [title, setTitle] = useState("");
     const [img, setImg] = useState("");
     let location = useLocation();
@@ -72,7 +72,18 @@ export const ViewAllProductStorePage = () => {
     return (
         <div>
             <Loading isLoading={isLoadingCircle} />
-            <ProductList data={products || []} />
+            <div className={`loading-spin ${!isLoadingCircle && "loading-spin-done"}`}></div>
+            <ProductList data={products || []} filter={2} />
+            {products?.length === 0 && (
+                <section className="shop" style={{ padding: "25px 0 40px 0" }}>
+                    <div className="container center_flex">
+                        <div className="contentWidth  center_flex" style={{ marginLeft: 0, flexDirection: "column", gap: 10 }}>
+                            <img src="/images/fish-bones.png" style={{ width: 80 }} alt="" />
+                            <span style={{ fontSize: "1.1rem" }}>Hiện không có sản phẩm nào!!</span>
+                        </div>
+                    </div>
+                </section>
+            )}
             {/* {!isLoadingCircle && <ProductGrid data={products || []} label={title || ""} cateId={""} labelImg={img || IMAGE_NOTFOUND} isViewAll={false} />} */}
         </div>
     );

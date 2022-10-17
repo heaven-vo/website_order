@@ -3,10 +3,7 @@ import Skeleton from "react-loading-skeleton";
 import { useHistory } from "react-router-dom";
 import Slider from "react-slick";
 import { getMenuByMode } from "../apis/apiService";
-import { SampleNextArrow, SamplePrevArrow } from "../components/flashDeals/FlashCard";
-import Mdata from "../components/MainPage/Mdata";
-import Pdata from "../components/products/Pdata";
-import { ProductSlide } from "../components/products/ProductSlide";
+import { ProductSlide, SampleNextArrow, SamplePrevArrow } from "../components/products/ProductSlide";
 import { CATE_FITLER, IMAGE_NOTFOUND, STORE_FILTER } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
@@ -58,13 +55,33 @@ const categorys = [
         img: "https://nhuhoaphat.com/wp-content/uploads/2022/03/Tai-ngay-milk-tea-hinh-nen-tra-sua-cute-moi-nhat-2022.png",
     },
 ];
-
+const Mdata = [
+    {
+        id: 1,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "/images/Buoisang_Banner-min.jpg",
+    },
+    {
+        id: 2,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "/images/banner-combo-mon-an-1200x600-finail.jpg",
+    },
+    {
+        id: 3,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "/images/panner.jpg",
+    },
+];
+export default Mdata;
 export const MenuPage = () => {
     // let date = new Date();
     // let timeEnd1 = 13.54;
     // let timeEnd2 = 13.55;
     // let timeEnd3 = 13.56;
-    const { menu, mobileMode, setIsHeaderOrder, setHeaderInfo } = useContext(AppContext);
+    const { menu, mobileMode, setIsHeaderOrder, setHeaderInfo, setMenuIdProvider } = useContext(AppContext);
     const [filtter, setFilter] = useState(CATE_FITLER);
     // const [checked, setChecked] = useState(false);
     const [isLoadingPage, setIsLoadingPage] = useState(true);
@@ -85,7 +102,7 @@ export const MenuPage = () => {
     const hanldeChangeFilter = (fil) => {
         setFilter(fil);
         setIsLoadingProduct(true);
-        getMenu(menu, fil, 1, 10);
+        getMenu(menu, fil, 1, 100);
     };
     // useEffect(() => {
     //     setIsLoadingProduct(true);
@@ -94,7 +111,6 @@ export const MenuPage = () => {
     // }, [filtter]);
     const getMenu = (menu, filtter, pageInd, size) => {
         // setMenuCategory([]);
-        console.log({ menu, filtter });
         if (menu !== "0") {
             getMenuByMode(menu, filtter, pageInd, size)
                 .then((res) => {
@@ -102,8 +118,8 @@ export const MenuPage = () => {
                     if (res.data) {
                         const menu = res.data;
                         setMenuProduct(menu);
+                        setMenuIdProvider(menu.id);
                         setMenuCategory(menu.listCategoryStoreInMenus);
-                        console.log(menu.listCategoryStoreInMenus.length);
                         if (menu.listCategoryStoreInMenus.length > 0) {
                             setMenuEmpty(false);
                         } else {
@@ -169,8 +185,6 @@ export const MenuPage = () => {
     //     // console.log("Xong");
     // };
 
-    const { shopItems } = Pdata;
-
     // function getTimeStamp(input) {
     //     var parts = input.trim().split(" ");
     //     var date = parts[0].split("-");
@@ -187,7 +201,7 @@ export const MenuPage = () => {
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
-
+        fade: true,
         appendDots: (dots) => {
             return <ul style={{ margin: "0px" }}>{dots}</ul>;
         },
@@ -210,7 +224,9 @@ export const MenuPage = () => {
         //     },
         // ],
     };
-
+    const hanldeReLoad = () => {
+        getMenu(menu, filtter, 1, 100);
+    };
     const settingCaategory = {
         dots: true,
         infinite: false,
@@ -254,6 +270,7 @@ export const MenuPage = () => {
                             fontSize: "0.9rem",
                             padding: "2px 4px",
                             transition: "all 0.3s",
+                            WebkitTransition: "0.3s all",
                             borderRadius: 3,
                         }}
                     >
@@ -268,6 +285,7 @@ export const MenuPage = () => {
                             fontSize: "0.9rem",
                             padding: "2px 4px",
                             transition: "all 0.3s",
+                            WebkitTransition: "0.3s all",
                             borderRadius: 3,
                         }}
                     >
@@ -282,6 +300,7 @@ export const MenuPage = () => {
                             fontSize: "0.9rem",
                             padding: "2px 4px",
                             transition: "all 0.3s",
+                            WebkitTransition: "0.3s all",
                             borderRadius: 3,
                         }}
                     >
@@ -300,6 +319,7 @@ export const MenuPage = () => {
                             fontSize: "0.9rem",
                             padding: "2px 4px",
                             transition: "all 0.3s",
+                            WebkitTransition: "0.3s all",
                             borderRadius: 3,
                         }}
                     >
@@ -314,6 +334,7 @@ export const MenuPage = () => {
                             fontSize: "0.9rem",
                             padding: "2px 4px",
                             transition: "all 0.3s",
+                            WebkitTransition: "0.3s all",
                             borderRadius: 3,
                         }}
                     >
@@ -328,6 +349,7 @@ export const MenuPage = () => {
                             fontSize: "0.9rem",
                             padding: "2px 4px",
                             transition: "all 0.3s",
+                            WebkitTransition: "0.3s all",
                             borderRadius: 3,
                         }}
                     >
@@ -382,7 +404,7 @@ export const MenuPage = () => {
                                                     style={{ padding: 0, background: "none", borderRadius: "0.5rem", boxShadow: "none", margin: 0, transition: "1s all" }}
                                                 >
                                                     <div className="slide-img" style={{ borderRadius: "0.5rem", overflow: "hidden" }}>
-                                                        <img src={value.cover} alt="" style={{ objectFit: "cover", width: "100%", borderRadius: "0.5rem" }} />
+                                                        <img src={value.cover} alt="" style={{ objectFit: "cover", width: "100%", height: "100%", borderRadius: "0.5rem" }} />
                                                     </div>
                                                 </div>
                                             </>
@@ -414,6 +436,7 @@ export const MenuPage = () => {
     };
     return (
         <>
+            <div className={`loading-spin ${!isLoadingPage && "loading-spin-done"}`}></div>
             <section className="shop background back-white" style={{}}>
                 <div className="container d_flex back-white " style={{ padding: "10px 15px 20px 15px", flexDirection: "column", gap: 10 }}>
                     <div className="">{render()}</div>
@@ -507,7 +530,7 @@ export const MenuPage = () => {
                                         return (
                                             <div key={index} className="cateogry-menu-wrapper ">
                                                 <div className="cateogry-menu-img" onClick={() => hanldeViewAll(cate.id)}>
-                                                    <img src={cate.img || "https://thumbs.dreamstime.com/b/vietnamese-pho-soup-illustration-97217112.jpg"} alt="" />
+                                                    <img src={cate.image || "https://thumbs.dreamstime.com/b/vietnamese-pho-soup-illustration-97217112.jpg"} alt="" />
                                                 </div>
                                                 <span className="cateogry-menu-text">{cate.name}</span>
                                             </div>
@@ -550,8 +573,11 @@ export const MenuPage = () => {
                                     data={[...menu.listProducts] || []}
                                     label={menu.name}
                                     cateId={menu.id}
-                                    labelImg={menu.img || IMAGE_NOTFOUND}
+                                    labelImg={menu.image || IMAGE_NOTFOUND}
                                     isViewAll={true}
+                                    reLoad={() => {
+                                        hanldeReLoad();
+                                    }}
                                 />
                             );
                         } else return true;

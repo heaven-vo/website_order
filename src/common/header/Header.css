@@ -151,8 +151,8 @@ header ul li a:hover {
     text-transform: uppercase;
     padding-top: 18px;
     padding-bottom: 18px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     display: flex;
     justify-content: space-between;
@@ -261,8 +261,8 @@ header ul li a:hover {
 }
 @import url("https://fonts.googleapis.com/css2?family=Coiny&display=swap");
 .heaader-home-img {
-    width: 370px;
-    height: 270px;
+    width: 310px;
+    height: 280px;
 
     display: flex;
     justify-content: start;
@@ -275,7 +275,7 @@ header ul li a:hover {
 .header-home-container {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 15px;
 }
 .header-main {
     /* background-image: ur; */
@@ -287,9 +287,10 @@ header ul li a:hover {
     gap: 35px;
 }
 .header-home-container span {
-    font-family: "Coiny", cursive;
+    /* font-family: "Coiny", cursive; */
+    font-weight: 900;
     font-size: 2rem;
-    line-height: 1.9rem;
+    line-height: 2.4rem;
     color: rgb(240, 240, 240);
 }
 .header-home-container p {
@@ -306,6 +307,8 @@ header ul li a:hover {
     z-index: 99;
     position: fixed;
     width: 100%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     /* height: 70px; */
 }
 .header-white-img {

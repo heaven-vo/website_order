@@ -13,7 +13,7 @@
 }
 @media (max-width: 1260px) {
     .food-detail-right {
-        padding-right: 50px;
+        /* padding-right: 50px; */
     }
     .food-detail-left {
         padding: 0px !important;
@@ -147,7 +147,22 @@
 } */
 
 @media (max-width: 700px) {
+    .loading-wrapper {
+        height: 100% !important;
+    }
+    .main {
+        height: 100% !important;
+        border-radius: 0 !important;
+    }
+    .root {
+        background-image: none !important;
+
+        /* width: 100vh; */
+    }
     /* -------------------------- */
+    .cart-main {
+        border-radius: 0 !important;
+    }
     .cart-main-container > div {
         height: 70px !important;
         right: 3% !important;
@@ -165,14 +180,14 @@
         width: 150px !important;
     }
     .home-menu-item {
-        gap: 0px;
+        gap: 0px !important;
     }
     .home-menu-item-icon {
-        width: 60px;
-        height: 40px;
+        width: 70px !important;
+        height: 50px !important;
     }
     .home-menu-item span {
-        font-size: 1rem;
+        font-size: 1rem !important;
     }
     .product-slide h3 {
         font-size: 18px;
@@ -187,6 +202,10 @@
     .header-white-building {
         font-size: 0.95rem;
     }
+    .header-white {
+        border-radius: 0px !important;
+    }
+
     .order-wrapper {
         padding: 10px;
         border-radius: 0.5rem;
@@ -201,8 +220,9 @@
         margin-top: 0px;
     }
     .order {
+        gap: 20px !important;
         /* margin: 5px 5px; */
-        /* padding: 5px 0px; */
+        padding: 15px 0px !important;
         /* border-top: 1px solid rgb(230, 230, 230); */
     }
     .order-total > div:first-child {
@@ -232,12 +252,25 @@
         width: 80px !important;
         height: 80px !important;
     }
+    .order-store-title {
+        font-size: 16px !important;
+    }
+    .order-store-time {
+        font-size: 14px !important;
+    }
+    .order-store-status {
+        font-size: 12px !important;
+    }
+    .order-store-btn {
+        font-size: 13px !important;
+    }
+    .order-info {
+        gap: 5px !important;
+    }
     /* .order-img {
         width: 70px !important;
     }
-    .order-store-title {
-        font-size: 16px;
-    }
+   
     .order-store > div > div > span {
         font-size: 13px;
     }
@@ -264,7 +297,7 @@
     .order-text-price {
         /* color: var(--secondary); */
         /* text-transform: uppercase; */
-        font-size: 14px;
+        font-size: 14px !important;
     }
     .order-text-name {
         text-overflow: ellipsis;
@@ -274,17 +307,12 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
         line-height: 24px;
-        font-size: 14px;
+        font-size: 14px !important;
         font-weight: 600;
     }
-    .order-text-cate {
-        line-height: 20px;
-        font-size: 0.8rem;
-        color: rgb(120, 120, 120);
-    }
+
     .order-text-count {
-        line-height: 20px;
-        font-size: 0.8rem;
+        font-size: 13px !important;
     }
     .cateogry-menu {
         padding-top: 0;
@@ -295,15 +323,15 @@
         padding-bottom: 5px;
     }
     .cateogry-menu-img {
-        width: 50px !important;
-        height: 50px !important;
+        width: 55px !important;
+        height: 55px !important;
     }
     .cateogry-menu-img img {
     }
     .cateogry-menu-text {
     }
     .cateogry-menu-text {
-        font-size: 0.75rem;
+        font-size: 0.75rem !important;
     }
     /* --------------- */
     .shop .product .img {
@@ -315,7 +343,7 @@
         padding: 0px;
     }
     .product-details h3 {
-        font-size: 15px !important;
+        font-size: 14px !important;
     }
     /* ------------- Menu ------------- */
     .menu-text-countdown {
@@ -473,12 +501,13 @@
         height: 110px !important;
     }
     .header-home-container span {
-        font-size: 1.5rem !important;
-        line-height: 2.2rem !important;
+        font-size: 1.4rem !important;
+        line-height: 1.8rem !important;
     }
     .header-home-container p {
+        margin-top: 5px;
         font-size: 0.9rem !important;
-        line-height: 1rem !important;
+        line-height: 1.3rem !important;
     }
     .search-box {
         /* display: none; */
@@ -554,7 +583,7 @@
         height: 25px !important;
     }
     .checkout-text-price {
-        font-size: 1.2rem;
+        font-size: 1.2rem !important;
     }
     .checkout-btn {
         margin-top: 10px;
