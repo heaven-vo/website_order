@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { caculatorVND } from "../../constants/Caculator";
-import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_USER_NAME } from "../../constants/Variable";
+import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE, LOCALSTORAGE_USER_NAME } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 import Rodal from "rodal";
 import Select from "react-select";
 import "./style.css";
 import Loading from "../Loading/Loading";
-import { getApartment, postOrder } from "../../apis/apiService";
+import { getApartment, postOrder, putOrder } from "../../apis/apiService";
 import { CountDown } from "./CountDown";
 
 const Cart = ({}) => {
@@ -57,6 +57,30 @@ const Cart = ({}) => {
             document.getElementById("main").style.overflow = "auto";
         };
     }, []);
+    const hanldeschedule = () => {
+        let productOrders = Cart.map((item) => {
+            return { productInMenuId: item.productMenuId, quantity: item.quantityCart.toString(), productName: item.name, price: item.pricePerPack };
+        });
+        let order = {
+            customerId: "1",
+            type: "",
+            total: totalPrice + 15000,
+            storeId: Cart.length > 0 && Cart[0].storeId,
+            buildingId: building.value,
+            note: note,
+            fullName: fullName,
+            phoneNumber: phone,
+            shipCost: 15000,
+            durationId: "1",
+            orderDetail: [...productOrders],
+            payments: [
+                {
+                    type: "Tiền mặt",
+                },
+            ],
+        };
+        history.push("/schedule", { order });
+    };
     const handleSubmit = () => {
         let isValid = true;
         if (fullName.length === 0 || phone.length === 0 || !building?.value) {
@@ -135,7 +159,7 @@ const Cart = ({}) => {
             return { productInMenuId: item.productMenuId, quantity: item.quantityCart.toString(), productName: item.name, price: item.pricePerPack };
         });
         let order = {
-            customerId: "1",
+            id: "",
             type: "",
             total: totalPrice + 15000,
             storeId: Cart.length > 0 && Cart[0].storeId,
@@ -152,23 +176,28 @@ const Cart = ({}) => {
                 },
             ],
         };
-        console.log({ order });
         postOrder(order)
             .then((res) => {
                 if (res.data) {
                     localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
                     setCart([]);
-                    setisLoadingOrder(false);
-
-                    history.push("/");
                 }
                 return res;
             })
             .then((res) => {
                 if (res.data) {
-                    console.log(res.data);
                     const order = res.data;
-                    console.log(order.id);
+
+                    let orderUpdate = {
+                        orderId: order.id,
+                        statusId: "2",
+                    };
+                    putOrder(orderUpdate).then((res) => {
+                        if (res.data) {
+                            setisLoadingOrder(false);
+                            history.push("/");
+                        }
+                    });
                 }
             })
             .catch((error) => {
@@ -190,7 +219,6 @@ const Cart = ({}) => {
         setArea(userInfo.area || "");
     }, [userInfo]);
     useEffect(() => {
-        setIsLoading(true);
         setIsHeaderOrder(false);
         setHeaderInfo({ isSearchHeader: false, title: "Đơn hàng của bạn" });
         setisCartMain(false);
@@ -240,14 +268,16 @@ const Cart = ({}) => {
         // Cập nhật lại danh sách sản phẩm hiện tại với số lượng vừa được cập nhật
         // setlistProducts([...newProduts]);
         setCart([...newCarts]);
+        console.log(isLoading);
+        setIsLoading(false);
         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
         setVisiblePopupQuantity(false);
     };
     return (
         <>
-            <div className={`loading-spin ${!isLoading && "loading-spin-done"}`}></div>
+            <div className={`loading-spin ${isLoading === false ? "loading-spin-done" : ""}`}></div>
             <Rodal
-                height={isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea ? 630 : 540}
+                height={isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea ? (mobileMode ? 620 : 650) : mobileMode ? 500 : 540}
                 width={mobileMode ? 350 : 400}
                 visible={visiblePopupInfo}
                 onClose={() => {
@@ -259,128 +289,119 @@ const Cart = ({}) => {
                 }}
                 style={{ borderRadius: 10 }}
             >
-                <div style={{ borderBottom: "1px solid rgb(220,220,220)", paddingBottom: "10px" }}>
-                    <span style={{ fontSize: 16, fontWeight: 700 }}>Nơi nhận</span>
-                </div>
-                <div style={{ padding: "10px 0 10px 0" }}>
-                    <span style={{ fontSize: 16, fontWeight: 700 }}>Khu vực</span>
-                </div>
-                <Select
-                    options={optionArea}
-                    placeholder="Khu vực"
-                    onChange={(e) => {
-                        setArea(e);
-                        setApartment("");
-                        setBuilding("");
-                    }}
-                    value={area}
-                />
-                {isValidArea && (
-                    <div className="input-validate">
-                        <span>Khu vực không được để trống</span>
+                <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%" }}>
+                    <div>
+                        <div style={{ borderBottom: "1px solid rgb(220,220,220)", paddingBottom: "10px" }}>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>Nơi nhận</span>
+                        </div>
+                        <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>Khu vực</span>
+                        </div>
+                        <Select
+                            options={optionArea}
+                            placeholder="Khu vực"
+                            onChange={(e) => {
+                                console.log({ e });
+                                setArea(e);
+                                setApartment("");
+                                setBuilding("");
+                            }}
+                            value={area}
+                        />
+                        {isValidArea && (
+                            <div className="input-validate">
+                                <span>Khu vực không được để trống</span>
+                            </div>
+                        )}
+                        <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>Cụm tòa nhà</span>
+                        </div>
+                        <Select
+                            options={optionsApartment}
+                            placeholder="Tòa nhà"
+                            onChange={(e) => {
+                                setApartment(e);
+                                setBuilding("");
+                                for (let index = 0; index < apartmentList.length; index++) {
+                                    const element = apartmentList[index];
+                                    if (element.id === e.value) {
+                                        setBuldingList(element.listBuilding);
+                                    }
+                                }
+                            }}
+                            value={apartment}
+                        />
+                        {isValidApartment && (
+                            <div className="input-validate">
+                                <span>Cụm tòa nhà không được để trống</span>
+                            </div>
+                        )}
+                        <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>Building (Tòa nhà)</span>
+                        </div>
+                        <Select options={optionsBuilding} placeholder="Tòa nhà" onChange={(e) => setBuilding(e)} value={building} />
+                        {isValidBuilding && (
+                            <div className="input-validate">
+                                <span>Tòa nhà không được để trống</span>
+                            </div>
+                        )}
+                        <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>Tên người nhận</span>
+                        </div>
+                        <div className="rodal-title" style={{ width: " 100%" }}>
+                            <input
+                                onChange={(e) => {
+                                    setFullName(e.target.value);
+                                }}
+                                value={fullName}
+                                type="text"
+                                style={{ border: "1px solid rgb(200,200,200)", width: " 100%", borderRadius: 4, padding: "10px 10px", lineHeight: "1rem", fontSize: "1rem" }}
+                            />
+                        </div>
+                        {isValidFullName && (
+                            <div className="input-validate">
+                                <span>Tên không được để trống</span>
+                            </div>
+                        )}
+                        <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>Số điện thoại nhận hàng</span>
+                        </div>
+                        <div className="rodal-title" style={{ width: " 100%" }}>
+                            <input
+                                onChange={(e) => {
+                                    setPhone(e.target.value);
+                                }}
+                                value={phone}
+                                type="number"
+                                style={{ border: "1px solid rgb(200,200,200)", width: " 100%", borderRadius: 4, padding: "10px 10px", lineHeight: "1rem", fontSize: "1rem" }}
+                            />
+                        </div>
+                        {isValidPhone && (
+                            <div className="input-validate">
+                                <span>Số điện thoại không được để trống</span>
+                            </div>
+                        )}
                     </div>
-                )}
-                <div style={{ padding: "10px 0 10px 0" }}>
-                    <span style={{ fontSize: 16, fontWeight: 700 }}>Cụm tòa nhà</span>
-                </div>
-                <Select
-                    options={optionsApartment}
-                    placeholder="Tòa nhà"
-                    onChange={(e) => {
-                        setApartment(e);
-                        setBuilding("");
-                        for (let index = 0; index < apartmentList.length; index++) {
-                            const element = apartmentList[index];
-                            if (element.id === e.value) {
-                                setBuldingList(element.listBuilding);
-                            }
-                        }
-                    }}
-                    value={apartment}
-                />
-                {isValidApartment && (
-                    <div className="input-validate">
-                        <span>Cụm tòa nhà không được để trống</span>
+                    <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 5, gap: 15 }}>
+                        <button
+                            style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10 }}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setVisiblePopupInfo(false);
+                            }}
+                        >
+                            Đóng
+                        </button>
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleSubmit();
+                            }}
+                            style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)" }}
+                        >
+                            OK
+                        </button>
                     </div>
-                )}
-                <div style={{ padding: "10px 0 10px 0" }}>
-                    <span style={{ fontSize: 16, fontWeight: 700 }}>Building (Tòa nhà)</span>
-                </div>
-                <Select options={optionsBuilding} placeholder="Tòa nhà" onChange={(e) => setBuilding(e)} value={building} />
-                {isValidBuilding && (
-                    <div className="input-validate">
-                        <span>Tòa nhà không được để trống</span>
-                    </div>
-                )}
-                <div style={{ padding: "10px 0 10px 0" }}>
-                    <span style={{ fontSize: 16, fontWeight: 700 }}>Tên người nhận</span>
-                </div>
-                <div style={{ width: " 100%" }}>
-                    <input
-                        onChange={(e) => {
-                            setFullName(e.target.value);
-                        }}
-                        value={fullName}
-                        type="text"
-                        style={{ border: "1px solid rgb(200,200,200)", width: " 100%", borderRadius: 4, padding: "10px 10px", lineHeight: "1rem", fontSize: "1rem" }}
-                    />
-                </div>
-                {isValidFullName && (
-                    <div className="input-validate">
-                        <span>Tên không được để trống</span>
-                    </div>
-                )}
-                <div style={{ padding: "10px 0 10px 0" }}>
-                    <span style={{ fontSize: 16, fontWeight: 700 }}>Số điện thoại nhận hàng</span>
-                </div>
-                <div style={{ width: " 100%" }}>
-                    <input
-                        onChange={(e) => {
-                            setPhone(e.target.value);
-                        }}
-                        value={phone}
-                        type="number"
-                        style={{ border: "1px solid rgb(200,200,200)", width: " 100%", borderRadius: 4, padding: "10px 10px", lineHeight: "1rem", fontSize: "1rem" }}
-                    />
-                </div>
-                {isValidPhone && (
-                    <div className="input-validate">
-                        <span>Số điện thoại không được để trống</span>
-                    </div>
-                )}
-                {/* <div style={{ padding: "10px 0 10px 0" }}>
-                    <span style={{ fontSize: 16, fontWeight: 700 }}>Lưu ý đặc biệt</span>
-                </div>
-                <div style={{ width: " 100%" }}>
-                    <input
-                        onChange={(e) => {
-                            setNote(e.target.value);
-                        }}
-                        value={note}
-                        type="text"
-                        placeholder="Ví dụ: Không hành ..."
-                        style={{ border: "1px solid rgb(200,200,200)", width: " 100%", borderRadius: 4, padding: "10px 10px", lineHeight: "1rem", fontSize: "1rem" }}
-                    />
-                </div> */}
-                <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 25, gap: 15 }}>
-                    <button
-                        style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10 }}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            setVisiblePopupInfo(false);
-                        }}
-                    >
-                        Đóng
-                    </button>
-                    <button
-                        onClick={(e) => {
-                            e.preventDefault();
-                            handleSubmit();
-                        }}
-                        style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)" }}
-                    >
-                        OK
-                    </button>
                 </div>
             </Rodal>
             <Rodal
@@ -712,10 +733,11 @@ const Cart = ({}) => {
                                 <button
                                     onClick={() => {
                                         console.log(menu);
-                                        if (menu === 1) {
+                                        const Mode = JSON.parse(localStorage.getItem(LOCALSTORAGE_MODE));
+                                        if (Mode === "1") {
                                             setVisiblePopupComfirm(true);
-                                        } else if (menu === 2) {
-                                            history.push("/schedule");
+                                        } else if (Mode === "2") {
+                                            hanldeschedule();
                                         }
                                     }}
                                     type="button"

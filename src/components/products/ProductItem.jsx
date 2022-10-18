@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useImperativeHandle, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME } from "../../constants/Variable";
+import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 
 export const ProductItem = React.forwardRef(({ product, openRodal, index, filter, openRodalOutOfStore, isBorderBottom }, ref) => {
@@ -77,6 +77,7 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
             localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
         }
+        console.log("ok");
         const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
         if (!checkOutOfStore(product)) {
             const carts = [
@@ -90,6 +91,7 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
             setisCartMain(true);
             setProductRodalQuantity(productRodalQuantity + 1);
             setCart(carts);
+            localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(menu));
             localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
         } else {
             openRodalOutOfStore({ rodal: true, product: product, index });
@@ -114,13 +116,13 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
     };
     return (
         <>
-            <div key={product.id} className="c_flex" style={{ borderBottom: isBorderBottom ? "1px solid #f0f0f0" : "none", width: "100%", padding: "12px 0" }}>
+            <div key={product.id} className="c_flex" style={{ borderBottom: isBorderBottom ? "1px solid #f0f0f0" : "none", width: "100%", padding: "12px 0px" }}>
                 <div className="product-list-info">
                     <div
                         className="product-list-img"
                         onClick={() => {
                             // setIsHeader(false);
-                            history.push(`/mode/${menu}/${product.id}`);
+                            history.push(`/menu/${menu}/${product.id}`);
                         }}
                         style={{ fontWeight: 500, cursor: "pointer" }}
                     >
@@ -130,7 +132,7 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                         <span
                             onClick={() => {
                                 // setIsHeader(false);
-                                history.push(`/mode/${menu}/${product.id}`);
+                                history.push(`/menu/${menu}/${product.id}`);
                             }}
                             style={{ fontWeight: 500, cursor: "pointer" }}
                         >

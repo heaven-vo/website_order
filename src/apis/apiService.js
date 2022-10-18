@@ -73,6 +73,13 @@ export const postOrder = (order) => {
         "Content-Type": "application/json",
     });
 };
+//https://deliveryvhgp-webapi.azurewebsites.net/api/v1/orders/1
+export const putOrder = (order) => {
+    return axios.put(`${BASE_URL}${ORDER}/${order.orderId}`, order, {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+    });
+};
 
 //https://deliveryvhgp-webapi.azurewebsites.net/api/v1/orders/9a552a0b-aea5-4327-97bc-d27fdb960179
 export const getOrderDetail = (orderId) => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { getAreas, getBuildings, getListOrder } from "../apis/apiService";
-import { LOCALSTORAGE_CART_NAME, LOCALSTORAGE_USER_LOGIN, LOCALSTORAGE_USER_NAME } from "../constants/Variable";
+import { LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE, LOCALSTORAGE_USER_LOGIN, LOCALSTORAGE_USER_NAME } from "../constants/Variable";
 
 export const AppContext = React.createContext();
 
@@ -19,6 +19,7 @@ export default function AppProvider({ children }) {
     const [isHeaderHome, setIsHeaderHome] = useState(false);
     const [isHeaderOrder, setIsHeaderOrder] = useState(false);
     const [visiblePopupInfo, setVisiblePopupInfo] = useState(false);
+    const [isLoadingMain, setisLoadingMain] = useState(true);
     const [isCartMain, setisCartMain] = useState(true);
     const [headerInfo, setHeaderInfo] = useState({});
     const [apartmentProvider, setApartmentProvider] = useState([]);
@@ -35,11 +36,16 @@ export default function AppProvider({ children }) {
                 if (res.data) {
                     const area = res.data;
                     setAreaProvider(area);
+                    setisLoadingMain(false);
                 } else {
+                    setAreaProvider([]);
+                    setisLoadingMain(false);
                 }
             })
             .catch((error) => {
                 console.log(error);
+                setAreaProvider([]);
+                setisLoadingMain(false);
             });
     }, [location.pathname]);
 
@@ -50,6 +56,9 @@ export default function AppProvider({ children }) {
         }
     }, [location.pathname]);
     useEffect(() => {
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_MODE))) {
+            localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(""));
+        }
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_USER_NAME))) {
             localStorage.setItem(LOCALSTORAGE_USER_NAME, JSON.stringify([]));
             setUserInfo({});
@@ -71,19 +80,19 @@ export default function AppProvider({ children }) {
         } else {
             const auth = JSON.parse(localStorage.getItem(LOCALSTORAGE_USER_LOGIN));
             setAuth({ ...auth });
-            getListOrder(auth.userId, 1, 3)
-                .then((res) => {
-                    if (res.data) {
-                        let orders = res.data;
-                        orders = orders.filter((item) => item.statusId !== "4" || item.statusId !== "5");
-                        console.log(orders);
-                        setOrdersDrawer(orders || []);
-                    } else {
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            // getListOrder(auth.userId, 1, 3)
+            //     .then((res) => {
+            //         if (res.data) {
+            //             let orders = res.data;
+            //             orders = orders.filter((item) => item.statusId !== "4" || item.statusId !== "5");
+            //             console.log(orders);
+            //             setOrdersDrawer(orders || []);
+            //         } else {
+            //         }
+            //     })
+            //     .catch((error) => {
+            //         console.log(error);
+            //     });
         }
         return () => {};
     }, [history]);
@@ -155,6 +164,8 @@ export default function AppProvider({ children }) {
                 setMenuIdProvider,
                 isCartFooter,
                 setIsCartFooter,
+                isLoadingMain,
+                setisLoadingMain,
             }}
         >
             {children}

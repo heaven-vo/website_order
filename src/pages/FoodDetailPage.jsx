@@ -4,11 +4,11 @@ import Rodal from "rodal";
 import { getProductDetail } from "../apis/apiService";
 import Loading from "../common/Loading/Loading";
 import Pdata from "../components/products/Pdata";
-import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME } from "../constants/Variable";
+import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
 export const FoodDetailPage = () => {
-    const { setCart, mobileMode, setHeaderInfo, setisCartMain } = useContext(AppContext);
+    const { setCart, mobileMode, setHeaderInfo, setisCartMain, menu } = useContext(AppContext);
     const [countQuantity, setcountQuantity] = useState(1);
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
     const [product, setProduct] = useState({});
@@ -203,6 +203,7 @@ export const FoodDetailPage = () => {
             setProductRodalQuantity(productRodalQuantity + 1);
             setCart(carts);
             localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
+            localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(menu));
         } else {
             setVisiblePopupOutOfStore(true);
             // openRodalOutOfStore({ rodal: true, product: product, index });

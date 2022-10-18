@@ -238,6 +238,7 @@ button {
 /*---------product-----------*/
 .product-list-info {
     display: flex;
+    gap: 10px;
     /* align-items: center; */
 }
 .product-list-name {
@@ -1119,7 +1120,7 @@ iframe {
 }
 .cateogry-menu {
     padding-bottom: 5px;
-    padding-top: 10px;
+    /* padding-top: 10px; */
     /* display: grid;
     grid-template-columns: repeat(8, 1fr);
     grid-gap: 0px; */
@@ -1322,4 +1323,93 @@ iframe {
 }
 .like {
     color: red;
+}
+.schedule-wrapper {
+    /* padding: 100px 15px; */
+}
+.schedule-week {
+    text-align: center;
+    width: 40px;
+    font-size: 15px;
+    font-weight: 500;
+    color: rgb(180, 180, 180);
+}
+.schedule-day {
+    font-size: 26px;
+    font-weight: 700;
+}
+.schedule-scroll {
+    width: 100%;
+    /* overflow-y: auto;
+    padding-top: 30px;
+    gap: 30px;
+    touch-action: auto;
+    -webkit-overflow-scrolling: auto; */
+}
+.schedule-item {
+    cursor: pointer;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    border-radius: 0.5rem;
+    padding: 10px 0;
+}
+.schedule-item:hover {
+    background-color: rgb(245, 245, 245);
+}
+.schedule-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.schedule-item-active {
+    transition: 0.5s all;
+    -webkit-transition: 0.5s all;
+    background-color: var(--primary);
+    border-radius: 0.5rem;
+}
+.schedule-item-active:hover {
+    background-color: var(--primary);
+}
+.schedule-item-active .schedule-week {
+    color: rgb(100, 100, 100);
+}
+.schedule-wrapper .control-btn .next,
+.schedule-wrapper .control-btn .prev {
+    position: absolute;
+    top: 25%;
+    width: 40px;
+    height: 40px;
+    line-height: 45px;
+    background: #fff;
+    border-radius: 50%;
+    border: 1px solid var(--primary);
+    transform: 0.5s;
+    z-index: 5;
+    box-shadow: 0 0 5px 1px rgb(0 0 0 / 15%);
+}
+.schedule-wrapper .control-btn .prev {
+    left: -30px;
+}
+.schedule-wrapper .control-btn .next {
+    right: -30px;
+}
+.schedule-padding {
+    padding: 100px 40px 20px 40px;
+}
+.schedule-day-detail i {
+    font-size: 14px;
+}
+.schedule-day-detail span {
+    font-size: 18px;
+    font-weight: 600;
+}
+.container-padding {
+    /* height: 70px; */
+    width: 100%;
+    background-color: rgb(246, 249, 252);
+}
+
+.shop-slide > div > div > .slick-track {
+    /* height: 165px; */
 }

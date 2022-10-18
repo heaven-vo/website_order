@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useImperativeHandle, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME } from "../../constants/Variable";
+import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 
 export const ProductCart = React.forwardRef(({ product, openRodal, index, openRodalOutOfStore }, ref) => {
@@ -108,6 +108,7 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
             setisCartMain(true);
             setProductRodalQuantity(productRodalQuantity + 1);
             setCart(carts);
+            localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(menu));
             localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
         } else {
             openRodalOutOfStore({ rodal: true, product: product, index });
