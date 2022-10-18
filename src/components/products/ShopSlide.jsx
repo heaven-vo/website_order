@@ -50,6 +50,7 @@ export const ShopSlide = ({ filtter, label, data, labelImg, cateId, isLoading, i
         autoplay: false,
         swipeToSlide: false,
         swipe: false,
+        rows: 1,
         variableWidth: true,
         appendDots: (dots) => {
             return <ul style={{ margin: "0px" }}>{dots}</ul>;
@@ -105,14 +106,14 @@ export const ShopSlide = ({ filtter, label, data, labelImg, cateId, isLoading, i
                                     <i class="fa-solid fa-chevron-right" style={{ fontSize: 18, marginTop: 5, marginLeft: 30 }}></i>
                                 </div>
                             </div>
-                            <div style={{ padding: "15px 15px 15px 15px" }}>
+                            <div className="shop-slide" style={{ padding: "15px 15px 15px 15px" }}>
                                 <Slider {...ShopSlide}>
                                     {data.map((value, index) => {
                                         return <ShopCart ref={(el) => (itemsRef.current[index] = el)} index={index} product={value} key={index} />;
                                     })}
                                     {slideShow > 3 && (
-                                        <div className="">
-                                            <div className="center_flex " style={{ flexDirection: "column", height: 220, marginLeft: 10 }}>
+                                        <div className="" style={{}}>
+                                            <div className="center_flex " style={{ flexDirection: "column", height: 150, marginLeft: 10 }}>
                                                 <div
                                                     className="center_flex cusor"
                                                     onClick={() => {

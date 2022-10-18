@@ -272,7 +272,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                                         </div>
                                     )}
                                     {isLoading ? <Skeleton height={43} width={150} borderRadius={8} style={{ margin: 0 }} /> : <h2>{label ? label : ""}</h2>} */}
-                                <div style={{ width: 40, height: 40, borderRadius: 50, marginLeft: 5 }}>
+                                <div className="product-slide-image" style={{ width: 40, height: 40, borderRadius: 50, marginLeft: 5 }}>
                                     <img style={{ borderRadius: 50, objectFit: "cover", width: "100%", height: "100%" }} src={labelImg} alt="" />
                                 </div>
                                 <h3 style={{}}>{label}</h3>

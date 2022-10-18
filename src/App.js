@@ -66,7 +66,7 @@ function App() {
 
     return (
         <div className="root center_flex">
-            <MessengerCustomerChat pageId="100083337097834" appId="437264958531394" />,
+            {/* <MessengerCustomerChat pageId="100083337097834" appId="437264958531394" /> */}
             <div className="logo-backround">
                 <img style={{ width: "100%", height: "100%", objectFit: "contain" }} src="/images/logo.jpg" alt="" />
             </div>

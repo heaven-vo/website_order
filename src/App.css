@@ -238,6 +238,7 @@ button {
 /*---------product-----------*/
 .product-list-info {
     display: flex;
+    gap: 10px;
     /* align-items: center; */
 }
 .product-list-name {
@@ -1119,7 +1120,7 @@ iframe {
 }
 .cateogry-menu {
     padding-bottom: 5px;
-    padding-top: 10px;
+    /* padding-top: 10px; */
     /* display: grid;
     grid-template-columns: repeat(8, 1fr);
     grid-gap: 0px; */
@@ -1404,7 +1405,11 @@ iframe {
     font-weight: 600;
 }
 .container-padding {
-    height: 70px;
+    /* height: 70px; */
     width: 100%;
     background-color: rgb(246, 249, 252);
+}
+
+.shop-slide > div > div > .slick-track {
+    /* height: 165px; */
 }

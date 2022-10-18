@@ -473,7 +473,7 @@ export const MenuPage = () => {
                                     <input type="search" name="" id="" style={{ flex: 1 }} placeholder="Tìm sản phẩm" />
                                 </div>
                             )} */}
-                            {isLoadingPage ? (
+                            {/* {isLoadingPage ? (
                                 <Skeleton borderRadius={5} height={37} style={{ marginTop: 10 }} />
                             ) : (
                                 <div className=" f_flex category-list" style={{ marginBottom: 0, display: "flex", alignItems: "center", gap: 10, paddingTop: 10 }}>
@@ -519,7 +519,7 @@ export const MenuPage = () => {
                                         </div>
                                     </div>
                                 </div>
-                            )}
+                            )} */}
                         </div>
                     </div>
                     {isLoadingPage ? (
@@ -612,7 +612,7 @@ export const MenuPage = () => {
                 {menu === "1" && (
                     <>
                         <div className="container-padding f_flex" style={{ alignItems: "end" }}>
-                            <span style={{ padding: "10px 15px 10px 15px", fontWeight: 700, fontSize: 17, color: "rgb(100, 100, 100)" }}>Quán ngon gần bạn</span>
+                            <span style={{ padding: "40px 15px 10px 15px", fontWeight: 700, fontSize: 16, color: "rgb(100, 100, 100)" }}>Quán ngon gần bạn</span>
                         </div>
                         <ShopList data={menuCategory.length > 0 && menuCategory} />;
                     </>

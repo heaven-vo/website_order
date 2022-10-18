@@ -134,7 +134,7 @@ export const ProductList = ({ data, filter, reLoad }) => {
                 </div>
             </Rodal>
             <Rodal
-                height={180}
+                height={170}
                 width={mobileMode ? 350 : 400}
                 visible={visiblePopupQuantity}
                 onClose={() => {
@@ -160,7 +160,7 @@ export const ProductList = ({ data, filter, reLoad }) => {
                         style={{
                             flex: 1,
                             padding: 14,
-                            fontSize: "1.2em",
+                            fontSize: "1em",
                             cursor: "pointer",
                             fontWeight: 700,
                             borderRadius: 10,
@@ -180,7 +180,7 @@ export const ProductList = ({ data, filter, reLoad }) => {
                         style={{
                             flex: 1,
                             padding: 14,
-                            fontSize: "1.2em",
+                            fontSize: "1em",
                             cursor: "pointer",
                             fontWeight: 700,
                             borderRadius: 10,
@@ -195,10 +195,15 @@ export const ProductList = ({ data, filter, reLoad }) => {
                 </div>
             </Rodal>
             <div className="product-list-wrapper" style={{ paddingTop: 55, paddingBottom: 100, background: "#fff" }}>
-                <div className="back-white c_flex" style={{ padding: "0px 15px", alignItems: "self-start", flexDirection: "column" }}>
+                {filter === 2 && (
+                    <div className="container-padding f_flex" style={{ alignItems: "end" }}>
+                        <span style={{ padding: "30px 15px 10px 15px", fontWeight: 700, fontSize: 16, color: "rgb(100, 100, 100)" }}>Cơm</span>
+                    </div>
+                )}
+                <div className="back-white c_flex" style={{ padding: "10px 15px", alignItems: "self-start", flexDirection: "column" }}>
                     {data.map((item, index) => {
                         let isBorderBottom = true;
-                        if (index === 0 || index === data.length - 1) {
+                        if (index === data.length - 1) {
                             isBorderBottom = false;
                         }
                         return (

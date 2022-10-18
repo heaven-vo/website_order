@@ -133,7 +133,7 @@ const Head = () => {
     return (
         <>
             <Rodal
-                height={isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea ? 650 : 590}
+                height={isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea ? (mobileMode ? 620 : 650) : mobileMode ? 500 : 540}
                 width={mobileMode ? 350 : 400}
                 visible={visiblePopupInfo}
                 onClose={() => {
@@ -150,7 +150,7 @@ const Head = () => {
                         <div style={{ borderBottom: "1px solid rgb(220,220,220)", paddingBottom: "10px" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>Nơi nhận</span>
                         </div>
-                        <div style={{ padding: "10px 0 10px 0" }}>
+                        <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>Khu vực</span>
                         </div>
                         <Select
@@ -169,7 +169,7 @@ const Head = () => {
                                 <span>Khu vực không được để trống</span>
                             </div>
                         )}
-                        <div style={{ padding: "10px 0 10px 0" }}>
+                        <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>Cụm tòa nhà</span>
                         </div>
                         <Select
@@ -192,7 +192,7 @@ const Head = () => {
                                 <span>Cụm tòa nhà không được để trống</span>
                             </div>
                         )}
-                        <div style={{ padding: "10px 0 10px 0" }}>
+                        <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>Building (Tòa nhà)</span>
                         </div>
                         <Select options={optionsBuilding} placeholder="Tòa nhà" onChange={(e) => setBuilding(e)} value={building} />
@@ -201,10 +201,10 @@ const Head = () => {
                                 <span>Tòa nhà không được để trống</span>
                             </div>
                         )}
-                        <div style={{ padding: "10px 0 10px 0" }}>
+                        <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>Tên người nhận</span>
                         </div>
-                        <div style={{ width: " 100%" }}>
+                        <div className="rodal-title" style={{ width: " 100%" }}>
                             <input
                                 onChange={(e) => {
                                     setFullName(e.target.value);
@@ -219,10 +219,10 @@ const Head = () => {
                                 <span>Tên không được để trống</span>
                             </div>
                         )}
-                        <div style={{ padding: "10px 0 10px 0" }}>
+                        <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>Số điện thoại nhận hàng</span>
                         </div>
-                        <div style={{ width: " 100%" }}>
+                        <div className="rodal-title" style={{ width: " 100%" }}>
                             <input
                                 onChange={(e) => {
                                     setPhone(e.target.value);
@@ -238,7 +238,7 @@ const Head = () => {
                             </div>
                         )}
                     </div>
-                    <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 25, gap: 15 }}>
+                    <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 5, gap: 15 }}>
                         <button
                             style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10 }}
                             onClick={(e) => {

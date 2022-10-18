@@ -116,13 +116,13 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
     };
     return (
         <>
-            <div key={product.id} className="c_flex" style={{ borderBottom: isBorderBottom ? "1px solid #f0f0f0" : "none", width: "100%", padding: "12px 0" }}>
+            <div key={product.id} className="c_flex" style={{ borderBottom: isBorderBottom ? "1px solid #f0f0f0" : "none", width: "100%", padding: "12px 0px" }}>
                 <div className="product-list-info">
                     <div
                         className="product-list-img"
                         onClick={() => {
                             // setIsHeader(false);
-                            history.push(`/mode/${menu}/${product.id}`);
+                            history.push(`/menu/${menu}/${product.id}`);
                         }}
                         style={{ fontWeight: 500, cursor: "pointer" }}
                     >
@@ -132,7 +132,7 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                         <span
                             onClick={() => {
                                 // setIsHeader(false);
-                                history.push(`/mode/${menu}/${product.id}`);
+                                history.push(`/menu/${menu}/${product.id}`);
                             }}
                             style={{ fontWeight: 500, cursor: "pointer" }}
                         >

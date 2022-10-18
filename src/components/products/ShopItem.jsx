@@ -38,7 +38,8 @@ export const ShopCart = React.forwardRef(({ product, openRodal, index, openRodal
                         className="img shop-item-image"
                         onClick={() => {
                             // setIsHeader(false);
-                            history.push(`/menu/${menu}/${product.id}`);
+                            // history.push(`/menu/${menu}/${product.id}`);
+                            history.push(`/menu/${menu}/store/s4`);
                         }}
                     >
                         {/* <span className="discount">{item.discount}% Off</span> */}
@@ -65,7 +66,7 @@ export const ShopCart = React.forwardRef(({ product, openRodal, index, openRodal
                             {pro.name}
                         </h3>
                         <h3
-                            style={{ fontSize: 13, cursor: "pointer", fontWeight: 500, lineHeight: 1.5, color: "rgb(100, 100, 100)" }}
+                            style={{ fontSize: 12, cursor: "pointer", fontWeight: 400, lineHeight: 1.5 }}
                             onClick={() => {
                                 // setIsHeader(false);
                                 // history.push(`/menu/${menu}/${product.id}`);
