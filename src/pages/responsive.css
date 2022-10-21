@@ -199,6 +199,15 @@
         justify-content: center;
         align-items: center;
     }
+    .header-label {
+        padding: 12px !important;
+    }
+    .header-white-icon-back {
+        font-size: 18px !important;
+    }
+    .header-label h4 {
+        font-size: 16px !important;
+    }
     .home-menu > div {
         gap: 10px !important;
     }
@@ -220,7 +229,14 @@
         height: 30px !important;
     }
     .product-slide h3 {
-        font-size: 16px;
+        font-size: 15px;
+    }
+    .product-list-info {
+        gap: 10px !important;
+    }
+    .product-slide i {
+        font-size: 14px !important;
+        margin-left: 10px !important;
     }
     .header-white-img {
         width: 25px !important;
@@ -402,7 +418,7 @@
     }
     .food-detail-left {
         width: 100%;
-        padding: 10px !important;
+        margin: 10px 0px !important;
     }
     .food-detail-left img {
         width: 100% !important;
@@ -411,15 +427,36 @@
     }
     .food-detail-right > div {
         margin-right: 0px !important;
+        font-size: 18px !important;
     }
     .food-detail-right {
         width: 100%;
         padding: 0px !important;
     }
+    .food-detail-right h3 {
+        font-size: 17px !important;
+    }
     .food-detail-btn > div:first-child {
         width: 35% !important;
     }
-
+    .food-detail-text {
+        font-size: 14px !important;
+    }
+    .food-detail-label {
+        font-size: 15px !important;
+    }
+    .rodal-delet-cart {
+        gap: 20px !important;
+        padding: 0 5px;
+    }
+    .rodal-delet-cart button {
+        font-size: 15px !important;
+        height: 40px !important;
+        padding: 10px !important;
+    }
+    .cart-quantity-name {
+        font-size: 18px !important;
+    }
     .category-item {
         min-width: 200px;
         width: 100%;
@@ -527,11 +564,11 @@
         gap: 0px !important;
     }
     .heaader-home-img {
-        width: 250px !important;
-        height: 110px !important;
+        width: 220px !important;
+        height: 140px !important;
     }
     .header-home-container span {
-        font-size: 1.4rem !important;
+        font-size: 1.2rem !important;
         line-height: 1.8rem !important;
     }
     .header-home-container p {
@@ -559,6 +596,16 @@
     }
     footer li {
         font-size: 16px;
+    }
+    .store-image-background {
+        padding: 170px 15px 15px 15px !important;
+        height: 230px !important;
+    }
+    .store-name span {
+        font-size: 14px !important;
+    }
+    .store-wrapper {
+        height: 350px !important;
     }
 }
 @media (max-width: 500px) {

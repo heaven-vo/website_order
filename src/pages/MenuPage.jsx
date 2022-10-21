@@ -6,7 +6,7 @@ import { getMenuByMode } from "../apis/apiService";
 import { ProductSlide, SampleNextArrow, SamplePrevArrow } from "../components/products/ProductSlide";
 import ShopList from "../components/products/ShopList";
 import { ShopSlide } from "../components/products/ShopSlide";
-import { CATE_FITLER, IMAGE_NOTFOUND, STORE_FILTER } from "../constants/Variable";
+import { CATE_FITLER, IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, STORE_FILTER } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
 const categorys = [
@@ -83,7 +83,7 @@ export const MenuPage = () => {
     // let timeEnd1 = 13.54;
     // let timeEnd2 = 13.55;
     // let timeEnd3 = 13.56;
-    const { menu, mobileMode, setIsHeaderOrder, setHeaderInfo, setMenuIdProvider } = useContext(AppContext);
+    const { menu, mobileMode, setIsHeaderOrder, setHeaderInfo, setMenuIdProvider, setisCartMain, setCart } = useContext(AppContext);
     const [filtter, setFilter] = useState(CATE_FITLER);
     // const [checked, setChecked] = useState(false);
     const [isLoadingPage, setIsLoadingPage] = useState(true);
@@ -111,6 +111,22 @@ export const MenuPage = () => {
 
     //     getMenu(menu, filtter, 1, 10);
     // }, [filtter]);
+    const checkCartInMenu = (menuId) => {
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+            setCart([]);
+            setisCartMain(false);
+        } else {
+            const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+            if (CartList.length > 0 && CartList[0].menuId !== menuId.toString()) {
+                console.log(CartList[0].menu);
+                console.log(menuId.toString());
+                localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+                setCart([]);
+                setisCartMain(false);
+            }
+        }
+    };
     const getMenu = (menu, filtter, pageInd, size) => {
         // setMenuCategory([]);
         if (menu !== "0") {
@@ -119,6 +135,7 @@ export const MenuPage = () => {
                     console.log(res);
                     if (res.data) {
                         const menu = res.data;
+                        checkCartInMenu(menu.id);
                         setMenuProduct(menu);
                         setMenuIdProvider(menu.id);
                         setMenuCategory(menu.listCategoryStoreInMenus);

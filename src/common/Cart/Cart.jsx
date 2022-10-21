@@ -31,6 +31,7 @@ const Cart = ({}) => {
     const [isValidPhone, setIsValidPhone] = useState(false);
     const [isValidBuilding, setIsValidBuilding] = useState(false);
     const [isLoadingOrder, setisLoadingOrder] = useState(true);
+    const [isValidPhoneRegex, setIsValidPhoneRegex] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const [payment, setPayment] = useState({});
     const [isValidArea, setIsValidArea] = useState(false);
@@ -83,7 +84,7 @@ const Cart = ({}) => {
     };
     const handleSubmit = () => {
         let isValid = true;
-        if (fullName.length === 0 || phone.length === 0 || !building?.value) {
+        if (fullName.length === 0 || phone.length === 0 || !building?.value || !validatePhoneNumber(phone)) {
             isValid = false;
         }
         if (!fullName && fullName.length === 0) {
@@ -111,12 +112,22 @@ const Cart = ({}) => {
         } else {
             setIsValidArea(false);
         }
+        if (validatePhoneNumber(phone)) {
+            setIsValidPhoneRegex(true);
+        } else {
+            setIsValidPhoneRegex(false);
+        }
         if (isValid) {
             setUserInfo({ fullName, phone, building, note, area, apartment });
             localStorage.setItem(LOCALSTORAGE_USER_NAME, JSON.stringify({ fullName, phone, building, area, note, apartment }));
             setVisiblePopupInfo(false);
         }
     };
+    function validatePhoneNumber(input_str) {
+        var re = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
+
+        return re.test(input_str);
+    }
     useEffect(() => {
         if (area) {
             getApartment(area.value)
@@ -156,7 +167,7 @@ const Cart = ({}) => {
         setisLoadingOrder(true);
         let userId = phone;
         let productOrders = Cart.map((item) => {
-            return { productInMenuId: item.productMenuId, quantity: item.quantityCart.toString(), productName: item.name, price: item.pricePerPack };
+            return { productInMenuId: item.productMenuId, quantity: item.quantityCart.toString(), price: item.pricePerPack };
         });
         let order = {
             id: "",
@@ -277,7 +288,9 @@ const Cart = ({}) => {
         <>
             <div className={`loading-spin ${isLoading === false ? "loading-spin-done" : ""}`}></div>
             <Rodal
-                height={isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea ? (mobileMode ? 620 : 650) : mobileMode ? 500 : 540}
+                // height={isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea ? (mobileMode ? 620 : 650) : mobileMode ? 500 : 540}
+                height={isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea || !isValidPhoneRegex ? (mobileMode ? 550 : 590) : mobileMode ? 500 : 540}
+                // height={mobileMode ? 535 : 575}
                 width={mobileMode ? 350 : 400}
                 visible={visiblePopupInfo}
                 onClose={() => {
@@ -295,58 +308,73 @@ const Cart = ({}) => {
                             <span style={{ fontSize: 16, fontWeight: 700 }}>Nơi nhận</span>
                         </div>
                         <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
-                            <span style={{ fontSize: 16, fontWeight: 700 }}>Khu vực</span>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>
+                                Khu vực <span style={{ color: "red", fontSize: 14 }}> *</span>
+                            </span>
                         </div>
-                        <Select
-                            options={optionArea}
-                            placeholder="Khu vực"
-                            onChange={(e) => {
-                                console.log({ e });
-                                setArea(e);
-                                setApartment("");
-                                setBuilding("");
-                            }}
-                            value={area}
-                        />
-                        {isValidArea && (
+                        <div className={`${isValidArea && "error-select"}`}>
+                            <Select
+                                options={optionArea}
+                                placeholder="Khu vực"
+                                onChange={(e) => {
+                                    console.log({ e });
+                                    setArea(e);
+                                    setApartment("");
+                                    setBuilding("");
+                                }}
+                                value={area}
+                            />
+                        </div>
+                        {/* {isValidArea && (
                             <div className="input-validate">
                                 <span>Khu vực không được để trống</span>
                             </div>
-                        )}
+                        )} */}
                         <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
-                            <span style={{ fontSize: 16, fontWeight: 700 }}>Cụm tòa nhà</span>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>
+                                Cụm tòa nhà<span style={{ color: "red", fontSize: 14 }}> *</span>
+                            </span>
                         </div>
-                        <Select
-                            options={optionsApartment}
-                            placeholder="Tòa nhà"
-                            onChange={(e) => {
-                                setApartment(e);
-                                setBuilding("");
-                                for (let index = 0; index < apartmentList.length; index++) {
-                                    const element = apartmentList[index];
-                                    if (element.id === e.value) {
-                                        setBuldingList(element.listBuilding);
+                        <div className={`${isValidApartment && "error-select"}`}>
+                            <Select
+                                options={optionsApartment}
+                                placeholder="Tòa nhà"
+                                onChange={(e) => {
+                                    setApartment(e);
+                                    setBuilding("");
+                                    for (let index = 0; index < apartmentList.length; index++) {
+                                        const element = apartmentList[index];
+                                        if (element.id === e.value) {
+                                            setBuldingList(element.listBuilding);
+                                        }
                                     }
-                                }
-                            }}
-                            value={apartment}
-                        />
-                        {isValidApartment && (
+                                }}
+                                value={apartment}
+                            />
+                        </div>
+                        {/* {isValidApartment && (
                             <div className="input-validate">
                                 <span>Cụm tòa nhà không được để trống</span>
                             </div>
-                        )}
+                        )} */}
                         <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
-                            <span style={{ fontSize: 16, fontWeight: 700 }}>Building (Tòa nhà)</span>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>
+                                Building (Tòa nhà)<span style={{ color: "red", fontSize: 14 }}> *</span>
+                            </span>
                         </div>
-                        <Select options={optionsBuilding} placeholder="Tòa nhà" onChange={(e) => setBuilding(e)} value={building} />
-                        {isValidBuilding && (
+                        <div className={`${isValidBuilding && "error-select"}`}>
+                            <Select options={optionsBuilding} placeholder="Tòa nhà" onChange={(e) => setBuilding(e)} value={building} />
+                        </div>
+
+                        {/* {isValidBuilding && (
                             <div className="input-validate">
                                 <span>Tòa nhà không được để trống</span>
                             </div>
-                        )}
+                        )} */}
                         <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
-                            <span style={{ fontSize: 16, fontWeight: 700 }}>Tên người nhận</span>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>
+                                Tên người nhận<span style={{ color: "red", fontSize: 14 }}> *</span>
+                            </span>
                         </div>
                         <div className="rodal-title" style={{ width: " 100%" }}>
                             <input
@@ -355,16 +383,25 @@ const Cart = ({}) => {
                                 }}
                                 value={fullName}
                                 type="text"
-                                style={{ border: "1px solid rgb(200,200,200)", width: " 100%", borderRadius: 4, padding: "10px 10px", lineHeight: "1rem", fontSize: "1rem" }}
+                                style={{
+                                    border: !isValidFullName ? "1px solid rgb(200,200,200)" : "1px solid red",
+                                    width: " 100%",
+                                    borderRadius: 4,
+                                    padding: "10px 10px",
+                                    lineHeight: "1rem",
+                                    fontSize: "1rem",
+                                }}
                             />
                         </div>
-                        {isValidFullName && (
+                        {/* {isValidFullName && (
                             <div className="input-validate">
                                 <span>Tên không được để trống</span>
                             </div>
-                        )}
+                        )} */}
                         <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
-                            <span style={{ fontSize: 16, fontWeight: 700 }}>Số điện thoại nhận hàng</span>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>
+                                Số điện thoại nhận hàng<span style={{ color: "red", fontSize: 14 }}> *</span>
+                            </span>
                         </div>
                         <div className="rodal-title" style={{ width: " 100%" }}>
                             <input
@@ -373,15 +410,32 @@ const Cart = ({}) => {
                                 }}
                                 value={phone}
                                 type="number"
-                                style={{ border: "1px solid rgb(200,200,200)", width: " 100%", borderRadius: 4, padding: "10px 10px", lineHeight: "1rem", fontSize: "1rem" }}
+                                style={{
+                                    border: !isValidPhone ? "1px solid rgb(200,200,200)" : "1px solid red",
+                                    width: " 100%",
+                                    borderRadius: 4,
+                                    padding: "10px 10px",
+                                    lineHeight: "1rem",
+                                    fontSize: "1rem",
+                                }}
                             />
                         </div>
-                        {isValidPhone && (
+                        {/* {isValidPhone && (
                             <div className="input-validate">
                                 <span>Số điện thoại không được để trống</span>
                             </div>
-                        )}
+                        )} */}
                     </div>
+                    {(isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea) && !isValidPhoneRegex && (
+                        <div className="input-validate-form">
+                            <span>Vui lòng điền đủ thông tin</span>
+                        </div>
+                    )}
+                    {!(isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea) && !isValidPhoneRegex && (
+                        <div className="input-validate-form">
+                            <span>Số điện thoại không hơp lệ</span>
+                        </div>
+                    )}
                     <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 5, gap: 15 }}>
                         <button
                             style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10 }}

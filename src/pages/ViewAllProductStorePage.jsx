@@ -73,6 +73,26 @@ export const ViewAllProductStorePage = () => {
         <div>
             <Loading isLoading={isLoadingCircle} />
             <div className={`loading-spin ${!isLoadingCircle && "loading-spin-done"}`}></div>
+            <div className="store-wrapper">
+                <div className="store-image-background">
+                    <div className="store-name">
+                        <h3 style={{ paddingBottom: 5 }}> Hủ tiếu Mỹ Tho</h3>
+                        <span className="store-building">
+                            <i class="fa-solid fa-location-dot" style={{ color: "var(--primary)", paddingRight: 7 }}></i>
+                            <span>Tòa S6.03, Rainbow, Vinhomes Grand Park</span>
+                        </span>
+                        <span className="store-building" style={{}}>
+                            <i class="fa-regular fa-clock" style={{ color: "var(--primary)", paddingRight: 7 }}></i>
+                            <span>Giờ mở cửa: 07:00 | Giờ đóng cửa: 22:00</span>
+                        </span>
+
+                        <span className="store-building" style={{ color: "green" }}>
+                            <i class="fa-solid fa-clock-rotate-left" style={{ color: "green", paddingRight: 7 }}></i>
+                            <span>Giao nhanh 30 phút</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
             <ProductList data={products || []} filter={2} />
             {products?.length === 0 && (
                 <section className="shop" style={{ padding: "25px 0 40px 0" }}>

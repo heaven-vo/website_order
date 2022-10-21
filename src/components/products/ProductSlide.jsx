@@ -66,6 +66,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
             {
                 ...productRodal,
                 quantityCart: 1,
+                menuId: menu,
             },
         ];
         // setisProductCart(true);
@@ -144,7 +145,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                     </span>
                 </div>
 
-                <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 10 }}>
+                <div className="f_flex " style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 10 }}>
                     <button
                         onClick={(e) => {
                             e.preventDefault();
@@ -275,7 +276,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                                 <div className="product-slide-image" style={{ width: 40, height: 40, borderRadius: 50, marginLeft: 5 }}>
                                     <img style={{ borderRadius: 50, objectFit: "cover", width: "100%", height: "100%" }} src={labelImg} alt="" />
                                 </div>
-                                <h3 style={{}}>{label}</h3>
+                                <h3>{label}</h3>
                                 <div
                                     className="heading-right  "
                                     style={{ display: label ? "block" : "none" }}
