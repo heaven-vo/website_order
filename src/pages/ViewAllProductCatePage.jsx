@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { getListProductByCateId } from "../apis/apiService";
 import Loading from "../common/Loading/Loading";
 import { ProductList } from "../components/products/ProductList";
@@ -14,13 +14,18 @@ export const ViewAllProductCatePage = () => {
     const [reload, setReload] = useState(false);
     const [img, setImg] = useState("");
     let location = useLocation();
+    let history = useHistory();
     useEffect(() => {
-        let cateId = location.pathname.trim().split("/")[4];
-        // let menuId = location.pathname.trim().split("/")[2];
-        console.log({ menuIdProvider });
-        setIsLoadingCircle(true);
-        // setIsHeader(false);
-        getListProductByFilter(menuIdProvider, cateId);
+        let modeId = location.pathname.trim().split("/")[2];
+        if (menuIdProvider === "0") {
+            history.push(`/mode/${modeId}`);
+        } else {
+            let cateId = location.pathname.trim().split("/")[4];
+            // let menuId = location.pathname.trim().split("/")[2];
+            setIsLoadingCircle(true);
+            // setIsHeader(false);
+            getListProductByFilter(menuIdProvider, cateId);
+        }
         return () => {
             setIsLoadingCircle(false);
             setHeaderInfo({});

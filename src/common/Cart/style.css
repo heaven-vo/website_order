@@ -231,15 +231,16 @@
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid #f0f0f0;
+    padding: 0 0 15px 0;
 }
 .checkout-product-info {
     flex: 1;
     gap: 10px;
 }
 .checkout-product-image {
-    width: 100px;
-    height: 100px;
-    padding: 5px;
+    width: 70px;
+    height: 70px;
+    /* padding: px; */
 }
 .checkout-product-image img {
     width: 100%;

@@ -160,7 +160,6 @@ const Navbar = () => {
                                 options={optionArea}
                                 placeholder="Khu vực"
                                 onChange={(e) => {
-                                    console.log({ e });
                                     setArea(e);
                                     setApartment("");
                                     setBuilding("");
@@ -279,9 +278,9 @@ const Navbar = () => {
                             <span>Số điện thoại không hơp lệ</span>
                         </div>
                     )}
-                    <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 5, gap: 15 }}>
+                    <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 5, gap: 15 }}>
                         <button
-                            style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10 }}
+                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, height: 50 }}
                             onClick={(e) => {
                                 e.preventDefault();
                                 setVisiblePopupInfo(false);
@@ -294,7 +293,7 @@ const Navbar = () => {
                                 e.preventDefault();
                                 handleSubmit();
                             }}
-                            style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)" }}
+                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", color: "#fff", height: 50 }}
                         >
                             OK
                         </button>
@@ -350,13 +349,14 @@ const Navbar = () => {
                             <input
                                 onChange={(e) => {}}
                                 // value={phone}
+                                placeholder="Tìm món ăn hoặc nhà hàng"
                                 type="text"
                                 style={{ width: " 100%", borderRadius: 4, padding: "8px 10px", lineHeight: "1rem", fontSize: "1rem" }}
                             />
                         </div>
                     )}
                 </div>
-                {isHeaderOrder && (
+                {/* {isHeaderOrder && (
                     <div
                         className={`container-mobile tab-menu-mobile search `}
                         style={{
@@ -367,7 +367,7 @@ const Navbar = () => {
                     >
                         <TabMenuOrder />
                     </div>
-                )}
+                )} */}
             </section>
         </>
     );

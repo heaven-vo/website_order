@@ -7,16 +7,20 @@ export const AppContext = React.createContext();
 
 export default function AppProvider({ children }) {
     const [listProducts, setlistProducts] = useState([]);
-    const [menu, setMenu] = useState("0");
+    const [mode, setMode] = useState("0");
     const [menuIdProvider, setMenuIdProvider] = useState("0");
     const [orderStatus, setOrderStatus] = useState("0");
+    const [modeType, setModeType] = useState("");
     const [menuOrder, setMenuOrder] = useState(1);
     const [mobileMode, setMobileMode] = useState(window.innerWidth < 700 ? true : false);
     const [Cart, setCart] = useState([]);
     const [userInfo, setUserInfo] = useState({});
     const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+    const [openDeleteCart, setOpenDeleteCart] = useState(false);
     const [isCartFooter, setIsCartFooter] = useState(false);
     const [isHeaderHome, setIsHeaderHome] = useState(false);
+    const [opentModalSuccess, setOpentModalSuccess] = useState(false);
+    const [opentModalError, setOpentModalError] = useState(false);
     const [isHeaderOrder, setIsHeaderOrder] = useState(false);
     const [visiblePopupInfo, setVisiblePopupInfo] = useState(false);
     const [isLoadingMain, setisLoadingMain] = useState(true);
@@ -50,15 +54,30 @@ export default function AppProvider({ children }) {
     }, [location.pathname]);
 
     useEffect(() => {
-        let menuId = location.pathname.trim().split("/")[2];
-        if (location.pathname.trim().split("/") && location.pathname.trim().split("/")[1] === "menu") {
-            setMenu(menuId);
+        let modeId = location.pathname.trim().split("/")[2];
+        if (location.pathname.trim().split("/") && location.pathname.trim().split("/")[1] === "mode") {
+            setMode(modeId);
+            switch (modeId) {
+                case "1":
+                    setModeType("Giao nhanh 30 phút");
+                    break;
+                case "2":
+                    setModeType("Giao hàng trong ngày");
+                    break;
+                case "3":
+                    setModeType("Đặt hàng 3 - 5 ngày");
+                    break;
+
+                default:
+                    setModeType("");
+                    break;
+            }
         }
     }, [location.pathname]);
     useEffect(() => {
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_MODE))) {
-            localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(""));
-        }
+        // if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_MODE))) {
+        //     localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(""));
+        // }
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_USER_NAME))) {
             localStorage.setItem(LOCALSTORAGE_USER_NAME, JSON.stringify([]));
             setUserInfo({});
@@ -134,8 +153,8 @@ export default function AppProvider({ children }) {
                 setMobileMode,
                 isOpenDrawer,
                 setIsOpenDrawer,
-                menu,
-                setMenu,
+                mode,
+                setMode,
                 buildings,
                 setBuildings,
                 isHeaderOrder,
@@ -166,6 +185,14 @@ export default function AppProvider({ children }) {
                 setIsCartFooter,
                 isLoadingMain,
                 setisLoadingMain,
+                opentModalSuccess,
+                setOpentModalSuccess,
+                opentModalError,
+                setOpentModalError,
+                openDeleteCart,
+                setOpenDeleteCart,
+                modeType,
+                setModeType,
             }}
         >
             {children}

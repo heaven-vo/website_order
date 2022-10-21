@@ -7,7 +7,7 @@ import { LOCALSTORAGE_MODE } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
 const HomePage = ({ productItems, shopItems }) => {
-    const { userInfo, setIsHeaderHome, setVisiblePopupInfo, mobileMode, menu, setMenu, setisCartMain, Cart } = useContext(AppContext);
+    const { userInfo, setIsHeaderHome, setVisiblePopupInfo, mobileMode, mode, setMode, setisCartMain, Cart } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(true);
     let history = useHistory();
     useEffect(() => {
@@ -91,10 +91,10 @@ const HomePage = ({ productItems, shopItems }) => {
                             style={{}}
                             className="home-menu-item"
                             onClick={() => {
-                                setMenu(1);
+                                setMode(1);
                                 if (userInfo.building && userInfo.fullName && userInfo.phone) {
                                     setVisiblePopupInfo(false);
-                                    history.push(`/menu/${1}`);
+                                    history.push(`/mode/${1}`);
                                 } else {
                                     setVisiblePopupInfo(true);
                                 }
@@ -109,11 +109,11 @@ const HomePage = ({ productItems, shopItems }) => {
                             style={{}}
                             className="home-menu-item"
                             onClick={() => {
-                                setMenu(2);
+                                setMode(2);
 
                                 if (userInfo.building && userInfo.fullName && userInfo.phone) {
                                     setVisiblePopupInfo(false);
-                                    history.push(`/menu/${2}`);
+                                    history.push(`/mode/${2}`);
                                 } else {
                                     setVisiblePopupInfo(true);
                                 }
@@ -128,10 +128,10 @@ const HomePage = ({ productItems, shopItems }) => {
                             style={{}}
                             className="home-menu-item"
                             onClick={() => {
-                                setMenu(3);
+                                setMode(3);
                                 if (userInfo.building && userInfo.fullName && userInfo.phone) {
                                     setVisiblePopupInfo(false);
-                                    history.push(`/menu/${3}`);
+                                    history.push(`/mode/${3}`);
                                 } else {
                                     setVisiblePopupInfo(true);
                                 }

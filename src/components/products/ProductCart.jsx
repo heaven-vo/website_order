@@ -14,7 +14,7 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
             setProductRodalQuantity(1);
         },
     }));
-    const { setCart, menu, setisCartMain } = useContext(AppContext);
+    const { setCart, menuIdProvider, setisCartMain, mode } = useContext(AppContext);
     const [productRodalQuantity, setProductRodalQuantity] = useState(0);
     const [isProductCart, setisProductCart] = useState(true);
     // const [isOutOfStore, setisOutOfStore] = useState(false);
@@ -102,14 +102,14 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
                 {
                     ...product,
                     quantityCart: 1,
-                    menuId: menu,
+                    menuId: menuIdProvider,
                 },
             ];
             setisProductCart(true);
             setisCartMain(true);
             setProductRodalQuantity(productRodalQuantity + 1);
             setCart(carts);
-            localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(menu));
+            localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
             localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
         } else {
             openRodalOutOfStore({ rodal: true, product: product, index });
@@ -140,7 +140,7 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
                         className="img"
                         onClick={() => {
                             // setIsHeader(false);
-                            history.push(`/menu/${menu}/${product.id}`);
+                            history.push(`/mode/${mode}/${product.id}`);
                         }}
                     >
                         {/* <span className="discount">{item.discount}% Off</span> */}
@@ -151,6 +151,7 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
                                 height: "100%",
                                 width: "100%",
                                 objectFit: "cover",
+                                borderRadius: "0.5rem",
                             }}
                         />
                     </div>
@@ -162,7 +163,7 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
                             style={{ fontSize: 14, cursor: "pointer", fontWeight: 600, lineHeight: 1.5 }}
                             onClick={() => {
                                 // setIsHeader(false);
-                                history.push(`/menu/${menu}/${product.id}`);
+                                history.push(`/mode/${mode}/${product.id}`);
                             }}
                         >
                             {pro.name}

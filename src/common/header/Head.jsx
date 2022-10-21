@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { LOCALSTORAGE_USER_NAME } from "../../constants/Variable";
 import { getApartment } from "../../apis/apiService";
 const Head = () => {
-    const { userInfo, setUserInfo, setVisiblePopupInfo, visiblePopupInfo, mobileMode, menu, setMenu, buildings, setIsOpenDrawer, areaProvider } = useContext(AppContext);
+    const { userInfo, setUserInfo, setVisiblePopupInfo, visiblePopupInfo, mobileMode, mode, setMode, buildings, setIsOpenDrawer, areaProvider } = useContext(AppContext);
     // const [visible, setVisible] = useState(false);
     const [fullName, setFullName] = useState("ok");
     const [phone, setPhone] = useState("");
@@ -39,8 +39,8 @@ const Head = () => {
         setBuilding(userInfo.building || "");
         setApartment(userInfo.apartment || "");
         setArea(userInfo.area || "");
-        setMenu(0);
-    }, [setMenu, userInfo]);
+        setMode(0);
+    }, [setMode, userInfo]);
     useEffect(() => {
         if (area) {
             getApartment(area.value)
@@ -132,8 +132,8 @@ const Head = () => {
                 localStorage.setItem(LOCALSTORAGE_USER_NAME, JSON.stringify({ fullName, phone, building, area, apartment }));
                 setUserInfo({ fullName, phone, building, area, apartment });
             }
-            if (menu === 1 || menu === 2 || menu === 3) {
-                history.push(`/menu/${menu}`);
+            if (mode === 1 || mode === 2 || mode === 3) {
+                history.push(`/mode/${mode}`);
             }
         }
     };
@@ -175,7 +175,6 @@ const Head = () => {
                                 options={optionArea}
                                 placeholder="Khu vực"
                                 onChange={(e) => {
-                                    console.log({ e });
                                     setArea(e);
                                     setApartment("");
                                     setBuilding("");
@@ -294,9 +293,9 @@ const Head = () => {
                             <span>Số điện thoại không hơp lệ</span>
                         </div>
                     )}
-                    <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 5, gap: 15 }}>
+                    <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 5, gap: 15 }}>
                         <button
-                            style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10 }}
+                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, height: 50 }}
                             onClick={(e) => {
                                 e.preventDefault();
                                 setVisiblePopupInfo(false);
@@ -309,7 +308,7 @@ const Head = () => {
                                 e.preventDefault();
                                 handleSubmit();
                             }}
-                            style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)" }}
+                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", color: "#fff", height: 50 }}
                         >
                             OK
                         </button>

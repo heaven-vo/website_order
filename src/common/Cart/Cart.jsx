@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { caculatorVND } from "../../constants/Caculator";
+import { validatePhoneNumber, hanldeGetTime } from "../../constants/Caculator";
 import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE, LOCALSTORAGE_USER_NAME } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 import Rodal from "rodal";
@@ -11,13 +11,15 @@ import { getApartment, postOrder, putOrder } from "../../apis/apiService";
 import { CountDown } from "./CountDown";
 
 const Cart = ({}) => {
-    const { Cart, setCart, setHeaderInfo, setIsHeaderOrder, mobileMode, setisCartMain, userInfo, setUserInfo, areaProvider, menu } = useContext(AppContext);
+    const { Cart, setCart, setHeaderInfo, setIsHeaderOrder, mobileMode, setisCartMain, userInfo, setUserInfo, areaProvider, mode, modeType, setOpentModalSuccess, setOpentModalError } =
+        useContext(AppContext);
     const [totalPrice, setTotalPrice] = useState(0);
     const [CartList, setCartList] = useState([]);
-    const [visible, setVisible] = useState(false);
+    const [total, setTotal] = useState("");
     const [visiblePopupInfo, setVisiblePopupInfo] = useState(false);
     const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);
     const [visiblePopupComfirm, setVisiblePopupComfirm] = useState(false);
+    const [visiblePopupNote, setVisiblePopupNote] = useState(false);
     const [fullName, setFullName] = useState("");
     const [phone, setPhone] = useState("");
     const [building, setBuilding] = useState("");
@@ -36,6 +38,7 @@ const Cart = ({}) => {
     const [payment, setPayment] = useState({});
     const [isValidArea, setIsValidArea] = useState(false);
     const [isValidApartment, setIsValidApartment] = useState(false);
+    const [isValidNote, setIsValidNote] = useState(false);
     const [note, setNote] = useState("");
 
     useEffect(() => {
@@ -123,11 +126,7 @@ const Cart = ({}) => {
             setVisiblePopupInfo(false);
         }
     };
-    function validatePhoneNumber(input_str) {
-        var re = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
 
-        return re.test(input_str);
-    }
     useEffect(() => {
         if (area) {
             getApartment(area.value)
@@ -165,7 +164,6 @@ const Cart = ({}) => {
     let history = useHistory();
     const hanldeOrder = () => {
         setisLoadingOrder(true);
-        let userId = phone;
         let productOrders = Cart.map((item) => {
             return { productInMenuId: item.productMenuId, quantity: item.quantityCart.toString(), price: item.pricePerPack };
         });
@@ -187,6 +185,7 @@ const Cart = ({}) => {
                 },
             ],
         };
+        console.log({ order });
         postOrder(order)
             .then((res) => {
                 if (res.data) {
@@ -203,16 +202,25 @@ const Cart = ({}) => {
                         orderId: order.id,
                         statusId: "2",
                     };
-                    putOrder(orderUpdate).then((res) => {
-                        if (res.data) {
+                    putOrder(orderUpdate)
+                        .then((res) => {
+                            if (res.data) {
+                                setisLoadingOrder(false);
+                                setOpentModalSuccess(true);
+
+                                // history.push("/");
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                            setOpentModalError(true);
                             setisLoadingOrder(false);
-                            history.push("/");
-                        }
-                    });
+                        });
                 }
             })
             .catch((error) => {
                 console.log(error);
+                setOpentModalError(true);
                 setisLoadingOrder(false);
             });
     };
@@ -279,11 +287,11 @@ const Cart = ({}) => {
         // Cập nhật lại danh sách sản phẩm hiện tại với số lượng vừa được cập nhật
         // setlistProducts([...newProduts]);
         setCart([...newCarts]);
-        console.log(isLoading);
         setIsLoading(false);
         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
         setVisiblePopupQuantity(false);
     };
+
     return (
         <>
             <div className={`loading-spin ${isLoading === false ? "loading-spin-done" : ""}`}></div>
@@ -317,7 +325,6 @@ const Cart = ({}) => {
                                 options={optionArea}
                                 placeholder="Khu vực"
                                 onChange={(e) => {
-                                    console.log({ e });
                                     setArea(e);
                                     setApartment("");
                                     setBuilding("");
@@ -325,11 +332,7 @@ const Cart = ({}) => {
                                 value={area}
                             />
                         </div>
-                        {/* {isValidArea && (
-                            <div className="input-validate">
-                                <span>Khu vực không được để trống</span>
-                            </div>
-                        )} */}
+
                         <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>
                                 Cụm tòa nhà<span style={{ color: "red", fontSize: 14 }}> *</span>
@@ -352,11 +355,7 @@ const Cart = ({}) => {
                                 value={apartment}
                             />
                         </div>
-                        {/* {isValidApartment && (
-                            <div className="input-validate">
-                                <span>Cụm tòa nhà không được để trống</span>
-                            </div>
-                        )} */}
+
                         <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>
                                 Building (Tòa nhà)<span style={{ color: "red", fontSize: 14 }}> *</span>
@@ -366,11 +365,6 @@ const Cart = ({}) => {
                             <Select options={optionsBuilding} placeholder="Tòa nhà" onChange={(e) => setBuilding(e)} value={building} />
                         </div>
 
-                        {/* {isValidBuilding && (
-                            <div className="input-validate">
-                                <span>Tòa nhà không được để trống</span>
-                            </div>
-                        )} */}
                         <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>
                                 Tên người nhận<span style={{ color: "red", fontSize: 14 }}> *</span>
@@ -393,11 +387,7 @@ const Cart = ({}) => {
                                 }}
                             />
                         </div>
-                        {/* {isValidFullName && (
-                            <div className="input-validate">
-                                <span>Tên không được để trống</span>
-                            </div>
-                        )} */}
+
                         <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>
                                 Số điện thoại nhận hàng<span style={{ color: "red", fontSize: 14 }}> *</span>
@@ -420,11 +410,6 @@ const Cart = ({}) => {
                                 }}
                             />
                         </div>
-                        {/* {isValidPhone && (
-                            <div className="input-validate">
-                                <span>Số điện thoại không được để trống</span>
-                            </div>
-                        )} */}
                     </div>
                     {(isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea) && !isValidPhoneRegex && (
                         <div className="input-validate-form">
@@ -436,9 +421,9 @@ const Cart = ({}) => {
                             <span>Số điện thoại không hơp lệ</span>
                         </div>
                     )}
-                    <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 5, gap: 15 }}>
+                    <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 5, gap: 15 }}>
                         <button
-                            style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10 }}
+                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, height: 50 }}
                             onClick={(e) => {
                                 e.preventDefault();
                                 setVisiblePopupInfo(false);
@@ -451,7 +436,68 @@ const Cart = ({}) => {
                                 e.preventDefault();
                                 handleSubmit();
                             }}
-                            style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)" }}
+                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", color: "#fff", height: 50 }}
+                        >
+                            OK
+                        </button>
+                    </div>
+                </div>
+            </Rodal>
+            <Rodal
+                // height={isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea ? (mobileMode ? 620 : 650) : mobileMode ? 500 : 540}
+                height={mobileMode ? 170 : 200}
+                // height={mobileMode ? 535 : 575}
+                width={mobileMode ? 350 : 400}
+                visible={visiblePopupNote}
+                onClose={() => {
+                    setVisiblePopupNote(false);
+                    setIsValidNote(false);
+                }}
+                style={{ borderRadius: 10 }}
+            >
+                <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%" }}>
+                    <div>
+                        <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
+                            <span style={{ fontSize: 16, fontWeight: 700 }}>Lưu ý đặc biệt</span>
+                        </div>
+                        <div className="rodal-title" style={{ width: " 100%" }}>
+                            <input
+                                onChange={(e) => {
+                                    setNote(e.target.value);
+                                }}
+                                value={note}
+                                type="text"
+                                style={{
+                                    border: "1px solid rgb(200,200,200)",
+                                    width: " 100%",
+                                    borderRadius: 4,
+                                    padding: "10px 10px",
+                                    lineHeight: "1rem",
+                                    fontSize: "1rem",
+                                }}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 5, gap: 15 }}>
+                        <button
+                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, height: 50 }}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setVisiblePopupNote(false);
+                            }}
+                        >
+                            Đóng
+                        </button>
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                // handleSubmit();
+                                setUserInfo({ fullName, phone, building, note, area, apartment });
+                                localStorage.setItem(LOCALSTORAGE_USER_NAME, JSON.stringify({ fullName, phone, building, area, note, apartment }));
+                                setVisiblePopupNote(false);
+                            }}
+                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", color: "#fff", height: 50 }}
                         >
                             OK
                         </button>
@@ -460,7 +506,7 @@ const Cart = ({}) => {
             </Rodal>
             <Rodal
                 height={250}
-                width={mobileMode ? 350 : 400}
+                width={mobileMode ? 320 : 350}
                 visible={visiblePopupQuantity}
                 onClose={() => {
                     setVisiblePopupQuantity(false);
@@ -505,7 +551,7 @@ const Cart = ({}) => {
                     </div>
                 </div>
 
-                <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 15 }}>
+                <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 15 }}>
                     {productRodalQuantity > 0 ? (
                         <button
                             onClick={(e) => {
@@ -515,13 +561,15 @@ const Cart = ({}) => {
                             style={{
                                 flex: 1,
                                 padding: 14,
-                                fontSize: mobileMode ? "1.1em" : "1.2em",
+                                fontSize: mobileMode ? "14px" : "16px",
                                 cursor: "pointer",
+                                height: 50,
                                 fontWeight: 700,
                                 borderRadius: 10,
                                 background: "var(--primary)",
                                 transition: "0.3s all",
                                 WebkitTransition: "0.3s all",
+                                color: "#fff",
                             }}
                         >
                             Cập nhật giỏ hàng
@@ -561,10 +609,10 @@ const Cart = ({}) => {
                 style={{ borderRadius: 10 }}
             >
                 <div style={{ padding: "5px 0 10px 0", textAlign: "center", display: "flex", flexDirection: "column" }}>
-                    <span className="" style={{ fontSize: mobileMode ? 20 : 23, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)" }}>
+                    <span className="" style={{ fontSize: mobileMode ? 18 : 20, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)" }}>
                         Đơn hàng sẽ được gửi đi trong
                     </span>
-                    <span className="" style={{ fontSize: mobileMode ? 20 : 23, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)" }}>
+                    <span className="" style={{ fontSize: mobileMode ? 18 : 20, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)" }}>
                         {visiblePopupComfirm ? (
                             <CountDown
                                 callbackOrder={() => {
@@ -579,20 +627,20 @@ const Cart = ({}) => {
                     </span>
                 </div>
                 <div style={{ padding: "5px 0" }}>
-                    <span style={{ fontSize: mobileMode ? 16 : 17, fontWeight: 600 }}>Địa chỉ giao hàng:</span>
-                    <span style={{ fontSize: mobileMode ? 16 : 17, fontWeight: 400 }}> Building S102 Vinhomes Grand Park</span>
+                    <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 600 }}>Địa chỉ giao hàng:</span>
+                    <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 400 }}> Building S102 Vinhomes Grand Park</span>
                 </div>
                 <div style={{ padding: "5px 0" }}>
-                    <span style={{ fontSize: mobileMode ? 16 : 17, fontWeight: 600 }}>Thời gian giao hàng dự kiến:</span>
-                    <span style={{ fontSize: mobileMode ? 16 : 17, fontWeight: 400 }}> 22:30 - 23:00</span>
+                    <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 600 }}>Thời gian giao hàng dự kiến: </span>
+                    <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 400 }}>{hanldeGetTime()}</span>
                 </div>
                 <div style={{ padding: "5px 0" }}>
-                    <span style={{ fontSize: mobileMode ? 16 : 17, fontWeight: 600 }}>Tổng tiền đơn hàng:</span>
-                    <span style={{ fontSize: mobileMode ? 16 : 17, fontWeight: 400 }}> 96.000</span>
+                    <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 600 }}>Tổng tiền đơn hàng:</span>
+                    <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 400 }}>{" " + (totalPrice + 15000).toLocaleString()}</span>
                 </div>
-                <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 15 }}>
+                <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 15 }}>
                     <button
-                        style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "rgb(220,220,220)" }}
+                        style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "rgb(220,220,220)" }}
                         onClick={(e) => {
                             e.preventDefault();
                             setVisiblePopupComfirm(false);
@@ -606,13 +654,13 @@ const Cart = ({}) => {
                             hanldeOrder();
                             setVisiblePopupComfirm(false);
                         }}
-                        style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)" }}
+                        style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", color: "#fff" }}
                     >
-                        OK
+                        Đồng ý
                     </button>
                 </div>
             </Rodal>
-            <Loading isLoading={isLoadingOrder} />
+            <Loading isLoading={isLoadingOrder} opacity={0.7} />
             <div id="cart-main" className="" style={{}}>
                 <div className="cart-main" style={{}}>
                     <section className="cart-items" style={{}}>
@@ -622,39 +670,51 @@ const Cart = ({}) => {
                             </div>
                             <div className="checkout-content">
                                 <div className="checkout-content-item">
-                                    <h2>{userInfo.building?.label || ""} Vinhomes GP </h2>
+                                    <h2>
+                                        {userInfo.building?.label || ""}
+                                        {", " + userInfo.area?.label} Vinhomes GP
+                                    </h2>
                                 </div>
                                 <div className="checkout-content-item">
                                     <span>Thời gian giao hàng</span>
-                                    <span>Giao nhanh 30 phút</span>
+                                    <span>{modeType}</span>
                                 </div>
                                 <div className="checkout-content-item">
                                     <span>Thời gian giao hàng dự kiến</span>
-                                    <span>17:59 - 18:09</span>
+                                    <span>{hanldeGetTime()}</span>
                                 </div>
                                 <div className="checkout-content-item">
                                     <span>Được giao từ</span>
                                     <span>{Cart.length > 0 ? Cart[0].storeName : "Không có"}</span>
                                 </div>
                             </div>
-                            {/* <div className="c_flex" style={{ margin: "15px 15px 5px 15px" }}>
+                            <div className="c_flex" style={{ margin: "15px 15px 5px 15px" }}>
                                 <span style={{ color: "rgba(0,0,0,.4)", fontWeight: 700 }}>Thông tin người nhận</span>
-                                {!auth.isLogin && (
-                                    <span onClick={() => history.push("/login")} style={{ color: "#1890ff", fontWeight: 700, cursor: "pointer", fontSize: 15 }}>
-                                        Đăng nhập
-                                    </span>
-                                )}
-                            </div> */}
+                                <span
+                                    onClick={() => {
+                                        setVisiblePopupInfo(true);
+                                        setFullName(userInfo.fullName || "");
+                                        setPhone(userInfo.phone || "");
+                                        setBuilding(userInfo.building || "");
+                                        setIsValidBuilding(false);
+                                        setIsValidFullname(false);
+                                        setIsValidPhone(false);
+                                    }}
+                                    style={{ color: "#1890ff", fontWeight: 700, cursor: "pointer", fontSize: 15 }}
+                                >
+                                    Thay đổi
+                                </span>
+                            </div>
                             <div
                                 className="checkout-content"
                                 onClick={() => {
-                                    setVisiblePopupInfo(true);
-                                    setFullName(userInfo.fullName || "");
-                                    setPhone(userInfo.phone || "");
-                                    setBuilding(userInfo.building || "");
-                                    setIsValidBuilding(false);
-                                    setIsValidFullname(false);
-                                    setIsValidPhone(false);
+                                    setVisiblePopupNote(true);
+                                    // setFullName(userInfo.fullName || "");
+                                    // setPhone(userInfo.phone || "");
+                                    // setBuilding(userInfo.building || "");
+                                    // setIsValidBuilding(false);
+                                    // setIsValidFullname(false);
+                                    // setIsValidPhone(false);
                                 }}
                             >
                                 <div className="f_flex checkout-content-icon-wrapper" style={{ alignItems: "center", gap: 15 }}>
@@ -686,14 +746,14 @@ const Cart = ({}) => {
                                 </div>
                             </div>
                             <div style={{ margin: "15px 15px 5px 15px" }}>
-                                <span style={{ color: "rgba(0,0,0,.4)", fontWeight: 700 }}>Tóm tắt đơn hàng</span>
+                                <span style={{ color: "rgba(0,0,0,.4)", fontWeight: 700, fontSize: mobileMode ? 14 : 16 }}>Tóm tắt đơn hàng</span>
                             </div>
                             <div className="checkout-content">
-                                {Cart.map((item) => (
+                                {[...Cart].map((item) => (
                                     <div className="checkout-product-cart" key={item.id}>
-                                        <div className="c_flex">
+                                        <div className="c_flex" style={{ gap: 10 }}>
                                             <div className="checkout-product-image">
-                                                <img src={item.image || IMAGE_NOTFOUND} alt="" />
+                                                <img src={item.image || IMAGE_NOTFOUND} alt="" style={{ borderRadius: "0.5rem" }} />
                                             </div>
                                             <div
                                                 className="center_flex checkout-product-quantity-count"
@@ -733,7 +793,7 @@ const Cart = ({}) => {
                                             </div>
                                         </div>
                                         <div className="checkout-product-price">
-                                            <span style={{ display: "flex", gap: 3 }}>
+                                            <span style={{ display: "flex", gap: 3, fontSize: mobileMode ? 14 : 16 }}>
                                                 {item.pricePerPack.toLocaleString()}
                                                 <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
                                             </span>
@@ -741,17 +801,17 @@ const Cart = ({}) => {
                                     </div>
                                 ))}
                                 <div className="c_flex">
-                                    <span>Tiền hàng</span>
-                                    <span style={{ fontWeight: 600, display: "flex", gap: 3 }}>
+                                    <span style={{ fontSize: mobileMode ? 14 : 16 }}>Tiền hàng</span>
+                                    <span style={{ fontWeight: 600, display: "flex", gap: 3, fontSize: mobileMode ? 14 : 16 }}>
                                         {Cart.length > 0 ? totalPrice.toLocaleString() : 0}
                                         <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
                                     </span>
                                 </div>
                                 <div className="c_flex">
-                                    <span>Phí giao hàng</span>
-                                    <span style={{ fontWeight: 600, display: "flex", gap: 3 }}>
+                                    <span style={{ fontSize: mobileMode ? 14 : 16 }}>Phí giao hàng</span>
+                                    <span style={{ fontWeight: 600, display: "flex", fontSize: mobileMode ? 14 : 16, gap: 3 }}>
                                         {"15.000"}
-                                        <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
+                                        <span style={{ fontSize: 15, fontWeight: 600 }}>₫</span>
                                     </span>
                                 </div>
                             </div>
@@ -769,7 +829,7 @@ const Cart = ({}) => {
                                 <div className="c_flex" style={{ flexDirection: "row", gap: 2, width: "100%" }}>
                                     <div className="f_flex" style={{ flexDirection: "column", gap: 2 }}>
                                         <div className="checkout-text" style={{ padding: 0 }}>
-                                            <span style={{ fontSize: mobileMode ? "1rem" : "1.2rem" }}>Tổng cộng:</span>
+                                            <span style={{ fontSize: mobileMode ? 15 : 18 }}>Tổng cộng:</span>
                                         </div>
                                         {/* {!auth.isLogin && (
                                             <div className="checkout-text-require" style={{ padding: 0 }}>
@@ -786,11 +846,10 @@ const Cart = ({}) => {
                                 </div>
                                 <button
                                     onClick={() => {
-                                        console.log(menu);
                                         const Mode = JSON.parse(localStorage.getItem(LOCALSTORAGE_MODE));
                                         if (Mode === "1") {
                                             setVisiblePopupComfirm(true);
-                                        } else if (Mode === "2") {
+                                        } else if (Mode === "2" || Mode === "3") {
                                             hanldeschedule();
                                         }
                                     }}
@@ -799,14 +858,15 @@ const Cart = ({}) => {
                                     style={{
                                         textAlign: "center",
                                         width: "100%",
-                                        height: 45,
+                                        height: mobileMode ? 45 : 50,
                                         borderRadius: "0.5rem",
                                         alignItems: "center",
                                         backgroundColor: isLoadingOrder ? "#f5f5f5" : "var(--primary)",
+                                        color: "#fff",
                                     }}
                                     className="center_flex checkout-btn"
                                 >
-                                    <span style={{ fontWeight: 700, fontSize: 18 }}>Đặt hàng</span>
+                                    <span style={{ fontWeight: 700, fontSize: mobileMode ? 14 : 16 }}>Đặt hàng</span>
                                 </button>
                             </div>
                         </div>

@@ -27,7 +27,7 @@ export const SamplePrevArrow = (props) => {
     );
 };
 export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading, isViewAll, reLoad }) => {
-    const { setCart, setisCartMain, mobileMode, menu } = useContext(AppContext);
+    const { setCart, setisCartMain, mobileMode, mode, menuIdProvider } = useContext(AppContext);
     const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);
     const [visiblePopupOutOfStore, setVisiblePopupOutOfStore] = useState(false);
     const [productRodal, setProductRodal] = useState({});
@@ -45,13 +45,11 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
     }, [data, slideShow]);
 
     const hanldeRodalQuantity = (child) => {
-        console.log(child);
         setVisiblePopupQuantity(child.rodal);
         setProductRodal(child.product);
         setIndexRodal(child.index);
     };
     const hanldeRodalOutOfStore = (child) => {
-        console.log(child);
         setVisiblePopupOutOfStore(child.rodal);
         setProductRodal(child.product);
         setIndexRodal(child.index);
@@ -66,7 +64,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
             {
                 ...productRodal,
                 quantityCart: 1,
-                menuId: menu,
+                menuId: menuIdProvider,
             },
         ];
         // setisProductCart(true);
@@ -75,7 +73,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
         setVisiblePopupOutOfStore(false);
         itemsRef.current[indexRodal].isQuantity();
         setCart(carts);
-        localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(menu));
+        localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
         reLoad();
     };
@@ -84,7 +82,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
         const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
         let newCarts = CartList?.filter((item) => item.id !== productRodal.id);
         setCart([...newCarts]);
-        localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(menu));
+        // localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(menu));
         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
         setVisiblePopupQuantity(false);
         itemsRef.current[indexRodal].resetQuantity();
@@ -128,7 +126,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
     return (
         <>
             <Rodal
-                height={180}
+                height={170}
                 width={mobileMode ? 350 : 400}
                 visible={visiblePopupQuantity}
                 onClose={() => {
@@ -154,8 +152,8 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                         style={{
                             flex: 1,
                             padding: 14,
-                            fontSize: "1.1em",
-                            height: 45,
+                            fontSize: "1em",
+                            height: 50,
                             cursor: "pointer",
                             fontWeight: 700,
                             borderRadius: 10,
@@ -177,8 +175,8 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                         style={{
                             flex: 1,
                             padding: 14,
-                            fontSize: "1.1em",
-                            height: 45,
+                            fontSize: "1em",
+                            height: 50,
                             cursor: "pointer",
                             fontWeight: 700,
                             borderRadius: 10,
@@ -220,7 +218,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                             flex: 1,
                             padding: 14,
                             fontSize: "1.1em",
-                            height: 45,
+                            height: 50,
                             cursor: "pointer",
                             fontWeight: 700,
                             borderRadius: 10,
@@ -244,7 +242,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                             flex: 1,
                             padding: 14,
                             fontSize: "1.1em",
-                            height: 45,
+                            height: 50,
                             cursor: "pointer",
                             fontWeight: 700,
                             borderRadius: 10,
@@ -281,7 +279,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                                     className="heading-right  "
                                     style={{ display: label ? "block" : "none" }}
                                     onClick={() => {
-                                        history.push(`/menu/${menu}/${filtter}/${cateId}`);
+                                        history.push(`/mode/${mode}/${filtter}/${cateId}`);
                                     }}
                                 >
                                     {/* <span>Xem tất cả</span> */}
@@ -308,7 +306,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                                                 <div
                                                     className="center_flex cusor"
                                                     onClick={() => {
-                                                        history.push(`/menu/${menu}/${filtter}/${cateId}`);
+                                                        history.push(`/mode/${mode}/${filtter}/${cateId}`);
                                                     }}
                                                     style={{ borderRadius: 50, border: "1px solid rgb(220,220,220)", width: 50, height: 50 }}
                                                 >
@@ -316,7 +314,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                                                 </div>
                                                 <span
                                                     onClick={() => {
-                                                        history.push(`/menu/${menu}/${filtter}/${cateId}`);
+                                                        history.push(`/mode/${mode}/${filtter}/${cateId}`);
                                                     }}
                                                     className="cusor"
                                                 >

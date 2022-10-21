@@ -5,7 +5,7 @@ import { AppContext } from "../../context/AppProvider";
 
 export const ShopCart = React.forwardRef(({ product, openRodal, index, openRodalOutOfStore }, ref) => {
     useImperativeHandle(ref, () => ({}));
-    const { setCart, menu, setisCartMain } = useContext(AppContext);
+    const { setCart, mode, setisCartMain } = useContext(AppContext);
     const [productRodalQuantity, setProductRodalQuantity] = useState(0);
     const [isShopCart, setisShopCart] = useState(true);
 
@@ -39,7 +39,7 @@ export const ShopCart = React.forwardRef(({ product, openRodal, index, openRodal
                         onClick={() => {
                             // setIsHeader(false);
                             // history.push(`/menu/${menu}/${product.id}`);
-                            history.push(`/menu/${menu}/store/s4`);
+                            history.push(`/mode/${mode}/store/store2@gmail.com`);
                         }}
                     >
                         {/* <span className="discount">{item.discount}% Off</span> */}

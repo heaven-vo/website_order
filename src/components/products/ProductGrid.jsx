@@ -5,7 +5,7 @@ import { AppContext } from "../../context/AppProvider";
 import { ProductCart } from "./ProductCart";
 
 export const ProductGrid = ({ filtter, label, data, labelImg, cateId, isLoading, isViewAll }) => {
-    const { setCart, setlistProducts, mobileMode, menu } = useContext(AppContext);
+    const { mode, mobileMode } = useContext(AppContext);
     // const [products, setProducts] = useState([]);
     // useEffect(() => {
     //     setProducts(listProducts);
@@ -34,7 +34,7 @@ export const ProductGrid = ({ filtter, label, data, labelImg, cateId, isLoading,
                                     (isLoading ? (
                                         <Skeleton height={43} width={110} borderRadius={8} style={{ margin: 0 }} />
                                     ) : (
-                                        <div className="heading-right  " style={{ display: label ? "block" : "none" }} onClick={() => history.push(`/menu/${menu}/${filtter}/${cateId}`)}>
+                                        <div className="heading-right  " style={{ display: label ? "block" : "none" }} onClick={() => history.push(`/mode/${mode}/${filtter}/${cateId}`)}>
                                             <span>Xem tất cả</span>
                                             <i className="fa-solid fa-caret-right"></i>
                                         </div>
@@ -83,7 +83,7 @@ export const ProductGrid = ({ filtter, label, data, labelImg, cateId, isLoading,
                             <div
                                 style={{ textAlign: "center", margin: "0 5px", height: 45, borderRadius: "0.5rem", alignItems: "center", border: "1px solid var(--secondary)" }}
                                 className="center_flex "
-                                onClick={() => history.push(`/menu/${menu}/${filtter}/${cateId}`)}
+                                onClick={() => history.push(`/mode/${mode}/${filtter}/${cateId}`)}
                             >
                                 <span onClick={() => {}} style={{ fontWeight: 600, fontSize: 15, color: "var(--secondary)" }}>
                                     Xem thêm sản phẩm

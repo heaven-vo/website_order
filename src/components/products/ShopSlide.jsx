@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Slider from "react-slick";
 import { AppContext } from "../../context/AppProvider";
-import { ShopCart } from "./ShopItem";
+import { ShopCart } from "./ShopCart";
 
 export const SampleNextArrow = (props) => {
     const { onClick } = props;
@@ -25,7 +25,7 @@ export const SamplePrevArrow = (props) => {
     );
 };
 export const ShopSlide = ({ filtter, label, data, labelImg, cateId, isLoading, isViewAll, reLoad }) => {
-    const { setCart, setisCartMain, mobileMode, menu } = useContext(AppContext);
+    const { mode } = useContext(AppContext);
     const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);
     const [visiblePopupOutOfStore, setVisiblePopupOutOfStore] = useState(false);
     const [productRodal, setProductRodal] = useState({});
@@ -99,7 +99,7 @@ export const ShopSlide = ({ filtter, label, data, labelImg, cateId, isLoading, i
                                     className="heading-right  "
                                     style={{ display: label ? "block" : "none", color: "rgb(100, 100, 100)" }}
                                     onClick={() => {
-                                        history.push(`/menu/${menu}/${filtter}/${cateId}`);
+                                        history.push(`/mode/${mode}/${filtter}/${cateId}`);
                                     }}
                                 >
                                     {/* <span>Xem tất cả</span> */}
@@ -117,7 +117,7 @@ export const ShopSlide = ({ filtter, label, data, labelImg, cateId, isLoading, i
                                                 <div
                                                     className="center_flex cusor"
                                                     onClick={() => {
-                                                        history.push(`/menu/${menu}/${filtter}/${cateId}`);
+                                                        history.push(`/mode/${mode}/${filtter}/${cateId}`);
                                                     }}
                                                     style={{ borderRadius: 50, border: "1px solid rgb(220,220,220)", width: 50, height: 50 }}
                                                 >
@@ -125,7 +125,7 @@ export const ShopSlide = ({ filtter, label, data, labelImg, cateId, isLoading, i
                                                 </div>
                                                 <span
                                                     onClick={() => {
-                                                        history.push(`/menu/${menu}/${filtter}/${cateId}`);
+                                                        history.push(`/mode/${mode}/${filtter}/${cateId}`);
                                                     }}
                                                     className="cusor"
                                                 >

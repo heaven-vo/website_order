@@ -13,14 +13,16 @@ import { LOCALSTORAGE_CART_NAME } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
 const SchedulePage = () => {
-    const { setIsHeaderOrder, setHeaderInfo, setisCartMain, mobileMode, Cart, userInfo, setCart } = useContext(AppContext);
+    const { setIsHeaderOrder, setHeaderInfo, setisCartMain, mobileMode, Cart, userInfo, setCart, setOpentModalSuccess, setOpentModalError } = useContext(AppContext);
     const [day, setDay] = useState("");
     const [total, setTotal] = useState("");
     const [hour, setHour] = useState("");
     const [building, setBuilding] = useState("");
     const [order, setOrder] = useState(null);
     const [fullTime, setFullTime] = useState("");
+    const [optionTime, setOptionTime] = useState([]);
     const [visiblePopupComfirm, setVisiblePopupComfirm] = useState(false);
+    const [hourState, setHourState] = useState(true);
     const [isLoadingOrder, setisLoadingOrder] = useState(false);
     let history = useHistory();
     let location = useLocation();
@@ -34,7 +36,16 @@ const SchedulePage = () => {
         { value: "6", label: "14:00 - 15:00" },
         { value: "7", label: "15:00 - 16:00" },
         { value: "9", label: "16:00 - 17:00" },
+        { value: "10", label: "17:00 - 18:00" },
+        { value: "11", label: "18:00 - 19:00" },
+        // { value: "12", label: "19:00 - 20:00" },
     ];
+    let date = new Date();
+    const optionsHours = hours.filter((hour) => {
+        if (parseInt(hour.label.split(" - ")[1]) >= date.getHours() + 1) {
+            return { value: hour.value, label: hour.label };
+        }
+    });
     function converDate(data) {
         var dd = String(data.getDate()).padStart(2, "0");
         var mm = String(data.getMonth()).padStart(2, "0");
@@ -66,7 +77,6 @@ const SchedulePage = () => {
         setIsHeaderOrder(false);
         if (location.state) {
             let { order } = location.state;
-            console.log("check");
             setOrder(order);
         } else {
             history.push("/checkout");
@@ -77,14 +87,13 @@ const SchedulePage = () => {
             }
         };
     }, [setHeaderInfo, setIsHeaderOrder, setisCartMain, Cart, location.state, history]);
-    const options = hours.map((time) => {
-        return { value: time.value, label: time.label };
-    });
+
     useEffect(() => {
         setisCartMain(false);
         setDay(getDate()[0].day);
         setFullTime(getDate()[0].fullTime);
-        setHour(options[0]);
+        setHour(optionsHours[0] || "");
+        setOptionTime(optionsHours);
         return () => {};
     }, []);
     const SampleNextArrow = (props) => {
@@ -134,18 +143,30 @@ const SchedulePage = () => {
         ],
     };
 
-    console.log({ options });
+    const handleValidate = () => {
+        let isValid = true;
+        if (!hour) {
+            isValid = false;
+        }
+        if (hour) {
+            setHourState(true);
+        } else {
+            setHourState(false);
+        }
+        if (isValid) {
+            setVisiblePopupComfirm(true);
+        }
+    };
     const hanldeOrder = () => {
         // setisLoadingOrder(true);
 
-        console.log({ order });
+        setOpentModalError(true);
         // postOrder(order)
         //     .then((res) => {
         //         if (res.data) {
         //             localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
         //             setCart([]);
         //             setisLoadingOrder(false);
-
         //             history.push("/");
         //         }
         //         return res;
@@ -164,7 +185,7 @@ const SchedulePage = () => {
         <>
             <Loading isLoading={isLoadingOrder} />
             <Rodal
-                height={300}
+                height={mobileMode ? 300 : 320}
                 width={mobileMode ? 350 : 400}
                 visible={visiblePopupComfirm}
                 showCloseButton={false}
@@ -174,10 +195,10 @@ const SchedulePage = () => {
                 style={{ borderRadius: 10 }}
             >
                 <div style={{ padding: "5px 0 10px 0", textAlign: "center", display: "flex", flexDirection: "column" }}>
-                    <span className="" style={{ fontSize: mobileMode ? 20 : 23, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)" }}>
+                    <span className="" style={{ fontSize: mobileMode ? 18 : 20, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)" }}>
                         Đơn hàng sẽ được gửi đi trong
                     </span>
-                    <span className="" style={{ fontSize: mobileMode ? 20 : 23, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)" }}>
+                    <span className="" style={{ fontSize: mobileMode ? 18 : 20, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)" }}>
                         {visiblePopupComfirm ? (
                             <CountDown
                                 callbackOrder={() => {
@@ -192,20 +213,22 @@ const SchedulePage = () => {
                     </span>
                 </div>
                 <div style={{ padding: "5px 0" }}>
-                    <span style={{ fontSize: mobileMode ? 16 : 17, fontWeight: 600 }}>Địa chỉ giao hàng:</span>
-                    <span style={{ fontSize: mobileMode ? 16 : 17, fontWeight: 400 }}> Building {building} Vinhomes Grand Park</span>
+                    <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 600 }}>Địa chỉ giao hàng:</span>
+                    <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 400 }}> Building {building} Vinhomes Grand Park</span>
                 </div>
                 <div style={{ padding: "5px 0" }}>
-                    <span style={{ fontSize: mobileMode ? 16 : 17, fontWeight: 600 }}>Thời gian giao hàng dự kiến: </span>
-                    <span style={{ fontSize: mobileMode ? 16 : 17, fontWeight: 400 }}>{hour !== null ? hour.label : ""}</span>
+                    <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 600 }}>Thời gian giao hàng dự kiến: </span>
+                    <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 400 }}>
+                        {hour !== null ? hour.label : ""}, {fullTime !== null ? fullTime : ""}
+                    </span>
                 </div>
                 <div style={{ padding: "5px 0" }}>
-                    <span style={{ fontSize: mobileMode ? 16 : 17, fontWeight: 600 }}>Tổng tiền đơn hàng:</span>
-                    <span style={{ fontSize: mobileMode ? 16 : 17, fontWeight: 400 }}>{" " + total.toLocaleString()}</span>
+                    <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 600 }}>Tổng tiền đơn hàng:</span>
+                    <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 400 }}>{" " + total.toLocaleString()}</span>
                 </div>
-                <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 15 }}>
+                <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 15 }}>
                     <button
-                        style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "rgb(220,220,220)" }}
+                        style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "rgb(220,220,220)", height: 50, color: "#000" }}
                         onClick={(e) => {
                             e.preventDefault();
                             setVisiblePopupComfirm(false);
@@ -219,9 +242,9 @@ const SchedulePage = () => {
                             hanldeOrder();
                             setVisiblePopupComfirm(false);
                         }}
-                        style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)" }}
+                        style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", height: 50, color: "#fff" }}
                     >
-                        OK
+                        Đồng ý
                     </button>
                 </div>
             </Rodal>
@@ -241,6 +264,12 @@ const SchedulePage = () => {
                                         onClick={() => {
                                             setDay(item.day);
                                             setFullTime(item.fullTime);
+                                            if (item.day.toString() === date.getDate().toString()) {
+                                                setOptionTime(optionsHours);
+                                            } else {
+                                                setOptionTime(hours);
+                                            }
+                                            console.log();
                                             setHour("");
                                         }}
                                     >
@@ -258,14 +287,21 @@ const SchedulePage = () => {
                     </div>
                     <div style={{ paddingTop: 20 }}>
                         <Select
-                            options={options}
-                            placeholder="Chọn giờ"
+                            options={optionTime.length > 0 ? optionTime : []}
+                            placeholder={`${optionTime.length > 0 ? "Chọn giờ" : "Không có khung giờ phù hợp"} `}
                             onChange={(e) => {
                                 setHour(e);
                             }}
+                            isSearchable={false}
                             value={hour}
                         />
                     </div>
+                    {!hourState && (
+                        <div className="input-validate">
+                            <span>Vui lòng chọn giờ nhận hàng</span>
+                        </div>
+                    )}
+
                     <div className="center_flex" style={{ gap: 20, paddingTop: 30 }}>
                         <button
                             onClick={() => {
@@ -285,27 +321,30 @@ const SchedulePage = () => {
                             }}
                             className="center_flex checkout-btn"
                         >
-                            <span style={{ fontWeight: 700, fontSize: 18 }}>Quay lại</span>
+                            <span style={{ fontWeight: 700, fontSize: mobileMode ? 15 : 18 }}>Quay lại</span>
                         </button>
                         <button
                             onClick={() => {
                                 setBuilding(userInfo.building.label);
                                 setTotal(order.total);
-                                setVisiblePopupComfirm(true);
+                                // setVisiblePopupComfirm(true);
+                                // setOpentModalError(true);
+                                handleValidate();
                             }}
                             type="button"
                             disabled={isLoadingOrder}
                             style={{
                                 textAlign: "center",
                                 width: "100%",
-                                height: 45,
+                                height: 50,
                                 borderRadius: "0.5rem",
                                 alignItems: "center",
                                 backgroundColor: isLoadingOrder ? "#f5f5f5" : "var(--primary)",
+                                color: "#fff",
                             }}
                             className="center_flex checkout-btn"
                         >
-                            <span style={{ fontWeight: 700, fontSize: 18 }}>Đặt hàng</span>
+                            <span style={{ fontWeight: 700, fontSize: mobileMode ? 15 : 18 }}>Đặt hàng</span>
                         </button>
                     </div>
                 </div>
