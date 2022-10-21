@@ -39,7 +39,7 @@ export const ShopCart = React.forwardRef(({ product, openRodal, index, openRodal
                         onClick={() => {
                             // setIsHeader(false);
                             // history.push(`/menu/${menu}/${product.id}`);
-                            history.push(`/menu/${menu}/store/s4`);
+                            history.push(`/menu/${menu}/store/store2@gmail.com`);
                         }}
                     >
                         {/* <span className="discount">{item.discount}% Off</span> */}

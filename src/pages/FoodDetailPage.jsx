@@ -256,7 +256,7 @@ export const FoodDetailPage = () => {
                             flex: 1,
                             padding: 14,
                             fontSize: "1.1em",
-                            height: 45,
+                            height: 50,
                             cursor: "pointer",
                             fontWeight: 700,
                             borderRadius: 10,
@@ -281,7 +281,7 @@ export const FoodDetailPage = () => {
                             flex: 1,
                             padding: 14,
                             fontSize: "1.1em",
-                            height: 45,
+                            height: 50,
                             cursor: "pointer",
                             fontWeight: 700,
                             borderRadius: 10,
@@ -296,7 +296,7 @@ export const FoodDetailPage = () => {
                 </div>
             </Rodal>
             <Rodal
-                height={165}
+                height={170}
                 width={mobileMode ? 350 : 400}
                 visible={visiblePopupQuantity}
                 onClose={() => {
@@ -323,7 +323,7 @@ export const FoodDetailPage = () => {
                             flex: 1,
                             padding: 14,
                             fontSize: "1.1em",
-                            height: 45,
+                            height: 50,
                             cursor: "pointer",
                             fontWeight: 700,
                             borderRadius: 10,
@@ -344,7 +344,7 @@ export const FoodDetailPage = () => {
                             flex: 1,
                             padding: 14,
                             fontSize: "1.1em",
-                            height: 45,
+                            height: 50,
                             cursor: "pointer",
                             fontWeight: 700,
                             borderRadius: 10,

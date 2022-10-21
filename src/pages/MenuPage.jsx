@@ -603,7 +603,7 @@ export const MenuPage = () => {
                     })}
                 {!isLoadingPage &&
                     !isLoadingProduct &&
-                    menu === "2" &&
+                    menu === "1" &&
                     menuProduct?.listCategoryStoreInMenus?.map((menu, index) => {
                         if (menu.listProducts.length > 0) {
                             return (

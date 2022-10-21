@@ -198,7 +198,7 @@ export const ProductList = ({ data, filter, reLoad }) => {
             <div className="product-list-wrapper" style={{ paddingTop: 0, paddingBottom: 100, background: "#fff" }}>
                 {filter === 2 && (
                     <div className="container-padding f_flex" style={{ alignItems: "end" }}>
-                        <span style={{ padding: "30px 15px 10px 15px", fontWeight: 700, fontSize: 16, color: "rgb(100, 100, 100)" }}>Cơm</span>
+                        <span style={{ padding: "15px 15px 10px 15px", fontWeight: 700, fontSize: 16, color: "rgb(100, 100, 100)" }}>Dành cho bạn</span>
                     </div>
                 )}
                 <div className="back-white c_flex" style={{ padding: "10px 15px", alignItems: "self-start", flexDirection: "column" }}>

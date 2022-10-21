@@ -117,7 +117,7 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
     };
     return (
         <>
-            <div key={product.id} className="c_flex" style={{ borderBottom: isBorderBottom ? "1px solid #f0f0f0" : "none", width: "100%", padding: "12px 0px" }}>
+            <div key={product.id} className="c_flex" style={{ borderBottom: isBorderBottom ? "1px solid #f0f0f0" : "none", width: "100%", padding: "12px 0px", alignItems: "flex-start" }}>
                 <div className="product-list-info">
                     <div
                         className="product-list-img"
@@ -137,9 +137,9 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                             }}
                             style={{ fontWeight: 500, cursor: "pointer" }}
                         >
-                            {product.name}{" "}
+                            {product.name}
                         </span>
-                        <span style={{ fontSize: 13, color: "rgb(110,110,150)" }}>{product.storeName} </span>
+                        {/* <span style={{ fontSize: 13, color: "rgb(110,110,150)" }}>{product.storeName} </span> */}
                         <div className="" style={{ paddingBottom: "0" }}>
                             {isProductCart ? (
                                 <div className="center_flex cart-quantity" style={{ width: " 100%", boxShadow: "0 4px 5px rgb(0 0 0 / 13%)" }}>

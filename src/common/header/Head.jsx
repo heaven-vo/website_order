@@ -296,7 +296,7 @@ const Head = () => {
                     )}
                     <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 5, gap: 15 }}>
                         <button
-                            style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10 }}
+                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, height: 50 }}
                             onClick={(e) => {
                                 e.preventDefault();
                                 setVisiblePopupInfo(false);
@@ -309,7 +309,7 @@ const Head = () => {
                                 e.preventDefault();
                                 handleSubmit();
                             }}
-                            style={{ flex: 1, padding: 18, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)" }}
+                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", color: "#fff", height: 50 }}
                         >
                             OK
                         </button>

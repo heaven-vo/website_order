@@ -151,6 +151,7 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
                                 height: "100%",
                                 width: "100%",
                                 objectFit: "cover",
+                                borderRadius: "0.5rem",
                             }}
                         />
                     </div>

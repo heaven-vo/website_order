@@ -17,6 +17,8 @@ export default function AppProvider({ children }) {
     const [isOpenDrawer, setIsOpenDrawer] = useState(false);
     const [isCartFooter, setIsCartFooter] = useState(false);
     const [isHeaderHome, setIsHeaderHome] = useState(false);
+    const [opentModalSuccess, setOpentModalSuccess] = useState(false);
+    const [opentModalError, setOpentModalError] = useState(false);
     const [isHeaderOrder, setIsHeaderOrder] = useState(false);
     const [visiblePopupInfo, setVisiblePopupInfo] = useState(false);
     const [isLoadingMain, setisLoadingMain] = useState(true);
@@ -166,6 +168,10 @@ export default function AppProvider({ children }) {
                 setIsCartFooter,
                 isLoadingMain,
                 setisLoadingMain,
+                opentModalSuccess,
+                setOpentModalSuccess,
+                opentModalError,
+                setOpentModalError,
             }}
         >
             {children}

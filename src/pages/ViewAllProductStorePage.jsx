@@ -25,6 +25,7 @@ export const ViewAllProductStorePage = () => {
             .then((res) => {
                 if (res.data) {
                     const category = res.data;
+                    console.log({ category });
                     const productList = category.listProducts || [];
                     const title = category.name;
                     setTitle(title);
@@ -76,7 +77,7 @@ export const ViewAllProductStorePage = () => {
             <div className="store-wrapper">
                 <div className="store-image-background">
                     <div className="store-name">
-                        <h3 style={{ paddingBottom: 5 }}> Hủ tiếu Mỹ Tho</h3>
+                        <h3 style={{ paddingBottom: 5 }}> {title}</h3>
                         <span className="store-building">
                             <i class="fa-solid fa-location-dot" style={{ color: "var(--primary)", paddingRight: 7 }}></i>
                             <span>Tòa S6.03, Rainbow, Vinhomes Grand Park</span>
@@ -93,12 +94,12 @@ export const ViewAllProductStorePage = () => {
                     </div>
                 </div>
             </div>
-            <ProductList data={products || []} filter={2} />
+            {products?.length > 0 && <ProductList data={[...products, ...products, ...products] || []} filter={2} />}
             {products?.length === 0 && (
                 <section className="shop" style={{ padding: "25px 0 40px 0" }}>
                     <div className="container center_flex">
                         <div className="contentWidth  center_flex" style={{ marginLeft: 0, flexDirection: "column", gap: 10 }}>
-                            <img src="/images/fish-bones.png" style={{ width: 80 }} alt="" />
+                            <img src="/images/fish-bones.png" style={{ width: 50 }} alt="" />
                             <span style={{ fontSize: "1.1rem" }}>Hiện không có sản phẩm nào!!</span>
                         </div>
                     </div>

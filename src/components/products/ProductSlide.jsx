@@ -128,7 +128,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
     return (
         <>
             <Rodal
-                height={180}
+                height={170}
                 width={mobileMode ? 350 : 400}
                 visible={visiblePopupQuantity}
                 onClose={() => {
@@ -154,8 +154,8 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                         style={{
                             flex: 1,
                             padding: 14,
-                            fontSize: "1.1em",
-                            height: 45,
+                            fontSize: "1em",
+                            height: 50,
                             cursor: "pointer",
                             fontWeight: 700,
                             borderRadius: 10,
@@ -177,8 +177,8 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                         style={{
                             flex: 1,
                             padding: 14,
-                            fontSize: "1.1em",
-                            height: 45,
+                            fontSize: "1em",
+                            height: 50,
                             cursor: "pointer",
                             fontWeight: 700,
                             borderRadius: 10,
@@ -220,7 +220,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                             flex: 1,
                             padding: 14,
                             fontSize: "1.1em",
-                            height: 45,
+                            height: 50,
                             cursor: "pointer",
                             fontWeight: 700,
                             borderRadius: 10,
@@ -244,7 +244,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                             flex: 1,
                             padding: 14,
                             fontSize: "1.1em",
-                            height: 45,
+                            height: 50,
                             cursor: "pointer",
                             fontWeight: 700,
                             borderRadius: 10,
