@@ -6,7 +6,7 @@ import { getStatusColor, getStatusName, STATUS_ORDER } from "../constants/Variab
 import { AppContext } from "../context/AppProvider";
 
 export const OrderDetailPage = () => {
-    const { setIsHeaderOrder, mobileMode, setisCartMain, setHeaderInfo, menu } = useContext(AppContext);
+    const { setIsHeaderOrder, mobileMode, setisCartMain, setHeaderInfo, mode } = useContext(AppContext);
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
     const [orderInfo, setOrderInfo] = useState({});
     const [productOrder, setproductOrder] = useState([]);
@@ -20,14 +20,12 @@ export const OrderDetailPage = () => {
             behavior: "smooth",
         });
         let orderId = location.pathname.trim().split("/")[2];
-        console.log(orderId);
         setIsLoadingCircle(true);
         setIsHeaderOrder(false);
         getOrderDetail(orderId)
             .then((res) => {
                 if (res.data) {
                     const order = res.data;
-                    console.log(order);
                     setOrderInfo(order);
                     setproductOrder(order.listProInMenu || []);
                     setStatusOrder(order.listStatusOrder || []);
@@ -201,7 +199,6 @@ export const OrderDetailPage = () => {
                                         <div className="f_flex" style={{ gap: 15 }}></div>
                                     </div>
                                     {productOrder.map((item, index) => {
-                                        console.log(item);
                                         return (
                                             <div className="order" key={index} style={{}}>
                                                 <div className="" style={{}}>
@@ -309,7 +306,7 @@ export const OrderDetailPage = () => {
                 <div className="container" style={{ marginTop: 10, padding: "0 10px" }}>
                     <div
                         onClick={() => {
-                            history.push(`/menu/${menu}`);
+                            history.push(`/mode/${mode}`);
                         }}
                         style={{ textAlign: "center", width: "100%", height: 50, borderRadius: "0.5rem", alignItems: "center" }}
                         className="center_flex btn-hover "

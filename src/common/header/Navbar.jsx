@@ -160,7 +160,6 @@ const Navbar = () => {
                                 options={optionArea}
                                 placeholder="Khu vực"
                                 onChange={(e) => {
-                                    console.log({ e });
                                     setArea(e);
                                     setApartment("");
                                     setBuilding("");
@@ -279,7 +278,7 @@ const Navbar = () => {
                             <span>Số điện thoại không hơp lệ</span>
                         </div>
                     )}
-                    <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 5, gap: 15 }}>
+                    <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 5, gap: 15 }}>
                         <button
                             style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, height: 50 }}
                             onClick={(e) => {

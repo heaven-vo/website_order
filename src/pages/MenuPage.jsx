@@ -6,57 +6,9 @@ import { getMenuByMode } from "../apis/apiService";
 import { ProductSlide, SampleNextArrow, SamplePrevArrow } from "../components/products/ProductSlide";
 import ShopList from "../components/products/ShopList";
 import { ShopSlide } from "../components/products/ShopSlide";
-import { CATE_FITLER, IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, STORE_FILTER } from "../constants/Variable";
+import { CATE_FITLER, IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
-const categorys = [
-    {
-        id: 1,
-        categoryName: "Top Brands",
-        img: "https://cdn-icons-png.flaticon.com/512/5553/5553901.png",
-    },
-    {
-        id: 1,
-        categoryName: "Mì-Bún-Phở",
-        img: "https://thumbs.dreamstime.com/b/vietnamese-pho-soup-illustration-97217112.jpg",
-    },
-    {
-        id: 2,
-        categoryName: "Cơm",
-        img: "https://luabbq.com/upload/sanpham/abc-removebg-preview-1531.png",
-    },
-    {
-        id: 1,
-        categoryName: "Đồ Uống",
-        img: "https://icons.iconarchive.com/icons/graphicloads/food-drink/256/drink-icon.png",
-    },
-    {
-        id: 1,
-        categoryName: "Món Á/ÂU",
-        img: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/icon%2Fvmlz_at5y_180428.jpg?alt=media&token=039c791a-b172-46bc-a0a2-e59c97d38a7e",
-    },
-    {
-        id: 2,
-        categoryName: "Thức Ăn Nhanh",
-        img: "https://img.freepik.com/free-vector/french-fries-cartoon-icon-illustration-fast-food-icon-concept-isolated-flat-cartoon-style_138676-2923.jpg?w=2000",
-    },
-
-    {
-        id: 2,
-        categoryName: "Ăn Vặt",
-        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRL_BowaGaOh3Y3zrMOQ1vQQqFca3DqD27Csg&usqp=CAU",
-    },
-    {
-        id: 2,
-        categoryName: "Trà sữa",
-        img: "https://nhuhoaphat.com/wp-content/uploads/2022/03/Tai-ngay-milk-tea-hinh-nen-tra-sua-cute-moi-nhat-2022.png",
-    },
-    {
-        id: 2,
-        categoryName: "Trà sữa",
-        img: "https://nhuhoaphat.com/wp-content/uploads/2022/03/Tai-ngay-milk-tea-hinh-nen-tra-sua-cute-moi-nhat-2022.png",
-    },
-];
 const Mdata = [
     {
         id: 1,
@@ -83,7 +35,7 @@ export const MenuPage = () => {
     // let timeEnd1 = 13.54;
     // let timeEnd2 = 13.55;
     // let timeEnd3 = 13.56;
-    const { menu, mobileMode, setIsHeaderOrder, setHeaderInfo, setMenuIdProvider, setisCartMain, setCart } = useContext(AppContext);
+    const { mode, mobileMode, setIsHeaderOrder, setHeaderInfo, setMenuIdProvider, setisCartMain, setCart, setOpenDeleteCart } = useContext(AppContext);
     const [filtter, setFilter] = useState(CATE_FITLER);
     // const [checked, setChecked] = useState(false);
     const [isLoadingPage, setIsLoadingPage] = useState(true);
@@ -98,14 +50,14 @@ export const MenuPage = () => {
         setIsLoadingPage(true);
         setIsHeaderOrder(false);
         setTimeout(() => {
-            getMenu(menu, filtter, 1, 10);
+            getMenu(mode, filtter, 1, 10);
         }, 1);
-    }, [setIsHeaderOrder, menu]);
-    const hanldeChangeFilter = (fil) => {
-        setFilter(fil);
-        setIsLoadingProduct(true);
-        getMenu(menu, fil, 1, 100);
-    };
+    }, [setIsHeaderOrder, mode]);
+    // const hanldeChangeFilter = (fil) => {
+    //     setFilter(fil);
+    //     setIsLoadingProduct(true);
+    //     getMenu(mode, fil, 1, 100);
+    // };
     // useEffect(() => {
     //     setIsLoadingProduct(true);
 
@@ -119,11 +71,10 @@ export const MenuPage = () => {
         } else {
             const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
             if (CartList.length > 0 && CartList[0].menuId !== menuId.toString()) {
-                console.log(CartList[0].menu);
-                console.log(menuId.toString());
-                localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-                setCart([]);
-                setisCartMain(false);
+                setOpenDeleteCart(true);
+                // localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+                // setCart([]);
+                // setisCartMain(false);
             }
         }
     };
@@ -132,7 +83,6 @@ export const MenuPage = () => {
         if (menu !== "0") {
             getMenuByMode(menu, filtter, pageInd, size)
                 .then((res) => {
-                    console.log(res);
                     if (res.data) {
                         const menu = res.data;
                         checkCartInMenu(menu.id);
@@ -148,7 +98,6 @@ export const MenuPage = () => {
                         setMenuProduct([]);
                         setMenuCategory([]);
                         setMenuEmpty(true);
-                        console.log("ok");
                     }
                     setIsLoadingPage(false);
                     setIsLoadingProduct(false);
@@ -244,7 +193,7 @@ export const MenuPage = () => {
         // ],
     };
     const hanldeReLoad = () => {
-        getMenu(menu, filtter, 1, 100);
+        getMenu(mode, filtter, 1, 100);
     };
     const settingCaategory = {
         dots: true,
@@ -438,7 +387,7 @@ export const MenuPage = () => {
         );
     };
     const render = () => {
-        switch (menu) {
+        switch (mode) {
             case 1:
                 return menuTitle("Điểm Tâm Sáng", "Gọi là có - nhận đơn và xử lý giao hàng ngay.", 950000, true);
             case 2:
@@ -451,7 +400,7 @@ export const MenuPage = () => {
         }
     };
     const hanldeViewAll = (cateId) => {
-        history.push(`/menu/${menu}/${filtter}/${cateId}`);
+        history.push(`/mode/${mode}/${filtter}/${cateId}`);
     };
     return (
         <>
@@ -578,7 +527,7 @@ export const MenuPage = () => {
                 </div> */}
                 {!isLoadingPage &&
                     !isLoadingProduct &&
-                    menu === "1" &&
+                    mode === "1" &&
                     menuProduct?.listCategoryStoreInMenus?.map((menu, index) => {
                         if (menu.listProducts.length > 0) {
                             return (
@@ -603,7 +552,7 @@ export const MenuPage = () => {
                     })}
                 {!isLoadingPage &&
                     !isLoadingProduct &&
-                    menu === "1" &&
+                    mode === "2" &&
                     menuProduct?.listCategoryStoreInMenus?.map((menu, index) => {
                         if (menu.listProducts.length > 0) {
                             return (
@@ -626,7 +575,7 @@ export const MenuPage = () => {
                             );
                         } else return true;
                     })}
-                {menu === "1" && (
+                {mode === "1" && (
                     <>
                         <div className="container-padding f_flex" style={{ alignItems: "end" }}>
                             <span style={{ padding: "40px 15px 10px 15px", fontWeight: 700, fontSize: 16, color: "rgb(100, 100, 100)" }}>Quán ngon gần bạn</span>

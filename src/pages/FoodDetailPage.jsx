@@ -8,7 +8,7 @@ import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE } from "../co
 import { AppContext } from "../context/AppProvider";
 
 export const FoodDetailPage = () => {
-    const { setCart, mobileMode, setHeaderInfo, setisCartMain, menu } = useContext(AppContext);
+    const { setCart, mobileMode, setHeaderInfo, setisCartMain, menuIdProvider, mode, modeType } = useContext(AppContext);
     const [countQuantity, setcountQuantity] = useState(1);
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
     const [product, setProduct] = useState({});
@@ -21,43 +21,48 @@ export const FoodDetailPage = () => {
     let location = useLocation();
     useEffect(() => {
         // setIsHeader(false);
-        setHeaderInfo({ isSearchHeader: false, title: "Chi tiết sản phẩm" });
-        setIsLoadingCircle(true);
-        let productId = location.pathname.trim().split("/")[3];
-        if (productId) {
-            getProductDetail(productId)
-                .then((res) => {
-                    if (res.data) {
-                        const product = res.data;
-                        let newProduct = { ...product, quantityCart: 0 };
-                        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-                            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-                            setCart([]);
-                        } else {
-                            const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-                            for (let index = 0; index < CartList.length; index++) {
-                                if (CartList[index].id === newProduct.id) {
-                                    newProduct = { ...newProduct, quantityCart: CartList[index].quantityCart };
+        let modeId = location.pathname.trim().split("/")[2];
+        if (menuIdProvider === "0") {
+            history.push(`/mode/${modeId}`);
+        } else {
+            setHeaderInfo({ isSearchHeader: false, title: "Chi tiết sản phẩm" });
+            setIsLoadingCircle(true);
+            let productId = location.pathname.trim().split("/")[3];
+            if (productId) {
+                getProductDetail(productId)
+                    .then((res) => {
+                        if (res.data) {
+                            const product = res.data;
+                            let newProduct = { ...product, quantityCart: 0 };
+                            if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
+                                localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+                                setCart([]);
+                            } else {
+                                const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+                                for (let index = 0; index < CartList.length; index++) {
+                                    if (CartList[index].id === newProduct.id) {
+                                        newProduct = { ...newProduct, quantityCart: CartList[index].quantityCart };
+                                    }
                                 }
                             }
-                        }
-                        setProduct({ ...newProduct });
+                            setProduct({ ...newProduct });
 
-                        setIsLoadingCircle(false);
-                    } else {
+                            setIsLoadingCircle(false);
+                        } else {
+                            setProduct({});
+                            setIsLoadingCircle(false);
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
                         setProduct({});
                         setIsLoadingCircle(false);
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    setProduct({});
-                    setIsLoadingCircle(false);
-                });
+                    });
+            }
         }
 
         return () => {};
-    }, [location, setCart, setIsLoadingCircle]);
+    }, [history, location, setCart, setHeaderInfo, setIsLoadingCircle]);
 
     useEffect(() => {
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
@@ -174,7 +179,7 @@ export const FoodDetailPage = () => {
             {
                 ...product,
                 quantityCart: 1,
-                menuId: menu,
+                menuId: menuIdProvider,
             },
         ];
         setVisiblePopupOutOfStore(false);
@@ -197,7 +202,7 @@ export const FoodDetailPage = () => {
                 {
                     ...product,
                     quantityCart: 1,
-                    menuId: menu,
+                    menuId: menuIdProvider,
                 },
             ];
             setisProductCart(true);
@@ -205,7 +210,7 @@ export const FoodDetailPage = () => {
             setProductRodalQuantity(productRodalQuantity + 1);
             setCart(carts);
             localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
-            localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(menu));
+            localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
         } else {
             setVisiblePopupOutOfStore(true);
             // openRodalOutOfStore({ rodal: true, product: product, index });
@@ -322,7 +327,7 @@ export const FoodDetailPage = () => {
                         style={{
                             flex: 1,
                             padding: 14,
-                            fontSize: "1.1em",
+                            fontSize: "16px",
                             height: 50,
                             cursor: "pointer",
                             fontWeight: 700,
@@ -343,7 +348,7 @@ export const FoodDetailPage = () => {
                         style={{
                             flex: 1,
                             padding: 14,
-                            fontSize: "1.1em",
+                            fontSize: "16px",
                             height: 50,
                             cursor: "pointer",
                             fontWeight: 700,
@@ -382,7 +387,7 @@ export const FoodDetailPage = () => {
                                 </div>
 
                                 <h4 style={{ marginBottom: 15, fontSize: 14, fontWeight: 400, color: "#666666" }}>{product.packDescription}</h4>
-                                <h4 style={{ marginBottom: 15, fontSize: 15, fontWeight: 500, color: "#4db856", textTransform: "uppercase" }}>Giao nhanh 30 phút</h4>
+                                <h4 style={{ marginBottom: 15, fontSize: 15, fontWeight: 500, color: "#4db856", textTransform: "uppercase" }}>{modeType}</h4>
                                 <div
                                     className="d_flex food-detail-info"
                                     style={{
@@ -394,7 +399,7 @@ export const FoodDetailPage = () => {
                                         borderBottom: "1px solid rgb(230,230,230)",
                                     }}
                                 >
-                                    <div className="food-detail-shop" style={{ width: 140, height: 50 }} onClick={() => history.push("/shop-detail")}>
+                                    <div className="food-detail-shop" style={{ width: 140, height: 50 }} onClick={() => {}}>
                                         <img
                                             width={"100%"}
                                             height={"100%"}

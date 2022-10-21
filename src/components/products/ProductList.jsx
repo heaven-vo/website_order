@@ -7,7 +7,7 @@ import { AppContext } from "../../context/AppProvider";
 import { ProductItem } from "./ProductItem";
 
 export const ProductList = ({ data, filter, reLoad }) => {
-    const { setCart, mobileMode, setisCartMain, menu } = useContext(AppContext);
+    const { setCart, mobileMode, setisCartMain, menuIdProvider, mode, setisProductCart } = useContext(AppContext);
     const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);
     const [visiblePopupOutOfStore, setVisiblePopupOutOfStore] = useState(false);
     const [productRodal, setProductRodal] = useState({});
@@ -15,7 +15,6 @@ export const ProductList = ({ data, filter, reLoad }) => {
     const itemsRef = useRef([]);
 
     const hanldeRodal = (child) => {
-        console.log(child);
         setVisiblePopupQuantity(child.rodal);
         setProductRodal(child.product);
         setIndexRodal(child.index);
@@ -47,21 +46,19 @@ export const ProductList = ({ data, filter, reLoad }) => {
             {
                 ...productRodal,
                 quantityCart: 1,
-                menuId: menu,
+                menuId: menuIdProvider,
             },
         ];
-        // setisProductCart(true);
-        // setisCartMain(true);
-        // setProductRodalQuantity(productRodalQuantity + 1);
+        setisProductCart(true);
+        setisCartMain(true);
         setVisiblePopupOutOfStore(false);
         itemsRef.current[indexRodal].isQuantity();
         setCart(carts);
-        localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(menu));
+        localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
         reLoad();
     };
     const hanldeRodalOutOfStore = (child) => {
-        console.log(child);
         setVisiblePopupOutOfStore(child.rodal);
         setProductRodal(child.product);
         setIndexRodal(child.index);

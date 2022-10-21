@@ -14,7 +14,8 @@ import Header from "./common/header/Header";
 import Loading from "./common/Loading/Loading";
 import Data from "./components/Data";
 import Pdata from "./components/products/Pdata";
-import { ErrorModal, SuccessModal } from "./components/wrapper/modalOrder";
+import { ModalDeleteCart } from "./components/wrapper/ModalDeleteCart";
+import { ErrorModal, SuccessModal } from "./components/wrapper/ModalOrder";
 import { AppContext } from "./context/AppProvider";
 import { FoodDetailPage } from "./pages/FoodDetailPage";
 import HomePage from "./pages/HomePages";
@@ -24,7 +25,7 @@ import { NotFoundPage } from "./pages/NotFoundPage";
 import { OrderDetailPage } from "./pages/OrderDetailPage";
 import { OrderPage } from "./pages/OrderPage";
 import SchedulePage from "./pages/SchedulePage";
-import { ShopDetailPage } from "./pages/ShopDetailPage";
+
 import { ViewAllProductCatePage } from "./pages/ViewAllProductCatePage";
 import { ViewAllProductStorePage } from "./pages/ViewAllProductStorePage";
 import "./util.css";
@@ -54,11 +55,6 @@ function App() {
                 setMobileMode(false);
             }
         }
-        // let vh = window.innerHeight * 0.01;
-        // console.log(window.innerHeight * 0.01);
-        // document.getElementById("main").style.setProperty("--vh", `${vh}px`);
-        // document.documentElement.style.setProperty("--vh", `${vh}px`);
-
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, [setMobileMode]);
@@ -88,6 +84,7 @@ function App() {
             <div className="main" id="main">
                 {SuccessModal()}
                 {ErrorModal()}
+                <ModalDeleteCart />
                 <Loading isLoading={isLoadingMain} />
                 <Header />
                 <Drawer size={300} open={isOpenDrawer} duration={300} onClose={toggleDrawer} zIndex={9999} direction="right" className="drawer__container">
@@ -101,17 +98,17 @@ function App() {
                         <LoginPage />
                     </Route>
 
-                    <Route path="/menu/:id" exact>
+                    <Route path="/mode/:modeId" exact>
                         <MenuPage />
                     </Route>
 
                     {/* <Route path="/categories/:id" exact>
                     <HomePage productItems={productItems} />
                 </Route> */}
-                    <Route path="/menu/:menu/store/:store" exact>
+                    <Route path="/mode/:modeId/store/:storeId" exact>
                         <ViewAllProductStorePage />
                     </Route>
-                    <Route path="/menu/:menu/cate/:cate" exact>
+                    <Route path="/mode/:modeId/cate/:cateId" exact>
                         <ViewAllProductCatePage />
                     </Route>
                     <Route path="/order" exact>
@@ -120,12 +117,10 @@ function App() {
                     <Route path="/order/:order" exact>
                         <OrderDetailPage />
                     </Route>
-                    <Route path="/menu/:menuId/:id" exact>
+                    <Route path="/mode/:modeId/:id" exact>
                         <FoodDetailPage />
                     </Route>
-                    <Route path="/shop-detail" exact>
-                        <ShopDetailPage shopItems={shopItems} />
-                    </Route>
+
                     <Route path="/checkout" exact>
                         <Cart />
                     </Route>

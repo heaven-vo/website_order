@@ -77,7 +77,6 @@ const SchedulePage = () => {
         setIsHeaderOrder(false);
         if (location.state) {
             let { order } = location.state;
-            console.log("check");
             setOrder(order);
         } else {
             history.push("/checkout");
@@ -161,7 +160,6 @@ const SchedulePage = () => {
     const hanldeOrder = () => {
         // setisLoadingOrder(true);
 
-        console.log({ order });
         setOpentModalError(true);
         // postOrder(order)
         //     .then((res) => {
@@ -197,10 +195,10 @@ const SchedulePage = () => {
                 style={{ borderRadius: 10 }}
             >
                 <div style={{ padding: "5px 0 10px 0", textAlign: "center", display: "flex", flexDirection: "column" }}>
-                    <span className="" style={{ fontSize: mobileMode ? 18 : 23, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)" }}>
+                    <span className="" style={{ fontSize: mobileMode ? 18 : 20, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)" }}>
                         Đơn hàng sẽ được gửi đi trong
                     </span>
-                    <span className="" style={{ fontSize: mobileMode ? 18 : 23, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)" }}>
+                    <span className="" style={{ fontSize: mobileMode ? 18 : 20, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)" }}>
                         {visiblePopupComfirm ? (
                             <CountDown
                                 callbackOrder={() => {
@@ -228,9 +226,9 @@ const SchedulePage = () => {
                     <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 600 }}>Tổng tiền đơn hàng:</span>
                     <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 400 }}>{" " + total.toLocaleString()}</span>
                 </div>
-                <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 15 }}>
+                <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 15 }}>
                     <button
-                        style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "rgb(220,220,220)", height: 50, color: "#fff" }}
+                        style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "rgb(220,220,220)", height: 50, color: "#000" }}
                         onClick={(e) => {
                             e.preventDefault();
                             setVisiblePopupComfirm(false);
@@ -246,7 +244,7 @@ const SchedulePage = () => {
                         }}
                         style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", height: 50, color: "#fff" }}
                     >
-                        OK
+                        Đồng ý
                     </button>
                 </div>
             </Rodal>

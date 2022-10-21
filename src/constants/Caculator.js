@@ -23,7 +23,12 @@ export const hanldeGetTime = () => {
     var minutesEnd = "0" + datesEnd.getMinutes();
     var formattedStartTime = hoursStart + ":" + minutesStart.substr(-2);
     var formattedEndTime = hoursEnd + ":" + minutesEnd.substr(-2);
-    console.log(formattedStartTime + " - " + formattedEndTime);
 
     return formattedStartTime + " - " + formattedEndTime;
+};
+
+export const validatePhoneNumber = (input_str) => {
+    var re = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
+
+    return re.test(input_str);
 };

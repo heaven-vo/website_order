@@ -458,13 +458,13 @@
         font-size: 14px !important;
     }
     .rodal-delet-cart {
-        gap: 20px !important;
-        padding: 0 5px;
+        /* gap: 20px !important; */
+        /* padding: 0 5px; */
     }
     .rodal-delet-cart button {
-        font-size: 15px !important;
-        height: 40px !important;
-        padding: 10px !important;
+        font-size: 14px !important;
+        height: 45px !important;
+        /* padding: 10px !important; */
     }
     .cart-quantity-name {
         font-size: 18px !important;
@@ -501,8 +501,8 @@
         margin-right: 5px !important;
     }
     .checkout-product-image {
-        width: 70px !important;
-        height: 70px !important;
+        width: 60px !important;
+        height: 60px !important;
     }
     .checkout-product-name {
         font-size: 14px !important;
@@ -520,6 +520,9 @@
     .cart-items .cart-details h4 {
         font-size: 14px !important;
         margin-top: 20px !important;
+    }
+    .checkout-product-cart > div {
+        gap: 0px !important;
     }
     .shop {
         grid-template-columns: repeat(2, 1fr);

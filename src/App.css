@@ -1490,3 +1490,31 @@ iframe {
     /* padding: 3vh 0; */
     font-weight: lighter;
 }
+.modal-delete-cart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.modal-delete-cart-img {
+    width: 50%;
+}
+.modal-delete-cart-img img {
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+}
+.modal-delete-cart-title {
+    padding-bottom: 5px;
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 18px;
+}
+.modal-delete-cart-content {
+    color: grey;
+    font-size: 16px;
+    text-align: center;
+    padding: 5px 0;
+    /* padding: 3vh 0; */
+    font-weight: lighter;
+}

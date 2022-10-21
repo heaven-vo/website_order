@@ -22,7 +22,6 @@ export const OrderPage = () => {
                 if (res.data) {
                     const order = res.data;
                     setOrders(order);
-                    console.log(order);
                     setIsLoadingCircle(false);
                 } else {
                 }

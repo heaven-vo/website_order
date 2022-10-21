@@ -1,8 +1,10 @@
 import { useContext } from "react";
+import { useHistory } from "react-router-dom";
 import Rodal from "rodal";
 import { AppContext } from "../../context/AppProvider";
 
 export const SuccessModal = () => {
+    let history = useHistory();
     const { mobileMode, opentModalSuccess, setOpentModalSuccess } = useContext(AppContext);
     return (
         <Rodal
@@ -12,6 +14,7 @@ export const SuccessModal = () => {
             showCloseButton={false}
             onClose={() => {
                 setOpentModalSuccess(false);
+                history.replace("/");
             }}
             style={{ borderRadius: 10 }}
         >
@@ -28,7 +31,7 @@ export const SuccessModal = () => {
                 <button
                     onClick={(e) => {
                         e.preventDefault();
-
+                        history.replace("/");
                         setOpentModalSuccess(false);
                     }}
                     style={{ flex: 1, padding: 12, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", height: 45, color: "#fff" }}
