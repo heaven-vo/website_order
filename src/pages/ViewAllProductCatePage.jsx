@@ -3,10 +3,11 @@ import { useLocation } from "react-router-dom";
 import { getListProductByCateId } from "../apis/apiService";
 import Loading from "../common/Loading/Loading";
 import { ProductList } from "../components/products/ProductList";
+import ShopList from "../components/products/ShopList";
 import { AppContext } from "../context/AppProvider";
 
 export const ViewAllProductCatePage = () => {
-    const { setHeaderInfo, menuIdProvider } = useContext(AppContext);
+    const { setHeaderInfo, menuIdProvider, mobileMode } = useContext(AppContext);
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
     const [products, setProducts] = useState(null);
     const [title, setTitle] = useState("");
@@ -78,16 +79,32 @@ export const ViewAllProductCatePage = () => {
         return () => {};
     }, [isLoadingCircle]);
     return (
-        <div>
+        <div style={{ background: "rgb(246, 249, 252)", height: "100%" }}>
             <Loading isLoading={isLoadingCircle} />
             <div className={`loading-spin ${!isLoadingCircle && "loading-spin-done"}`}></div>
-            <ProductList
-                data={products !== null ? products : []}
-                filter={1}
-                reLoad={() => {
-                    hanldeReLoad();
-                }}
-            />
+            <div style={{ padding: "75px 15px 15px 15px", display: "flex", gap: 10 }}>
+                <div
+                    style={{ border: "1px solid rgb(230,230,230)", width: 135, height: 35, background: "#fff", borderRadius: "1rem", gap: 8, fontSize: mobileMode ? 14 : 16 }}
+                    className="center_flex cusor"
+                >
+                    <i class="fa-solid fa-filter" style={{ fontSize: 14 }}></i> <span>Lọc nhanh</span>
+                </div>
+                <div
+                    style={{ border: "1px solid rgb(230,230,230)", width: 135, height: 35, background: "#fff", borderRadius: "1rem", gap: 8, fontSize: mobileMode ? 14 : 16 }}
+                    className="center_flex cusor"
+                >
+                    <i class="fa-solid fa-utensils" style={{ fontSize: 14 }}></i> <span>Danh mục</span>
+                </div>
+            </div>
+            <div style={{ background: "#fff", height: "100%" }}>
+                <ShopList
+                    data={products !== null ? products : []}
+                    filter={1}
+                    reLoad={() => {
+                        hanldeReLoad();
+                    }}
+                />
+            </div>
             {products?.length === 0 && (
                 <section className="shop" style={{ padding: "25px 0 40px 0" }}>
                     <div className="container center_flex">

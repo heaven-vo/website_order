@@ -102,6 +102,7 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
                 {
                     ...product,
                     quantityCart: 1,
+                    menuId: menu,
                 },
             ];
             setisProductCart(true);

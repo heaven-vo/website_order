@@ -47,6 +47,7 @@ export const ProductList = ({ data, filter, reLoad }) => {
             {
                 ...productRodal,
                 quantityCart: 1,
+                menuId: menu,
             },
         ];
         // setisProductCart(true);
@@ -85,7 +86,7 @@ export const ProductList = ({ data, filter, reLoad }) => {
                     </span>
                 </div>
 
-                <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 10 }}>
+                <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 10 }}>
                     <button
                         onClick={(e) => {
                             e.preventDefault();
@@ -134,7 +135,7 @@ export const ProductList = ({ data, filter, reLoad }) => {
                 </div>
             </Rodal>
             <Rodal
-                height={170}
+                height={mobileMode ? 160 : 165}
                 width={mobileMode ? 350 : 400}
                 visible={visiblePopupQuantity}
                 onClose={() => {
@@ -151,7 +152,7 @@ export const ProductList = ({ data, filter, reLoad }) => {
                     </span>
                 </div>
 
-                <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 10 }}>
+                <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 10 }}>
                     <button
                         onClick={(e) => {
                             e.preventDefault();
@@ -194,7 +195,7 @@ export const ProductList = ({ data, filter, reLoad }) => {
                     </button>
                 </div>
             </Rodal>
-            <div className="product-list-wrapper" style={{ paddingTop: 55, paddingBottom: 100, background: "#fff" }}>
+            <div className="product-list-wrapper" style={{ paddingTop: 0, paddingBottom: 100, background: "#fff" }}>
                 {filter === 2 && (
                     <div className="container-padding f_flex" style={{ alignItems: "end" }}>
                         <span style={{ padding: "30px 15px 10px 15px", fontWeight: 700, fontSize: 16, color: "rgb(100, 100, 100)" }}>Cơm</span>

@@ -80,7 +80,7 @@ export const ShopSlide = ({ filtter, label, data, labelImg, cateId, isLoading, i
                 <div className="container d_flex">
                     <div className="contentWidth" style={{ marginLeft: 0 }}>
                         <div style={{}}>
-                            <div className="f_flex" style={{ padding: "30px 15px 15px 15px", alignItems: "center", gap: 10, background: "rgb(246, 249, 252)" }}>
+                            <div className="f_flex" style={{ padding: "30px 15px 10px 15px", alignItems: "center", gap: 10, background: "rgb(246, 249, 252)" }}>
                                 {/* {isLoading ? (
                                         <div style={{ marginRight: 5 }}>
                                             <Skeleton height={45} width={45} borderRadius={50} />
@@ -91,13 +91,13 @@ export const ShopSlide = ({ filtter, label, data, labelImg, cateId, isLoading, i
                                         </div>
                                     )}
                                     {isLoading ? <Skeleton height={43} width={150} borderRadius={8} style={{ margin: 0 }} /> : <h2>{label ? label : ""}</h2>} */}
-                                <div style={{ width: 40, height: 40, borderRadius: 50, marginLeft: 5 }}>
+                                {/* <div style={{ width: 40, height: 40, borderRadius: 50, marginLeft: 5 }}>
                                     <img style={{ borderRadius: 50, objectFit: "cover", width: "100%", height: "100%" }} src={labelImg} alt="" />
-                                </div>
-                                <h3 style={{}}>{label}</h3>
+                                </div> */}
+                                <h3 style={{ color: "rgb(100, 100, 100)", fontSize: 16 }}>{label}</h3>
                                 <div
                                     className="heading-right  "
-                                    style={{ display: label ? "block" : "none" }}
+                                    style={{ display: label ? "block" : "none", color: "rgb(100, 100, 100)" }}
                                     onClick={() => {
                                         history.push(`/menu/${menu}/${filtter}/${cateId}`);
                                     }}

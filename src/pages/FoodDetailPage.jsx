@@ -174,6 +174,7 @@ export const FoodDetailPage = () => {
             {
                 ...product,
                 quantityCart: 1,
+                menuId: menu,
             },
         ];
         setVisiblePopupOutOfStore(false);
@@ -196,6 +197,7 @@ export const FoodDetailPage = () => {
                 {
                     ...product,
                     quantityCart: 1,
+                    menuId: menu,
                 },
             ];
             setisProductCart(true);
@@ -244,7 +246,7 @@ export const FoodDetailPage = () => {
                     </span>
                 </div>
 
-                <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 10 }}>
+                <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 10 }}>
                     <button
                         onClick={(e) => {
                             e.preventDefault();
@@ -294,7 +296,7 @@ export const FoodDetailPage = () => {
                 </div>
             </Rodal>
             <Rodal
-                height={180}
+                height={165}
                 width={mobileMode ? 350 : 400}
                 visible={visiblePopupQuantity}
                 onClose={() => {
@@ -311,7 +313,7 @@ export const FoodDetailPage = () => {
                     </span>
                 </div>
 
-                <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 10 }}>
+                <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 10 }}>
                     <button
                         onClick={(e) => {
                             e.preventDefault();
@@ -401,7 +403,7 @@ export const FoodDetailPage = () => {
                                             alt=""
                                         />
                                     </div>
-                                    <div>
+                                    <div style={{}} className="center_flex">
                                         <h3 style={{ fontSize: 18, fontWeight: 600 }}>{product.storeName}</h3>
                                         <span style={{ color: "rgb(160,160,160)", fontWeight: 400, fontSize: 15 }}>{product.slogan}</span>
                                     </div>
@@ -476,8 +478,10 @@ export const FoodDetailPage = () => {
                                         <tr className="">
                                             <td className="food-detail-label">Loại Thực Phẩm: </td>
                                             <td>
-                                                <div className="cusor" style={{ borderRadius: 20, background: "rgba(0, 30, 108, 0.15)", padding: "8px 14px" }}>
-                                                    <span style={{ fontSize: 14, fontWeight: 700, color: "var(--secondary)" }}>{product.productCategory}</span>
+                                                <div className="cusor" style={{}}>
+                                                    <span className="food-detail-text" style={{}}>
+                                                        {product.productCategory}
+                                                    </span>
                                                 </div>
                                             </td>
                                         </tr>
