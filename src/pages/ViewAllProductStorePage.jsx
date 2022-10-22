@@ -10,6 +10,9 @@ export const ViewAllProductStorePage = () => {
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
     const [products, setProducts] = useState(null);
     const [title, setTitle] = useState("");
+    const [building, setBuilding] = useState("");
+    const [openTime, setOpenTime] = useState("");
+    const [closeTime, setCloseTime] = useState("");
 
     const [img, setImg] = useState("");
     let location = useLocation();
@@ -30,7 +33,10 @@ export const ViewAllProductStorePage = () => {
                         setTitle(title);
                         const image = category.image;
                         setImg(image);
-
+                        console.log({ category });
+                        setBuilding(category.location);
+                        setCloseTime(category.closeTime);
+                        setOpenTime(category.openTime);
                         // let newProduct =
                         // if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
                         //     localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
@@ -77,16 +83,23 @@ export const ViewAllProductStorePage = () => {
             <Loading isLoading={isLoadingCircle} />
             <div className={`loading-spin ${!isLoadingCircle && "loading-spin-done"}`}></div>
             <div className="store-wrapper">
-                <div className="store-image-background">
+                <div
+                    className="store-image-background"
+                    style={{
+                        backgroundImage: `url(${img})`,
+                    }}
+                >
                     <div className="store-name">
                         <h3 style={{ paddingBottom: 5 }}> {title}</h3>
                         <span className="store-building">
                             <i class="fa-solid fa-location-dot" style={{ color: "var(--primary)", paddingRight: 7 }}></i>
-                            <span>Tòa S6.03, Rainbow, Vinhomes Grand Park</span>
+                            <span>{building}</span>
                         </span>
                         <span className="store-building" style={{}}>
                             <i class="fa-regular fa-clock" style={{ color: "var(--primary)", paddingRight: 7 }}></i>
-                            <span>Giờ mở cửa: 07:00 | Giờ đóng cửa: 22:00</span>
+                            <span>
+                                Giờ mở cửa: {openTime} | Giờ đóng cửa: {closeTime}
+                            </span>
                         </span>
 
                         <span className="store-building" style={{ color: "green" }}>
@@ -100,9 +113,9 @@ export const ViewAllProductStorePage = () => {
             {products?.length === 0 && (
                 <section className="shop" style={{ padding: "25px 0 40px 0" }}>
                     <div className="container center_flex">
-                        <div className="contentWidth  center_flex" style={{ marginLeft: 0, flexDirection: "column", gap: 10 }}>
-                            <img src="/images/fish-bones.png" style={{ width: 50 }} alt="" />
-                            <span style={{ fontSize: "1.1rem" }}>Hiện không có sản phẩm nào!!</span>
+                        <div className="contentWidth  center_flex" style={{ marginLeft: 0, flexDirection: "column", gap: 20 }}>
+                            <img src="/images/fish-bones.png" style={{ width: 50, opacity: 0.7 }} alt="" />
+                            <span style={{ fontSize: "1rem", fontWeight: "lighter" }}>Hiện không có sản phẩm nào!!</span>
                         </div>
                     </div>
                 </section>

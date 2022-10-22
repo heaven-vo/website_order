@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 
-export const ShopCart = React.forwardRef(({ product, openRodal, index, openRodalOutOfStore }, ref) => {
+export const ShopCart = React.forwardRef(({ product }, ref) => {
     useImperativeHandle(ref, () => ({}));
     const { setCart, mode, setisCartMain } = useContext(AppContext);
     const [productRodalQuantity, setProductRodalQuantity] = useState(0);
@@ -39,12 +39,12 @@ export const ShopCart = React.forwardRef(({ product, openRodal, index, openRodal
                         onClick={() => {
                             // setIsHeader(false);
                             // history.push(`/menu/${menu}/${product.id}`);
-                            history.push(`/mode/${mode}/store/store2@gmail.com`);
+                            history.push(`/mode/${mode}/store/${pro.id}`);
                         }}
                     >
                         {/* <span className="discount">{item.discount}% Off</span> */}
                         <img
-                            src={"https://cdn.cet.edu.vn/wp-content/uploads/2018/03/bun-thit-nuong-kieu-mien-nam.jpg" || IMAGE_NOTFOUND}
+                            src={pro.image || IMAGE_NOTFOUND}
                             alt=""
                             style={{
                                 height: "100%",
@@ -59,8 +59,7 @@ export const ShopCart = React.forwardRef(({ product, openRodal, index, openRodal
                         <h3
                             style={{ fontSize: 14, cursor: "pointer", fontWeight: 700, lineHeight: 1.5 }}
                             onClick={() => {
-                                // setIsHeader(false);
-                                // history.push(`/menu/${menu}/${product.id}`);
+                                history.push(`/mode/${mode}/store/${pro.id}`);
                             }}
                         >
                             {pro.name}
@@ -72,7 +71,7 @@ export const ShopCart = React.forwardRef(({ product, openRodal, index, openRodal
                                 // history.push(`/menu/${menu}/${product.id}`);
                             }}
                         >
-                            {"Tòa S603"}
+                            {pro.building}
                         </h3>
 
                         {/* <div className="price">

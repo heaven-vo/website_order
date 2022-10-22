@@ -268,7 +268,7 @@ const Navbar = () => {
                             </div>
                         )} */}
                     </div>
-                    {(isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea) && !isValidPhoneRegex && (
+                    {(isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea || !validatePhoneNumber) && (
                         <div className="input-validate-form">
                             <span>Vui lòng điền đủ thông tin</span>
                         </div>

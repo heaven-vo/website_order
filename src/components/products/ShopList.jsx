@@ -1,32 +1,47 @@
 import React from "react";
+import { useContext } from "react";
+import { useHistory } from "react-router-dom";
+import { IMAGE_NOTFOUND } from "../../constants/Variable";
+import { AppContext } from "../../context/AppProvider";
 import "./style.css";
 const ShopList = ({ data }) => {
+    const { mode } = useContext(AppContext);
+    let history = useHistory();
     return (
-        <>
-            <div className="product-list-wrapper" style={{ paddingTop: 15, paddingBottom: 100 }}>
-                <div className=" c_flex" style={{ padding: "0px 15px", alignItems: "self-start", flexDirection: "column" }}>
-                    {data.length > 0 &&
-                        data.map((item, index) => {
-                            let isBorderBottom = true;
-                            if (index === 0 || index === data.length - 1) {
-                                isBorderBottom = false;
-                            }
-                            return (
-                                <div className="shop-item-wrapper f_flex">
-                                    <div className="shop-item">
-                                        <img src={"https://cdn.cet.edu.vn/wp-content/uploads/2018/03/bun-thit-nuong-kieu-mien-nam.jpg"} alt="" />
-                                    </div>
-                                    <div className="f_flex" style={{ flexDirection: "column", gap: 5 }}>
-                                        <span className="shop-item-title">Quán ốc cô Bảy</span>
-                                        <span className="shop-item-building">Tòa S703</span>
-                                        <span className="shop-item-category">Trà sữa - ăn vặt</span>
-                                    </div>
+        <div className="product-list-wrapper" style={{}}>
+            <div className=" c_flex" style={{ padding: "0px 15px", alignItems: "self-start", flexDirection: "column" }}>
+                {data.length > 0 &&
+                    data.map((item, index) => {
+                        let isBorderBottom = true;
+                        if (index === 0 || index === data.length - 1) {
+                            isBorderBottom = false;
+                        }
+                        return (
+                            <div className="shop-item-wrapper f_flex " style={{ border: !isBorderBottom && "none" }}>
+                                <div
+                                    className="shop-item cusor"
+                                    onClick={() => {
+                                        history.push(`/mode/${mode}/store/${item.id}`);
+                                    }}
+                                >
+                                    <img src={item.image || IMAGE_NOTFOUND} alt="" />
                                 </div>
-                            );
-                        })}
-                </div>
+                                <div
+                                    className="f_flex cusor"
+                                    style={{ flexDirection: "column", gap: 5 }}
+                                    onClick={() => {
+                                        history.push(`/mode/${mode}/store/${item.id}`);
+                                    }}
+                                >
+                                    <span className="shop-item-title">{item.name}</span>
+                                    <span className="shop-item-building">{item.building}</span>
+                                    <span className="shop-item-category">{item.storeCategory}</span>
+                                </div>
+                            </div>
+                        );
+                    })}
             </div>
-        </>
+        </div>
     );
 };
 

@@ -59,11 +59,14 @@ export const ProductGrid = ({ filtter, label, data, labelImg, cateId, isLoading,
                             ) : (
                                 <section className="shop" style={{ background: "#f6f9fc", padding: "50px 0 40px 0" }}>
                                     <div className="container collumn_flex" style={{ width: "300px" }}>
-                                        <div className="contentWidth  center_flex" style={{ marginLeft: 0, flexDirection: "column", gap: 10 }}>
-                                            {/* <i class="fa-solid fa-box-open" style={{ fontSize: 40, color: "var(--primary)" }}></i> */}
-                                            <img src="/images/fish-bones.png" style={{ width: 80 }} alt="" />
-                                            <span style={{ fontSize: "1.1rem" }}>Hiện không có sản phẩm nào!!</span>
-                                        </div>
+                                        <section className="shop" style={{ padding: "25px 0 40px 0" }}>
+                                            <div className="container center_flex">
+                                                <div className="contentWidth  center_flex" style={{ marginLeft: 0, flexDirection: "column", gap: 20 }}>
+                                                    <img src="/images/fish-bones.png" style={{ width: 50, opacity: 0.7 }} alt="" />
+                                                    <span style={{ fontSize: "1rem", fontWeight: "lighter" }}>Hiện không có sản phẩm nào!!</span>
+                                                </div>
+                                            </div>
+                                        </section>
 
                                         <div style={{ textAlign: "center", marginTop: 0, height: 50, borderRadius: "0.5rem", alignItems: "center" }} className="center_flex cusor">
                                             <span

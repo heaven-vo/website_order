@@ -24,7 +24,7 @@ export const SamplePrevArrow = (props) => {
         </div>
     );
 };
-export const ShopSlide = ({ filtter, label, data, labelImg, cateId, isLoading, isViewAll, reLoad }) => {
+export const ShopSlide = ({ filtter, label, data, cateId, isLoading, reLoad }) => {
     const { mode } = useContext(AppContext);
     const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);
     const [visiblePopupOutOfStore, setVisiblePopupOutOfStore] = useState(false);
@@ -99,7 +99,7 @@ export const ShopSlide = ({ filtter, label, data, labelImg, cateId, isLoading, i
                                     className="heading-right  "
                                     style={{ display: label ? "block" : "none", color: "rgb(100, 100, 100)" }}
                                     onClick={() => {
-                                        history.push(`/mode/${mode}/${filtter}/${cateId}`);
+                                        // history.push(`/mode/${mode}/${filtter}/${cateId}`);
                                     }}
                                 >
                                     {/* <span>Xem tất cả</span> */}

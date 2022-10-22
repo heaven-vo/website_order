@@ -147,6 +147,10 @@
 } */
 
 @media (max-width: 700px) {
+    .shop-item {
+        width: 80px !important;
+        height: 80px !important;
+    }
     .shop-item-title {
         font-size: 14px !important;
     }

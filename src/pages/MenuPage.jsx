@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { useHistory } from "react-router-dom";
 import Slider from "react-slick";
-import { getMenuByMode } from "../apis/apiService";
+import { getListStoreCategory, getListStoreInMenuByMode, getMenuByMode, getMenuByModeGroupBy } from "../apis/apiService";
 import { ProductSlide, SampleNextArrow, SamplePrevArrow } from "../components/products/ProductSlide";
 import ShopList from "../components/products/ShopList";
 import { ShopSlide } from "../components/products/ShopSlide";
@@ -35,13 +35,15 @@ export const MenuPage = () => {
     // let timeEnd1 = 13.54;
     // let timeEnd2 = 13.55;
     // let timeEnd3 = 13.56;
-    const { mode, mobileMode, setIsHeaderOrder, setHeaderInfo, setMenuIdProvider, setisCartMain, setCart, setOpenDeleteCart } = useContext(AppContext);
+    const { mode, mobileMode, setIsHeaderOrder, setHeaderInfo, setMenuIdProvider, setisCartMain, setCart, setOpenDeleteCart, setCategoriesInMenu } = useContext(AppContext);
     const [filtter, setFilter] = useState(CATE_FITLER);
     // const [checked, setChecked] = useState(false);
     const [isLoadingPage, setIsLoadingPage] = useState(true);
     const [isLoadingProduct, setIsLoadingProduct] = useState(false);
     const [menuProduct, setMenuProduct] = useState([]);
     const [menuCategory, setMenuCategory] = useState([]);
+    const [listStore, setListStore] = useState([]);
+    const [listStoreCategory, setListStoreCategory] = useState([]);
     const [menuEmpty, setMenuEmpty] = useState(false);
     // const [menuCategory, setMenuCategory] = useState([]);
     const [widthScreen, setWidthScreen] = useState(window.innerWidth - 100);
@@ -49,9 +51,12 @@ export const MenuPage = () => {
     useEffect(() => {
         setIsLoadingPage(true);
         setIsHeaderOrder(false);
-        setTimeout(() => {
+        if (mode === "1") {
+            getMenuByModeId(mode);
+        }
+        if (mode === "2" || mode === "3" || mode === "1") {
             getMenu(mode, filtter, 1, 10);
-        }, 1);
+        }
     }, [setIsHeaderOrder, mode]);
     // const hanldeChangeFilter = (fil) => {
     //     setFilter(fil);
@@ -78,10 +83,79 @@ export const MenuPage = () => {
             }
         }
     };
+    const getMenuByModeId = (mode) => {
+        console.log(mode);
+        if (mode !== "0") {
+            Promise.all([getMenuByMode(mode), getListStoreInMenuByMode(mode, 1, 100), getListStoreCategory(mode, 1, 100)])
+                .then((res) => {
+                    if (res.length > 0) {
+                        const menu = res[0].data;
+                        const stores = res[1].data;
+                        const storesCategory = res[2].data;
+                        console.log({ storesCategory });
+                        checkCartInMenu(menu.id);
+                        setListStoreCategory(storesCategory);
+                        setListStore(stores);
+                        setMenuIdProvider(menu.id);
+                        setMenuCategory(menu.listCategoryInMenus || []);
+                        setCategoriesInMenu(menu.listCategoryInMenus || []);
+                        if (menu.listCategoryInMenus.length > 0) {
+                            setMenuEmpty(false);
+                        } else {
+                            setMenuEmpty(true);
+                        }
+                    } else {
+                        setListStore([]);
+                        setMenuCategory([]);
+                        setMenuEmpty(true);
+                    }
+                    setIsLoadingPage(false);
+                    setIsLoadingProduct(false);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setIsLoadingPage(false);
+                    setIsLoadingProduct(false);
+                    setListStore([]);
+                    setMenuCategory([]);
+                    setMenuEmpty([]);
+                });
+            // getMenuByMode(mode)
+            //     .then((res) => {
+            //         if (res.data) {
+            //             const menu = res.data;
+            //             console.log({ menu });
+            //             checkCartInMenu(menu.id);
+            //             // setMenuProduct(menu);
+            //             setMenuIdProvider(menu.id);
+            //             setMenuCategory(menu.listCategoryInMenus || []);
+            //             if (menu.listCategoryInMenus.length > 0) {
+            //                 setMenuEmpty(false);
+            //             } else {
+            //                 setMenuEmpty(true);
+            //             }
+            //         } else {
+            //             // setMenuProduct([]);
+            //             setMenuCategory([]);
+            //             setMenuEmpty(true);
+            //         }
+            //         setIsLoadingPage(false);
+            //         setIsLoadingProduct(false);
+            //     })
+            //     .catch((error) => {
+            //         console.log(error);
+            //         setIsLoadingPage(false);
+            //         setIsLoadingProduct(false);
+            //         // setMenuProduct([]);
+            //         setMenuCategory([]);
+            //         setMenuEmpty([]);
+            //     });
+        }
+    };
     const getMenu = (menu, filtter, pageInd, size) => {
         // setMenuCategory([]);
         if (menu !== "0") {
-            getMenuByMode(menu, filtter, pageInd, size)
+            getMenuByModeGroupBy(menu, filtter, pageInd, size)
                 .then((res) => {
                     if (res.data) {
                         const menu = res.data;
@@ -89,6 +163,7 @@ export const MenuPage = () => {
                         setMenuProduct(menu);
                         setMenuIdProvider(menu.id);
                         setMenuCategory(menu.listCategoryStoreInMenus);
+                        setCategoriesInMenu(menu.listCategoryStoreInMenus || []);
                         if (menu.listCategoryStoreInMenus.length > 0) {
                             setMenuEmpty(false);
                         } else {
@@ -173,27 +248,9 @@ export const MenuPage = () => {
         appendDots: (dots) => {
             return <ul style={{ margin: "0px" }}>{dots}</ul>;
         },
-        // responsive: [
-        //     {
-        //         breakpoint: 950,
-        //         settings: {
-        //             slidesToShow: 3,
-        //             slidesToScroll: 1,
-        //             infinite: true,
-        //         },
-        //     },
-        //     {
-        //         breakpoint: 700,
-        //         settings: {
-        //             slidesToShow: 1,
-        //             slidesToScroll: 1,
-        //             infinite: true,
-        //         },
-        //     },
-        // ],
     };
     const hanldeReLoad = () => {
-        getMenu(mode, filtter, 1, 100);
+        // getMenu(mode, filtter, 1, 100);
     };
     const settingCaategory = {
         dots: true,
@@ -331,7 +388,13 @@ export const MenuPage = () => {
         return (
             <div className="c_flex" style={{ gap: 3, flexWrap: "wrap" }}>
                 <div className="f_flex" style={{ gap: 5, width: "100%", alignItems: "start", justifyContent: "space-between", flexDirection: "column" }}>
-                    {isLoadingPage ? <Skeleton height={mobileMode ? 18 : 21} width={mobileMode ? widthScreen : 380} /> : <span className="menu-text-detail">{description}</span>}
+                    {isLoadingPage ? (
+                        <Skeleton height={mobileMode ? 18 : 21} width={mobileMode ? widthScreen : 380} />
+                    ) : (
+                        <span className="menu-text-detail" style={{ fontWeight: "lighter" }}>
+                            {description}
+                        </span>
+                    )}
 
                     {/* <div className="center_flex" style={{ gap: 15, justifyContent: "space-between", width: "100%" }}>
                         {isLoadingPage ? <Skeleton height={mobileMode ? 30 : 38} width={230} /> : <h3 className="menu-text-title">{title}</h3>}
@@ -399,8 +462,8 @@ export const MenuPage = () => {
                 return menuTitle("Điểm Tâm Sáng", "Gọi là có - nhận đơn và xử lý giao hàng ngay.", 950000, true);
         }
     };
-    const hanldeViewAll = (cateId) => {
-        history.push(`/mode/${mode}/${filtter}/${cateId}`);
+    const hanldeViewAll = (cateId, categoryName) => {
+        history.push(`/mode/${mode}/${filtter}/${cateId}`, { categoryName: categoryName });
     };
     return (
         <>
@@ -497,7 +560,7 @@ export const MenuPage = () => {
                                     menuCategory.map((cate, index) => {
                                         return (
                                             <div key={index} className="cateogry-menu-wrapper ">
-                                                <div className="cateogry-menu-img" onClick={() => hanldeViewAll(cate.id)}>
+                                                <div className="cateogry-menu-img" onClick={() => hanldeViewAll(cate.id, cate.name)}>
                                                     <img src={cate.image || "https://thumbs.dreamstime.com/b/vietnamese-pho-soup-illustration-97217112.jpg"} alt="" />
                                                 </div>
                                                 <span className="cateogry-menu-text">{cate.name}</span>
@@ -528,21 +591,15 @@ export const MenuPage = () => {
                 {!isLoadingPage &&
                     !isLoadingProduct &&
                     mode === "1" &&
-                    menuProduct?.listCategoryStoreInMenus?.map((menu, index) => {
-                        if (menu.listProducts.length > 0) {
+                    listStoreCategory?.map((menu, index) => {
+                        if (menu.listStores.length > 0) {
                             return (
-                                // <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={500} transitionLeaveTimeout={500}>
-                                //     <ProductGrid data={menu.listProducts || []} label={menu.name} labelImg={menu.img || IMAGE_NOTFOUND} />
-                                // </ReactCSSTransitionGroup>
-
                                 <ShopSlide
                                     key={index}
                                     filtter={filtter}
-                                    data={[...menu.listProducts, ...menu.listProducts, ...menu.listProducts, ...menu.listProducts, ...menu.listProducts] || []}
+                                    data={[...menu.listStores] || []}
                                     label={menu.name}
                                     cateId={menu.id}
-                                    labelImg={menu.image || IMAGE_NOTFOUND}
-                                    isViewAll={true}
                                     reLoad={() => {
                                         hanldeReLoad();
                                     }}
@@ -552,7 +609,7 @@ export const MenuPage = () => {
                     })}
                 {!isLoadingPage &&
                     !isLoadingProduct &&
-                    mode === "2" &&
+                    (mode === "2" || mode === "3") &&
                     menuProduct?.listCategoryStoreInMenus?.map((menu, index) => {
                         if (menu.listProducts.length > 0) {
                             return (
@@ -580,7 +637,7 @@ export const MenuPage = () => {
                         <div className="container-padding f_flex" style={{ alignItems: "end" }}>
                             <span style={{ padding: "40px 15px 10px 15px", fontWeight: 700, fontSize: 16, color: "rgb(100, 100, 100)" }}>Quán ngon gần bạn</span>
                         </div>
-                        <ShopList data={menuCategory.length > 0 && menuCategory} />;
+                        <ShopList data={listStore.length > 0 && listStore} />;
                     </>
                 )}
 
@@ -623,8 +680,8 @@ export const MenuPage = () => {
                     <section className="shop" style={{ padding: "25px 0 40px 0" }}>
                         <div className="container center_flex">
                             <div className="contentWidth  center_flex" style={{ marginLeft: 0, flexDirection: "column", gap: 10 }}>
-                                <img src="/images/fish-bones.png" style={{ width: 80 }} alt="" />
-                                <span style={{ fontSize: "1.1rem" }}>Hiện không có sản phẩm nào!!</span>
+                                <img src="/images/fish-bones.png" style={{ width: 50 }} alt="" />
+                                <span style={{ fontSize: "1rem" }}>Hiện không có sản phẩm nào!!</span>
                             </div>
                         </div>
                     </section>
