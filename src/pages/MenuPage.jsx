@@ -497,7 +497,7 @@ export const MenuPage = () => {
                             ) : (
                                 <div className="search-menu" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                                     <div style={{ height: "100%" }}>
-                                        <i class="fa-solid fa-magnifying-glass" style={{ fontSize: 20, marginTop: 3 }}></i>
+                                        <i className="fa-solid fa-magnifying-glass" style={{ fontSize: 20, marginTop: 3 }}></i>
                                     </div>
                                     <input type="search" name="" id="" style={{ flex: 1 }} placeholder="Tìm sản phẩm" />
                                 </div>
@@ -637,7 +637,7 @@ export const MenuPage = () => {
                         <div className="container-padding f_flex" style={{ alignItems: "end" }}>
                             <span style={{ padding: "40px 15px 10px 15px", fontWeight: 700, fontSize: 16, color: "rgb(100, 100, 100)" }}>Quán ngon gần bạn</span>
                         </div>
-                        <ShopList data={listStore.length > 0 && listStore} />;
+                        <ShopList data={listStore.length > 0 && [...listStore]} />
                     </>
                 )}
 

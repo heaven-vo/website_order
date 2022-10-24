@@ -53,6 +53,8 @@ export const ViewAllProductCatePage = () => {
             setIsLoadingCircle(true);
             // setIsHeader(false);
             if (mode === "1") {
+                console.log({ mode });
+
                 getListStoreByCateId(menuIdProvider, cateId);
             } else if (mode === "2" || mode === "3") {
                 getListProductByFilter(menuIdProvider, cateId);
@@ -76,6 +78,7 @@ export const ViewAllProductCatePage = () => {
                     setTitle(title);
                     const image = category.image;
                     setImg(image);
+                    console.log({ productList });
                     // let newProduct =
                     // if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
                     //     localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
@@ -139,7 +142,7 @@ export const ViewAllProductCatePage = () => {
             <div className={`loading-spin ${!isLoadingCircle && "loading-spin-done"}`}></div>
             <div style={{ padding: "75px 15px 15px 15px", display: "flex", gap: 10, width: "100%" }}>
                 <div style={{}} className="center_flex cusor filter-select-cate">
-                    {/* <i class="fa-solid fa-utensils" style={{ fontSize: 14 }}></i> */}
+                    {/* <i className="fa-solid fa-utensils" style={{ fontSize: 14 }}></i> */}
                     <Select
                         options={categoriesInMenu.length > 0 ? optionsBuilding : null}
                         placeholder="Danh mục"

@@ -719,7 +719,7 @@ const Cart = ({}) => {
                             >
                                 <div className="f_flex checkout-content-icon-wrapper" style={{ alignItems: "center", gap: 15 }}>
                                     <div className="checkout-content-icon">
-                                        <i class="fa-solid fa-user"></i>
+                                        <i className="fa-solid fa-user"></i>
                                     </div>
                                     <div className="checkout-content-item">
                                         <h4>Tên người nhận</h4>
@@ -728,7 +728,7 @@ const Cart = ({}) => {
                                 </div>
                                 <div className="f_flex checkout-content-icon-wrapper" style={{ alignItems: "center", gap: 15 }}>
                                     <div className="checkout-content-icon">
-                                        <i class="fa-solid fa-mobile-screen-button"></i>
+                                        <i className="fa-solid fa-mobile-screen-button"></i>
                                     </div>
                                     <div className="checkout-content-item">
                                         <h4>Số điện thoại nhận hàng</h4>
@@ -737,7 +737,7 @@ const Cart = ({}) => {
                                 </div>
                                 <div className="f_flex checkout-content-icon-wrapper" style={{ alignItems: "center", gap: 15 }}>
                                     <div className="checkout-content-icon">
-                                        <i class="fa-regular fa-clipboard"></i>
+                                        <i className="fa-regular fa-clipboard"></i>
                                     </div>
                                     <div className="checkout-content-item">
                                         <h4>Lưu ý đặc biệt</h4>

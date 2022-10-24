@@ -12,3 +12,8 @@
     -webkit-transition: 1s ease-in-out;
     border-radius: 0.5rem;
 }
+
+.loading-wrapper img {
+    width: 50px;
+    opacity: 0.8;
+}

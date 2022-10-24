@@ -91,7 +91,7 @@ export const OrderPage = () => {
                                             <span className="order-store-btn">
                                                 Xem chi tiết
                                                 <div>
-                                                    <i class="fa-solid fa-arrow-right"></i>
+                                                    <i className="fa-solid fa-arrow-right"></i>
                                                 </div>
                                             </span>
                                         </div>
@@ -125,7 +125,7 @@ export const OrderPage = () => {
                                             <span className="order-store-btn">
                                                 Xem chi tiết
                                                 <div>
-                                                    <i class="fa-solid fa-arrow-right"></i>
+                                                    <i className="fa-solid fa-arrow-right"></i>
                                                 </div>
                                             </span>
                                         </div>

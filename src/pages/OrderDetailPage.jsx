@@ -99,7 +99,7 @@ export const OrderDetailPage = () => {
                             <div className="order-wrapper order-detail-container" style={{ flex: 0.35 }}>
                                 {/* <h3 style={{ fontSize: mobileMode ? "1rem" : "1.3rem" }}>Thông tin giao hàng</h3> */}
                                 {/* <div className="f_flex order-detail-info">
-                                    <i class="fa-solid fa-circle" style={{ fontSize: "0.7rem", lineHeight: 2, color: "green" }}></i>
+                                    <i className="fa-solid fa-circle" style={{ fontSize: "0.7rem", lineHeight: 2, color: "green" }}></i>
                                     <div className="flex-collumn">
                                         <span style={{ color: "green", fontWeight: 600 }}>Giao hàng thành công</span>
                                         <span>08-08-2022 16:30</span>
@@ -107,21 +107,21 @@ export const OrderDetailPage = () => {
                                 </div> */}
 
                                 <div className="f_flex order-detail-adrress">
-                                    <i style={{ color: "var(--primary)", lineHeight: 1.3, fontSize: 12 }} class="fa-solid fa-circle"></i>
+                                    <i style={{ color: "var(--primary)", lineHeight: 1.3, fontSize: 12 }} className="fa-solid fa-circle"></i>
                                     <div className="flex-collumn">
                                         <span>Mã đơn hàng:</span>
                                         <span> {orderInfo.id} </span>
                                     </div>
                                 </div>
                                 <div className="f_flex order-detail-adrress" style={{ marginTop: 15 }}>
-                                    <i style={{ color: "var(--primary)", lineHeight: 1.3 }} class="fa-regular fa-clock"></i>
+                                    <i style={{ color: "var(--primary)", lineHeight: 1.3 }} className="fa-regular fa-clock"></i>
                                     <div className="flex-collumn">
                                         <span>Ngày đặt hàng:</span>
                                         <span> {orderInfo?.time?.split(" ")[0]} </span>
                                     </div>
                                 </div>
                                 <div className="f_flex order-detail-adrress" style={{ marginTop: 15 }}>
-                                    <i style={{ color: "var(--primary)", lineHeight: 1.3 }} class="fa-solid fa-location-dot"></i>
+                                    <i style={{ color: "var(--primary)", lineHeight: 1.3 }} className="fa-solid fa-location-dot"></i>
                                     <div className="flex-collumn">
                                         <span>Địa chỉ nhận hàng:</span>
                                         <span>Building {orderInfo.buildingName} Vinhomes Green Park</span>
@@ -144,19 +144,19 @@ export const OrderDetailPage = () => {
                                 <div className="f_flex" style={{ gap: 20 }}>
                                     <div className="f_flex" style={{ gap: 13, padding: "30px 10px 10px 10px", flexDirection: "column", alignItems: "center" }}>
                                         <div style={{ opacity: getOpacity(statusOrder[0]) }}>
-                                            <i class="fa-regular fa-circle-dot" style={{ color: "var(--primary)" }}></i>
+                                            <i className="fa-regular fa-circle-dot" style={{ color: "var(--primary)" }}></i>
                                         </div>
                                         <div className="line" style={{ opacity: getOpacity(statusOrder[1]) }}></div>
                                         <div style={{ opacity: getOpacity(statusOrder[1]) }}>
-                                            <i class="fa-regular fa-circle-dot" style={{ color: "var(--primary)" }}></i>
+                                            <i className="fa-regular fa-circle-dot" style={{ color: "var(--primary)" }}></i>
                                         </div>
                                         <div className="line" style={{ opacity: getOpacity(statusOrder[2]) }}></div>
                                         <div style={{ opacity: getOpacity(statusOrder[2]) }}>
-                                            <i class="fa-regular fa-circle-dot" style={{ color: "var(--primary)" }}></i>
+                                            <i className="fa-regular fa-circle-dot" style={{ color: "var(--primary)" }}></i>
                                         </div>
                                         <div className="line" style={{ opacity: getOpacity(statusOrder[3]) }}></div>
                                         <div style={{ opacity: getOpacity(statusOrder[3]) }}>
-                                            <i class="fa-regular fa-circle-dot" style={{ color: "var(--primary)" }}></i>
+                                            <i className="fa-regular fa-circle-dot" style={{ color: "var(--primary)" }}></i>
                                         </div>
                                     </div>
                                     <div className="f_flex" style={{ gap: 25, padding: "10px 10px", flexDirection: "column" }}>

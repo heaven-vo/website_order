@@ -18,11 +18,11 @@ export const SuccessModal = () => {
             }}
             style={{ borderRadius: 10 }}
         >
-            <div class="modal-success">
-                <div class="modal-success-img">
-                    <img class="" src="/images/success.jpg" alt="" />
+            <div className="modal-success">
+                <div className="modal-success-img">
+                    <img className="" src="/images/success.jpg" alt="" />
                 </div>
-                <div class="modal-success-title">
+                <div className="modal-success-title">
                     <p>Thành công!</p>
                 </div>
                 <span>Đơn hàng sẽ đến với bạn sớm thôi.</span>
@@ -56,11 +56,11 @@ export const ErrorModal = () => {
             }}
             style={{ borderRadius: 10 }}
         >
-            <div class="modal-success">
-                <div class="modal-success-img" style={{ width: "45%", padding: "10px 0" }}>
-                    <img class="" src="/images/error.png" alt="" />
+            <div className="modal-success">
+                <div className="modal-success-img" style={{ width: "45%", padding: "10px 0" }}>
+                    <img className="" src="/images/error.png" alt="" />
                 </div>
-                <div class="modal-success-title">
+                <div className="modal-success-title">
                     <p style={{ color: "rgb(237, 55, 116)" }}>Oops...!</p>
                 </div>
                 <span>Đã xảy ra lỗi gì đó. Vui lòng thử lại sau.</span>

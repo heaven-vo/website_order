@@ -13,11 +13,11 @@ const ShopList = ({ data }) => {
                 {data.length > 0 &&
                     data.map((item, index) => {
                         let isBorderBottom = true;
-                        if (index === 0 || index === data.length - 1) {
+                        if (data.length === 0 || index === data.length - 1) {
                             isBorderBottom = false;
                         }
                         return (
-                            <div className="shop-item-wrapper f_flex " style={{ border: !isBorderBottom && "none" }}>
+                            <div className="shop-item-wrapper f_flex " key={index} style={{ border: !isBorderBottom && "none" }}>
                                 <div
                                     className="shop-item cusor"
                                     onClick={() => {

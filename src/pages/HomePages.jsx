@@ -101,7 +101,7 @@ const HomePage = ({ productItems, shopItems }) => {
                             }}
                         >
                             <div className="home-menu-item-icon">
-                                <img src="./images/icons/datmon-active.png" alt="" />
+                                <img src="./images/icons/hamburger.png" alt="" />
                             </div>
                             <span>Gọi đồ ăn</span>
                         </div>
@@ -120,7 +120,7 @@ const HomePage = ({ productItems, shopItems }) => {
                             }}
                         >
                             <div className="home-menu-item-icon">
-                                <img src="./images/icons/dicho-active.png" alt="" />
+                                <img src="./images/icons/groceries.png" alt="" />
                             </div>
                             <span>Giao hàng</span>
                         </div>
@@ -138,7 +138,7 @@ const HomePage = ({ productItems, shopItems }) => {
                             }}
                         >
                             <div className="home-menu-item-icon">
-                                <img src="./images/icons/dathang-active.png" alt="" />
+                                <img src="./images/icons/food-delivery.png" alt="" />
                             </div>
                             <span>Đặt Hàng</span>
                         </div>

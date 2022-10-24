@@ -44,6 +44,14 @@ export const getListStoreInMenuByMode = (modeId, page, size) => {
     });
 };
 
+//https://deliveryvhgp-webapi.azurewebsites.net/api/v1/menus/ByMenuId/keySearch?KeySearch=c&menuId=1&pageIndex=1&pageSize=10
+export const getListSearchByKey = (key, menuId, page, size) => {
+    return axios.get(`${BASE_URL}${MENU}/ByMenuId/keySearch?KeySearch=${key}&menuId=${menuId}&pageIndex=${page}&pageSize=${size}`, {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+    });
+};
+
 //https://deliveryvhgp-webapi.azurewebsites.net/api/v1/products/p1
 export const getProductDetail = (id) => {
     return axios.get(`${BASE_URL}${PRODUCT}/${id}`, {

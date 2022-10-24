@@ -201,7 +201,7 @@ export const ProductList = ({ data, filter, reLoad }) => {
                 <div className="back-white c_flex" style={{ padding: "10px 15px", alignItems: "self-start", flexDirection: "column" }}>
                     {data.map((item, index) => {
                         let isBorderBottom = true;
-                        if (index === data.length - 1) {
+                        if (index === data.length - 1 || data.length === 0) {
                             isBorderBottom = false;
                         }
                         return (

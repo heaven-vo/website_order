@@ -27,7 +27,7 @@ export const FoodDetailPage = () => {
         } else {
             setHeaderInfo({ isSearchHeader: false, title: "Chi tiết sản phẩm" });
             setIsLoadingCircle(true);
-            let productId = location.pathname.trim().split("/")[3];
+            let productId = location.pathname.trim().split("/")[4];
             if (productId) {
                 getProductDetail(productId)
                     .then((res) => {

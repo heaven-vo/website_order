@@ -92,18 +92,18 @@ export const ViewAllProductStorePage = () => {
                     <div className="store-name">
                         <h3 style={{ paddingBottom: 5 }}> {title}</h3>
                         <span className="store-building">
-                            <i class="fa-solid fa-location-dot" style={{ color: "var(--primary)", paddingRight: 7 }}></i>
+                            <i className="fa-solid fa-location-dot" style={{ color: "var(--primary)", paddingRight: 7 }}></i>
                             <span>{building}</span>
                         </span>
                         <span className="store-building" style={{}}>
-                            <i class="fa-regular fa-clock" style={{ color: "var(--primary)", paddingRight: 7 }}></i>
+                            <i className="fa-regular fa-clock" style={{ color: "var(--primary)", paddingRight: 7 }}></i>
                             <span>
                                 Giờ mở cửa: {openTime} | Giờ đóng cửa: {closeTime}
                             </span>
                         </span>
 
                         <span className="store-building" style={{ color: "green" }}>
-                            <i class="fa-solid fa-clock-rotate-left" style={{ color: "green", paddingRight: 7 }}></i>
+                            <i className="fa-solid fa-clock-rotate-left" style={{ color: "green", paddingRight: 7 }}></i>
                             <span>{modeType}</span>
                         </span>
                     </div>

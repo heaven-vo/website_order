@@ -322,7 +322,7 @@ const Head = () => {
                     </div>
                     <div className="c_flex" style={{ gap: 20 }}>
                         <div className="search-box f_flex">
-                            <i class="fa-solid fa-location-dot" style={{ color: "var(--primary)" }}></i>
+                            <i className="fa-solid fa-location-dot" style={{ color: "var(--primary)" }}></i>
                             <input
                                 type="text"
                                 placeholder="Nhập địa chỉ giao hàng"

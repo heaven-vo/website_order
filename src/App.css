@@ -1266,6 +1266,7 @@ iframe {
 .home-menu-item {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 20px;
     background-color: rgba(0, 30, 108, 0.08);
     flex: 1;
@@ -1273,7 +1274,7 @@ iframe {
     transition: 0.3s all;
     -webkit-transition: 0.3s all;
     cursor: pointer;
-    padding: 15px 10px;
+    padding: 18px 15px;
 }
 .home-menu-item:hover {
     background-color: rgba(0, 30, 108, 0.15);
@@ -1281,11 +1282,11 @@ iframe {
 .home-menu-item span {
     font-size: 1.2rem;
     font-weight: 700;
-    color: var(--secondary);
+    color: rgb(50, 50, 50);
 }
 .home-menu-item-icon {
-    width: 90px;
-    height: 70px;
+    width: 60px;
+    height: 60px;
 }
 .home-menu-item-icon img {
     width: 100%;

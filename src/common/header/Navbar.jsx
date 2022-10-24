@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import Rodal from "rodal";
 import { LOCALSTORAGE_USER_NAME } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
@@ -9,7 +9,7 @@ import { getApartment } from "../../apis/apiService";
 
 const Navbar = () => {
     // Toogle Menu
-    const { userInfo, setIsOpenDrawer, headerInfo, isHeaderOrder, setVisiblePopupInfo, visiblePopupInfo, setUserInfo, mobileMode, buildings, areaProvider } = useContext(AppContext);
+    const { userInfo, setIsOpenDrawer, headerInfo, setVisiblePopupInfo, visiblePopupInfo, setUserInfo, mobileMode, setKeySearch, areaProvider, setIsSearchSubmit, keySearch } = useContext(AppContext);
     // const [MobileMenu, setMobileMenu] = useState(false);
     const [fullName, setFullName] = useState("");
     const [phone, setPhone] = useState("");
@@ -27,6 +27,7 @@ const Navbar = () => {
     const [isValidApartment, setIsValidApartment] = useState(false);
     const [isValidPhoneRegex, setIsValidPhoneRegex] = useState(true);
     let history = useHistory();
+    let location = useLocation();
     const openDrawer = () => {
         setIsOpenDrawer(true);
         document.body.style.overflow = "hidden";
@@ -305,7 +306,13 @@ const Navbar = () => {
                     <div className="c_flex" style={{ width: "100%", justifyContent: "space-between" }}>
                         <div className="c_flex header-white-container">
                             <div>
-                                <i onClick={() => history.goBack()} className="fa-solid fa-chevron-left header-white-icon-back"></i>
+                                <i
+                                    onClick={() => {
+                                        setKeySearch("");
+                                        history.goBack();
+                                    }}
+                                    className="fa-solid fa-chevron-left header-white-icon-back"
+                                ></i>
                             </div>
                             <div
                                 className="f_flex cusor"
@@ -345,9 +352,23 @@ const Navbar = () => {
                     </div>
                     {headerInfo && headerInfo.isSearchHeader && (
                         <div className="search-header f_flex" style={{ width: " 100%" }}>
-                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <i className="fa-solid fa-magnifying-glass"></i>
                             <input
-                                onChange={(e) => {}}
+                                value={keySearch}
+                                onChange={(e) => {
+                                    setKeySearch(e.target.value);
+                                }}
+                                onClick={() => {
+                                    let modeId = location.pathname.trim().split("/")[2];
+                                    history.push(`/mode/${modeId}/search`);
+                                }}
+                                onKeyPress={(event) => {
+                                    if (event.key === "Enter") {
+                                        event.preventDefault();
+                                        event.target.blur();
+                                        setIsSearchSubmit(true);
+                                    }
+                                }}
                                 // value={phone}
                                 placeholder="Tìm món ăn hoặc nhà hàng"
                                 type="text"
