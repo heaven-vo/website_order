@@ -80,7 +80,7 @@ body {
 
 .background {
     background: #f6f9fc;
-    padding: 120px 0;
+    padding: 120px 0 30px 0;
 }
 .container {
     z-index: 1;
@@ -139,9 +139,11 @@ button {
     background-color: none;
 }
 .slide-img {
-    height: 300px;
+    height: 350px;
     object-fit: cover;
     /* padding: 0 7px; */
+}
+.slide-img img {
 }
 .shop .product .img {
     height: 120px !important;
@@ -768,7 +770,7 @@ textarea {
     color: #e94560;
 }
 .menu-text-title {
-    font-size: 1.9rem;
+    font-size: 24px;
 }
 .menu-text-detail {
     font-size: 1rem;
@@ -1518,4 +1520,14 @@ iframe {
     padding: 5px 0;
     /* padding: 3vh 0; */
     font-weight: lighter;
+}
+
+.active-search {
+    background-color: var(--primary) !important;
+    color: #fff !important;
+    border-color: #fff !important;
+    font-weight: 600;
+    transition: 0.3s all;
+}
+.active-search:hover {
 }

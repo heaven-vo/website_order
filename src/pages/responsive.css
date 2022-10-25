@@ -186,6 +186,14 @@
     .loading-wrapper img {
         width: 40px !important;
     }
+    .not-found-search {
+    }
+    .not-found-search span {
+        font-size: 15px !important;
+    }
+    .not-found-search img {
+        width: 40px !important;
+    }
 
     .main {
         /* height: calc(var(--vh, 1vh) * 100) !important; */
@@ -420,7 +428,7 @@
         color: #e94560;
     }
     .menu-text-title {
-        font-size: 1.5rem;
+        font-size: 20px !important;
     }
     .menu-text-detail {
         font-size: 1rem;

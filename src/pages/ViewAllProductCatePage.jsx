@@ -90,7 +90,6 @@ export const ViewAllProductCatePage = () => {
                     //         }
                     //     }
                     // }
-                    console.log({ productList });
                     setProducts(productList);
                     setHeaderInfo({ isSearchHeader: false, title: title });
                     setIsLoadingCircle(false);
@@ -207,16 +206,15 @@ export const ViewAllProductCatePage = () => {
                         // }}
                     />
                 )}
-                {mode === "2" ||
-                    (mode === "3" && (
-                        <ProductList
-                            data={products !== null ? products : []}
-                            filter={1}
-                            reLoad={() => {
-                                hanldeReLoad();
-                            }}
-                        />
-                    ))}
+                {(mode === "2" || mode === "3") && (
+                    <ProductList
+                        data={products !== null ? products : []}
+                        filter={1}
+                        reLoad={() => {
+                            hanldeReLoad();
+                        }}
+                    />
+                )}
                 {stores?.length === 0 ||
                     (products?.length === 0 && (
                         <section className="shop" style={{ padding: "25px 0 40px 0" }}>

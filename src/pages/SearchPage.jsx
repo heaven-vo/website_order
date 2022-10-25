@@ -7,8 +7,9 @@ import ShopList from "../components/products/ShopList";
 import { AppContext } from "../context/AppProvider";
 
 export const SearchPage = () => {
-    const { setHeaderInfo, keySearch, setKeySearch, isSearchSubmit, setIsSearchSubmit, menuIdProvider } = useContext(AppContext);
+    const { setHeaderInfo, keySearch, mobileMode, isSearchSubmit, setIsSearchSubmit, menuIdProvider } = useContext(AppContext);
     const [isLoadingCircle, setIsLoadingCircle] = useState(false);
+    const [listAll, setListAll] = useState(null);
     const [listSearch, setListSearch] = useState(null);
     const [tabActive, setTabActive] = useState(0);
     let history = useHistory();
@@ -24,17 +25,19 @@ export const SearchPage = () => {
             setHeaderInfo({});
             // setKeySearch("");
         };
-    }, [setHeaderInfo, keySearch]);
+    }, [setHeaderInfo]);
 
     useEffect(() => {
-        if (isSearchSubmit) {
+        if (isSearchSubmit || keySearch !== "") {
             console.log(menuIdProvider);
             setIsLoadingCircle(true);
             getListSearchByKey(keySearch, menuIdProvider, 1, 100)
                 .then((res) => {
                     if (res.data) {
                         const data = res.data;
-                        setListSearch(data.store);
+                        setListAll(data);
+
+                        setListSearch(tabActive === 0 ? data.store : data.product);
                         console.log({ data });
                         setIsLoadingCircle(false);
                         setIsSearchSubmit(false);
@@ -45,6 +48,7 @@ export const SearchPage = () => {
                 })
                 .catch((error) => {
                     console.log(error);
+                    setListAll([]);
                     setListSearch([]);
                     setIsLoadingCircle(false);
                     setIsSearchSubmit(false);
@@ -57,17 +61,59 @@ export const SearchPage = () => {
         <div>
             <Loading isLoading={isLoadingCircle} />
             <div className={`loading-spin ${!isLoadingCircle && "loading-spin-done"}`}></div>
-            {listSearch?.length === 0 && (
-                <div className="loading-wrapper container">
-                    <div className="center_flex" style={{ flexDirection: "column", gap: 20 }}>
-                        <img src="https://cdn-icons-png.flaticon.com/512/954/954591.png" alt="" />
-                        <span style={{ fontSize: 18, fontWeight: "lighter" }}>Không tìm thấy kết quả nào</span>
-                    </div>
-                </div>
-            )}
-            <div style={{ paddingTop: 140 }}></div>
 
-            <ShopList data={listSearch !== null && [...listSearch]} />
+            {listAll !== null && (
+                <>
+                    <div style={{ background: "rgb(246, 249, 252)", width: "100%", paddingTop: mobileMode ? 115 : 130, paddingBottom: 15, paddingLeft: 15, display: "flex", gap: 15 }}>
+                        <div
+                            style={{
+                                background: "#fff",
+                                borderRadius: "1rem",
+                                border: "1px solid rgb(204, 204, 204)",
+                                width: mobileMode ? 120 : 130,
+                                height: 40,
+                                color: "rgb(128, 128, 128)",
+                                fontSize: mobileMode ? 14 : 16,
+                            }}
+                            className={`center_flex cusor ${tabActive === 0 ? "active-search" : ""}`}
+                            onClick={() => {
+                                setTabActive(0);
+                                setListSearch(listAll.store);
+                            }}
+                        >
+                            <span>Nhà hàng</span>
+                        </div>
+                        <div
+                            style={{
+                                background: "#fff",
+                                borderRadius: "1rem",
+                                border: "1px solid rgb(204, 204, 204)",
+                                width: mobileMode ? 120 : 130,
+                                height: 40,
+                                color: "rgb(128, 128, 128)",
+                                fontSize: mobileMode ? 14 : 16,
+                            }}
+                            className={`center_flex cusor ${tabActive === 1 ? "active-search" : ""}`}
+                            onClick={() => {
+                                setTabActive(1);
+                                setListSearch(listAll.product);
+                            }}
+                        >
+                            <span>Món ăn</span>
+                        </div>
+                    </div>
+                    {listSearch?.length === 0 && (
+                        <div className="not-found-search container" style={{ height: mobileMode ? "calc(100% - 250px)" : "calc(90% - 185px)" }}>
+                            <div className="center_flex" style={{ flexDirection: "column", gap: 20 }}>
+                                <img src="https://cdn-icons-png.flaticon.com/512/954/954591.png" alt="" />
+                                <span style={{ fontSize: 18, fontWeight: "lighter" }}>Không tìm thấy kết quả nào</span>
+                            </div>
+                        </div>
+                    )}
+                </>
+            )}
+
+            <ShopList data={listSearch !== null && listSearch} isStore={tabActive === 0} />
         </div>
     );
 };

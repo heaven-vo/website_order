@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { IMAGE_NOTFOUND } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 import "./style.css";
-const ShopList = ({ data }) => {
+const ShopList = ({ data, isStore }) => {
     const { mode } = useContext(AppContext);
     let history = useHistory();
     return (
@@ -21,7 +21,11 @@ const ShopList = ({ data }) => {
                                 <div
                                     className="shop-item cusor"
                                     onClick={() => {
-                                        history.push(`/mode/${mode}/store/${item.id}`);
+                                        if (isStore) {
+                                            history.push(`/mode/${mode}/store/${item.id}`);
+                                        } else {
+                                            history.push(`/mode/${mode}/product/${item.id}`);
+                                        }
                                     }}
                                 >
                                     <img src={item.image || IMAGE_NOTFOUND} alt="" />
@@ -30,12 +34,16 @@ const ShopList = ({ data }) => {
                                     className="f_flex cusor"
                                     style={{ flexDirection: "column", gap: 5 }}
                                     onClick={() => {
-                                        history.push(`/mode/${mode}/store/${item.id}`);
+                                        if (isStore) {
+                                            history.push(`/mode/${mode}/store/${item.id}`);
+                                        } else {
+                                            history.push(`/mode/${mode}/product/${item.id}`);
+                                        }
                                     }}
                                 >
                                     <span className="shop-item-title">{item.name}</span>
-                                    <span className="shop-item-building">{item.building}</span>
-                                    <span className="shop-item-category">{item.storeCategory}</span>
+                                    <span className="shop-item-building">{item.building || item.pricePerPack?.toLocaleString()}</span>
+                                    <span className="shop-item-category">{item.storeCategory || item.storeName}</span>
                                 </div>
                             </div>
                         );

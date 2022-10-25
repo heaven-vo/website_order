@@ -308,7 +308,6 @@ const Navbar = () => {
                             <div>
                                 <i
                                     onClick={() => {
-                                        setKeySearch("");
                                         history.goBack();
                                     }}
                                     className="fa-solid fa-chevron-left header-white-icon-back"
