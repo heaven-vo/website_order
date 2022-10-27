@@ -1482,7 +1482,7 @@ iframe {
 }
 .modal-success-title {
     padding-bottom: 5px;
-    color: var(--primary);
+    color: rgb(4, 190, 190);
     font-weight: 700;
     font-size: 22px;
 }

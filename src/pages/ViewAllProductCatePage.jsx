@@ -200,6 +200,7 @@ export const ViewAllProductCatePage = () => {
                 {mode === "1" && (
                     <ShopList
                         data={stores !== null ? stores : []}
+                        isStore={true}
                         // filter={1}
                         // reLoad={() => {
                         //     hanldeReLoad();

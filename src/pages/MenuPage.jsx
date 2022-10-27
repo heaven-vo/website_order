@@ -109,7 +109,7 @@ export const MenuPage = () => {
     };
     const getMenuByModeId = (mode) => {
         if (mode !== "0") {
-            Promise.all([getMenuByMode(mode), getListStoreInMenuByMode(mode, 1, 100), getListStoreCategory(mode, 1, 100)])
+            Promise.all([getMenuByMode(mode), getListStoreInMenuByMode(mode, 1, 100), getListStoreCategory(mode, 5, 8)])
                 .then((res) => {
                     if (res.length > 0) {
                         const menu = res[0].data;
@@ -661,7 +661,7 @@ export const MenuPage = () => {
                         <div className="container-padding f_flex" style={{ alignItems: "end" }}>
                             <span style={{ padding: "40px 15px 10px 15px", fontWeight: 700, fontSize: 16, color: "rgb(100, 100, 100)" }}>Quán ngon gần bạn</span>
                         </div>
-                        <ShopList data={listStore.length > 0 && [...listStore]} />
+                        <ShopList data={listStore.length > 0 && [...listStore]} isStore={true} />
                     </>
                 )}
 

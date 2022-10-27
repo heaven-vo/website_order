@@ -34,7 +34,7 @@ export const SuccessModal = () => {
                         history.replace("/");
                         setOpentModalSuccess(false);
                     }}
-                    style={{ flex: 1, padding: 12, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", height: 45, color: "#fff" }}
+                    style={{ flex: 1, padding: 12, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "rgb(4, 190, 190)", height: 45, color: "#fff" }}
                 >
                     Đóng
                 </button>
@@ -72,7 +72,7 @@ export const ErrorModal = () => {
 
                         setOpentModalError(false);
                     }}
-                    style={{ flex: 1, padding: 12, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", height: 45, color: "#fff" }}
+                    style={{ flex: 1, padding: 12, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "rgb(237, 55, 116)", height: 45, color: "#fff" }}
                 >
                     Đóng
                 </button>
