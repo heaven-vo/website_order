@@ -5,10 +5,48 @@ const PRODUCT = "products";
 const MENU = "menus";
 const ORDER = "orders";
 const CATEGORY = "category-management";
+const STORE = "stores";
 //https://deliveryvhgp-webapi.azurewebsites.net/api/v1/menus/filter?modeId=1&gb=cate?page=1&pageSize=10
 //https://deliveryvhgp-webapi.azurewebsites.net/api/v1/menus/filter?modeId=1&gb=cate&page=1&pageSize=10
-export const getMenuByMode = (modeId, groupBy, page, size) => {
+export const getMenuByModeGroupBy = (modeId, groupBy, page, size) => {
     return axios.get(`${BASE_URL}${MENU}/filter?modeId=${modeId}&gb=${groupBy}&page=${page}&pageSize=${size}`, {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+    });
+};
+//https://deliveryvhgp-webapi.azurewebsites.net/api/v1/menus/now/categoies?modeId=1
+export const getMenuByMode = (modeId) => {
+    return axios.get(`${BASE_URL}${MENU}/now/categoies?modeId=${modeId}`, {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+    });
+};
+//https://deliveryvhgp-webapi.azurewebsites.net/api/v1/menus/now/storeCategories?modeId=1&storeCateSize=1&storeSize=20
+export const getListStoreCategory = (modeId, page, size) => {
+    return axios.get(`${BASE_URL}${MENU}/now/storeCategories?modeId=${modeId}&storeCateSize=${page}&storeSize=${size}`, {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+    });
+};
+
+//https://deliveryvhgp-webapi.azurewebsites.net/api/v1/menus/1/stores/filterByCate?cateId=1&page=1&pageSize=10
+export const getListStoreByCate = (menuId, cateId, page, size) => {
+    return axios.get(`${BASE_URL}${MENU}/${menuId}/${STORE}/filterByCate?cateId=${cateId}&page=${page}&pageSize=${size}`, {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+    });
+};
+//https://deliveryvhgp-webapi.azurewebsites.net/api/v1/menus/now/stores?modeId=1&page=1&pageSize=20
+export const getListStoreInMenuByMode = (modeId, page, size) => {
+    return axios.get(`${BASE_URL}${MENU}/now/stores?modeId=${modeId}&page=${page}&pageSize=${size}`, {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+    });
+};
+
+//https://deliveryvhgp-webapi.azurewebsites.net/api/v1/menus/ByMenuId/keySearch?KeySearch=c&menuId=1&pageIndex=1&pageSize=10
+export const getListSearchByKey = (key, menuId, page, size) => {
+    return axios.get(`${BASE_URL}${MENU}/ByMenuId/keySearch?KeySearch=${key}&menuId=${menuId}&pageIndex=${page}&pageSize=${size}`, {
         Accept: "application/json",
         "Content-Type": "application/json",
     });

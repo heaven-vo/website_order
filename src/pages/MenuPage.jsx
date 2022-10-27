@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
+import Countdown from "react-countdown";
 import Skeleton from "react-loading-skeleton";
 import { useHistory } from "react-router-dom";
 import Slider from "react-slick";
-import { getMenuByMode } from "../apis/apiService";
+import { getListStoreCategory, getListStoreInMenuByMode, getMenuByMode, getMenuByModeGroupBy } from "../apis/apiService";
 import { ProductSlide, SampleNextArrow, SamplePrevArrow } from "../components/products/ProductSlide";
 import ShopList from "../components/products/ShopList";
 import { ShopSlide } from "../components/products/ShopSlide";
+import { getHourFromDouble } from "../constants/Caculator";
 import { CATE_FITLER, IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
@@ -29,19 +31,40 @@ const Mdata = [
         cover: "/images/panner.jpg",
     },
 ];
+
+const Mdata2 = [
+    {
+        id: 3,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "https://storethailan.com/wp-content/uploads/2021/05/section_banner_2.jpg",
+    },
+    {
+        id: 1,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "http://cdn.tgdd.vn/Files/2022/03/16/1420563/15-3-28-3-2022-hoa-don-rau-thit-ca-100k-duoc-mua-ca-phao-song-huong-10k-202203160959551185.jpg",
+    },
+    {
+        id: 2,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "https://cdn.tgdd.vn/Files/2022/02/07/1414213/banh-keo-giam-tha-ga-giam-den-37-202202070953508165.jpg",
+    },
+];
 export default Mdata;
 export const MenuPage = () => {
-    // let date = new Date();
-    // let timeEnd1 = 13.54;
-    // let timeEnd2 = 13.55;
-    // let timeEnd3 = 13.56;
-    const { mode, mobileMode, setIsHeaderOrder, setHeaderInfo, setMenuIdProvider, setisCartMain, setCart, setOpenDeleteCart } = useContext(AppContext);
+    const { mode, mobileMode, setIsHeaderOrder, setHeaderInfo, setMenuIdProvider, setisCartMain, setCart, setOpenDeleteCart, setCategoriesInMenu, setKeySearch } = useContext(AppContext);
     const [filtter, setFilter] = useState(CATE_FITLER);
     // const [checked, setChecked] = useState(false);
     const [isLoadingPage, setIsLoadingPage] = useState(true);
     const [isLoadingProduct, setIsLoadingProduct] = useState(false);
     const [menuProduct, setMenuProduct] = useState([]);
     const [menuCategory, setMenuCategory] = useState([]);
+    const [title, setTitle] = useState("");
+    const [listStore, setListStore] = useState([]);
+    const [listStoreCategory, setListStoreCategory] = useState([]);
+    const [slideData, setSlideData] = useState([]);
     const [menuEmpty, setMenuEmpty] = useState(false);
     // const [menuCategory, setMenuCategory] = useState([]);
     const [widthScreen, setWidthScreen] = useState(window.innerWidth - 100);
@@ -49,9 +72,15 @@ export const MenuPage = () => {
     useEffect(() => {
         setIsLoadingPage(true);
         setIsHeaderOrder(false);
-        setTimeout(() => {
+        setKeySearch("");
+        if (mode === "1") {
+            getMenuByModeId(mode);
+            setSlideData(Mdata);
+        }
+        if (mode === "2" || mode === "3") {
             getMenu(mode, filtter, 1, 10);
-        }, 1);
+            setSlideData(Mdata2);
+        }
     }, [setIsHeaderOrder, mode]);
     // const hanldeChangeFilter = (fil) => {
     //     setFilter(fil);
@@ -78,10 +107,80 @@ export const MenuPage = () => {
             }
         }
     };
+    const getMenuByModeId = (mode) => {
+        if (mode !== "0") {
+            Promise.all([getMenuByMode(mode), getListStoreInMenuByMode(mode, 1, 100), getListStoreCategory(mode, 5, 8)])
+                .then((res) => {
+                    if (res.length > 0) {
+                        const menu = res[0].data;
+                        const stores = res[1].data;
+                        const storesCategory = res[2].data;
+
+                        checkCartInMenu(menu.id);
+                        setListStoreCategory(storesCategory);
+                        setListStore(stores);
+                        setMenuIdProvider(menu.id);
+                        setTitle(menu.name);
+                        setTimeEndState(getHourFromDouble(menu.endTime));
+                        setMenuCategory(menu.listCategoryInMenus || []);
+                        setCategoriesInMenu(menu.listCategoryInMenus || []);
+                        if (menu.listCategoryInMenus.length > 0) {
+                            setMenuEmpty(false);
+                        } else {
+                            setMenuEmpty(true);
+                        }
+                    } else {
+                        setListStore([]);
+                        setMenuCategory([]);
+                        setMenuEmpty(true);
+                    }
+                    setIsLoadingPage(false);
+                    setIsLoadingProduct(false);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setIsLoadingPage(false);
+                    setIsLoadingProduct(false);
+                    setListStore([]);
+                    setMenuCategory([]);
+                    setMenuEmpty([]);
+                });
+            // getMenuByMode(mode)
+            //     .then((res) => {
+            //         if (res.data) {
+            //             const menu = res.data;
+            //             console.log({ menu });
+            //             checkCartInMenu(menu.id);
+            //             // setMenuProduct(menu);
+            //             setMenuIdProvider(menu.id);
+            //             setMenuCategory(menu.listCategoryInMenus || []);
+            //             if (menu.listCategoryInMenus.length > 0) {
+            //                 setMenuEmpty(false);
+            //             } else {
+            //                 setMenuEmpty(true);
+            //             }
+            //         } else {
+            //             // setMenuProduct([]);
+            //             setMenuCategory([]);
+            //             setMenuEmpty(true);
+            //         }
+            //         setIsLoadingPage(false);
+            //         setIsLoadingProduct(false);
+            //     })
+            //     .catch((error) => {
+            //         console.log(error);
+            //         setIsLoadingPage(false);
+            //         setIsLoadingProduct(false);
+            //         // setMenuProduct([]);
+            //         setMenuCategory([]);
+            //         setMenuEmpty([]);
+            //     });
+        }
+    };
     const getMenu = (menu, filtter, pageInd, size) => {
         // setMenuCategory([]);
         if (menu !== "0") {
-            getMenuByMode(menu, filtter, pageInd, size)
+            getMenuByModeGroupBy(menu, filtter, pageInd, size)
                 .then((res) => {
                     if (res.data) {
                         const menu = res.data;
@@ -89,6 +188,7 @@ export const MenuPage = () => {
                         setMenuProduct(menu);
                         setMenuIdProvider(menu.id);
                         setMenuCategory(menu.listCategoryStoreInMenus);
+                        setCategoriesInMenu(menu.listCategoryStoreInMenus || []);
                         if (menu.listCategoryStoreInMenus.length > 0) {
                             setMenuEmpty(false);
                         } else {
@@ -124,34 +224,33 @@ export const MenuPage = () => {
             setHeaderInfo({});
         };
     }, [setHeaderInfo, widthScreen]);
-    // const [timeEnd, setTimeEnd] = useState(timeEnd1);
-    // const [timeCount, setTimeCount] = useState(1);
-    // const [isStop, setIsStop] = useState(false);
-    // const [result, setReuslt] = useState(1);
 
-    // useEffect(() => {
-    //     let hour = timeEnd - date.getHours() - 1;
-    //     let minus = 60 - date.getMinutes();
-    //     let second = 60 - date.getSeconds();
-    //     let res = hour * 3600 + minus * 60 + second;
-    //     setReuslt(res);
-    // }, [date, timeEnd]);
+    let date = new Date();
+    let timeStart = 12;
+    let timeEnd2 = 15;
+    // let timeEnd3 = 13.56;
+    // const [timeStartState, setTimeStartState] = useState(timeStart);
+    const [timeEndState, setTimeEndState] = useState(timeEnd2);
+    const [timeCount, setTimeCount] = useState(1);
+    const [isStop, setIsStop] = useState(false);
+    const [result, setReuslt] = useState(1);
 
-    // const callApi = (time) => {
-    //     if (time === 1) {
-    //         setTimeEnd(timeEnd1);
-    //         console.log("Call Api Sang");
-    //     } else if (time === 2) {
-    //         setTimeEnd(timeEnd2);
-    //         console.log("Call Api Trua");
-    //     } else if (time === 3) {
-    //         setTimeEnd(timeEnd3);
-    //         console.log("Call Api Chieu");
-    //         setIsStop(true);
-    //     }
-    //     setTimeCount(time);
-    //     // console.log("Xong");
-    // };
+    useEffect(() => {
+        let hour = timeEndState - date.getHours() - 1;
+        let minus = 60 - date.getMinutes();
+        let second = 60 - date.getSeconds();
+        let res = hour * 3600 + minus * 60 + second;
+        setReuslt(res);
+        return () => {};
+    }, [date]);
+
+    const callApi = () => {
+        setIsLoadingPage(true);
+        setIsLoadingProduct(true);
+        setTimeout(() => {
+            getMenuByModeId(mode);
+        }, 5000);
+    };
 
     // function getTimeStamp(input) {
     //     var parts = input.trim().split(" ");
@@ -173,27 +272,9 @@ export const MenuPage = () => {
         appendDots: (dots) => {
             return <ul style={{ margin: "0px" }}>{dots}</ul>;
         },
-        // responsive: [
-        //     {
-        //         breakpoint: 950,
-        //         settings: {
-        //             slidesToShow: 3,
-        //             slidesToScroll: 1,
-        //             infinite: true,
-        //         },
-        //     },
-        //     {
-        //         breakpoint: 700,
-        //         settings: {
-        //             slidesToShow: 1,
-        //             slidesToScroll: 1,
-        //             infinite: true,
-        //         },
-        //     },
-        // ],
     };
     const hanldeReLoad = () => {
-        getMenu(mode, filtter, 1, 100);
+        // getMenu(mode, filtter, 1, 100);
     };
     const settingCaategory = {
         dots: true,
@@ -327,13 +408,19 @@ export const MenuPage = () => {
             );
         }
     };
-    const menuTitle = (title, description, time, isCoundown) => {
+    const menuTitle = (title, description, isCoundown) => {
         return (
             <div className="c_flex" style={{ gap: 3, flexWrap: "wrap" }}>
                 <div className="f_flex" style={{ gap: 5, width: "100%", alignItems: "start", justifyContent: "space-between", flexDirection: "column" }}>
-                    {isLoadingPage ? <Skeleton height={mobileMode ? 18 : 21} width={mobileMode ? widthScreen : 380} /> : <span className="menu-text-detail">{description}</span>}
+                    {isLoadingPage ? (
+                        <Skeleton height={mobileMode ? 18 : 21} width={mobileMode ? widthScreen : 380} />
+                    ) : (
+                        <span className="menu-text-detail" style={{ fontWeight: "lighter" }}>
+                            {description}
+                        </span>
+                    )}
 
-                    {/* <div className="center_flex" style={{ gap: 15, justifyContent: "space-between", width: "100%" }}>
+                    <div className="center_flex" style={{ gap: 15, justifyContent: "space-between", width: "100%" }}>
                         {isLoadingPage ? <Skeleton height={mobileMode ? 30 : 38} width={230} /> : <h3 className="menu-text-title">{title}</h3>}
                         {isLoadingPage ? (
                             <Skeleton height={23} width={81} borderRadius={3} />
@@ -342,28 +429,28 @@ export const MenuPage = () => {
                                 <div className="">
                                     <Countdown
                                         renderer={renderer}
-                                        // date={Date.now() + result * 1000}
-                                        date={Date.now() + time}
+                                        date={Date.now() + result * 1000}
+                                        // date={Date.now() + 9500000}
                                         daysInHours={true}
                                         // overtime={true}
 
                                         onComplete={() => {
-                                            // callApi(timeCount + 1);
+                                            callApi();
                                         }}
                                     ></Countdown>
                                 </div>
                             )
                         )}
-                    </div> */}
+                    </div>
                     <section className="TopCate  " style={{ width: "100%" }}>
                         <div className="container" style={{ padding: 0 }}>
                             {isLoadingPage ? (
                                 <div style={{ height: "100%" }}>
-                                    <Skeleton borderRadius={5} height={mobileMode ? 180 : 300} style={{ margin: "0 5px" }} />
+                                    <Skeleton borderRadius={5} height={mobileMode ? 180 : 350} style={{ margin: "0 5px" }} />
                                 </div>
                             ) : (
                                 <Slider {...settings}>
-                                    {Mdata.map((value, index) => {
+                                    {slideData.map((value, index) => {
                                         return (
                                             <>
                                                 <div
@@ -388,19 +475,19 @@ export const MenuPage = () => {
     };
     const render = () => {
         switch (mode) {
-            case 1:
-                return menuTitle("Điểm Tâm Sáng", "Gọi là có - nhận đơn và xử lý giao hàng ngay.", 950000, true);
-            case 2:
-                return menuTitle("Hôm Nay Nấu Gì?", "Thực phẩm tươi sống giao ngay trong ngày.", 0, false);
-            case 3:
-                return menuTitle("Đồ Ăn Cho Cả Tuần", "Đặt hàng và giao hàng trong 3 - 5 ngày", 0, false);
+            case "1":
+                return menuTitle(title, "Gọi là có - nhận đơn và xử lý giao hàng ngay.", true);
+            case "2":
+                return menuTitle("Hôm Nay Nấu Gì?", "Thực phẩm tươi sống giao ngay trong ngày.", false);
+            case "3":
+                return menuTitle("Đồ Ăn Cho Cả Tuần", "Đặt hàng và giao hàng trong 3 - 5 ngày", false);
 
             default:
-                return menuTitle("Điểm Tâm Sáng", "Gọi là có - nhận đơn và xử lý giao hàng ngay.", 950000, true);
+                return menuTitle("Điểm Tâm Sáng", "Gọi là có - nhận đơn và xử lý giao hàng ngay.", true);
         }
     };
-    const hanldeViewAll = (cateId) => {
-        history.push(`/mode/${mode}/${filtter}/${cateId}`);
+    const hanldeViewAll = (cateId, categoryName) => {
+        history.push(`/mode/${mode}/${filtter}/${cateId}`, { categoryName: categoryName });
     };
     return (
         <>
@@ -434,7 +521,7 @@ export const MenuPage = () => {
                             ) : (
                                 <div className="search-menu" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                                     <div style={{ height: "100%" }}>
-                                        <i class="fa-solid fa-magnifying-glass" style={{ fontSize: 20, marginTop: 3 }}></i>
+                                        <i className="fa-solid fa-magnifying-glass" style={{ fontSize: 20, marginTop: 3 }}></i>
                                     </div>
                                     <input type="search" name="" id="" style={{ flex: 1 }} placeholder="Tìm sản phẩm" />
                                 </div>
@@ -497,7 +584,7 @@ export const MenuPage = () => {
                                     menuCategory.map((cate, index) => {
                                         return (
                                             <div key={index} className="cateogry-menu-wrapper ">
-                                                <div className="cateogry-menu-img" onClick={() => hanldeViewAll(cate.id)}>
+                                                <div className="cateogry-menu-img" onClick={() => hanldeViewAll(cate.id, cate.name)}>
                                                     <img src={cate.image || "https://thumbs.dreamstime.com/b/vietnamese-pho-soup-illustration-97217112.jpg"} alt="" />
                                                 </div>
                                                 <span className="cateogry-menu-text">{cate.name}</span>
@@ -528,21 +615,15 @@ export const MenuPage = () => {
                 {!isLoadingPage &&
                     !isLoadingProduct &&
                     mode === "1" &&
-                    menuProduct?.listCategoryStoreInMenus?.map((menu, index) => {
-                        if (menu.listProducts.length > 0) {
+                    listStoreCategory?.map((menu, index) => {
+                        if (menu.listStores.length > 0) {
                             return (
-                                // <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={500} transitionLeaveTimeout={500}>
-                                //     <ProductGrid data={menu.listProducts || []} label={menu.name} labelImg={menu.img || IMAGE_NOTFOUND} />
-                                // </ReactCSSTransitionGroup>
-
                                 <ShopSlide
                                     key={index}
                                     filtter={filtter}
-                                    data={[...menu.listProducts, ...menu.listProducts, ...menu.listProducts, ...menu.listProducts, ...menu.listProducts] || []}
+                                    data={[...menu.listStores] || []}
                                     label={menu.name}
                                     cateId={menu.id}
-                                    labelImg={menu.image || IMAGE_NOTFOUND}
-                                    isViewAll={true}
                                     reLoad={() => {
                                         hanldeReLoad();
                                     }}
@@ -552,7 +633,7 @@ export const MenuPage = () => {
                     })}
                 {!isLoadingPage &&
                     !isLoadingProduct &&
-                    mode === "2" &&
+                    (mode === "2" || mode === "3") &&
                     menuProduct?.listCategoryStoreInMenus?.map((menu, index) => {
                         if (menu.listProducts.length > 0) {
                             return (
@@ -575,12 +656,12 @@ export const MenuPage = () => {
                             );
                         } else return true;
                     })}
-                {mode === "1" && (
+                {!isLoadingPage && !isLoadingProduct && mode === "1" && (
                     <>
                         <div className="container-padding f_flex" style={{ alignItems: "end" }}>
                             <span style={{ padding: "40px 15px 10px 15px", fontWeight: 700, fontSize: 16, color: "rgb(100, 100, 100)" }}>Quán ngon gần bạn</span>
                         </div>
-                        <ShopList data={menuCategory.length > 0 && menuCategory} />;
+                        <ShopList data={listStore.length > 0 && [...listStore]} isStore={true} />
                     </>
                 )}
 
@@ -623,8 +704,8 @@ export const MenuPage = () => {
                     <section className="shop" style={{ padding: "25px 0 40px 0" }}>
                         <div className="container center_flex">
                             <div className="contentWidth  center_flex" style={{ marginLeft: 0, flexDirection: "column", gap: 10 }}>
-                                <img src="/images/fish-bones.png" style={{ width: 80 }} alt="" />
-                                <span style={{ fontSize: "1.1rem" }}>Hiện không có sản phẩm nào!!</span>
+                                <img src="/images/fish-bones.png" style={{ width: 50 }} alt="" />
+                                <span style={{ fontSize: "1rem" }}>Hiện không có sản phẩm nào!!</span>
                             </div>
                         </div>
                     </section>

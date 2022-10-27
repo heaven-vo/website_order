@@ -32,3 +32,16 @@ export const validatePhoneNumber = (input_str) => {
 
     return re.test(input_str);
 };
+
+export const getHourFromDouble = (number) => {
+    if (Number.isInteger(number)) {
+        return number;
+    } else {
+        var decNumber = (number + "").split(".")[1];
+        var intNumber = (number + "").split(".")[0];
+        intNumber = parseInt(intNumber);
+        decNumber = parseInt(decNumber);
+        decNumber = decNumber / 60;
+        return intNumber + decNumber;
+    }
+};

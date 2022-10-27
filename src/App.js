@@ -25,6 +25,7 @@ import { NotFoundPage } from "./pages/NotFoundPage";
 import { OrderDetailPage } from "./pages/OrderDetailPage";
 import { OrderPage } from "./pages/OrderPage";
 import SchedulePage from "./pages/SchedulePage";
+import { SearchPage } from "./pages/SearchPage";
 
 import { ViewAllProductCatePage } from "./pages/ViewAllProductCatePage";
 import { ViewAllProductStorePage } from "./pages/ViewAllProductStorePage";
@@ -117,12 +118,15 @@ function App() {
                     <Route path="/order/:order" exact>
                         <OrderDetailPage />
                     </Route>
-                    <Route path="/mode/:modeId/:id" exact>
+                    <Route path="/mode/:modeId/product/:id" exact>
                         <FoodDetailPage />
                     </Route>
 
                     <Route path="/checkout" exact>
                         <Cart />
+                    </Route>
+                    <Route path="/mode/:modeId/search" exact>
+                        <SearchPage />
                     </Route>
                     <Route path="/schedule" exact>
                         <SchedulePage />

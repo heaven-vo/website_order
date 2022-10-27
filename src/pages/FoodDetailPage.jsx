@@ -27,7 +27,7 @@ export const FoodDetailPage = () => {
         } else {
             setHeaderInfo({ isSearchHeader: false, title: "Chi tiết sản phẩm" });
             setIsLoadingCircle(true);
-            let productId = location.pathname.trim().split("/")[3];
+            let productId = location.pathname.trim().split("/")[4];
             if (productId) {
                 getProductDetail(productId)
                     .then((res) => {
@@ -496,24 +496,15 @@ export const FoodDetailPage = () => {
                                     </tr> */}
                                         <tr className="">
                                             <td className="food-detail-label">Đóng Gói: </td>
-                                            <td className="food-detail-text">
-                                                {product.packNetWeight}
-                                                {" " + product.unit}
-                                            </td>
+                                            <td className="food-detail-text">{product.packNetWeight ? product.packNetWeight + " " + product.unit : "Không có"}</td>
                                         </tr>
                                         <tr className="">
                                             <td className="food-detail-label">Tối Thiểu: </td>
-                                            <td className="food-detail-text">
-                                                {product.minimumQuantity + " "}
-                                                {product.unit}
-                                            </td>
+                                            <td className="food-detail-text">{product.minimumQuantity ? product.minimumQuantity + " " + product.unit : "Không có"}</td>
                                         </tr>
                                         <tr className="">
                                             <td className="food-detail-label">Tối Đa: </td>
-                                            <td className="food-detail-text">
-                                                {product.maximumQuantity + " "}
-                                                {product.unit}
-                                            </td>
+                                            <td className="food-detail-text">{product.maximumQuantity ? product.maximumQuantity + " " + product.unit : "Không có"}</td>
                                         </tr>
                                     </tbody>
                                 </table>

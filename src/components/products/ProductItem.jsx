@@ -121,7 +121,7 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                         className="product-list-img"
                         onClick={() => {
                             // setIsHeader(false);
-                            history.push(`/mode/${mode}/${product.id}`, { valid: true });
+                            history.push(`/mode/${mode}/product/${product.id}`, { valid: true });
                         }}
                         style={{ fontWeight: 500, cursor: "pointer" }}
                     >
@@ -131,7 +131,7 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                         <span
                             onClick={() => {
                                 // setIsHeader(false);
-                                history.push(`/mode/${mode}/${product.id}`, { valid: true });
+                                history.push(`/mode/${mode}/product/${product.id}`, { valid: true });
                             }}
                             style={{ fontWeight: 500, cursor: "pointer" }}
                         >

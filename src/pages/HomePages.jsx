@@ -30,20 +30,20 @@ const HomePage = ({ productItems, shopItems }) => {
             id: 1,
             title: "50% Off For Your First Shopping",
             desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
-            cover: "https://minhvumedia.vn/wp-content/uploads/banner-khai-truong-nha-hang-min.jpg",
+            cover: "https://www.tiendauroi.com/wp-content/uploads/2020/05/vinid-highlandcofffee-750x422.png",
         },
         {
             id: 2,
             title: "50% Off For Your First Shopping",
             desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
-            cover: "https://minhvumedia.vn/wp-content/uploads/banner-khai-truong-nha-hang-min.jpg",
+            cover: "https://www.chaoca.vn/wp-content/uploads/2019/03/CHA-Banner-s%E1%BB%B1-ki%E1%BB%87n-Crescent-Mall-700-x-350-01.png.webp",
         },
-        {
-            id: 3,
-            title: "50% Off For Your First Shopping",
-            desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
-            cover: "https://minhvumedia.vn/wp-content/uploads/banner-khai-truong-nha-hang-min.jpg",
-        },
+        // {
+        //     id: 3,
+        //     title: "50% Off For Your First Shopping",
+        //     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        //     cover: "https://minhvumedia.vn/wp-content/uploads/banner-khai-truong-nha-hang-min.jpg",
+        // },
     ];
     const settings = {
         dots: false,
@@ -101,7 +101,7 @@ const HomePage = ({ productItems, shopItems }) => {
                             }}
                         >
                             <div className="home-menu-item-icon">
-                                <img src="./images/icons/datmon-active.png" alt="" />
+                                <img src="./images/icons/hamburger.png" alt="" />
                             </div>
                             <span>Gọi đồ ăn</span>
                         </div>
@@ -120,7 +120,7 @@ const HomePage = ({ productItems, shopItems }) => {
                             }}
                         >
                             <div className="home-menu-item-icon">
-                                <img src="./images/icons/dicho-active.png" alt="" />
+                                <img src="./images/icons/groceries.png" alt="" />
                             </div>
                             <span>Giao hàng</span>
                         </div>
@@ -138,29 +138,40 @@ const HomePage = ({ productItems, shopItems }) => {
                             }}
                         >
                             <div className="home-menu-item-icon">
-                                <img src="./images/icons/dathang-active.png" alt="" />
+                                <img src="./images/icons/food-delivery.png" alt="" />
                             </div>
                             <span>Đặt Hàng</span>
                         </div>
                     </div>
-                    <Slider {...settings}>
-                        {banner.map((value, index) => {
-                            return (
-                                <>
-                                    <div
-                                        className=""
-                                        key={index}
-                                        style={{ padding: "30px 0 0 0", background: "none", boxShadow: "none", margin: 0, borderRadius: "0.5rem", transition: "1s all", WebkitTransition: "1s all" }}
-                                    >
-                                        <div className="nametop d_flex"></div>
-                                        <div className="slide-img" style={{ borderRadius: 5 }}>
-                                            <img src={value.cover} alt="" style={{ objectFit: "contain", width: "100%", height: "100%", borderRadius: "0.5rem" }} />
-                                        </div>
-                                    </div>
-                                </>
-                            );
-                        })}
-                    </Slider>
+                    <section className="TopCate  " style={{ width: "100%" }}>
+                        <div className="container" style={{ padding: 0 }}>
+                            <Slider {...settings}>
+                                {banner.map((value, index) => {
+                                    return (
+                                        <>
+                                            <div
+                                                className=""
+                                                key={index}
+                                                style={{
+                                                    padding: mobileMode ? "30px 0" : "30px 5px 0 5px",
+                                                    background: "none",
+                                                    boxShadow: "none",
+                                                    margin: 0,
+                                                    borderRadius: "0.5rem",
+                                                    transition: "1s all",
+                                                    WebkitTransition: "1s all",
+                                                }}
+                                            >
+                                                <div className="slide-img" style={{ borderRadius: 5, height: 200 }}>
+                                                    <img src={value.cover} alt="" style={{ objectFit: "cover", width: "100%", height: "100%", borderRadius: "0.5rem" }} />
+                                                </div>
+                                            </div>
+                                        </>
+                                    );
+                                })}
+                            </Slider>
+                        </div>
+                    </section>
                 </section>
             </div>
         </>

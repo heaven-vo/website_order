@@ -24,7 +24,7 @@ export const SamplePrevArrow = (props) => {
         </div>
     );
 };
-export const ShopSlide = ({ filtter, label, data, labelImg, cateId, isLoading, isViewAll, reLoad }) => {
+export const ShopSlide = ({ filtter, label, data, cateId, isLoading, reLoad }) => {
     const { mode } = useContext(AppContext);
     const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);
     const [visiblePopupOutOfStore, setVisiblePopupOutOfStore] = useState(false);
@@ -99,11 +99,11 @@ export const ShopSlide = ({ filtter, label, data, labelImg, cateId, isLoading, i
                                     className="heading-right  "
                                     style={{ display: label ? "block" : "none", color: "rgb(100, 100, 100)" }}
                                     onClick={() => {
-                                        history.push(`/mode/${mode}/${filtter}/${cateId}`);
+                                        // history.push(`/mode/${mode}/${filtter}/${cateId}`);
                                     }}
                                 >
                                     {/* <span>Xem tất cả</span> */}
-                                    <i class="fa-solid fa-chevron-right" style={{ fontSize: 18, marginTop: 5, marginLeft: 30 }}></i>
+                                    <i className="fa-solid fa-chevron-right" style={{ fontSize: 18, marginTop: 5, marginLeft: 30 }}></i>
                                 </div>
                             </div>
                             <div className="shop-slide" style={{ padding: "15px 15px 15px 15px" }}>
@@ -121,7 +121,7 @@ export const ShopSlide = ({ filtter, label, data, labelImg, cateId, isLoading, i
                                                     }}
                                                     style={{ borderRadius: 50, border: "1px solid rgb(220,220,220)", width: 50, height: 50 }}
                                                 >
-                                                    <i class="fa-solid fa-chevron-right" style={{ fontSize: 18 }}></i>
+                                                    <i className="fa-solid fa-chevron-right" style={{ fontSize: 18 }}></i>
                                                 </div>
                                                 <span
                                                     onClick={() => {

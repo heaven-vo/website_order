@@ -11,8 +11,22 @@ import { getApartment, postOrder, putOrder } from "../../apis/apiService";
 import { CountDown } from "./CountDown";
 
 const Cart = ({}) => {
-    const { Cart, setCart, setHeaderInfo, setIsHeaderOrder, mobileMode, setisCartMain, userInfo, setUserInfo, areaProvider, mode, modeType, setOpentModalSuccess, setOpentModalError } =
-        useContext(AppContext);
+    const {
+        Cart,
+        setCart,
+        setHeaderInfo,
+        setIsHeaderOrder,
+        mobileMode,
+        setisCartMain,
+        userInfo,
+        setUserInfo,
+        areaProvider,
+        menuIdProvider,
+        modeType,
+        setMenuIdProvider,
+        setOpentModalSuccess,
+        setOpentModalError,
+    } = useContext(AppContext);
     const [totalPrice, setTotalPrice] = useState(0);
     const [CartList, setCartList] = useState([]);
     const [total, setTotal] = useState("");
@@ -173,6 +187,7 @@ const Cart = ({}) => {
             total: totalPrice + 15000,
             storeId: Cart.length > 0 && Cart[0].storeId,
             buildingId: building.value,
+            menuId: menuIdProvider,
             note: note,
             fullName: fullName,
             phoneNumber: phone,
@@ -191,33 +206,11 @@ const Cart = ({}) => {
                 if (res.data) {
                     localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
                     setCart([]);
-                }
-                return res;
-            })
-            .then((res) => {
-                if (res.data) {
-                    const order = res.data;
-
-                    let orderUpdate = {
-                        orderId: order.id,
-                        statusId: "2",
-                    };
-                    putOrder(orderUpdate)
-                        .then((res) => {
-                            if (res.data) {
-                                setisLoadingOrder(false);
-                                setOpentModalSuccess(true);
-
-                                // history.push("/");
-                            }
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                            setOpentModalError(true);
-                            setisLoadingOrder(false);
-                        });
+                    setOpentModalSuccess(true);
+                    setisLoadingOrder(false);
                 }
             })
+
             .catch((error) => {
                 console.log(error);
                 setOpentModalError(true);
@@ -237,12 +230,11 @@ const Cart = ({}) => {
         setApartment(userInfo.apartment || "");
         setArea(userInfo.area || "");
     }, [userInfo]);
+
     useEffect(() => {
         setIsHeaderOrder(false);
         setHeaderInfo({ isSearchHeader: false, title: "Đơn hàng của bạn" });
         setisCartMain(false);
-        // setIsHeader(false);
-
         return () => {
             if (Cart.length > 0) {
                 setisCartMain(true);
@@ -255,6 +247,9 @@ const Cart = ({}) => {
         Cart?.map((item) => {
             return (total = item.pricePerPack * item.quantityCart + total);
         });
+        if (Cart && Cart?.length > 0) {
+            setMenuIdProvider(Cart[0].menuId);
+        }
         setTotalPrice(total);
         setCartList(Cart);
     }, [Cart]);
@@ -411,7 +406,7 @@ const Cart = ({}) => {
                             />
                         </div>
                     </div>
-                    {(isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea) && !isValidPhoneRegex && (
+                    {(isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea || !validatePhoneNumber) && (
                         <div className="input-validate-form">
                             <span>Vui lòng điền đủ thông tin</span>
                         </div>
@@ -719,7 +714,7 @@ const Cart = ({}) => {
                             >
                                 <div className="f_flex checkout-content-icon-wrapper" style={{ alignItems: "center", gap: 15 }}>
                                     <div className="checkout-content-icon">
-                                        <i class="fa-solid fa-user"></i>
+                                        <i className="fa-solid fa-user"></i>
                                     </div>
                                     <div className="checkout-content-item">
                                         <h4>Tên người nhận</h4>
@@ -728,7 +723,7 @@ const Cart = ({}) => {
                                 </div>
                                 <div className="f_flex checkout-content-icon-wrapper" style={{ alignItems: "center", gap: 15 }}>
                                     <div className="checkout-content-icon">
-                                        <i class="fa-solid fa-mobile-screen-button"></i>
+                                        <i className="fa-solid fa-mobile-screen-button"></i>
                                     </div>
                                     <div className="checkout-content-item">
                                         <h4>Số điện thoại nhận hàng</h4>
@@ -737,7 +732,7 @@ const Cart = ({}) => {
                                 </div>
                                 <div className="f_flex checkout-content-icon-wrapper" style={{ alignItems: "center", gap: 15 }}>
                                     <div className="checkout-content-icon">
-                                        <i class="fa-regular fa-clipboard"></i>
+                                        <i className="fa-regular fa-clipboard"></i>
                                     </div>
                                     <div className="checkout-content-item">
                                         <h4>Lưu ý đặc biệt</h4>

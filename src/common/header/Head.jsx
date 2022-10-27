@@ -283,7 +283,7 @@ const Head = () => {
                             </div>
                         )} */}
                     </div>
-                    {(isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea) && !isValidPhoneRegex && (
+                    {(isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea || !validatePhoneNumber) && (
                         <div className="input-validate-form">
                             <span>Vui lòng điền đủ thông tin</span>
                         </div>
@@ -322,7 +322,7 @@ const Head = () => {
                     </div>
                     <div className="c_flex" style={{ gap: 20 }}>
                         <div className="search-box f_flex">
-                            <i class="fa-solid fa-location-dot" style={{ color: "var(--primary)" }}></i>
+                            <i className="fa-solid fa-location-dot" style={{ color: "var(--primary)" }}></i>
                             <input
                                 type="text"
                                 placeholder="Nhập địa chỉ giao hàng"

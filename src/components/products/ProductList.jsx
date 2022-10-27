@@ -7,7 +7,7 @@ import { AppContext } from "../../context/AppProvider";
 import { ProductItem } from "./ProductItem";
 
 export const ProductList = ({ data, filter, reLoad }) => {
-    const { setCart, mobileMode, setisCartMain, menuIdProvider, mode, setisProductCart } = useContext(AppContext);
+    const { setCart, mobileMode, setisCartMain, menuIdProvider, mode } = useContext(AppContext);
     const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);
     const [visiblePopupOutOfStore, setVisiblePopupOutOfStore] = useState(false);
     const [productRodal, setProductRodal] = useState({});
@@ -49,7 +49,7 @@ export const ProductList = ({ data, filter, reLoad }) => {
                 menuId: menuIdProvider,
             },
         ];
-        setisProductCart(true);
+        // setisProductCart(true);
         setisCartMain(true);
         setVisiblePopupOutOfStore(false);
         itemsRef.current[indexRodal].isQuantity();
@@ -201,7 +201,7 @@ export const ProductList = ({ data, filter, reLoad }) => {
                 <div className="back-white c_flex" style={{ padding: "10px 15px", alignItems: "self-start", flexDirection: "column" }}>
                     {data.map((item, index) => {
                         let isBorderBottom = true;
-                        if (index === data.length - 1) {
+                        if (index === data.length - 1 || data.length === 0) {
                             isBorderBottom = false;
                         }
                         return (

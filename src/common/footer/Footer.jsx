@@ -31,7 +31,7 @@ const Footer = () => {
 
                     <div className="center_flex" style={{ gap: 20 }} onClick={() => setIsActiveFirst(!isActiveFirst)}>
                         <h2>Về Chúng Tôi</h2>
-                        <i class="fa-solid fa-chevron-down"></i>
+                        <i className="fa-solid fa-chevron-down"></i>
                     </div>
 
                     <div className={`box  footer-title ${isActiveFirst ? "activeFooter" : ""}`}>
@@ -47,7 +47,7 @@ const Footer = () => {
 
                     <div className="center_flex" style={{ gap: 20 }} onClick={() => setIsActiveSecond(!isActiveSecond)}>
                         <h2>Chăm Sóc Khách Hàng</h2>
-                        <i class="fa-solid fa-chevron-down"></i>
+                        <i className="fa-solid fa-chevron-down"></i>
                     </div>
 
                     <div className={`box ${"footer-title "} ${isActiveSecond ? "activeFooter" : ""}`}>
@@ -62,7 +62,7 @@ const Footer = () => {
 
                     <div className="center_flex" style={{ gap: 20 }} onClick={() => setIsActiveThird(!isActiveThird)}>
                         <h2>Liên Hệ Với Chúng Tôi</h2>
-                        <i class="fa-solid fa-chevron-down"></i>
+                        <i className="fa-solid fa-chevron-down"></i>
                     </div>
 
                     <div className={`box ${"footer-title "} ${isActiveThird ? "activeFooter" : ""}`}>

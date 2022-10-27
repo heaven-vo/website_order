@@ -26,6 +26,10 @@ export default function AppProvider({ children }) {
     const [isLoadingMain, setisLoadingMain] = useState(true);
     const [isCartMain, setisCartMain] = useState(true);
     const [headerInfo, setHeaderInfo] = useState({});
+    const [keySearch, setKeySearch] = useState("");
+    const [isSearchSubmit, setIsSearchSubmit] = useState(false);
+
+    const [categoriesInMenu, setCategoriesInMenu] = useState([]);
     const [apartmentProvider, setApartmentProvider] = useState([]);
     const [areaProvider, setAreaProvider] = useState([]);
     const [buildings, setBuildings] = useState([]);
@@ -193,6 +197,12 @@ export default function AppProvider({ children }) {
                 setOpenDeleteCart,
                 modeType,
                 setModeType,
+                categoriesInMenu,
+                setCategoriesInMenu,
+                keySearch,
+                setKeySearch,
+                isSearchSubmit,
+                setIsSearchSubmit,
             }}
         >
             {children}

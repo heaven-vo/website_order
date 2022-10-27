@@ -35,15 +35,15 @@ export const LoginPage = () => {
     return (
         <section className="background back-white" style={{ paddingTop: 90, height: "100vh" }}>
             <div className="container login-wrapper" style={{ borderRadius: 10, background: "#fff" }}>
-                <div class="limiter">
-                    <div class="center_flex" style={{ flexDirection: "column" }}>
-                        <div class="" style={{ padding: "15px 0" }}>
+                <div className="limiter">
+                    <div className="center_flex" style={{ flexDirection: "column" }}>
+                        <div className="" style={{ padding: "15px 0" }}>
                             <span className="login-logo">Cộng Đồng Chung Cư </span>
                         </div>
-                        <div class="" style={{}}>
+                        <div className="" style={{}}>
                             <span className="login-hello">___ Xin Chào ___</span>
                         </div>
-                        <div class="f_flex login-text" style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", padding: "30px 0", gap: 5 }}>
+                        <div className="f_flex login-text" style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", padding: "30px 0", gap: 5 }}>
                             <span>Gửi mã xác nhận</span>
                             <span>Có thể bỏ qua nếu không nhận được OTP</span>
                             <span>sau vài giây</span>

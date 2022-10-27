@@ -18,9 +18,9 @@ export const ModalDeleteCart = () => {
             }}
             style={{ borderRadius: 10 }}
         >
-            <div class="modal-delete-cart">
-                <div class="modal-delete-cart-img">
-                    <img class="" src="/images/delete-cart.jpg" alt="" />
+            <div className="modal-delete-cart">
+                <div className="modal-delete-cart-img">
+                    <img className="" src="/images/delete-cart.jpg" alt="" />
                 </div>
                 <div style={{ textAlign: "center" }} className="modal-delete-cart-title">
                     <span style={{}}>Bạn muốn đổi thực đơn?</span>

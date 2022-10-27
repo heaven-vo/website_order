@@ -283,7 +283,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                                     }}
                                 >
                                     {/* <span>Xem tất cả</span> */}
-                                    <i class="fa-solid fa-chevron-right" style={{ fontSize: 18, marginTop: 5, marginLeft: 30 }}></i>
+                                    <i className="fa-solid fa-chevron-right" style={{ fontSize: 18, marginTop: 5, marginLeft: 30 }}></i>
                                 </div>
                             </div>
                             <div style={{ padding: "15px 15px 15px 15px" }}>
@@ -310,7 +310,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                                                     }}
                                                     style={{ borderRadius: 50, border: "1px solid rgb(220,220,220)", width: 50, height: 50 }}
                                                 >
-                                                    <i class="fa-solid fa-chevron-right" style={{ fontSize: 18 }}></i>
+                                                    <i className="fa-solid fa-chevron-right" style={{ fontSize: 18 }}></i>
                                                 </div>
                                                 <span
                                                     onClick={() => {
