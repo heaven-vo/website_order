@@ -6,24 +6,23 @@ import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import "../src/pages/responsive.css";
 import "./App.css";
-import Cart from "./common/Cart/Cart";
 import { CartMain } from "./common/Cart/CartMain";
 import Footer from "./common/footer/Footer";
 import { DrawerContent } from "./common/header/Drawer";
 import Header from "./common/header/Header";
 import Loading from "./common/Loading/Loading";
-import Data from "./components/Data";
-import Pdata from "./components/products/Pdata";
+
 import { ModalDeleteCart } from "./components/wrapper/ModalDeleteCart";
 import { ErrorModal, SuccessModal } from "./components/wrapper/ModalOrder";
 import { AppContext } from "./context/AppProvider";
+import Cart from "./pages/CartPage";
 import { FoodDetailPage } from "./pages/FoodDetailPage";
 import HomePage from "./pages/HomePages";
 import { LoginPage } from "./pages/LoginPage";
 import { MenuPage } from "./pages/MenuPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { OrderDetailPage } from "./pages/OrderDetailPage";
-import { OrderPage } from "./pages/OrderPage";
+import OrderLookupPage from "./pages/OrderLookupPage";
 import SchedulePage from "./pages/SchedulePage";
 import { SearchPage } from "./pages/SearchPage";
 
@@ -31,9 +30,7 @@ import { ViewAllProductCatePage } from "./pages/ViewAllProductCatePage";
 import { ViewAllProductStorePage } from "./pages/ViewAllProductStorePage";
 import "./util.css";
 function App() {
-    const { productItems } = Data;
-    const { shopItems } = Pdata;
-    const { setMobileMode, isOpenDrawer, setIsOpenDrawer, isCartMain, isLoadingMain, mobileMode, opentModalSuccess, setOpentModalSuccess } = useContext(AppContext);
+    const { setMobileMode, isOpenDrawer, setIsOpenDrawer, isCartMain, isLoadingMain, mobileMode } = useContext(AppContext);
     const [vh, setVh] = useState(window.innerHeight);
     useEffect(() => {
         const updateVh = () => {
@@ -113,7 +110,7 @@ function App() {
                         <ViewAllProductCatePage />
                     </Route>
                     <Route path="/order" exact>
-                        <OrderPage />
+                        <OrderLookupPage />
                     </Route>
                     <Route path="/order/:order" exact>
                         <OrderDetailPage />

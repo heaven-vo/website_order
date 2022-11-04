@@ -192,7 +192,7 @@ export const ProductList = ({ data, filter, reLoad }) => {
                     </button>
                 </div>
             </Rodal>
-            <div className="product-list-wrapper" style={{ paddingTop: 0, paddingBottom: 100, background: "#fff" }}>
+            <div className="product-list-wrapper" style={{ paddingTop: 0, paddingBottom: 0, background: "#fff" }}>
                 {filter === 2 && (
                     <div className="container-padding f_flex" style={{ alignItems: "end" }}>
                         <span style={{ padding: "15px 15px 10px 15px", fontWeight: 700, fontSize: 16, color: "rgb(100, 100, 100)" }}>Dành cho bạn</span>

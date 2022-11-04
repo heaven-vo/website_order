@@ -68,7 +68,7 @@ export const SearchPage = () => {
                         <div
                             style={{
                                 background: "#fff",
-                                borderRadius: "1rem",
+                                borderRadius: "10px",
                                 border: "1px solid rgb(204, 204, 204)",
                                 width: mobileMode ? 120 : 130,
                                 height: 40,
@@ -86,7 +86,7 @@ export const SearchPage = () => {
                         <div
                             style={{
                                 background: "#fff",
-                                borderRadius: "1rem",
+                                borderRadius: "10px",
                                 border: "1px solid rgb(204, 204, 204)",
                                 width: mobileMode ? 120 : 130,
                                 height: 40,

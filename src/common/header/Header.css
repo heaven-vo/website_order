@@ -300,6 +300,9 @@ header ul li a:hover {
 }
 .rodal-zoom-enter {
     border-radius: 10px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .header-white {

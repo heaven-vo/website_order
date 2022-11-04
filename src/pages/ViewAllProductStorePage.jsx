@@ -49,7 +49,7 @@ export const ViewAllProductStorePage = () => {
                         //     }
                         // }
                         setProducts(productList);
-                        setHeaderInfo({ isSearchHeader: false, title: title });
+                        setHeaderInfo({ isSearchHeader: false, title: "Chi tiết cửa hàng" });
                         setIsLoadingCircle(false);
                     } else {
                         setIsLoadingCircle(false);

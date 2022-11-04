@@ -31,7 +31,7 @@ export const ShopCart = React.forwardRef(({ product }, ref) => {
 
     return (
         <>
-            <div className="box" key={pro.id} style={{ width: 150 }}>
+            <div className="box" key={pro.id} style={{ width: 135 }}>
                 <div className="product mtop" style={{ margin: 0, padding: "0", boxShadow: "none" }}>
                     {/* <Link to="/food-detail"> */}
                     <div

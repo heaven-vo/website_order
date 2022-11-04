@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
+import ScrollContainer from "react-indiana-drag-scroll";
 import { useHistory } from "react-router-dom";
 import Slider from "react-slick";
 import { AppContext } from "../../context/AppProvider";
@@ -107,34 +108,43 @@ export const ShopSlide = ({ filtter, label, data, cateId, isLoading, reLoad }) =
                                 </div>
                             </div>
                             <div className="shop-slide" style={{ padding: "15px 15px 15px 15px" }}>
-                                <Slider {...ShopSlide}>
+                                {/* <Slider {...ShopSlide}> */}
+                                <ScrollContainer
+                                    className="schedule-category"
+                                    horizontal={true}
+                                    style={{ width: "100%", gridTemplateColumns: "repeat(9, 1fr)", display: "grid", gridGap: 10, overflow: "auto" }}
+                                >
                                     {data.map((value, index) => {
-                                        return <ShopCart ref={(el) => (itemsRef.current[index] = el)} index={index} product={value} key={index} />;
+                                        if (index < 8) {
+                                            return <ShopCart ref={(el) => (itemsRef.current[index] = el)} index={index} product={value} key={index} />;
+                                        }
                                     })}
                                     {slideShow > 3 && (
-                                        <div className="" style={{}}>
-                                            <div className="center_flex " style={{ flexDirection: "column", height: 150, marginLeft: 10 }}>
+                                        <div className="view-all-btn" style={{}}>
+                                            <div className="center_flex " style={{ flexDirection: "column", height: 150, width: 70 }}>
                                                 <div
-                                                    className="center_flex cusor"
+                                                    className="center_flex cusor view-all-btn"
                                                     onClick={() => {
                                                         history.push(`/mode/${mode}/${filtter}/${cateId}`);
                                                     }}
-                                                    style={{ borderRadius: 50, border: "1px solid rgb(220,220,220)", width: 50, height: 50 }}
+                                                    style={{ borderRadius: 50, border: "1px solid rgb(220,220,220)", width: 45, height: 45 }}
                                                 >
                                                     <i className="fa-solid fa-chevron-right" style={{ fontSize: 18 }}></i>
                                                 </div>
                                                 <span
+                                                    style={{ fontSize: 14, paddingTop: 5 }}
                                                     onClick={() => {
                                                         history.push(`/mode/${mode}/${filtter}/${cateId}`);
                                                     }}
                                                     className="cusor"
                                                 >
-                                                    Xem tất cả
+                                                    Xem thêm
                                                 </span>
                                             </div>
                                         </div>
                                     )}
-                                </Slider>
+                                </ScrollContainer>
+                                {/* </Slider> */}
                             </div>
                         </div>
                     </div>

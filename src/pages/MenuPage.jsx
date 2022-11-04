@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import Countdown from "react-countdown";
+import BallTriangle from "react-loading-icons/dist/esm/components/ball-triangle";
 import Skeleton from "react-loading-skeleton";
 import { useHistory } from "react-router-dom";
 import Slider from "react-slick";
 import { getListStoreCategory, getListStoreInMenuByMode, getMenuByMode, getMenuByModeGroupBy } from "../apis/apiService";
+import DurationList from "../components/products/DurationList";
 import { ProductSlide, SampleNextArrow, SamplePrevArrow } from "../components/products/ProductSlide";
 import ShopList from "../components/products/ShopList";
 import { ShopSlide } from "../components/products/ShopSlide";
@@ -32,7 +34,7 @@ const Mdata = [
     },
 ];
 
-const Mdata2 = [
+export const Mdata2 = [
     {
         id: 3,
         title: "50% Off For Your First Shopping",
@@ -59,6 +61,7 @@ export const MenuPage = () => {
     // const [checked, setChecked] = useState(false);
     const [isLoadingPage, setIsLoadingPage] = useState(true);
     const [isLoadingProduct, setIsLoadingProduct] = useState(false);
+    const [isLoadingMore, setIsLoadingMore] = useState(true);
     const [menuProduct, setMenuProduct] = useState([]);
     const [menuCategory, setMenuCategory] = useState([]);
     const [title, setTitle] = useState("");
@@ -66,8 +69,11 @@ export const MenuPage = () => {
     const [listStoreCategory, setListStoreCategory] = useState([]);
     const [slideData, setSlideData] = useState([]);
     const [menuEmpty, setMenuEmpty] = useState(false);
+    const [pageIndex, setPageIndex] = useState(1);
+    const [isFull, setisFull] = useState(false);
     // const [menuCategory, setMenuCategory] = useState([]);
     const [widthScreen, setWidthScreen] = useState(window.innerWidth - 100);
+
     let history = useHistory();
     useEffect(() => {
         setIsLoadingPage(true);
@@ -81,6 +87,12 @@ export const MenuPage = () => {
             getMenu(mode, filtter, 1, 10);
             setSlideData(Mdata2);
         }
+        if (mode === "3") {
+            setHeaderInfo({ isSearchHeader: false, title: "Chọn ngày giao hàng" });
+        } else {
+            console.log("chay");
+            setHeaderInfo({ isSearchHeader: true, title: "" });
+        }
     }, [setIsHeaderOrder, mode]);
     // const hanldeChangeFilter = (fil) => {
     //     setFilter(fil);
@@ -92,6 +104,75 @@ export const MenuPage = () => {
 
     //     getMenu(menu, filtter, 1, 10);
     // }, [filtter]);
+
+    const loadMore = () => {
+        // setPageIndex(pageIndex + 1);
+        console.log({ listStore });
+        let newStores = [];
+        getListStoreInMenuByMode("1", pageIndex, 3)
+            .then((res) => {
+                if (res.data) {
+                    const stores = res.data;
+
+                    console.log({ stores });
+                    newStores = [...listStore, ...stores];
+                    console.log({ newStores });
+                    setListStore([...listStore, ...stores]);
+                } else {
+                }
+                setIsLoadingPage(false);
+                setIsLoadingProduct(false);
+            })
+            .catch((error) => {
+                console.log(error);
+                setIsLoadingPage(false);
+                setIsLoadingProduct(false);
+            });
+    };
+
+    useEffect(() => {
+        const handleScroll = (e) => {
+            const scrollHeight = e.target.scrollHeight;
+            let currentHeight = 0;
+            if (mobileMode) {
+                currentHeight = Math.ceil(e.target.scrollTop + window.innerHeight);
+            } else {
+                currentHeight = Math.ceil(e.target.scrollTop + window.innerHeight * (90 / 100));
+            }
+            if (currentHeight === scrollHeight && !isFull) {
+                setIsLoadingMore(true);
+
+                getListStoreInMenuByMode("1", pageIndex, 3)
+                    .then((res) => {
+                        if (res.data) {
+                            const stores = res.data;
+                            if (stores.length > 0) {
+                                setListStore([...listStore, ...stores]);
+                                setIsLoadingMore(false);
+                                setPageIndex(pageIndex + 1);
+                                console.log(pageIndex);
+                            } else {
+                                setisFull(true);
+                                setListStore([...listStore, ...stores]);
+                                setIsLoadingMore(false);
+                            }
+                        } else {
+                        }
+                        setIsLoadingPage(false);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        setIsLoadingMore(false);
+                    });
+            }
+        };
+        let main = document.getElementById("main");
+        main.addEventListener("scroll", handleScroll);
+        return () => {
+            main.removeEventListener("scroll", handleScroll);
+        };
+    }, [listStore, mobileMode, pageIndex]);
+
     const checkCartInMenu = (menuId) => {
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
             localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
@@ -101,15 +182,12 @@ export const MenuPage = () => {
             const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
             if (CartList.length > 0 && CartList[0].menuId !== menuId.toString()) {
                 setOpenDeleteCart(true);
-                // localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-                // setCart([]);
-                // setisCartMain(false);
             }
         }
     };
     const getMenuByModeId = (mode) => {
         if (mode !== "0") {
-            Promise.all([getMenuByMode(mode), getListStoreInMenuByMode(mode, 1, 100), getListStoreCategory(mode, 5, 8)])
+            Promise.all([getMenuByMode(mode), getListStoreInMenuByMode(mode, pageIndex, 3), getListStoreCategory(mode, 5, 8)])
                 .then((res) => {
                     if (res.length > 0) {
                         const menu = res[0].data;
@@ -124,6 +202,7 @@ export const MenuPage = () => {
                         setTimeEndState(getHourFromDouble(menu.endTime));
                         setMenuCategory(menu.listCategoryInMenus || []);
                         setCategoriesInMenu(menu.listCategoryInMenus || []);
+                        setPageIndex(pageIndex + 1);
                         if (menu.listCategoryInMenus.length > 0) {
                             setMenuEmpty(false);
                         } else {
@@ -134,6 +213,7 @@ export const MenuPage = () => {
                         setMenuCategory([]);
                         setMenuEmpty(true);
                     }
+
                     setIsLoadingPage(false);
                     setIsLoadingProduct(false);
                 })
@@ -145,36 +225,6 @@ export const MenuPage = () => {
                     setMenuCategory([]);
                     setMenuEmpty([]);
                 });
-            // getMenuByMode(mode)
-            //     .then((res) => {
-            //         if (res.data) {
-            //             const menu = res.data;
-            //             console.log({ menu });
-            //             checkCartInMenu(menu.id);
-            //             // setMenuProduct(menu);
-            //             setMenuIdProvider(menu.id);
-            //             setMenuCategory(menu.listCategoryInMenus || []);
-            //             if (menu.listCategoryInMenus.length > 0) {
-            //                 setMenuEmpty(false);
-            //             } else {
-            //                 setMenuEmpty(true);
-            //             }
-            //         } else {
-            //             // setMenuProduct([]);
-            //             setMenuCategory([]);
-            //             setMenuEmpty(true);
-            //         }
-            //         setIsLoadingPage(false);
-            //         setIsLoadingProduct(false);
-            //     })
-            //     .catch((error) => {
-            //         console.log(error);
-            //         setIsLoadingPage(false);
-            //         setIsLoadingProduct(false);
-            //         // setMenuProduct([]);
-            //         setMenuCategory([]);
-            //         setMenuEmpty([]);
-            //     });
         }
     };
     const getMenu = (menu, filtter, pageInd, size) => {
@@ -212,8 +262,8 @@ export const MenuPage = () => {
                 });
         }
     };
+
     useEffect(() => {
-        setHeaderInfo({ isSearchHeader: true, title: "" });
         function handleResize() {
             setWidthScreen(window.innerWidth - 100);
         }
@@ -305,6 +355,7 @@ export const MenuPage = () => {
             },
         ],
     };
+
     // Renderer callback
     const renderer = ({ total, hours, minutes, seconds }) => {
         if (total) {
@@ -313,7 +364,7 @@ export const MenuPage = () => {
                 <span className="count-down">
                     <span
                         style={{
-                            background: "var(--secondary)",
+                            background: "var(--primary)",
                             color: "#fff",
                             fontWeight: 600,
                             fontSize: "0.9rem",
@@ -328,7 +379,7 @@ export const MenuPage = () => {
                     :
                     <span
                         style={{
-                            background: "var(--secondary)",
+                            background: "var(--primary)",
                             color: "#fff",
                             fontWeight: 600,
                             fontSize: "0.9rem",
@@ -343,7 +394,7 @@ export const MenuPage = () => {
                     :
                     <span
                         style={{
-                            background: "var(--secondary)",
+                            background: "var(--primary)",
                             color: "#fff",
                             fontWeight: 600,
                             fontSize: "0.9rem",
@@ -362,7 +413,7 @@ export const MenuPage = () => {
                 <span className="count-down">
                     <span
                         style={{
-                            background: "var(--secondary)",
+                            background: "var(--primary)",
                             color: "#fff",
                             fontWeight: 600,
                             fontSize: "0.9rem",
@@ -377,7 +428,7 @@ export const MenuPage = () => {
                     :
                     <span
                         style={{
-                            background: "var(--secondary)",
+                            background: "var(--primary)",
                             color: "#fff",
                             fontWeight: 600,
                             fontSize: "0.9rem",
@@ -392,7 +443,7 @@ export const MenuPage = () => {
                     :
                     <span
                         style={{
-                            background: "var(--secondary)",
+                            background: "var(--primary)",
                             color: "#fff",
                             fontWeight: 600,
                             fontSize: "0.9rem",
@@ -446,7 +497,7 @@ export const MenuPage = () => {
                         <div className="container" style={{ padding: 0 }}>
                             {isLoadingPage ? (
                                 <div style={{ height: "100%" }}>
-                                    <Skeleton borderRadius={5} height={mobileMode ? 180 : 350} style={{ margin: "0 5px" }} />
+                                    <Skeleton borderRadius={5} height={mobileMode ? 180 : 350} style={{ margin: "0 0" }} />
                                 </div>
                             ) : (
                                 <Slider {...settings}>
@@ -492,92 +543,13 @@ export const MenuPage = () => {
     return (
         <>
             <div className={`loading-spin ${!isLoadingPage && "loading-spin-done"}`}></div>
-            <section className="shop background back-white" style={{}}>
+            <section className="shop background back-white" style={{ paddingTop: mode === "3" ? 80 : 120 }}>
                 <div className="container d_flex back-white " style={{ padding: "10px 15px 20px 15px", flexDirection: "column", gap: 10 }}>
                     <div className="">{render()}</div>
-                    {/* <div className="c_flex" style={{ gap: 3, flexWrap: "wrap" }}>
-                        <div className="f_flex" style={{ gap: 15, width: "100%", alignItems: "center", justifyContent: "space-between" }}>
-                            <h3 className="menu-text-title">Điểm Tâm Sáng</h3>
-                            <div className="">
-                                <Countdown
-                                    renderer={renderer}
-                                    // date={Date.now() + result * 1000}
-                                    date={Date.now() + 9500000}
-                                    daysInHours={true}
-                                    // overtime={true}
 
-                                    onComplete={() => {
-                                        // callApi(timeCount + 1);
-                                    }}
-                                ></Countdown>
-                            </div>
-                        </div>
-                        <span className="menu-text-detail">Gọi là có - nhận đơn và xử lý giao hàng ngay.</span>
-                    </div> */}
-                    <div className="c_flex" style={{ gap: 10, marginTop: 0, width: "100%" }}>
-                        <div style={{ width: "100%" }}>
-                            {/* {isLoadingPage ? (
-                                <Skeleton borderRadius={5} height={50} style={{ marginTop: 10 }} />
-                            ) : (
-                                <div className="search-menu" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                                    <div style={{ height: "100%" }}>
-                                        <i className="fa-solid fa-magnifying-glass" style={{ fontSize: 20, marginTop: 3 }}></i>
-                                    </div>
-                                    <input type="search" name="" id="" style={{ flex: 1 }} placeholder="Tìm sản phẩm" />
-                                </div>
-                            )} */}
-                            {/* {isLoadingPage ? (
-                                <Skeleton borderRadius={5} height={37} style={{ marginTop: 10 }} />
-                            ) : (
-                                <div className=" f_flex category-list" style={{ marginBottom: 0, display: "flex", alignItems: "center", gap: 10, paddingTop: 10 }}>
-                                    <h4 htmlFor="1" style={{ fontSize: 18 }}>
-                                        Lọc Theo:
-                                    </h4>
-                                    <div className="f_flex" style={{ gap: 0, justifyContent: "start" }}>
-                                        <div
-                                            className={`${filtter === 1 ? "menu-item-active" : "menu-item "} cusor center_flex `}
-                                            style={{ borderTopLeftRadius: 10, borderBottomLeftRadius: 10, gap: 10 }}
-                                        >
-                                            <input
-                                                type="radio"
-                                                name="filter"
-                                                id="1"
-                                                value={"1"}
-                                                onClick={() => {
-                                                    hanldeChangeFilter(CATE_FITLER);
-                                                }}
-                                                onChange={() => {}}
-                                                checked={filtter === CATE_FITLER}
-                                            />
-                                            <label htmlFor="1" onClick={() => hanldeChangeFilter(CATE_FITLER)}>
-                                                Danh Mục
-                                            </label>
-                                        </div>
-                                        <div
-                                            className={`${filtter === 2 ? "menu-item-active" : "menu-item "} cusor center_flex `}
-                                            style={{ borderTopRightRadius: 10, borderBottomRightRadius: 10, gap: 10 }}
-                                        >
-                                            <input
-                                                onChange={() => {}}
-                                                type="radio"
-                                                name="filter"
-                                                id="2"
-                                                value={"2"}
-                                                onClick={() => hanldeChangeFilter(STORE_FILTER)}
-                                                checked={filtter === STORE_FILTER}
-                                            />
-                                            <label htmlFor="2" onClick={() => hanldeChangeFilter(STORE_FILTER)}>
-                                                Cửa Hàng
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            )} */}
-                        </div>
-                    </div>
                     {isLoadingPage ? (
                         <Skeleton borderRadius={5} height={122} style={{ marginBottom: 5 }} />
-                    ) : menuCategory && menuCategory.length > 0 ? (
+                    ) : mode !== "3" && menuCategory && menuCategory.length > 0 ? (
                         <div className="cateogry-menu">
                             <Slider {...settingCaategory}>
                                 {menuCategory &&
@@ -597,21 +569,7 @@ export const MenuPage = () => {
                         ""
                     )}
                 </div>
-                {/* <div className="container d_flex" style={{ marginTop: 30 }}>
-                    <div className="c_flex" style={{ gap: 10, flexWrap: "wrap" }}>
-                        <div>
-                            <Countdown
-                                // date={Date.now() + result * 1000}
-                                date={Date.now() + 10000}
-                                daysInHours={true}
-                                // overtime={true}
-                                onComplete={() => {
-                                    // callApi(timeCount + 1);
-                                }}
-                            ></Countdown>
-                        </div>
-                    </div>
-                </div> */}
+
                 {!isLoadingPage &&
                     !isLoadingProduct &&
                     mode === "1" &&
@@ -631,16 +589,27 @@ export const MenuPage = () => {
                             );
                         } else return true;
                     })}
+                {!isLoadingPage && !isLoadingProduct && mode === "1" && (
+                    <>
+                        <div className="container-padding f_flex" style={{ alignItems: "end" }}>
+                            <span style={{ padding: "40px 15px 10px 15px", fontWeight: 700, fontSize: 16, color: "rgb(100, 100, 100)" }}>Quán ngon gần bạn</span>
+                        </div>
+                        <ShopList data={listStore.length > 0 && [...listStore]} isStore={true} />{" "}
+                        {isLoadingMore && !isFull && (
+                            <div style={{ width: "100%", paddingTop: 15, paddingBottom: 15 }} className="center_flex">
+                                <BallTriangle stroke="var(--primary)" style={{ width: 40 }} />
+                                {/* <span>Đang tải</span> */}
+                            </div>
+                        )}
+                    </>
+                )}
+
                 {!isLoadingPage &&
                     !isLoadingProduct &&
-                    (mode === "2" || mode === "3") &&
+                    mode === "2" &&
                     menuProduct?.listCategoryStoreInMenus?.map((menu, index) => {
                         if (menu.listProducts.length > 0) {
                             return (
-                                // <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={500} transitionLeaveTimeout={500}>
-                                //     <ProductGrid data={menu.listProducts || []} label={menu.name} labelImg={menu.img || IMAGE_NOTFOUND} />
-                                // </ReactCSSTransitionGroup>
-
                                 <ProductSlide
                                     key={index}
                                     filtter={filtter}
@@ -656,15 +625,7 @@ export const MenuPage = () => {
                             );
                         } else return true;
                     })}
-                {!isLoadingPage && !isLoadingProduct && mode === "1" && (
-                    <>
-                        <div className="container-padding f_flex" style={{ alignItems: "end" }}>
-                            <span style={{ padding: "40px 15px 10px 15px", fontWeight: 700, fontSize: 16, color: "rgb(100, 100, 100)" }}>Quán ngon gần bạn</span>
-                        </div>
-                        <ShopList data={listStore.length > 0 && [...listStore]} isStore={true} />
-                    </>
-                )}
-
+                {!isLoadingPage && !isLoadingProduct && mode === "3" && <DurationList />}
                 {isLoadingPage || isLoadingProduct ? (
                     <section className="shop" style={{ padding: "0px 15px 0px 15px" }}>
                         <div className="container d_flex">

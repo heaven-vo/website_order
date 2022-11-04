@@ -181,8 +181,9 @@
     margin-bottom: 15px;
 }
 .checkout-text-payment img {
-    width: 35px;
-    height: 35px;
+    width: 35px !important;
+    height: 35px !important;
+    object-fit: cover;
 }
 .checkout-text-require {
     color: #e94560;
@@ -379,4 +380,11 @@
 
 .cart-main::-webkit-scrollbar {
     display: none;
+}
+
+.payment-select {
+    border-color: #ff8c00 !important;
+    background-color: #fde7cd !important;
+    transition: 0.3s all;
+    -webkit-transition: 0.3s all;
 }

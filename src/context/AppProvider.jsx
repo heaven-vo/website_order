@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { getAreas, getBuildings, getListOrder } from "../apis/apiService";
-import { LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE, LOCALSTORAGE_USER_LOGIN, LOCALSTORAGE_USER_NAME } from "../constants/Variable";
+import { LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE, LOCALSTORAGE_ORDER, LOCALSTORAGE_USER_LOGIN, LOCALSTORAGE_USER_NAME } from "../constants/Variable";
 
 export const AppContext = React.createContext();
 
@@ -20,7 +20,9 @@ export default function AppProvider({ children }) {
     const [isCartFooter, setIsCartFooter] = useState(false);
     const [isHeaderHome, setIsHeaderHome] = useState(false);
     const [opentModalSuccess, setOpentModalSuccess] = useState(false);
+    const [orderIdSuccess, setorderIdSuccess] = useState("");
     const [opentModalError, setOpentModalError] = useState(false);
+    const [messError, setMessError] = useState(null);
     const [isHeaderOrder, setIsHeaderOrder] = useState(false);
     const [visiblePopupInfo, setVisiblePopupInfo] = useState(false);
     const [isLoadingMain, setisLoadingMain] = useState(true);
@@ -58,6 +60,35 @@ export default function AppProvider({ children }) {
     }, [location.pathname]);
 
     useEffect(() => {
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_ORDER))) {
+            localStorage.setItem(LOCALSTORAGE_ORDER, JSON.stringify([]));
+        } else {
+            const order = JSON.parse(localStorage.getItem(LOCALSTORAGE_ORDER));
+            setOrdersDrawer(order);
+        }
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_MODE))) {
+            setAuth({ userId: "", isLogin: false, userPhone: "" });
+            localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify({ userId: "", isLogin: false, userPhone: "" }));
+        } else {
+            const Mode = JSON.parse(localStorage.getItem(LOCALSTORAGE_MODE));
+            setMode(Mode);
+            switch (Mode) {
+                case "1":
+                    setModeType("Giao nhanh 30 phút");
+                    break;
+                case "2":
+                    setModeType("Giao hàng trong ngày");
+                    break;
+                case "3":
+                    setModeType("Đặt hàng 3 - 5 ngày");
+                    break;
+
+                default:
+                    setModeType("");
+                    break;
+            }
+        }
+
         let modeId = location.pathname.trim().split("/")[2];
         if (location.pathname.trim().split("/") && location.pathname.trim().split("/")[1] === "mode") {
             setMode(modeId);
@@ -203,6 +234,10 @@ export default function AppProvider({ children }) {
                 setKeySearch,
                 isSearchSubmit,
                 setIsSearchSubmit,
+                messError,
+                setMessError,
+                orderIdSuccess,
+                setorderIdSuccess,
             }}
         >
             {children}

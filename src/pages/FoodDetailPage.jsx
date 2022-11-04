@@ -365,7 +365,7 @@ export const FoodDetailPage = () => {
             </Rodal>
             <div className={`loading-spin ${!isLoadingCircle && "loading-spin-done"}`}></div>
             {!isLoadingCircle && product && (
-                <section className="" style={{ paddingTop: 60, paddingBottom: 100, background: "#fff", transition: "1s all", WebkitTransition: "1s all" }}>
+                <section className="" style={{ paddingTop: 60, paddingBottom: 0, background: "#fff", transition: "1s all", WebkitTransition: "1s all" }}>
                     <div className="container non-radius" style={{ borderRadius: 0, height: "100%" }}>
                         <div className="d_flex food-detail" style={{ padding: "10px 25px", flexDirection: "column" }}>
                             <div className="food-detail-left" style={{}}>
