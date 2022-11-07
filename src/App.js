@@ -125,7 +125,7 @@ function App() {
                     <Route path="/mode/:modeId/search" exact>
                         <SearchPage />
                     </Route>
-                    <Route path="/schedule" exact>
+                    <Route path="/mode/:id/schedule" exact>
                         <SchedulePage />
                     </Route>
                     {/* <Route path="/checkout2" exact>

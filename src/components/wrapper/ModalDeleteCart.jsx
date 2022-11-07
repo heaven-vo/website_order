@@ -39,8 +39,8 @@ export const ModalDeleteCart = () => {
                     style={{
                         flex: 1,
                         padding: 14,
-                        fontSize: "1em",
-                        height: 50,
+                        fontSize: mobileMode ? 15 : 16,
+                        height: 45,
                         cursor: "pointer",
                         fontWeight: 700,
                         borderRadius: 10,
@@ -63,8 +63,8 @@ export const ModalDeleteCart = () => {
                     style={{
                         flex: 1,
                         padding: 14,
-                        fontSize: "1em",
-                        height: 50,
+                        fontSize: mobileMode ? 15 : 16,
+                        height: 45,
                         cursor: "pointer",
                         fontWeight: 700,
                         borderRadius: 10,

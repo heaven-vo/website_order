@@ -125,7 +125,7 @@ export const ShopSlide = ({ filtter, label, data, cateId, isLoading, reLoad }) =
                                                 <div
                                                     className="center_flex cusor view-all-btn"
                                                     onClick={() => {
-                                                        history.push(`/mode/${mode}/${filtter}/${cateId}`);
+                                                        // history.push(`/mode/${mode}/${filtter}/${cateId}`);
                                                     }}
                                                     style={{ borderRadius: 50, border: "1px solid rgb(220,220,220)", width: 45, height: 45 }}
                                                 >
@@ -134,7 +134,7 @@ export const ShopSlide = ({ filtter, label, data, cateId, isLoading, reLoad }) =
                                                 <span
                                                     style={{ fontSize: 14, paddingTop: 5 }}
                                                     onClick={() => {
-                                                        history.push(`/mode/${mode}/${filtter}/${cateId}`);
+                                                        // history.push(`/mode/${mode}/${filtter}/${cateId}`);
                                                     }}
                                                     className="cusor"
                                                 >

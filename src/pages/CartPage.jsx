@@ -30,6 +30,7 @@ const Cart = ({}) => {
         setorderIdSuccess,
         mode,
         setOrdersDrawer,
+        deliveryDate,
     } = useContext(AppContext);
     const [totalPrice, setTotalPrice] = useState(0);
     const [CartList, setCartList] = useState([]);
@@ -627,7 +628,7 @@ const Cart = ({}) => {
                 </div>
             </Rodal>
             <Rodal
-                height={300}
+                height={280}
                 width={mobileMode ? 320 : 350}
                 visible={visiblePopupQuantity}
                 onClose={() => {
@@ -635,7 +636,7 @@ const Cart = ({}) => {
                 }}
                 style={{ borderRadius: 10 }}
             >
-                <div style={{ display: "flex", flexDirection: "column", height: "100%", gap: 6 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                     <div style={{ borderBottom: "1px solid rgb(220,220,220)", paddingBottom: "10px" }}>
                         <span style={{ fontSize: 16, fontWeight: 700 }}>Cập nhật giỏ hàng</span>
                     </div>
@@ -675,7 +676,7 @@ const Cart = ({}) => {
                     </div>
                 </div>
 
-                <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 15 }}>
+                <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 15, gap: 15 }}>
                     {productRodalQuantity > 0 ? (
                         <button
                             onClick={(e) => {
@@ -685,9 +686,9 @@ const Cart = ({}) => {
                             style={{
                                 flex: 1,
                                 padding: 14,
-                                fontSize: mobileMode ? "14px" : "16px",
+                                fontSize: mobileMode ? "15px" : "16px",
                                 cursor: "pointer",
-                                height: 50,
+                                height: 45,
                                 fontWeight: 700,
                                 borderRadius: 10,
                                 background: "var(--primary)",
@@ -707,10 +708,11 @@ const Cart = ({}) => {
                             style={{
                                 flex: 1,
                                 padding: 14,
-                                fontSize: mobileMode ? "14px" : "16px",
+                                fontSize: mobileMode ? "15px" : "16px",
                                 cursor: "pointer",
                                 fontWeight: 700,
                                 borderRadius: 10,
+                                height: 45,
                                 background: "var(--red)",
                                 color: "#fff",
                                 transition: "0.3s all",
@@ -804,10 +806,17 @@ const Cart = ({}) => {
                                     <span>Được giao từ</span>
                                     <span style={{ fontWeight: 600 }}>{Cart.length > 0 ? Cart[0].storeName : "Không có"}</span>
                                 </div>
-                                <div className="checkout-content-item">
-                                    <span>Hình thúc giao hàng</span>
-                                    <span style={{ fontSize: 15, fontWeight: 600, color: "#4db856", textTransform: "uppercase" }}>{modeType}</span>
-                                </div>
+                                {mode === "3" ? (
+                                    <div className="checkout-content-item">
+                                        <span>Ngày giao hàng</span>
+                                        <span style={{ fontSize: 15, fontWeight: 600, color: "#4db856", textTransform: "uppercase" }}>{deliveryDate}</span>
+                                    </div>
+                                ) : (
+                                    <div className="checkout-content-item">
+                                        <span>Hình thúc giao hàng</span>
+                                        <span style={{ fontSize: 15, fontWeight: 600, color: "#4db856", textTransform: "uppercase" }}>{modeType}</span>
+                                    </div>
+                                )}
                                 <div className="checkout-content-item">
                                     <span>{mode === "1" ? "Thời gian giao dự kiến" : "Khung giờ giao hàng"}</span>
                                     {mode === "1" ? (

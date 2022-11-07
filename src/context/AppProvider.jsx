@@ -9,8 +9,8 @@ export default function AppProvider({ children }) {
     const [listProducts, setlistProducts] = useState([]);
     const [mode, setMode] = useState("0");
     const [menuIdProvider, setMenuIdProvider] = useState("0");
-    const [orderStatus, setOrderStatus] = useState("0");
     const [modeType, setModeType] = useState("");
+    const [deliveryDate, setDeliveryDate] = useState("");
     const [menuOrder, setMenuOrder] = useState(1);
     const [mobileMode, setMobileMode] = useState(window.innerWidth < 700 ? true : false);
     const [Cart, setCart] = useState([]);
@@ -164,6 +164,9 @@ export default function AppProvider({ children }) {
                     setisCartMain(false);
                 } else if (CartList.length > 0) {
                     setisCartMain(true);
+                    if (CartList[0] && CartList[0].menuName) {
+                        setDeliveryDate(CartList[0].menuName);
+                    }
                 }
             } else {
                 setisCartMain(false);
@@ -238,6 +241,8 @@ export default function AppProvider({ children }) {
                 setMessError,
                 orderIdSuccess,
                 setorderIdSuccess,
+                deliveryDate,
+                setDeliveryDate,
             }}
         >
             {children}

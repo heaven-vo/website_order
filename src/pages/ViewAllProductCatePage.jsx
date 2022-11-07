@@ -6,6 +6,7 @@ import Loading from "../common/Loading/Loading";
 import { ProductList } from "../components/products/ProductList";
 import ShopList from "../components/products/ShopList";
 import { AppContext } from "../context/AppProvider";
+import ScrollContainer from "react-indiana-drag-scroll";
 
 export const ViewAllProductCatePage = () => {
     const { setHeaderInfo, menuIdProvider, mobileMode, mode, categoriesInMenu } = useContext(AppContext);
@@ -111,8 +112,20 @@ export const ViewAllProductCatePage = () => {
     const colourStyles = {
         control: (styles) => ({
             ...styles,
-            // width: 150,
-            borderRadius: "1rem",
+            width: mobileMode ? 150 : 170,
+            borderRadius: "8px",
+            padding: "0 5px",
+            fontSize: mobileMode ? 14 : 16,
+        }),
+        menuList: (styles) => ({
+            ...styles,
+        }),
+    };
+    const filterStyles = {
+        control: (styles) => ({
+            ...styles,
+            width: mobileMode ? 160 : 170,
+            borderRadius: "8px",
             padding: "0 5px",
             fontSize: mobileMode ? 14 : 16,
         }),
@@ -135,17 +148,39 @@ export const ViewAllProductCatePage = () => {
     const optionsBuilding = categoriesInMenu?.map((item) => {
         return { value: item.id, label: item.name };
     });
+    const optionsFiltter = [
+        { id: 1, name: "Khuyến mãi" },
+        { id: 2, name: "Quán mở cửa" },
+    ].map((item) => {
+        return { value: item.id, label: item.name };
+    });
+    const sortFiltter = [
+        { id: 1, name: "Bán chạy nhất" },
+        { id: 2, name: "A - Z" },
+        { id: 3, name: "Z - A" },
+    ].map((item) => {
+        return { value: item.id, label: item.name };
+    });
     return (
         <div style={{ background: "rgb(246, 249, 252)", height: "100%" }}>
             <Loading isLoading={isLoadingCircle} />
             <div className={`loading-spin ${!isLoadingCircle && "loading-spin-done"}`}></div>
-            <div style={{ padding: "75px 15px 15px 15px", display: "flex", gap: 10, width: "100%" }}>
+            <div style={{ padding: "75px 15px 15px 15px", gap: 10, width: "100%", display: "flex", overflow: "auto" }}>
+                <div style={{}} className="center_flex cusor filter-select-cate">
+                    {/* <i className="fa-solid fa-utensils" style={{ fontSize: 14 }}></i> */}
+                    <Select options={optionsFiltter} placeholder="Lọc nhanh" isSearchable={false} onChange={(e) => {}} styles={colourStyles} menuPosition="fixed" />
+                </div>
+                <div style={{}} className="center_flex cusor filter-select-cate">
+                    {/* <i className="fa-solid fa-utensils" style={{ fontSize: 14 }}></i> */}
+                    <Select options={sortFiltter} placeholder="Sắp xếp theo" isSearchable={false} onChange={(e) => {}} styles={filterStyles} menuPosition="fixed" />
+                </div>
                 <div style={{}} className="center_flex cusor filter-select-cate">
                     {/* <i className="fa-solid fa-utensils" style={{ fontSize: 14 }}></i> */}
                     <Select
                         options={categoriesInMenu.length > 0 ? optionsBuilding : null}
                         placeholder="Danh mục"
-                        isSearchable={false}
+                        menuPosition="fixed"
+                        isSearchable={true}
                         onChange={(e) => {
                             setIsLoadingCircle(true);
                             if (mode === "1") {

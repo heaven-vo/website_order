@@ -8,12 +8,13 @@ import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE } from "../co
 import { AppContext } from "../context/AppProvider";
 
 export const FoodDetailPage = () => {
-    const { setCart, mobileMode, setHeaderInfo, setisCartMain, menuIdProvider, mode, modeType } = useContext(AppContext);
+    const { setCart, mobileMode, setHeaderInfo, setisCartMain, menuIdProvider, mode, modeType, deliveryDate, setDeliveryDate } = useContext(AppContext);
     const [countQuantity, setcountQuantity] = useState(1);
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
     const [product, setProduct] = useState({});
     const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);
     const [visiblePopupOutOfStore, setVisiblePopupOutOfStore] = useState(false);
+    const [visiblePopupOutOfMenu, setVisiblePopupOutOfMenu] = useState(false);
     const [productRodalQuantity, setProductRodalQuantity] = useState(0);
     const [isProductCart, setisProductCart] = useState(true);
     const { shopItems } = Pdata;
@@ -21,8 +22,9 @@ export const FoodDetailPage = () => {
     let location = useLocation();
     useEffect(() => {
         // setIsHeader(false);
+        console.log({ menuIdProvider });
         let modeId = location.pathname.trim().split("/")[2];
-        if (menuIdProvider === "0") {
+        if (menuIdProvider === "0" && mode !== "3") {
             history.push(`/mode/${modeId}`);
         } else {
             setHeaderInfo({ isSearchHeader: false, title: "Chi tiết sản phẩm" });
@@ -70,8 +72,9 @@ export const FoodDetailPage = () => {
         }
         const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
         let include = false;
+
         CartList?.map((item) => {
-            if (item.id === product.id) {
+            if (item.id === product.id && menuIdProvider === item.menuId) {
                 setProductRodalQuantity(item.quantityCart);
                 include = true;
                 return;
@@ -92,7 +95,7 @@ export const FoodDetailPage = () => {
             setisProductCart(false);
         }
         return () => {};
-    }, [product]);
+    }, [menuIdProvider, product]);
 
     useEffect(() => {
         if (!isLoadingCircle) {
@@ -136,6 +139,21 @@ export const FoodDetailPage = () => {
         }
         return false;
     };
+    const checkOutOfMenu = (product) => {
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+        }
+        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+
+        if (CartList.length > 0) {
+            if (menuIdProvider === CartList[0].menuId) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    };
     // Giảm số lượng sản phẩm trong giỏ hàng
     const decreaseQty = (id) => {
         setProductRodalQuantity(productRodalQuantity - 1);
@@ -152,24 +170,7 @@ export const FoodDetailPage = () => {
         setCart([...newCarts]);
         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
     };
-    // const AddCart = () => {
-    //     let isQuantity = false;
-    //     if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-    //         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-    //     }
-    //     const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-    //     const carts = [
-    //         ...CartList,
-    //         {
-    //             ...product,
-    //             quantityCart: 1,
-    //         },
-    //     ];
-    //     setisCartMain(true);
-    //     setProductRodalQuantity(productRodalQuantity + 1);
-    //     setCart(carts);
-    //     localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
-    // };
+
     const AddCartOutOfStore = () => {
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
             localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
@@ -182,7 +183,7 @@ export const FoodDetailPage = () => {
                 menuId: menuIdProvider,
             },
         ];
-        setVisiblePopupOutOfStore(false);
+        setVisiblePopupOutOfMenu(false);
 
         setisProductCart(true);
         setProductRodalQuantity(1);
@@ -196,25 +197,50 @@ export const FoodDetailPage = () => {
             localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
         }
         const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-        if (!checkOutOfStore(product)) {
-            const carts = [
-                ...CartList,
-                {
-                    ...product,
-                    quantityCart: 1,
-                    menuId: menuIdProvider,
-                },
-            ];
-            setisProductCart(true);
-            setisCartMain(true);
-            setProductRodalQuantity(productRodalQuantity + 1);
-            setCart(carts);
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
-            localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
+        if (mode === "3") {
+            console.log({ deliveryDate });
+            if (!checkOutOfMenu(product)) {
+                const carts = [
+                    ...CartList,
+                    {
+                        ...product,
+                        quantityCart: 1,
+                        menuId: menuIdProvider,
+                        menuName: deliveryDate,
+                    },
+                ];
+                setisProductCart(true);
+                setisCartMain(true);
+                setProductRodalQuantity(productRodalQuantity + 1);
+                setCart(carts);
+                localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
+                localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
+            } else {
+                setVisiblePopupOutOfMenu(true);
+                // openRodalOutOfStore({ rodal: true, product: product, index });
+                console.log("khac menu");
+            }
         } else {
-            setVisiblePopupOutOfStore(true);
-            // openRodalOutOfStore({ rodal: true, product: product, index });
-            console.log("khac store");
+            if (!checkOutOfStore(product)) {
+                const carts = [
+                    ...CartList,
+                    {
+                        ...product,
+                        quantityCart: 1,
+                        menuId: menuIdProvider,
+                    },
+                ];
+                setisProductCart(true);
+                setisCartMain(true);
+                setProductRodalQuantity(productRodalQuantity + 1);
+                setCart(carts);
+                localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
+                localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
+            } else {
+                setVisiblePopupOutOfStore(true);
+                // openRodalOutOfStore({ rodal: true, product: product, index });
+                console.log("khac store");
+            }
         }
     };
     const deleteCartItem = () => {
@@ -234,7 +260,7 @@ export const FoodDetailPage = () => {
         <>
             <Loading isLoading={isLoadingCircle} />
             <Rodal
-                height={200}
+                height={mobileMode ? 310 : 330}
                 width={mobileMode ? 350 : 400}
                 visible={visiblePopupOutOfStore}
                 onClose={() => {
@@ -242,62 +268,139 @@ export const FoodDetailPage = () => {
                 }}
                 style={{ borderRadius: 10 }}
             >
-                <div style={{ paddingBottom: "10px", textAlign: "center", paddingTop: 12 }}>
-                    <span style={{ fontSize: 17, fontWeight: 700 }}>Bạn muốn đặt món ở cửa hàng này?</span>
-                </div>
-                <div style={{ padding: "10px 0 5px 0", textAlign: "center" }}>
-                    <span className="" style={{ fontSize: 15, fontWeight: 500, textAlign: "center", color: "rgb(150,150,150)" }}>
-                        Nhưng những món bạn đã chọn từ cửa hàng trước sẽ bị xóa khỏi giỏ hàng nhé.
-                    </span>
-                </div>
+                <div className="modal-delete-cart">
+                    <div className="modal-delete-cart-img">
+                        <img className="" src="/images/delete-cart.jpg" alt="" />
+                    </div>
+                    <div style={{ paddingBottom: "10px", textAlign: "center", paddingTop: 12 }}>
+                        <span style={{ fontSize: mobileMode ? 17 : 18, fontWeight: 700, color: "var(--primary)" }}>Bạn muốn đặt món ở cửa hàng này?</span>
+                    </div>
+                    <div style={{ padding: "0px 0 0px 0", textAlign: "center" }}>
+                        <span className="" style={{ fontSize: mobileMode ? 15 : 16, fontWeight: "lighter", textAlign: "center", color: "grey" }}>
+                            Nhưng những món bạn đã chọn từ cửa hàng trước sẽ bị xóa khỏi giỏ hàng nhé.
+                        </span>
+                    </div>
 
-                <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 10 }}>
-                    <button
-                        onClick={(e) => {
-                            e.preventDefault();
-                            setVisiblePopupOutOfStore(false);
-                        }}
-                        style={{
-                            flex: 1,
-                            padding: 14,
-                            fontSize: "1.1em",
-                            height: 50,
-                            cursor: "pointer",
-                            fontWeight: 700,
-                            borderRadius: 10,
-                            background: "#aab2bd",
-                            color: "#fff",
-                            transition: "0.3s all",
-                            WebkitTransition: "0.3s all",
-                        }}
-                    >
-                        Hủy
-                    </button>
-                    <button
-                        onClick={(e) => {
-                            e.preventDefault();
-                            AddCartOutOfStore();
+                    <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 10 }}>
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setVisiblePopupOutOfStore(false);
+                            }}
+                            style={{
+                                flex: 1,
+                                padding: 14,
+                                fontSize: mobileMode ? 15 : 16,
+                                height: 45,
+                                cursor: "pointer",
+                                fontWeight: 700,
+                                borderRadius: 10,
+                                background: "#aab2bd",
+                                color: "#fff",
+                                transition: "0.3s all",
+                                WebkitTransition: "0.3s all",
+                            }}
+                        >
+                            Hủy
+                        </button>
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                AddCartOutOfStore();
 
-                            // setisProductCartRodal(false);
-                            // setIsOpenRodal(false);
-                            // deleteCartItem();
-                        }}
-                        style={{
-                            flex: 1,
-                            padding: 14,
-                            fontSize: "1.1em",
-                            height: 50,
-                            cursor: "pointer",
-                            fontWeight: 700,
-                            borderRadius: 10,
-                            background: "var(--primary)",
-                            color: "#fff",
-                            transition: "0.3s all",
-                            WebkitTransition: "0.3s all",
-                        }}
-                    >
-                        Tiếp tục
-                    </button>
+                                // setisProductCartRodal(false);
+                                // setIsOpenRodal(false);
+                                // deleteCartItem();
+                            }}
+                            style={{
+                                flex: 1,
+                                padding: 14,
+                                fontSize: mobileMode ? 15 : 16,
+                                height: 45,
+                                cursor: "pointer",
+                                fontWeight: 700,
+                                borderRadius: 10,
+                                background: "var(--primary)",
+                                color: "#fff",
+                                transition: "0.3s all",
+                                WebkitTransition: "0.3s all",
+                            }}
+                        >
+                            Tiếp tục
+                        </button>
+                    </div>
+                </div>
+            </Rodal>
+            <Rodal
+                height={mobileMode ? 310 : 330}
+                width={mobileMode ? 350 : 400}
+                visible={visiblePopupOutOfMenu}
+                onClose={() => {
+                    setVisiblePopupOutOfMenu(false);
+                }}
+                style={{ borderRadius: 10 }}
+            >
+                <div className="modal-delete-cart">
+                    <div className="modal-delete-cart-img">
+                        <img className="" src="/images/delete-cart.jpg" alt="" />
+                    </div>
+                    <div style={{ paddingBottom: "10px", textAlign: "center", paddingTop: 12 }}>
+                        <span style={{ fontSize: mobileMode ? 17 : 18, fontWeight: 700, color: "var(--primary)" }}>Bạn muốn đặt món ở vào ngày này?</span>
+                    </div>
+                    <div style={{ padding: "0px 0 0px 0", textAlign: "center" }}>
+                        <span className="" style={{ fontSize: mobileMode ? 15 : 16, fontWeight: "lighter", textAlign: "center", color: "grey" }}>
+                            Nhưng những món bạn đã chọn từ ngày trước sẽ bị xóa khỏi giỏ hàng nhé.
+                        </span>
+                    </div>
+
+                    <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 10 }}>
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setVisiblePopupOutOfMenu(false);
+                            }}
+                            style={{
+                                flex: 1,
+                                padding: 14,
+                                fontSize: mobileMode ? 15 : 16,
+                                height: 45,
+                                cursor: "pointer",
+                                fontWeight: 700,
+                                borderRadius: 10,
+                                background: "#aab2bd",
+                                color: "#fff",
+                                transition: "0.3s all",
+                                WebkitTransition: "0.3s all",
+                            }}
+                        >
+                            Hủy
+                        </button>
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                AddCartOutOfStore();
+
+                                // setisProductCartRodal(false);
+                                // setIsOpenRodal(false);
+                                // deleteCartItem();
+                            }}
+                            style={{
+                                flex: 1,
+                                padding: 14,
+                                fontSize: mobileMode ? 15 : 16,
+                                height: 45,
+                                cursor: "pointer",
+                                fontWeight: 700,
+                                borderRadius: 10,
+                                background: "var(--primary)",
+                                color: "#fff",
+                                transition: "0.3s all",
+                                WebkitTransition: "0.3s all",
+                            }}
+                        >
+                            Tiếp tục
+                        </button>
+                    </div>
                 </div>
             </Rodal>
             <Rodal
@@ -367,7 +470,7 @@ export const FoodDetailPage = () => {
             {!isLoadingCircle && product && (
                 <section className="" style={{ paddingTop: 60, paddingBottom: 0, background: "#fff", transition: "1s all", WebkitTransition: "1s all" }}>
                     <div className="container non-radius" style={{ borderRadius: 0, height: "100%" }}>
-                        <div className="d_flex food-detail" style={{ padding: "10px 25px", flexDirection: "column" }}>
+                        <div className="d_flex food-detail" style={{ padding: "10px 25px", flexDirection: "column", alignItems: "center" }}>
                             <div className="food-detail-left" style={{}}>
                                 <img src={product.image || IMAGE_NOTFOUND} alt="" />
                             </div>
@@ -379,15 +482,17 @@ export const FoodDetailPage = () => {
                                 <i className="fa fa-star"></i>
                                 <i className="fa fa-star" style={{ color: "rgb(102, 102, 102)" }}></i>
                             </div> */}
-                                <h3>{product.name}</h3>
+                                <h3 style={{ fontSize: 18 }}>{product.name}</h3>
                                 {/* <h4 style={{ fontWeight: 500, color: "rgb(102, 102, 102)" }}>{product.id}</h4> */}
-                                <div style={{ color: "var(--primary)", fontSize: "1.5rem", marginTop: 10, marginBottom: 5, fontWeight: 600, display: "flex", alignItems: "center", gap: 5 }}>
+                                <div style={{ color: "var(--primary)", fontSize: "24px", marginTop: 10, marginBottom: 5, fontWeight: 600, display: "flex", alignItems: "center", gap: 5 }}>
                                     {product.pricePerPack?.toLocaleString()}
                                     <span style={{ fontSize: "1.2rem" }}>₫</span>
                                 </div>
 
                                 <h4 style={{ marginBottom: 15, fontSize: 14, fontWeight: 400, color: "#666666" }}>{product.packDescription}</h4>
-                                <h4 style={{ marginBottom: 15, fontSize: 15, fontWeight: 500, color: "#4db856", textTransform: "uppercase" }}>{modeType}</h4>
+                                <h4 style={{ marginBottom: 15, fontSize: mobileMode ? 14 : 15, fontWeight: 500, color: "#4db856", textTransform: "uppercase" }}>
+                                    {mode === "3" ? "Giao hàng vào " + deliveryDate : modeType}
+                                </h4>
                                 <div
                                     className="d_flex food-detail-info"
                                     style={{
@@ -399,11 +504,11 @@ export const FoodDetailPage = () => {
                                         borderBottom: "1px solid rgb(230,230,230)",
                                     }}
                                 >
-                                    <div className="food-detail-shop" style={{ width: 140, height: 50 }} onClick={() => {}}>
+                                    <div className="food-detail-shop" style={{ width: 70, height: 70 }} onClick={() => {}}>
                                         <img
                                             width={"100%"}
                                             height={"100%"}
-                                            style={{ objectFit: "contain" }}
+                                            style={{ objectFit: "cover", borderRadius: 8 }}
                                             src={product.storeImage || "https://cdn-icons-png.flaticon.com/512/123/123403.png"}
                                             alt=""
                                         />
@@ -413,8 +518,8 @@ export const FoodDetailPage = () => {
                                         <span style={{ color: "rgb(160,160,160)", fontWeight: 400, fontSize: 15 }}>{product.slogan}</span>
                                     </div>
                                 </div>
-                                <p style={{ color: "#666666", padding: "20px 0", fontSize: "15px" }}>{product.description}</p>
-                                <div className="" style={{ paddingBottom: "15px" }}>
+                                {/* <p style={{ color: "#666666", padding: "20px 0", fontSize: "15px" }}>{product.description}</p> */}
+                                <div className="" style={{ paddingBottom: 15, paddingTop: 15 }}>
                                     {isProductCart ? (
                                         <div className="center_flex cart-quantity" style={{ width: " 100%", boxShadow: "0 4px 5px rgb(0 0 0 / 13%)" }}>
                                             <div

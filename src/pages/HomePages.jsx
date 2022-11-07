@@ -129,6 +129,7 @@ const HomePage = ({ productItems, shopItems }) => {
                             className="home-menu-item"
                             onClick={() => {
                                 setMode(3);
+                                // localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify("3"));
                                 if (userInfo.building && userInfo.fullName && userInfo.phone) {
                                     setVisiblePopupInfo(false);
                                     history.push(`/mode/${3}`);

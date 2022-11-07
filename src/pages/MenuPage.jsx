@@ -4,13 +4,13 @@ import BallTriangle from "react-loading-icons/dist/esm/components/ball-triangle"
 import Skeleton from "react-loading-skeleton";
 import { useHistory } from "react-router-dom";
 import Slider from "react-slick";
-import { getListStoreCategory, getListStoreInMenuByMode, getMenuByMode, getMenuByModeGroupBy } from "../apis/apiService";
+import { getListStoreCategory, getListStoreInMenuByMode, getMenuByMode, getMenuByModeGroupBy, getMenuMode3 } from "../apis/apiService";
 import DurationList from "../components/products/DurationList";
 import { ProductSlide, SampleNextArrow, SamplePrevArrow } from "../components/products/ProductSlide";
 import ShopList from "../components/products/ShopList";
 import { ShopSlide } from "../components/products/ShopSlide";
 import { getHourFromDouble } from "../constants/Caculator";
-import { CATE_FITLER, IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME } from "../constants/Variable";
+import { CATE_FITLER, IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
 const Mdata = [
@@ -61,7 +61,7 @@ export const MenuPage = () => {
     // const [checked, setChecked] = useState(false);
     const [isLoadingPage, setIsLoadingPage] = useState(true);
     const [isLoadingProduct, setIsLoadingProduct] = useState(false);
-    const [isLoadingMore, setIsLoadingMore] = useState(true);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
     const [menuProduct, setMenuProduct] = useState([]);
     const [menuCategory, setMenuCategory] = useState([]);
     const [title, setTitle] = useState("");
@@ -83,14 +83,15 @@ export const MenuPage = () => {
             getMenuByModeId(mode);
             setSlideData(Mdata);
         }
-        if (mode === "2" || mode === "3") {
+        if (mode === "2") {
             getMenu(mode, filtter, 1, 10);
             setSlideData(Mdata2);
         }
         if (mode === "3") {
             setHeaderInfo({ isSearchHeader: false, title: "Chọn ngày giao hàng" });
+            getMenuInMode3(7);
+            setSlideData(Mdata2);
         } else {
-            console.log("chay");
             setHeaderInfo({ isSearchHeader: true, title: "" });
         }
     }, [setIsHeaderOrder, mode]);
@@ -105,30 +106,30 @@ export const MenuPage = () => {
     //     getMenu(menu, filtter, 1, 10);
     // }, [filtter]);
 
-    const loadMore = () => {
-        // setPageIndex(pageIndex + 1);
-        console.log({ listStore });
-        let newStores = [];
-        getListStoreInMenuByMode("1", pageIndex, 3)
-            .then((res) => {
-                if (res.data) {
-                    const stores = res.data;
+    // const loadMore = () => {
+    //     // setPageIndex(pageIndex + 1);
+    //     console.log({ listStore });
+    //     let newStores = [];
+    //     getListStoreInMenuByMode("1", pageIndex, 3)
+    //         .then((res) => {
+    //             if (res.data) {
+    //                 const stores = res.data;
 
-                    console.log({ stores });
-                    newStores = [...listStore, ...stores];
-                    console.log({ newStores });
-                    setListStore([...listStore, ...stores]);
-                } else {
-                }
-                setIsLoadingPage(false);
-                setIsLoadingProduct(false);
-            })
-            .catch((error) => {
-                console.log(error);
-                setIsLoadingPage(false);
-                setIsLoadingProduct(false);
-            });
-    };
+    //                 console.log({ stores });
+    //                 newStores = [...listStore, ...stores];
+    //                 console.log({ newStores });
+    //                 setListStore([...listStore, ...stores]);
+    //             } else {
+    //             }
+    //             setIsLoadingPage(false);
+    //             setIsLoadingProduct(false);
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //             setIsLoadingPage(false);
+    //             setIsLoadingProduct(false);
+    //         });
+    // };
 
     useEffect(() => {
         const handleScroll = (e) => {
@@ -150,7 +151,6 @@ export const MenuPage = () => {
                                 setListStore([...listStore, ...stores]);
                                 setIsLoadingMore(false);
                                 setPageIndex(pageIndex + 1);
-                                console.log(pageIndex);
                             } else {
                                 setisFull(true);
                                 setListStore([...listStore, ...stores]);
@@ -167,7 +167,9 @@ export const MenuPage = () => {
             }
         };
         let main = document.getElementById("main");
-        main.addEventListener("scroll", handleScroll);
+        if (mode === "1") {
+            main.addEventListener("scroll", handleScroll);
+        }
         return () => {
             main.removeEventListener("scroll", handleScroll);
         };
@@ -181,6 +183,19 @@ export const MenuPage = () => {
         } else {
             const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
             if (CartList.length > 0 && CartList[0].menuId !== menuId.toString()) {
+                setOpenDeleteCart(true);
+            }
+        }
+    };
+    const checkCartInMode3 = (mode) => {
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_MODE))) {
+            localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify([]));
+            setCart([]);
+            setisCartMain(false);
+        } else {
+            const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+            const Mode = JSON.parse(localStorage.getItem(LOCALSTORAGE_MODE));
+            if (CartList.length > 0 && Mode !== mode) {
                 setOpenDeleteCart(true);
             }
         }
@@ -222,6 +237,40 @@ export const MenuPage = () => {
                     setIsLoadingPage(false);
                     setIsLoadingProduct(false);
                     setListStore([]);
+                    setMenuCategory([]);
+                    setMenuEmpty([]);
+                });
+        }
+    };
+    const getMenuInMode3 = (size) => {
+        if (mode !== "0") {
+            getMenuMode3(size)
+                .then((res) => {
+                    if (res.data) {
+                        const menu = res.data;
+                        checkCartInMode3(mode);
+                        setMenuProduct(menu);
+                        // setMenuIdProvider(menu.id);
+                        // setMenuCategory(menu.listCategoryStoreInMenus);
+                        // setCategoriesInMenu(menu.listCategoryStoreInMenus || []);
+                        // if (menu.listCategoryStoreInMenus.length > 0) {
+                        //     setMenuEmpty(false);
+                        // } else {
+                        //     setMenuEmpty(true);
+                        // }
+                    } else {
+                        setMenuProduct([]);
+                        setMenuCategory([]);
+                        setMenuEmpty(true);
+                    }
+                    setIsLoadingPage(false);
+                    setIsLoadingProduct(false);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setIsLoadingPage(false);
+                    setIsLoadingProduct(false);
+                    setMenuProduct([]);
                     setMenuCategory([]);
                     setMenuEmpty([]);
                 });
@@ -625,7 +674,7 @@ export const MenuPage = () => {
                             );
                         } else return true;
                     })}
-                {!isLoadingPage && !isLoadingProduct && mode === "3" && <DurationList />}
+                {!isLoadingPage && !isLoadingProduct && mode === "3" && <DurationList data={[...menuProduct]} />}
                 {isLoadingPage || isLoadingProduct ? (
                     <section className="shop" style={{ padding: "0px 15px 0px 15px" }}>
                         <div className="container d_flex">

@@ -6,7 +6,7 @@ import { ProductList } from "../components/products/ProductList";
 import { AppContext } from "../context/AppProvider";
 
 export const ViewAllProductStorePage = () => {
-    const { setHeaderInfo, menuIdProvider, modeType, setModeType } = useContext(AppContext);
+    const { setHeaderInfo, menuIdProvider, modeType } = useContext(AppContext);
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
     const [products, setProducts] = useState(null);
     const [title, setTitle] = useState("");

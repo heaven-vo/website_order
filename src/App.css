@@ -303,6 +303,14 @@ button {
     overflow: hidden;
     line-height: 1.2em;
 }
+.max-line-1 {
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
 .product .rate i {
     font-size: 13px;
     color: #e94560;
@@ -503,14 +511,15 @@ button {
 
 /* -----------Food Detail-------- */
 .food-detail-left img {
-    width: 450px;
-    object-fit: contain;
-    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
 }
 .food-detail-left {
     margin: 10px;
-    height: 100%;
-    width: 100%;
+    height: 350px;
+    width: 500px;
     display: flex;
     justify-content: center;
 }
@@ -988,6 +997,9 @@ iframe {
     justify-content: center;
     gap: 3px;
 }
+.order-icon-dot {
+    font-size: 15px;
+}
 .status-info-time {
     font-size: 14px;
     font-weight: 500;
@@ -1001,7 +1013,7 @@ iframe {
 }
 .line {
     border-left: 1px solid #1cc461;
-    height: 30px;
+    height: 33px;
 }
 
 .order-wrapper {
@@ -1424,8 +1436,8 @@ iframe {
     /* height: 165px; */
 }
 .store-image-background {
-    padding: 250px 30px 30px 30px;
-    height: 320px;
+    padding: 270px 30px 30px 30px;
+    height: 350px;
     width: 100%;
     background-repeat: no-repeat;
     background-size: cover;
@@ -1442,7 +1454,7 @@ iframe {
     gap: 7px;
 }
 .store-wrapper {
-    height: 430px;
+    height: 450px;
 }
 .store-building {
     font-size: 15px;
@@ -1493,8 +1505,8 @@ iframe {
 }
 .duration-product img {
     border-radius: 8px;
-    height: 110px;
-    /* width: 130px; */
+    height: 100px;
+    width: 120px;
     object-fit: cover;
     cursor: pointer;
 }
@@ -1504,15 +1516,15 @@ iframe {
 }
 .duration-grid {
     padding: 15px;
-    grid-template-columns: repeat(auto-fill, minmax(105px, auto));
+    grid-template-columns: repeat(5, 1fr);
     display: grid;
-    grid-gap: 16px;
+    grid-gap: 10px;
     width: calc(100% - 85px);
 }
 .duration-product-name {
     font-size: 14px;
     cursor: pointer;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1.5;
     text-overflow: ellipsis;
     display: -webkit-box;

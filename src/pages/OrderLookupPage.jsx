@@ -10,9 +10,51 @@ const OrderLookupPage = () => {
     const [isLoadingCircle, setIsLoadingCircle] = useState(false);
     const [orderInfo, setOrderInfo] = useState(null);
     const [notFound, setNotFound] = useState(false);
+    const [isCancelOrder, setIsCancelOrder] = useState(false);
     const [orderId, setOrderId] = useState("");
+    const [statusCanCelName, setStatusCanCelName] = useState("");
     const [productOrder, setproductOrder] = useState([]);
-    const [statusOrder, setStatusOrder] = useState([]);
+    // const [statusOrder, setStatusOrder] = useState([]);
+    const statusMain = [
+        {
+            statusName: "Đặt hàng thành công",
+            time: "---",
+            id: 1,
+            active: true,
+        },
+        {
+            statusName: "Đang xử lý",
+            time: "---",
+            id: 2,
+            active: false,
+        },
+        {
+            statusName: "Tài xế nhận đơn",
+            time: "---",
+            id: 3,
+            active: false,
+        },
+        {
+            statusName: "Lấy hàng thành công",
+            time: "---",
+            id: 4,
+            active: false,
+        },
+        {
+            statusName: "Đang giao",
+            time: "---",
+            id: 5,
+            active: false,
+        },
+        {
+            statusName: "Hoàn thành",
+            time: "---",
+            id: 6,
+            active: false,
+        },
+    ];
+    const [statusOrderUser, setStatusOrderUser] = useState(statusMain);
+
     let location = useLocation();
     useEffect(() => {
         setHeaderInfo({ isSearchHeader: false, title: "Đơn hàng của bạn" });
@@ -32,13 +74,14 @@ const OrderLookupPage = () => {
             left: 0,
             behavior: "smooth",
         });
-        console.log({ orderId });
         setIsHeaderOrder(false);
 
         // setHeaderInfo({ isSearchHeader: false, title: "Chi tiết đơn hàng" });
     }, [setIsHeaderOrder, setHeaderInfo, location]);
     let history = useHistory();
     const hanldeSubmit = (id) => {
+        console.log({ statusMain });
+        // setStatusOrderUser(statusMain);
         setOrderInfo(null);
         setIsLoadingCircle(true);
         getOrderDetail(id)
@@ -47,7 +90,12 @@ const OrderLookupPage = () => {
                     const order = res.data;
                     setOrderInfo(order);
                     setproductOrder(order.listProInMenu || []);
-                    setStatusOrder(order.listStatusOrder || []);
+                    // setStatusOrder(order.listStatusOrder || []);
+                    if (order.listStatusOrder) {
+                        handleSetStatusList(order.listStatusOrder, statusMain);
+                        getStatusCancel(order.listStatusOrder);
+                        setStatusCanCelName(getStatusCancelName(order.listStatusOrder));
+                    }
                     setIsLoadingCircle(false);
                     setNotFound(false);
                 } else {
@@ -70,42 +118,98 @@ const OrderLookupPage = () => {
             return "--";
         }
     };
+    const handleSetStatusList = (listStatus, statusMain) => {
+        let newStatus = statusMain;
+        listStatus.map((item, index) => {
+            if (item.status === 0) {
+                newStatus[0].active = true;
+                newStatus[0].time = getTimeOrder(item.time);
+            }
+            if (item.status === 1 || item.status === 2) {
+                newStatus[1].active = true;
+                newStatus[1].time = getTimeOrder(item.time);
+            }
+            if (item.status === 3) {
+                newStatus[2].active = true;
+                newStatus[2].time = getTimeOrder(item.time);
+            }
+            if (item.status === 4 || item.status === 7 || item.status === 8) {
+                newStatus[3].active = true;
+                newStatus[3].time = getTimeOrder(item.time);
+            }
+            if (item.status === 9) {
+                newStatus[4].active = true;
+                newStatus[4].time = getTimeOrder(item.time);
+            }
+            if (item.status === 5) {
+                newStatus[5].active = true;
+                newStatus[5].time = getTimeOrder(item.time);
+            }
+            if (item.status !== 6 || item.status !== 10 || item.status !== 11 || item.status !== 12 || item.status !== 13) {
+                setIsCancelOrder(false);
+            }
+        });
+        setStatusOrderUser(newStatus);
+    };
     const getStatusCancel = (statusList) => {
-        let cancel = false;
         for (let index = 0; index < statusList.length; index++) {
             const element = statusList[index];
-            if (element && element.name === STATUS_ORDER[4].compare) {
-                cancel = true;
+            if (element.status === 6 || element.status === 10 || element.status === 11 || element.status === 12 || element.status === 13) {
+                setIsCancelOrder(true);
+                return;
             }
         }
-        return cancel;
+    };
+    const getStatusCancelName = (statusList) => {
+        for (let index = 0; index < statusList.length; index++) {
+            const element = statusList[index];
+
+            switch (element) {
+                case 6:
+                    return "Đã Hủy";
+
+                case 10:
+                    return "Hủy Đơn Do Hết Thời Gian";
+
+                case 11:
+                    return "Cửa Hàng Hủy Đơn";
+                case 12:
+                    return "Tài Xế Hủy Đơn";
+                case 13:
+                    return "Khách Hàng Hủy Đơn";
+
+                default:
+                    return "Đã Hủy";
+            }
+        }
     };
     // statusOrder[1] ? (statusOrder[1].name === STATUS_ORDER[1].compare ? 1 : 0.3) : 0.3
-    const getOpacity = (status) => {
-        let opacity = 0;
-        if (status && status.name) {
-            if (status.name === STATUS_ORDER[0].compare || status.name === STATUS_ORDER[1].compare || status.name === STATUS_ORDER[2].compare || status.name === STATUS_ORDER[3].compare) {
-                opacity = 1;
-            } else {
-                opacity = 0.3;
-            }
-        } else {
-            opacity = 0.3;
-        }
-        return opacity;
-    };
-    //{statusOrder[0] ? (statusOrder[0].name === STATUS_ORDER[0].compare ? getTimeOrder(statusOrder[0].time) : "--") : "--"}
-    const validStatus = (status) => {
-        let statusTime = "--";
-        if (status && status.name) {
-            if (status.name === STATUS_ORDER[0].compare || status.name === STATUS_ORDER[1].compare || status.name === STATUS_ORDER[2].compare || status.name === STATUS_ORDER[3].compare) {
-                statusTime = getTimeOrder(statusOrder[0].time);
-            }
-        }
-        return statusTime;
-    };
+    // const getOpacity = (status) => {
+    //     console.log({ status });
+    //     let opacity = 0;
+    //     if (status) {
+    //         if (status.status === STATUS_ORDER[0].id || status.status === STATUS_ORDER[1].id || status.status === STATUS_ORDER[2].id || status.status === STATUS_ORDER[3].id) {
+    //             opacity = 1;
+    //         } else {
+    //             opacity = 0.3;
+    //         }
+    //     } else {
+    //         opacity = 0.3;
+    //     }
+    //     return opacity;
+    // };
+    //{statusOrder[0] ? (statusOrder[0].name === STATUS_ORDER[0].id ? getTimeOrder(statusOrder[0].time) : "--") : "--"}
+    // const validStatus = (status) => {
+    //     let statusTime = "--";
+    //     if (status) {
+    //         if (status.status === STATUS_ORDER[0].id || status.status === STATUS_ORDER[1].id || status.status === STATUS_ORDER[2].id || status.name === STATUS_ORDER[3].id) {
+    //             statusTime = getTimeOrder(statusOrder[0].time);
+    //         }
+    //     }
+    //     return statusTime;
+    // };
     return (
-        <section className="background back-white" style={{ paddingTop: 100, paddingBottom: 80 }}>
+        <section className="background back-white" style={{ paddingTop: 70, paddingBottom: 80 }}>
             <div className="center_flex">
                 <div className="order-lookup-wrapper">
                     <div className="c_flex" style={{ alignItems: "center", width: "100%", gap: 10, padding: "0 15px" }}>
@@ -186,7 +290,7 @@ const OrderLookupPage = () => {
                                                     <span> {orderInfo.id} </span>
                                                 </div>
                                             </div>
-                                            <div className="f_flex order-detail-adrress" style={{ marginTop: 15 }}>
+                                            <div className="f_flex order-detail-adrress" style={{ marginTop: 15, gap: 11 }}>
                                                 <i style={{ color: "var(--primary)", lineHeight: 2 }} className="fa-regular fa-clock"></i>
                                                 <div className="flex-collumn">
                                                     <span>Ngày đặt hàng:</span>
@@ -206,70 +310,84 @@ const OrderLookupPage = () => {
                                         <div className="order-wrapper" style={{ flex: 0.65 }}>
                                             <h3 style={{ fontSize: mobileMode ? "1rem" : "1.3rem", display: "flex", alignItems: "center", gap: 20 }}>
                                                 Tiến độ
-                                                {getStatusCancel(statusOrder) && (
-                                                    <div className="center_flex" style={{ background: getStatusColor("5"), borderRadius: "20px", padding: "7px 18px" }}>
+                                                {isCancelOrder && (
+                                                    <div className="center_flex" style={{ background: "#e94560", borderRadius: "20px", padding: "7px 18px" }}>
                                                         <span className="order-store-status" style={{ fontSize: 15 }}>
-                                                            {getStatusName("5")}
+                                                            {statusCanCelName}
                                                         </span>
                                                     </div>
                                                 )}
                                             </h3>
-                                            <div className="f_flex" style={{ gap: 20 }}>
-                                                <div className="f_flex" style={{ gap: 9, padding: "24px 10px 10px 10px", flexDirection: "column", alignItems: "center" }}>
-                                                    <div style={{ opacity: getOpacity(statusOrder[0]) }}>
+                                            <div className="f_flex" style={{ gap: 15 }}>
+                                                <div
+                                                    className="f_flex"
+                                                    style={{ gap: 9, padding: mobileMode ? "26px 10px 10px 10px" : "24px 10px 10px 10px", flexDirection: "column", alignItems: "center" }}
+                                                >
+                                                    <div style={{ opacity: statusOrderUser[0].active ? 1 : 0.3 }} className="order-icon-dot">
                                                         <i className="fa-regular fa-circle-dot" style={{ color: "#1cc461", boxShadow: "0 0 0 2px rgb(27 196 97 / 30%)", borderRadius: "50%" }}></i>
                                                     </div>
-                                                    <div className="line" style={{ opacity: getOpacity(statusOrder[0]) }}></div>
-                                                    <div style={{ opacity: getOpacity(statusOrder[0]) }}>
+                                                    <div className="line" style={{ opacity: statusOrderUser[1].active ? 1 : 0.3 }}></div>
+                                                    <div style={{ opacity: statusOrderUser[1].active ? 1 : 0.3 }} className="order-icon-dot">
                                                         <i className="fa-regular fa-circle-dot" style={{ color: "#1cc461", boxShadow: "0 0 0 2px rgb(27 196 97 / 30%)", borderRadius: "50%" }}></i>
                                                     </div>
-                                                    <div className="line" style={{ opacity: getOpacity(statusOrder[0]) }}></div>
-                                                    <div style={{ opacity: getOpacity(statusOrder[0]) }}>
+                                                    <div className="line" style={{ opacity: statusOrderUser[2].active ? 1 : 0.3 }}></div>
+                                                    <div style={{ opacity: statusOrderUser[2].active ? 1 : 0.3 }} className="order-icon-dot">
                                                         <i className="fa-regular fa-circle-dot" style={{ color: "#1cc461", boxShadow: "0 0 0 2px rgb(27 196 97 / 30%)", borderRadius: "50%" }}></i>
                                                     </div>
-                                                    <div className="line" style={{ opacity: getOpacity(statusOrder[0]) }}></div>
-                                                    <div style={{ opacity: getOpacity(statusOrder[0]) }}>
+                                                    <div className="line" style={{ opacity: statusOrderUser[3].active ? 1 : 0.3 }}></div>
+                                                    <div style={{ opacity: statusOrderUser[3].active ? 1 : 0.3 }} className="order-icon-dot">
                                                         <i className="fa-regular fa-circle-dot" style={{ color: "#1cc461", boxShadow: "0 0 0 2px rgb(27 196 97 / 30%)", borderRadius: "50%" }}></i>
                                                     </div>
-                                                    <div className="line" style={{ opacity: getOpacity(statusOrder[0]) }}></div>
-                                                    <div style={{ opacity: getOpacity(statusOrder[0]) }}>
+                                                    <div className="line" style={{ opacity: statusOrderUser[4].active ? 1 : 0.3 }}></div>
+                                                    <div style={{ opacity: statusOrderUser[4].active ? 1 : 0.3 }} className="order-icon-dot">
+                                                        <i className="fa-regular fa-circle-dot" style={{ color: "#1cc461", boxShadow: "0 0 0 2px rgb(27 196 97 / 30%)", borderRadius: "50%" }}></i>
+                                                    </div>
+                                                    <div className="line" style={{ opacity: statusOrderUser[5].active ? 1 : 0.3 }}></div>
+                                                    <div style={{ opacity: statusOrderUser[5].active ? 1 : 0.3 }} className="order-icon-dot">
                                                         <i className="fa-regular fa-circle-dot" style={{ color: "#1cc461", boxShadow: "0 0 0 2px rgb(27 196 97 / 30%)", borderRadius: "50%" }}></i>
                                                     </div>
                                                 </div>
                                                 <div className="f_flex" style={{ gap: 25, padding: "10px 10px", flexDirection: "column" }}>
-                                                    <div className="f_flex status-icon" style={{ opacity: getOpacity(statusOrder[0]) }}>
+                                                    <div className="f_flex status-icon" style={{ opacity: statusOrderUser[0].active ? 1 : 0.3 }}>
                                                         <img src="https://cdn-icons-png.flaticon.com/512/3338/3338721.png" alt="" style={{ width: 38, height: 38 }} />
                                                         <div className="f_flex" style={{ flexDirection: "column", paddingLeft: 4 }}>
-                                                            <span className="status-info-time">{validStatus(statusOrder[0])}</span>
-                                                            <span className="status-info-name">Đặt hàng thành công</span>
+                                                            <span className="status-info-time">{statusOrderUser[0].time}</span>
+                                                            <span className="status-info-name">{statusOrderUser[0].statusName}</span>
                                                         </div>
                                                     </div>
-                                                    <div className="f_flex status-icon" style={{ opacity: getOpacity(statusOrder[0]) }}>
-                                                        <img src="https://cdn-icons-png.flaticon.com/512/3338/3338671.png" alt="" style={{ width: 42, height: 42 }} />
+                                                    <div className="f_flex status-icon" style={{ opacity: statusOrderUser[1].active ? 1 : 0.3 }}>
+                                                        <img src="https://cdn-icons-png.flaticon.com/512/3338/3338690.png" alt="" style={{ width: 42, height: 42 }} />
                                                         <div className="f_flex" style={{ flexDirection: "column" }}>
-                                                            <span className="status-info-time">{validStatus(statusOrder[0])}</span>
-                                                            <span className="status-info-name">Đang chuẩn bị</span>
+                                                            <span className="status-info-time">{statusOrderUser[1].time}</span>
+                                                            <span className="status-info-name">{statusOrderUser[1].statusName}</span>
                                                         </div>
                                                     </div>
-                                                    <div className="f_flex status-icon" style={{ opacity: getOpacity(statusOrder[0]) }}>
+                                                    <div className="f_flex status-icon" style={{ opacity: statusOrderUser[2].active ? 1 : 0.3 }}>
+                                                        <img src="https://cdn-icons-png.flaticon.com/512/3338/3338690.png" alt="" style={{ width: 42, height: 42 }} />
+                                                        <div className="f_flex" style={{ flexDirection: "column" }}>
+                                                            <span className="status-info-time">{statusOrderUser[2].time}</span>
+                                                            <span className="status-info-name">{statusOrderUser[2].statusName}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="f_flex status-icon" style={{ opacity: statusOrderUser[3].active ? 1 : 0.3 }}>
                                                         <img src="https://cdn-icons-png.flaticon.com/512/3338/3338686.png" alt="" style={{ width: 38, height: 38 }} />
                                                         <div className="f_flex" style={{ flexDirection: "column", paddingLeft: 4 }}>
-                                                            <span className="status-info-time">{validStatus(statusOrder[0])}</span>
-                                                            <span className="status-info-name">Lấy hàng thành công</span>
+                                                            <span className="status-info-time">{statusOrderUser[3].time}</span>
+                                                            <span className="status-info-name">{statusOrderUser[3].statusName}</span>
                                                         </div>
                                                     </div>
-                                                    <div className="f_flex status-icon" style={{ opacity: getOpacity(statusOrder[0]) }}>
+                                                    <div className="f_flex status-icon" style={{ opacity: statusOrderUser[4].active ? 1 : 0.3 }}>
                                                         <img src="https://cdn-icons-png.flaticon.com/512/3338/3338599.png" alt="" style={{ width: 38, height: 38 }} />
                                                         <div className="f_flex" style={{ flexDirection: "column", paddingLeft: 4 }}>
-                                                            <span className="status-info-time">{validStatus(statusOrder[0])}</span>
-                                                            <span className="status-info-name">Đang giao</span>
+                                                            <span className="status-info-time">{statusOrderUser[4].time}</span>
+                                                            <span className="status-info-name">{statusOrderUser[4].statusName}</span>
                                                         </div>
                                                     </div>
-                                                    <div className="f_flex status-icon" style={{ opacity: getOpacity(statusOrder[0]) }}>
+                                                    <div className="f_flex status-icon" style={{ opacity: statusOrderUser[5].active ? 1 : 0.3 }}>
                                                         <img src="https://cdn-icons-png.flaticon.com/512/3338/3338590.png" alt="" style={{ width: 38, height: 38 }} />
                                                         <div className="f_flex" style={{ flexDirection: "column", paddingLeft: 4 }}>
-                                                            <span className="status-info-time">{validStatus(statusOrder[0])}</span>
-                                                            <span className="status-info-name">Hoàn thành</span>
+                                                            <span className="status-info-time">{statusOrderUser[5].time}</span>
+                                                            <span className="status-info-name">{statusOrderUser[5].statusName}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -309,7 +427,7 @@ const OrderLookupPage = () => {
                                         <div style={{ flex: 0.65, background: "#f6f9fc" }}></div>
                                         {/* {mobileMode ? "" : <div style={{ width: "10px", background: "#f6f9fc" }}></div>} */}
                                         <div className="order-wrapper order-detail-container" style={{ flex: 0.35 }}>
-                                            <h3 style={{ fontSize: mobileMode ? "1.1rem" : "1.3rem", paddingBottom: 10 }}>Chi tiết thanh toán</h3>
+                                            <h3 style={{ fontSize: mobileMode ? "1rem" : "1.3rem", paddingBottom: 10 }}>Chi tiết thanh toán</h3>
 
                                             {/* <div className="order-detail-total">
                                     <div className="order-detail-total-titlte">
@@ -327,14 +445,7 @@ const OrderLookupPage = () => {
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div className="order-detail-total">
-                                                <div className="order-detail-total-titlte">
-                                                    Hình thức giao hàng:
-                                                    <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10 }}>
-                                                        {"--"}
-                                                    </span>
-                                                </div>
-                                            </div>
+
                                             <div className="order-detail-total">
                                                 <div className="order-detail-total-titlte">
                                                     Người giao hàng:
