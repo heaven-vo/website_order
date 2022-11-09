@@ -3,7 +3,7 @@ import ScrollContainer from "react-indiana-drag-scroll";
 import { useHistory } from "react-router-dom";
 import Slider from "react-slick";
 import Rodal from "rodal";
-import { LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE } from "../../constants/Variable";
+import { LOCALSTORAGE_CART_NAME, LOCALSTORAGE_CART_NAME1, LOCALSTORAGE_CART_NAME2, LOCALSTORAGE_CART_NAME3, LOCALSTORAGE_MODE } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 import { ProductCart } from "./ProductCart";
 
@@ -28,7 +28,7 @@ export const SamplePrevArrow = (props) => {
     );
 };
 export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading, isViewAll, reLoad }) => {
-    const { setCart, setisCartMain, mobileMode, mode, menuIdProvider } = useContext(AppContext);
+    const { setCart1, setCart2, setCart3, setisCartMain1, setisCartMain2, setisCartMain3, mobileMode, mode, menuIdProvider } = useContext(AppContext);
     const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);
     const [visiblePopupOutOfStore, setVisiblePopupOutOfStore] = useState(false);
     const [productRodal, setProductRodal] = useState({});
@@ -57,10 +57,15 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
     };
 
     const AddCart = () => {
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
         }
-        // const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+        }
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+        }
         const carts = [
             {
                 ...productRodal,
@@ -68,61 +73,87 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                 menuId: menuIdProvider,
             },
         ];
-        // setisProductCart(true);
-        // setisCartMain(true);
-        // setProductRodalQuantity(productRodalQuantity + 1);
+
         setVisiblePopupOutOfStore(false);
         itemsRef.current[indexRodal].isQuantity();
-        setCart(carts);
+        if (mode === "1") {
+            setCart1(carts);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...carts]));
+        } else if (mode === "2") {
+            setCart2(carts);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([...carts]));
+        } else {
+            setCart3(carts);
+
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...carts]));
+        }
         localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
-        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
+
         reLoad();
     };
     const deleteCartItem = () => {
-        // console.log(productRodal);
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+        let CartList = [];
+        if (mode === "1") {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+        } else if (mode === "2") {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+        } else {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+        }
         let newCarts = CartList?.filter((item) => item.id !== productRodal.id);
-        setCart([...newCarts]);
-        // localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(menu));
-        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
+        if (mode === "1") {
+            setCart1([...newCarts]);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...newCarts]));
+            if (newCarts.length === 0) {
+                setisCartMain1(false);
+            }
+        } else if (mode === "2") {
+            setCart2([...newCarts]);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([...newCarts]));
+            if (newCarts.length === 0) {
+                setisCartMain2(false);
+            }
+        } else {
+            setCart3([...newCarts]);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...newCarts]));
+            if (newCarts.length === 0) {
+                setisCartMain3(false);
+            }
+        }
         setVisiblePopupQuantity(false);
         itemsRef.current[indexRodal].resetQuantity();
-
         setProductRodal({});
-        if (newCarts.length === 0) {
-            setisCartMain(false);
-        }
     };
-    const settingProductSlide = {
-        dots: false,
-        infinite: false,
-        slidesToShow: slideShow,
-        slidesToScroll: 4,
-        autoplay: false,
-        swipeToSlide: false,
-        swipe: false,
-        variableWidth: true,
-        appendDots: (dots) => {
-            return <ul style={{ margin: "0px" }}>{dots}</ul>;
-        },
-        nextArrow: slideShow >= 5 && <SampleNextArrow />,
-        prevArrow: slideShow >= 5 && <SamplePrevArrow />,
-        responsive: [
-            {
-                breakpoint: 700,
-                settings: {
-                    slidesToShow: data.length >= 2 ? 2 : 1,
-                    slidesToScroll: 1,
-                    swipeToSlide: true,
-                    // slidesPerRow: 1,
-                    swipe: true,
-                    nextArrow: "",
-                    prevArrow: "",
-                    rows: 1,
-                },
-            },
-        ],
-    };
+    // const settingProductSlide = {
+    //     dots: false,
+    //     infinite: false,
+    //     slidesToShow: slideShow,
+    //     slidesToScroll: 4,
+    //     autoplay: false,
+    //     swipeToSlide: false,
+    //     swipe: false,
+    //     variableWidth: true,
+    //     appendDots: (dots) => {
+    //         return <ul style={{ margin: "0px" }}>{dots}</ul>;
+    //     },
+    //     nextArrow: slideShow >= 5 && <SampleNextArrow />,
+    //     prevArrow: slideShow >= 5 && <SamplePrevArrow />,
+    //     responsive: [
+    //         {
+    //             breakpoint: 700,
+    //             settings: {
+    //                 slidesToShow: data.length >= 2 ? 2 : 1,
+    //                 slidesToScroll: 1,
+    //                 swipeToSlide: true,
+    //                 // slidesPerRow: 1,
+    //                 swipe: true,
+    //                 nextArrow: "",
+    //                 prevArrow: "",
+    //                 rows: 1,
+    //             },
+    //         },
+    //     ],
+    // };
     let history = useHistory();
     return (
         <>
@@ -192,7 +223,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                 </div>
             </Rodal>
             <Rodal
-                height={200}
+                height={mobileMode ? 310 : 330}
                 width={mobileMode ? 350 : 400}
                 visible={visiblePopupOutOfStore}
                 onClose={() => {
@@ -200,61 +231,66 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                 }}
                 style={{ borderRadius: 10 }}
             >
-                <div style={{ paddingBottom: "10px", textAlign: "center", paddingTop: 12 }}>
-                    <span style={{ fontSize: 17, fontWeight: 700 }}>Bạn muốn đặt món ở cửa hàng này?</span>
-                </div>
-                <div style={{ padding: "10px 0 5px 0", textAlign: "center" }}>
-                    <span className="" style={{ fontSize: 15, fontWeight: 500, textAlign: "center", color: "rgb(150,150,150)" }}>
-                        Nhưng những món bạn đã chọn từ cửa hàng trước sẽ bị xóa khỏi giỏ hàng nhé.
-                    </span>
-                </div>
+                <div className="modal-delete-cart">
+                    <div className="modal-delete-cart-img">
+                        <img className="" src="/images/delete-cart.jpg" alt="" />
+                    </div>
+                    <div style={{ paddingBottom: "10px", textAlign: "center", paddingTop: 12 }}>
+                        <span style={{ fontSize: mobileMode ? 17 : 18, fontWeight: 700, color: "var(--primary)" }}>Bạn muốn đặt món ở cửa hàng này?</span>
+                    </div>
+                    <div style={{ padding: "0px 0 0px 0", textAlign: "center" }}>
+                        <span className="" style={{ fontSize: mobileMode ? 15 : 16, fontWeight: "lighter", textAlign: "center", color: "grey" }}>
+                            Nhưng những món bạn đã chọn từ cửa hàng trước sẽ bị xóa khỏi giỏ hàng nhé.
+                        </span>
+                    </div>
 
-                <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 10 }}>
-                    <button
-                        onClick={(e) => {
-                            e.preventDefault();
-                            setVisiblePopupOutOfStore(false);
-                        }}
-                        style={{
-                            flex: 1,
-                            padding: 14,
-                            fontSize: "1.1em",
-                            height: 50,
-                            cursor: "pointer",
-                            fontWeight: 700,
-                            borderRadius: 10,
-                            background: "#aab2bd",
-                            color: "#fff",
-                            transition: "0.3s all",
-                            WebkitTransition: "0.3s all",
-                        }}
-                    >
-                        Hủy
-                    </button>
-                    <button
-                        onClick={(e) => {
-                            e.preventDefault();
-                            AddCart();
-                            // setisProductCartRodal(false);
-                            // setIsOpenRodal(false);
-                            // deleteCartItem();
-                        }}
-                        style={{
-                            flex: 1,
-                            padding: 14,
-                            fontSize: "1.1em",
-                            height: 50,
-                            cursor: "pointer",
-                            fontWeight: 700,
-                            borderRadius: 10,
-                            background: "var(--primary)",
-                            color: "#fff",
-                            transition: "0.3s all",
-                            WebkitTransition: "0.3s all",
-                        }}
-                    >
-                        Tiếp tục
-                    </button>
+                    <div className="f_flex" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 10 }}>
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setVisiblePopupOutOfStore(false);
+                            }}
+                            style={{
+                                flex: 1,
+                                padding: 14,
+                                fontSize: "1.1em",
+                                height: 50,
+                                cursor: "pointer",
+                                fontWeight: 700,
+                                borderRadius: 10,
+                                background: "#aab2bd",
+                                color: "#fff",
+                                transition: "0.3s all",
+                                WebkitTransition: "0.3s all",
+                            }}
+                        >
+                            Hủy
+                        </button>
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                AddCart();
+                                // setisProductCartRodal(false);
+                                // setIsOpenRodal(false);
+                                // deleteCartItem();
+                            }}
+                            style={{
+                                flex: 1,
+                                padding: 14,
+                                fontSize: "1.1em",
+                                height: 50,
+                                cursor: "pointer",
+                                fontWeight: 700,
+                                borderRadius: 10,
+                                background: "var(--primary)",
+                                color: "#fff",
+                                transition: "0.3s all",
+                                WebkitTransition: "0.3s all",
+                            }}
+                        >
+                            Tiếp tục
+                        </button>
+                    </div>
                 </div>
             </Rodal>
             <section className="shop product-slide" style={{ padding: "0px 0px 0px 0px" }}>

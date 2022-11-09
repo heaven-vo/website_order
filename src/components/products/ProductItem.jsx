@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useImperativeHandle, useState } from "react";
 import { useHistory } from "react-router-dom";
-import Rodal from "rodal";
-import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE } from "../../constants/Variable";
+import { checkOutOfMenu, checkOutOfStore } from "../../constants/Cart";
+import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME1, LOCALSTORAGE_CART_NAME2, LOCALSTORAGE_CART_NAME3, LOCALSTORAGE_MODE } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 
 export const ProductItem = React.forwardRef(({ product, openRodal, index, filter, openRodalOutOfStore, openRodalOutOfMenu, isBorderBottom, store, menuName }, ref) => {
@@ -17,17 +17,29 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
     }));
     let history = useHistory();
 
-    const { setCart, setisCartMain, mode, menuIdProvider, mobileMode, setDeliveryDate, deliveryDate } = useContext(AppContext);
+    const { setCart1, setCart2, setCart3, setisCartMain1, setisCartMain2, setisCartMain3, mode, menuIdProvider, mobileMode, setDeliveryDate, deliveryDate } = useContext(AppContext);
     const [productRodalQuantity, setProductRodalQuantity] = useState(0);
     const [isProductCart, setisProductCart] = useState(true);
     // const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);
 
     useEffect(() => {
-        console.log("chay");
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
         }
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+        }
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+        }
+        let CartList = [];
+        if (mode === "1") {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+        } else if (mode === "2") {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+        } else {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+        }
         let include = false;
         CartList?.map((item) => {
             if (item.id === product.id && menuIdProvider === item.menuId) {
@@ -44,81 +56,111 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
         return () => {};
     }, [product, menuIdProvider]);
 
-    const decreaseQty = () => {
+    const decreaseQtyCart1 = (id) => {
         setProductRodalQuantity(productRodalQuantity - 1);
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
         }
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-        let newCarts = CartList?.map((item) => {
+        const CartList1 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+        let newCarts = CartList1?.map((item) => {
             if (item.id === product.id) {
                 item.quantityCart = item.quantityCart - 1;
             }
             return item;
         });
-        setCart([...newCarts]);
-        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
+        setCart1([...newCarts]);
+        localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...newCarts]));
     };
-    const checkOutOfStore = (product) => {
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+    const decreaseQtyCart2 = (id) => {
+        setProductRodalQuantity(productRodalQuantity - 1);
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
         }
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-
-        if (CartList.length > 0) {
-            if (CartList[0].storeId === product.storeId) {
-                return false;
-            } else {
-                return true;
+        const CartList2 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+        let newCarts = CartList2?.map((item) => {
+            if (item.id === product.id) {
+                item.quantityCart = item.quantityCart - 1;
             }
-        }
-        return false;
+            return item;
+        });
+        setCart2([...newCarts]);
+        localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([...newCarts]));
     };
-    const checkOutOfMenu = (product) => {
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+    const decreaseQtyCart3 = (id) => {
+        setProductRodalQuantity(productRodalQuantity - 1);
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
         }
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-
-        if (CartList.length > 0) {
-            if (menuIdProvider === CartList[0].menuId) {
-                return false;
-            } else {
-                return true;
+        const CartList3 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+        let newCarts = CartList3?.map((item) => {
+            if (item.id === product.id) {
+                item.quantityCart = item.quantityCart - 1;
             }
-        }
-        return false;
+            return item;
+        });
+        setCart3([...newCarts]);
+        localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...newCarts]));
     };
+
+    // const checkOutOfMenu = () => {
+    //     if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
+    //         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+    //     }
+    //     const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+
+    //     if (CartList.length > 0) {
+    //         if (menuIdProvider === CartList[0].menuId) {
+    //             return false;
+    //         } else {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // };
+
     const AddCart = () => {
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
         }
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+        }
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+        }
+
         if (mode === "3") {
-            if (!checkOutOfMenu(product)) {
-                const carts = [
-                    ...CartList,
-                    {
-                        ...product,
-                        quantityCart: 1,
-                        menuId: menuIdProvider,
-                        menuName: deliveryDate,
-                    },
-                ];
-                setisProductCart(true);
-                setisCartMain(true);
-                setProductRodalQuantity(productRodalQuantity + 1);
-                setCart(carts);
-                localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
-                localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
+            const CartList3 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+            if (!checkOutOfMenu(menuIdProvider, mode)) {
+                if (!checkOutOfStore(product, mode)) {
+                    const carts = [
+                        ...CartList3,
+                        {
+                            ...product,
+                            quantityCart: 1,
+                            menuId: menuIdProvider,
+                            menuName: deliveryDate,
+                        },
+                    ];
+                    setisProductCart(true);
+                    setisCartMain3(true);
+                    setProductRodalQuantity(productRodalQuantity + 1);
+                    setCart3(carts);
+                    localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...carts]));
+                    localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
+                } else {
+                    openRodalOutOfStore({ rodal: true, product: product, index });
+                    console.log("khac store");
+                }
             } else {
                 openRodalOutOfMenu({ rodal: true, product: product, index });
                 console.log("khac menu");
             }
-        } else {
-            if (!checkOutOfStore(product)) {
+        } else if (mode === "1") {
+            const CartList1 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+            if (!checkOutOfStore(product, mode)) {
                 const carts = [
-                    ...CartList,
+                    ...CartList1,
                     {
                         ...product,
                         quantityCart: 1,
@@ -126,11 +168,32 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                     },
                 ];
                 setisProductCart(true);
-                setisCartMain(true);
+                setisCartMain1(true);
+                setCart1(carts);
                 setProductRodalQuantity(productRodalQuantity + 1);
-                setCart(carts);
                 localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
-                localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
+                localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...carts]));
+            } else {
+                openRodalOutOfStore({ rodal: true, product: product, index });
+                console.log("khac store");
+            }
+        } else {
+            const CartList2 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+            if (!checkOutOfStore(product, mode)) {
+                const carts = [
+                    ...CartList2,
+                    {
+                        ...product,
+                        quantityCart: 1,
+                        menuId: menuIdProvider,
+                    },
+                ];
+                setisProductCart(true);
+                setisCartMain2(true);
+                setProductRodalQuantity(productRodalQuantity + 1);
+                setCart2(carts);
+                localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
+                localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([...carts]));
             } else {
                 openRodalOutOfStore({ rodal: true, product: product, index });
                 console.log("khac store");
@@ -138,20 +201,50 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
         }
     };
 
-    const increaseQty = () => {
+    const increaseQtyCart1 = (id) => {
         setProductRodalQuantity(productRodalQuantity + 1);
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
         }
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-        let newCarts = CartList?.map((item) => {
+        const CartList1 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+        let newCarts = CartList1?.map((item) => {
             if (item.id === product.id) {
                 item.quantityCart = item.quantityCart + 1;
             }
             return item;
         });
-        setCart([...newCarts]);
-        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
+        setCart1([...newCarts]);
+        localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...newCarts]));
+    };
+    const increaseQtyCart2 = (id) => {
+        setProductRodalQuantity(productRodalQuantity + 1);
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+        }
+        const CartList2 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+        let newCarts = CartList2?.map((item) => {
+            if (item.id === product.id) {
+                item.quantityCart = item.quantityCart + 1;
+            }
+            return item;
+        });
+        setCart2([...newCarts]);
+        localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([...newCarts]));
+    };
+    const increaseQtyCart3 = (id) => {
+        setProductRodalQuantity(productRodalQuantity + 1);
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+        }
+        const CartList3 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+        let newCarts = CartList3?.map((item) => {
+            if (item.id === product.id) {
+                item.quantityCart = item.quantityCart + 1;
+            }
+            return item;
+        });
+        setCart3([...newCarts]);
+        localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...newCarts]));
     };
     return (
         <>
@@ -199,7 +292,13 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                                         className="center_flex cart-quantity-minus"
                                         onClick={() => {
                                             if (productRodalQuantity > 1) {
-                                                decreaseQty(1);
+                                                if (mode === "1") {
+                                                    decreaseQtyCart1(1);
+                                                } else if (mode === "2") {
+                                                    decreaseQtyCart2(1);
+                                                } else {
+                                                    decreaseQtyCart3(1);
+                                                }
                                             } else {
                                                 openRodal({ rodal: true, product: product, index });
                                                 // setVisiblePopupQuantity(true);
@@ -211,7 +310,19 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                                     <div className="center_flex cart-quantity-text">
                                         <span>{productRodalQuantity}</span>
                                     </div>
-                                    <div className="center_flex cart-quantity-plus" onClick={() => increaseQty(1)} style={{}}>
+                                    <div
+                                        className="center_flex cart-quantity-plus"
+                                        onClick={() => {
+                                            if (mode === "1") {
+                                                increaseQtyCart1(product.id);
+                                            } else if (mode === "2") {
+                                                increaseQtyCart2(product.id);
+                                            } else {
+                                                increaseQtyCart3(product.id);
+                                            }
+                                        }}
+                                        style={{}}
+                                    >
                                         <i className="fa-solid fa-plus"></i>
                                     </div>
                                 </div>
@@ -230,11 +341,22 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                         </div>
                     </div>
                 </div>
-                <div className="product-list-price">
+                <div className="product-list-price" style={{ alignItems: "flex-end", display: "flex", flexDirection: "column" }}>
                     <span style={{ display: "flex", gap: 3, fontSize: mobileMode ? "15px" : "16px" }}>
                         {product.pricePerPack?.toLocaleString()}
                         <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
                     </span>
+                    {store && (
+                        <span
+                            onClick={() => {
+                                // setIsHeader(false);
+                                history.push(`/mode/${mode}/product/${product.id}`, { valid: true });
+                            }}
+                            style={{ fontWeight: 500, cursor: "pointer", fontSize: 12, color: "rgb(102, 102, 102)" }}
+                        >
+                            {"1 " + product.unit}
+                        </span>
+                    )}
                 </div>
             </div>
         </>

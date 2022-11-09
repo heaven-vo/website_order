@@ -1,36 +1,43 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import Rodal from "rodal";
 import Select from "react-select";
 import "../common/Cart/style.css";
 import { AppContext } from "../context/AppProvider";
 import { hanldeGetTime, validatePhoneNumber } from "../constants/Caculator";
-import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE, LOCALSTORAGE_ORDER, LOCALSTORAGE_USER_NAME } from "../constants/Variable";
-import { getApartment, postOrder } from "../apis/apiService";
+import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME1, LOCALSTORAGE_CART_NAME2, LOCALSTORAGE_CART_NAME3, LOCALSTORAGE_MODE, LOCALSTORAGE_ORDER, LOCALSTORAGE_USER_NAME } from "../constants/Variable";
+import { getApartment, getTimeDurationList, postOrder } from "../apis/apiService";
 import Loading from "../common/Loading/Loading";
 import { CountDown } from "../common/Cart/CountDown";
 
 const Cart = ({}) => {
     const {
-        Cart,
-        setCart,
+        Cart1,
+        Cart2,
+        Cart3,
+        setCart1,
+        setCart2,
+        setCart3,
+        setMessError,
         setHeaderInfo,
+        setOrdersDrawer,
+        setOpentModalError,
+        setOpentModalSuccess,
         setIsHeaderOrder,
         mobileMode,
-        setisCartMain,
+        setisCartMain1,
+        setisCartMain2,
+        setisCartMain3,
         userInfo,
         setUserInfo,
         areaProvider,
         menuIdProvider,
         modeType,
         setMenuIdProvider,
-        setOpentModalSuccess,
-        setOpentModalError,
-        setMessError,
-        setorderIdSuccess,
         mode,
-        setOrdersDrawer,
+        setMode,
         deliveryDate,
+        setorderIdSuccess,
     } = useContext(AppContext);
     const [totalPrice, setTotalPrice] = useState(0);
     const [CartList, setCartList] = useState([]);
@@ -57,14 +64,43 @@ const Cart = ({}) => {
     const [isLoadingOrder, setisLoadingOrder] = useState(false);
     const [isLoadingWhite, setisLoadingWhite] = useState(true);
     const [isValidPhoneRegex, setIsValidPhoneRegex] = useState(true);
-    const [isLoading, setIsLoading] = useState(true);
+    const [storeName, setStoreName] = useState("");
+    // const [isLoading, setIsLoading] = useState(true);
     const [paymentType, setPaymentType] = useState(0);
     const [isValidArea, setIsValidArea] = useState(false);
     const [isValidApartment, setIsValidApartment] = useState(false);
     const [isValidNote, setIsValidNote] = useState(false);
     const [note, setNote] = useState("");
-
+    let date = new Date();
+    let location = useLocation();
     useEffect(() => {
+        let modeId = location.pathname.split("/")[2];
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
+        }
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+        }
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+        }
+        if (modeId && (modeId === "1" || modeId === "2" || modeId === "3")) {
+            setMode(modeId);
+            let CartList = [];
+            if (mode === "1") {
+                CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+            } else if (mode === "2") {
+                CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+            } else {
+                CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+            }
+            console.log("ok");
+            if (CartList.length === 0) {
+                history.push("/");
+            } else {
+                setStoreName(CartList[0].storeName);
+            }
+        }
         setisLoadingWhite(true);
 
         document.getElementById("main").scrollTo({
@@ -73,10 +109,10 @@ const Cart = ({}) => {
             behavior: "smooth",
         });
 
-        setTimeout(() => {
-            document.getElementById("main").style.overflow = "hidden";
-            setisLoadingWhite(false);
-        }, 500);
+        // setTimeout(() => {
+        //     document.getElementById("main").style.overflow = "hidden";
+        //     setisLoadingWhite(false);
+        // }, 500);
         // document.getElementById("cart-main").scrollTo({
         //     bottom: 0,
         //     left: 0,
@@ -85,31 +121,7 @@ const Cart = ({}) => {
         return () => {
             document.getElementById("main").style.overflow = "auto";
         };
-    }, []);
-    // const hanldeschedule = () => {
-    //     let productOrders = Cart.map((item) => {
-    //         return { productId: item.id, quantity: item.quantityCart.toString(), price: item.pricePerPack };
-    //     });
-    //     let order = {
-    //         id: "",
-    //         phoneNumber: phone,
-    //         total: totalPrice + 15000,
-    //         storeId: Cart.length > 0 && Cart[0].storeId,
-    //         menuId: menuIdProvider,
-    //         buildingId: building.value,
-    //         note: note,
-    //         fullName: fullName,
-    //         shipCost: 10000,
-    //         durationId: "1",
-    //         orderDetail: [...productOrders],
-    //         payments: [
-    //             {
-    //                 type: "Tiền mặt",
-    //             },
-    //         ],
-    //     };
-    //     history.push("/schedule", { order });
-    // };
+    }, [location.pathname]);
     const handleSubmit = () => {
         let isValid = true;
         if (fullName.length === 0 || phone.length === 0 || !building?.value || !validatePhoneNumber(phone)) {
@@ -153,11 +165,21 @@ const Cart = ({}) => {
     };
 
     useEffect(() => {
+        let menuId = "13c699e4-7e19-4ecb-ac99-1df0661f0e61";
+        // setisLoadingWhite(true);
+
+        // document.getElementById("main").scrollTo({
+        //     top: 0,
+        //     left: 0,
+        //     behavior: "smooth",
+        // });
+
         if (area) {
-            getApartment(area.value)
+            Promise.all([getTimeDurationList(menuId, 1, 100), getApartment(area.value)])
                 .then((res) => {
-                    if (res.data) {
-                        const apart = res.data;
+                    if (res.length > 0) {
+                        const duration = res[0].data;
+                        const apart = res[1].data;
                         setApartmentList(apart.listCluster);
                         if (apartment) {
                             for (let index = 0; index < apart.listCluster.length; index++) {
@@ -167,15 +189,41 @@ const Cart = ({}) => {
                                 }
                             }
                         }
+                        if (duration) {
+                            let optionsHours = [];
+                            if (mode === "2") {
+                                duration.forEach((hour) => {
+                                    if (parseInt(hour.fromHour) >= date.getHours() + 1) {
+                                        optionsHours.push({ value: hour.id, label: hour.fromHour + " - " + hour.toHour });
+                                    }
+                                });
+                            } else if (mode === "3") {
+                                duration.forEach((hour) => {
+                                    optionsHours.push({ value: hour.id, label: hour.fromHour + " - " + hour.toHour });
+                                });
+                            }
+
+                            setOptionTime(optionsHours);
+                        }
+
+                        setTimeout(() => {
+                            document.getElementById("main").style.overflow = "hidden";
+                            setisLoadingWhite(false);
+                        }, 400);
                     } else {
                         setApartmentList([]);
+                        setisLoadingWhite(false);
                     }
                 })
                 .catch((error) => {
                     console.log(error);
                     setApartmentList([]);
+                    setisLoadingWhite(false);
                 });
         }
+        return () => {
+            document.getElementById("main").style.overflow = "auto";
+        };
     }, [apartment, area]);
     const optionsBuilding = buldingList.map((building) => {
         return { value: building.id, label: building.name };
@@ -189,7 +237,7 @@ const Cart = ({}) => {
     let history = useHistory();
     const hanldeOrder = () => {
         setisLoadingOrder(true);
-        let productOrders = Cart.map((item) => {
+        let productOrders = CartList.map((item) => {
             return { productId: item.id, quantity: item.quantityCart.toString(), price: item.pricePerPack };
         });
 
@@ -197,21 +245,21 @@ const Cart = ({}) => {
             id: "",
             phoneNumber: phone,
             total: totalPrice + 15000,
-            storeId: Cart.length > 0 && Cart[0].storeId,
+            storeId: CartList.length > 0 && Cart[0].storeId,
             menuId: menuIdProvider,
             buildingId: building.value,
             note: note,
             fullName: fullName,
             shipCost: 10000,
-            durationId: "1",
+            deliveryTimeId: mode === "1" ? "1" : hour.value,
             orderDetail: [...productOrders],
             payments: [
                 {
-                    type: "Tiền mặt",
+                    type: paymentType === 0 ? "Tiền mặt" : "VN PAY",
                 },
             ],
         };
-
+        console.log({ order });
         postOrder(order)
             .then((res) => {
                 if (res.data) {
@@ -238,14 +286,19 @@ const Cart = ({}) => {
                         setorderIdSuccess(orderId);
                         setOpentModalSuccess(true);
                         setisLoadingOrder(false);
-                        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-                        setCart([]);
+                        if (mode === "1") {
+                            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
+                            setCart1([]);
+                        } else if (mode === "2") {
+                            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+                            setCart2([]);
+                        } else {
+                            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+                            setCart3([]);
+                        }
                     }
-
-                    // setCart([]);
                 }
             })
-
             .catch((error) => {
                 setMessError(null);
                 console.log(error);
@@ -253,32 +306,10 @@ const Cart = ({}) => {
                 setisLoadingOrder(false);
             });
     };
-    const hours = [
-        { value: "8", label: "08:00 - 9:00" },
-        { value: "9", label: "09:00 - 10:00" },
-        { value: "10", label: "10:00 - 11:00" },
-        { value: "11", label: "11:00 - 12:00" },
-        { value: "12", label: "12:00 - 13:00" },
-        { value: "13", label: "13:00 - 14:00" },
-        { value: "14", label: "14:00 - 15:00" },
-        { value: "15", label: "15:00 - 16:00" },
-        { value: "16", label: "16:00 - 17:00" },
-        { value: "17", label: "17:00 - 18:00" },
-        { value: "18", label: "18:00 - 19:00" },
-        { value: "19", label: "19:00 - 20:00" },
-        { value: "20", label: "20:00 - 21:00" },
-        { value: "21", label: "21:00 - 22:00" },
-        // { value: "12", label: "19:00 - 20:00" },
-    ];
-    let date = new Date();
-    const optionsHours = hours.filter((hour) => {
-        if (parseInt(hour.label.split(" - ")[1]) >= date.getHours() + 1) {
-            return { value: hour.value, label: hour.label };
-        }
-    });
+
     useEffect(() => {
         setTimeout(() => {
-            setIsLoading(false);
+            setisLoadingOrder(false);
         }, 100);
         // setUser(userInfo);
         setFullName(userInfo.fullName || "");
@@ -287,31 +318,57 @@ const Cart = ({}) => {
         setNote(userInfo.note || "");
         setApartment(userInfo.apartment || "");
         setArea(userInfo.area || "");
-        setOptionTime(optionsHours);
     }, [userInfo]);
 
     useEffect(() => {
         setIsHeaderOrder(false);
         setHeaderInfo({ isSearchHeader: false, title: "Đơn hàng của bạn" });
-        setisCartMain(false);
+        setisCartMain1(false);
+        setisCartMain2(false);
+        setisCartMain3(false);
         return () => {
-            if (Cart.length > 0) {
-                setisCartMain(true);
+            if (CartList.length > 0) {
+                setisCartMain1(true);
+                setisCartMain2(true);
+                setisCartMain3(true);
             }
         };
-    }, [setIsHeaderOrder, setHeaderInfo, setisCartMain, Cart.length]);
+    }, [setIsHeaderOrder, setHeaderInfo, setisCartMain1, setisCartMain2, setisCartMain3, CartList]);
 
     useEffect(() => {
+        let modeId = location.pathname.split("/")[2];
         var total = 0;
-        Cart?.map((item) => {
-            return (total = item.pricePerPack * item.quantityCart + total);
-        });
-        if (Cart && Cart?.length > 0) {
-            setMenuIdProvider(Cart[0].menuId);
+        if (modeId && (modeId === "1" || modeId === "2" || modeId === "3")) {
+            if (modeId === "1") {
+                Cart1?.map((item) => {
+                    return (total = item.pricePerPack * item.quantityCart + total);
+                });
+                if (Cart1 && Cart1?.length > 0) {
+                    setMenuIdProvider(Cart1[0].menuId);
+                }
+                setTotalPrice(total);
+                setCartList(Cart1);
+            } else if (modeId === "2") {
+                Cart2?.map((item) => {
+                    return (total = item.pricePerPack * item.quantityCart + total);
+                });
+                if (Cart2 && Cart2?.length > 0) {
+                    setMenuIdProvider(Cart2[0].menuId);
+                }
+                setTotalPrice(total);
+                setCartList(Cart2);
+            } else {
+                Cart3?.map((item) => {
+                    return (total = item.pricePerPack * item.quantityCart + total);
+                });
+                if (Cart3 && Cart3?.length > 0) {
+                    setMenuIdProvider(Cart3[0].menuId);
+                }
+                setTotalPrice(total);
+                setCartList(Cart3);
+            }
         }
-        setTotalPrice(total);
-        setCartList(Cart);
-    }, [Cart]);
+    }, [Cart1, Cart2, Cart3]);
 
     // Tăng số lượng sản phẩm trong giỏ hàng
     const increaseQty = (id) => {
@@ -323,16 +380,23 @@ const Cart = ({}) => {
         setProductRodalQuantity(productRodalQuantity - 1);
     };
     const updateCart = (id) => {
-        let newCarts = CartList?.map((item) => {
+        let newCarts = [];
+        newCarts = CartList?.map((item) => {
             if (item.id === id) {
                 item.quantityCart = productRodalQuantity;
             }
             return item;
         });
-        // Cập nhật lại Giỏ hàng ở Provider
-        setCart([...newCarts]);
-        // Cập nhật giỏ hàng ỏ local storage
-        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
+        if (mode === "1") {
+            setCart1([...newCarts]);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...newCarts]));
+        } else if (mode === "2") {
+            setCart2([...newCarts]);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([...newCarts]));
+        } else {
+            setCart3([...newCarts]);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...newCarts]));
+        }
         setVisiblePopupQuantity(false);
     };
     const deleteCartItem = (id) => {
@@ -340,15 +404,23 @@ const Cart = ({}) => {
         // let newProduts = listProducts?.filter((item) => item.id !== id);
         // Cập nhật lại danh sách sản phẩm hiện tại với số lượng vừa được cập nhật
         // setlistProducts([...newProduts]);
-        setCart([...newCarts]);
-        setIsLoading(false);
-        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
+        if (mode === "1") {
+            setCart1([...newCarts]);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...newCarts]));
+        } else if (mode === "2") {
+            setCart2([...newCarts]);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([...newCarts]));
+        } else {
+            setCart3([...newCarts]);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...newCarts]));
+        }
+        setisLoadingOrder(false);
         setVisiblePopupQuantity(false);
     };
 
     return (
         <>
-            <div className={`loading-spin ${isLoading === false ? "loading-spin-done" : ""}`}></div>
+            <div className={`loading-spin ${isLoadingWhite === false ? "loading-spin-done" : ""}`}></div>
             <Rodal
                 // height={isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea ? (mobileMode ? 620 : 650) : mobileMode ? 500 : 540}
                 height={isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea || !isValidPhoneRegex ? (mobileMode ? 550 : 590) : mobileMode ? 500 : 540}
@@ -601,30 +673,6 @@ const Cart = ({}) => {
                             <span>VN Pay</span>
                         </div>
                     </div>
-
-                    {/* <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 5, gap: 15 }}>
-                        <button
-                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, height: 50 }}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                setVisiblePopupPayment(false);
-                            }}
-                        >
-                            Đóng
-                        </button>
-                        <button
-                            onClick={(e) => {
-                                e.preventDefault();
-                                // handleSubmit();
-                                setUserInfo({ fullName, phone, building, note, area, apartment });
-                                localStorage.setItem(LOCALSTORAGE_USER_NAME, JSON.stringify({ fullName, phone, building, area, note, apartment }));
-                                setVisiblePopupNote(false);
-                            }}
-                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", color: "#fff", height: 50 }}
-                        >
-                            OK
-                        </button>
-                    </div> */}
                 </div>
             </Rodal>
             <Rodal
@@ -804,7 +852,7 @@ const Cart = ({}) => {
                                 </div>
                                 <div className="checkout-content-item">
                                     <span>Được giao từ</span>
-                                    <span style={{ fontWeight: 600 }}>{Cart.length > 0 ? Cart[0].storeName : "Không có"}</span>
+                                    <span style={{ fontWeight: 600 }}>{storeName}</span>
                                 </div>
                                 {mode === "3" ? (
                                     <div className="checkout-content-item">
@@ -831,6 +879,15 @@ const Cart = ({}) => {
                                                 }}
                                                 isSearchable={false}
                                                 value={hour}
+                                                styles={{
+                                                    control: (styles) => ({
+                                                        ...styles,
+                                                        width: optionTime.length > 0 ? 200 : 280,
+                                                    }),
+                                                    menuList: (styles) => ({
+                                                        ...styles,
+                                                    }),
+                                                }}
                                             />
                                         </div>
                                     )}
@@ -897,7 +954,7 @@ const Cart = ({}) => {
                                 <span style={{ color: "rgba(0,0,0,.4)", fontWeight: 700, fontSize: mobileMode ? 14 : 16 }}>Tóm tắt đơn hàng</span>
                             </div>
                             <div className="checkout-content">
-                                {[...Cart].map((item) => (
+                                {[...CartList].map((item) => (
                                     <div className="checkout-product-cart" key={item.id}>
                                         <div className="c_flex" style={{ gap: 10 }}>
                                             <div className="checkout-product-image">
@@ -951,7 +1008,7 @@ const Cart = ({}) => {
                                 <div className="c_flex">
                                     <span style={{ fontSize: mobileMode ? 14 : 16 }}>Tiền hàng</span>
                                     <span style={{ fontWeight: 600, display: "flex", gap: 3, fontSize: mobileMode ? 14 : 16 }}>
-                                        {Cart.length > 0 ? totalPrice.toLocaleString() : 0}
+                                        {CartList.length > 0 ? totalPrice.toLocaleString() : 0}
                                         <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
                                     </span>
                                 </div>

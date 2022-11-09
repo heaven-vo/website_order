@@ -2,12 +2,12 @@ import React, { useContext, useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
 import Rodal from "rodal";
-import { LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE } from "../../constants/Variable";
+import { LOCALSTORAGE_CART_NAME, LOCALSTORAGE_CART_NAME1, LOCALSTORAGE_CART_NAME2, LOCALSTORAGE_CART_NAME3, LOCALSTORAGE_MODE } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 import { ProductItem } from "./ProductItem";
 
 export const ProductList = ({ data, filter, reLoad, store, menuName }) => {
-    const { setCart, mobileMode, setisCartMain, menuIdProvider, mode, deliveryDate } = useContext(AppContext);
+    const { setCart1, setCart2, setCart3, mobileMode, setisCartMain1, setisCartMain2, setisCartMain3, menuIdProvider, mode, deliveryDate } = useContext(AppContext);
     const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);
     const [visiblePopupOutOfStore, setVisiblePopupOutOfStore] = useState(false);
     const [visiblePopupOutOfMenu, setVisiblePopupOutOfMenu] = useState(false);
@@ -25,24 +25,48 @@ export const ProductList = ({ data, filter, reLoad, store, menuName }) => {
         itemsRef.current = itemsRef.current.slice(0, data.length);
     }, [data]);
     const deleteCartItem = () => {
-        // console.log(productRodal);
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+        let CartList = [];
+        if (mode === "1") {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+        } else if (mode === "2") {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+        } else {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+        }
         let newCarts = CartList?.filter((item) => item.id !== productRodal.id);
-        setCart([...newCarts]);
-        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
+        if (mode === "1") {
+            setCart1([...newCarts]);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...newCarts]));
+            if (newCarts.length === 0) {
+                setisCartMain1(false);
+            }
+        } else if (mode === "2") {
+            setCart2([...newCarts]);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([...newCarts]));
+            if (newCarts.length === 0) {
+                setisCartMain2(false);
+            }
+        } else {
+            setCart3([...newCarts]);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...newCarts]));
+            if (newCarts.length === 0) {
+                setisCartMain3(false);
+            }
+        }
         setVisiblePopupQuantity(false);
         itemsRef.current[indexRodal].resetQuantity();
-
         setProductRodal({});
-        if (newCarts.length === 0) {
-            setisCartMain(false);
-        }
     };
     const AddCart = () => {
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
         }
-        // const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+        }
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+        }
         const carts = [
             {
                 ...productRodal,
@@ -51,15 +75,26 @@ export const ProductList = ({ data, filter, reLoad, store, menuName }) => {
                 menuName: deliveryDate,
             },
         ];
-        // setisProductCart(true);
-        setisCartMain(true);
+        if (mode === "1") {
+            setCart1(carts);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...carts]));
+            setisCartMain1(true);
+        } else if (mode === "2") {
+            setCart2(carts);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([...carts]));
+            setisCartMain2(true);
+            reLoad();
+        } else {
+            setCart3(carts);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...carts]));
+            setisCartMain3(true);
+            reLoad();
+        }
+        console.log("add item");
         setVisiblePopupOutOfStore(false);
         setVisiblePopupOutOfMenu(false);
         itemsRef.current[indexRodal].isQuantity();
-        setCart(carts);
         localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
-        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
-        reLoad();
     };
     const hanldeRodalOutOfStore = (child) => {
         setVisiblePopupOutOfStore(child.rodal);

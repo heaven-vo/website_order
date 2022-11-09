@@ -10,53 +10,90 @@ import { ProductSlide, SampleNextArrow, SamplePrevArrow } from "../components/pr
 import ShopList from "../components/products/ShopList";
 import { ShopSlide } from "../components/products/ShopSlide";
 import { getHourFromDouble } from "../constants/Caculator";
-import { CATE_FITLER, IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE } from "../constants/Variable";
+import { CATE_FITLER, IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_CART_NAME1, LOCALSTORAGE_CART_NAME2, LOCALSTORAGE_CART_NAME3, LOCALSTORAGE_MODE } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
 const Mdata = [
     {
-        id: 1,
-        title: "50% Off For Your First Shopping",
-        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
-        cover: "/images/Buoisang_Banner-min.jpg",
-    },
-    {
         id: 2,
         title: "50% Off For Your First Shopping",
         desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
-        cover: "/images/banner-combo-mon-an-1200x600-finail.jpg",
+        cover: "https://www.highlandscoffee.com.vn/vnt_upload/weblink/Summer_Tea__website_banner2000x640_Tra_Yi_hYng.jpg",
+    },
+    {
+        id: 1,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/banner%2Fbanner_sale.jpg?alt=media&token=7d19e5a3-9cbf-44e7-902d-bb532651362f",
     },
     {
         id: 3,
         title: "50% Off For Your First Shopping",
         desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
-        cover: "/images/panner.jpg",
+        cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/banner%2F193452567_232982721923561_7074968439565756507_n.jpg?alt=media&token=81a1f170-ee5a-472f-b47a-31decc0760fc",
     },
 ];
 
 export const Mdata2 = [
     {
-        id: 3,
-        title: "50% Off For Your First Shopping",
-        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
-        cover: "https://storethailan.com/wp-content/uploads/2021/05/section_banner_2.jpg",
-    },
-    {
         id: 1,
         title: "50% Off For Your First Shopping",
         desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
-        cover: "http://cdn.tgdd.vn/Files/2022/03/16/1420563/15-3-28-3-2022-hoa-don-rau-thit-ca-100k-duoc-mua-ca-phao-song-huong-10k-202203160959551185.jpg",
+        cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/icon%2Fslider_1.webp?alt=media&token=b61c0b1c-cdb9-4376-a4d4-954dc4a562d6",
     },
+    {
+        id: 3,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/banner%2Fsection_banner_2.jpg?alt=media&token=8b1e5d93-a71e-42e4-935c-79071d44f2a0",
+    },
+
     {
         id: 2,
         title: "50% Off For Your First Shopping",
         desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
-        cover: "https://cdn.tgdd.vn/Files/2022/02/07/1414213/banh-keo-giam-tha-ga-giam-den-37-202202070953508165.jpg",
+        cover: "https://salt.tikicdn.com/cache/w830/ts/tmp/d3/b9/a9/26ecee15b4f1b63e5ff92b621226f000.jpg",
     },
+];
+export const Mdata3 = [
+    {
+        id: 1,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/banner%2Fslide_2.png?alt=media&token=fda857ed-3c7f-469d-9e51-927a28207085",
+    },
+    // {
+    //     id: 3,
+    //     title: "50% Off For Your First Shopping",
+    //     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+    //     cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/banner%2Fsection_banner_2.jpg?alt=media&token=8b1e5d93-a71e-42e4-935c-79071d44f2a0",
+    // },
+
+    // {
+    //     id: 2,
+    //     title: "50% Off For Your First Shopping",
+    //     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+    //     cover: "https://salt.tikicdn.com/cache/w830/ts/tmp/d3/b9/a9/26ecee15b4f1b63e5ff92b621226f000.jpg",
+    // },
 ];
 export default Mdata;
 export const MenuPage = () => {
-    const { mode, mobileMode, setIsHeaderOrder, setHeaderInfo, setMenuIdProvider, setisCartMain, setCart, setOpenDeleteCart, setCategoriesInMenu, setKeySearch } = useContext(AppContext);
+    const {
+        mode,
+        mobileMode,
+        setIsHeaderOrder,
+        setHeaderInfo,
+        setMenuIdProvider,
+        setisCartMain1,
+        setisCartMain2,
+        setisCartMain3,
+        setCart1,
+        setCart2,
+        setCart3,
+        setOpenDeleteCart,
+        setCategoriesInMenu,
+        setKeySearch,
+    } = useContext(AppContext);
     const [filtter, setFilter] = useState(CATE_FITLER);
     // const [checked, setChecked] = useState(false);
     const [isLoadingPage, setIsLoadingPage] = useState(true);
@@ -90,7 +127,7 @@ export const MenuPage = () => {
         if (mode === "3") {
             setHeaderInfo({ isSearchHeader: false, title: "Chọn ngày giao hàng" });
             getMenuInMode3(7);
-            setSlideData(Mdata2);
+            setSlideData(Mdata3);
         } else {
             setHeaderInfo({ isSearchHeader: true, title: "" });
         }
@@ -140,9 +177,9 @@ export const MenuPage = () => {
             } else {
                 currentHeight = Math.ceil(e.target.scrollTop + window.innerHeight * (90 / 100));
             }
-            if (currentHeight === scrollHeight && !isFull) {
-                setIsLoadingMore(true);
 
+            if (currentHeight >= scrollHeight - 5 && !isFull) {
+                setIsLoadingMore(true);
                 getListStoreInMenuByMode("1", pageIndex, 3)
                     .then((res) => {
                         if (res.data) {
@@ -175,31 +212,43 @@ export const MenuPage = () => {
         };
     }, [listStore, mobileMode, pageIndex]);
 
-    const checkCartInMenu = (menuId) => {
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-            setCart([]);
-            setisCartMain(false);
+    const checkCartInMenu1 = (menuId) => {
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
+            setCart1([]);
+            setisCartMain1(false);
         } else {
-            const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-            if (CartList.length > 0 && CartList[0].menuId !== menuId.toString()) {
+            const CartList1 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+            if (CartList1.length > 0 && CartList1[0].menuId !== menuId.toString()) {
                 setOpenDeleteCart(true);
             }
         }
     };
-    const checkCartInMode3 = (mode) => {
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_MODE))) {
-            localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify([]));
-            setCart([]);
-            setisCartMain(false);
+    const checkCartInMenu2 = (menuId) => {
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+            setCart2([]);
+            setisCartMain2(false);
         } else {
-            const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-            const Mode = JSON.parse(localStorage.getItem(LOCALSTORAGE_MODE));
-            if (CartList.length > 0 && Mode !== mode) {
+            const CartList2 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+            if (CartList2.length > 0 && CartList2[0].menuId !== menuId.toString()) {
                 setOpenDeleteCart(true);
             }
         }
     };
+    // const checkCartInMode3 = () => {
+    //     if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_MODE))) {
+    //         localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify([]));
+    //         setCart3([]);
+    //         setisCartMain3(false);
+    //     } else {
+    //         const CartList3 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+    //         const Mode = JSON.parse(localStorage.getItem(LOCALSTORAGE_MODE));
+    //         if (CartList3.length > 0 && Mode !== mode) {
+    //             setOpenDeleteCart(true);
+    //         }
+    //     }
+    // };
     const getMenuByModeId = (mode) => {
         if (mode !== "0") {
             Promise.all([getMenuByMode(mode), getListStoreInMenuByMode(mode, pageIndex, 3), getListStoreCategory(mode, 5, 8)])
@@ -209,7 +258,7 @@ export const MenuPage = () => {
                         const stores = res[1].data;
                         const storesCategory = res[2].data;
 
-                        checkCartInMenu(menu.id);
+                        checkCartInMenu1(menu.id);
                         setListStoreCategory(storesCategory);
                         setListStore(stores);
                         setMenuIdProvider(menu.id);
@@ -248,7 +297,7 @@ export const MenuPage = () => {
                 .then((res) => {
                     if (res.data) {
                         const menu = res.data;
-                        checkCartInMode3(mode);
+                        // checkCartInMode3(mode);
                         setMenuProduct(menu);
                         // setMenuIdProvider(menu.id);
                         // setMenuCategory(menu.listCategoryStoreInMenus);
@@ -283,7 +332,7 @@ export const MenuPage = () => {
                 .then((res) => {
                     if (res.data) {
                         const menu = res.data;
-                        checkCartInMenu(menu.id);
+                        checkCartInMenu2(menu.id);
                         setMenuProduct(menu);
                         setMenuIdProvider(menu.id);
                         setMenuCategory(menu.listCategoryStoreInMenus);
@@ -373,7 +422,7 @@ export const MenuPage = () => {
         },
     };
     const hanldeReLoad = () => {
-        // getMenu(mode, filtter, 1, 100);
+        getMenu(mode, filtter, 1, 100);
     };
     const settingCaategory = {
         dots: true,
@@ -399,7 +448,7 @@ export const MenuPage = () => {
                     swipe: true,
                     nextArrow: "",
                     prevArrow: "",
-                    rows: 1,
+                    rows: 2,
                 },
             },
         ],
@@ -640,15 +689,17 @@ export const MenuPage = () => {
                     })}
                 {!isLoadingPage && !isLoadingProduct && mode === "1" && (
                     <>
-                        <div className="container-padding f_flex" style={{ alignItems: "end" }}>
+                        <div className="container-padding f_flex" style={{ alignItems: "end", display: listStore.length > 0 ? "flex" : "none" }}>
                             <span style={{ padding: "40px 15px 10px 15px", fontWeight: 700, fontSize: 16, color: "rgb(100, 100, 100)" }}>Quán ngon gần bạn</span>
                         </div>
                         <ShopList data={listStore.length > 0 && [...listStore]} isStore={true} />{" "}
-                        {isLoadingMore && !isFull && (
-                            <div style={{ width: "100%", paddingTop: 15, paddingBottom: 15 }} className="center_flex">
+                        {isLoadingMore && !isFull ? (
+                            <div style={{ width: "100%" }} className="center_flex">
                                 <BallTriangle stroke="var(--primary)" style={{ width: 40 }} />
                                 {/* <span>Đang tải</span> */}
                             </div>
+                        ) : (
+                            <div style={{ height: 50, width: "100%" }}></div>
                         )}
                     </>
                 )}
@@ -714,8 +765,11 @@ export const MenuPage = () => {
                     <section className="shop" style={{ padding: "25px 0 40px 0" }}>
                         <div className="container center_flex">
                             <div className="contentWidth  center_flex" style={{ marginLeft: 0, flexDirection: "column", gap: 10 }}>
-                                <img src="/images/fish-bones.png" style={{ width: 50 }} alt="" />
-                                <span style={{ fontSize: "1rem" }}>Hiện không có sản phẩm nào!!</span>
+                                <img src="/images/empty-food.png" style={{ width: mobileMode ? 50 : 80, paddingBottom: 10 }} alt="" />
+                                <span style={{ fontSize: mobileMode ? 16 : 20, fontWeight: 600 }}>Không có sản phẩm nào!</span>
+                                <span style={{ fontSize: mobileMode ? 14 : 16, fontWeight: "lighter", textAlign: "center", padding: "0 50px" }}>
+                                    Hiện không có sản phẩm nào, Bạn vui lòng quay lại vào lúc khác.
+                                </span>
                             </div>
                         </div>
                     </section>

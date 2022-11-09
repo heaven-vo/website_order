@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { getAreas, getBuildings, getListOrder } from "../apis/apiService";
-import { LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE, LOCALSTORAGE_ORDER, LOCALSTORAGE_USER_LOGIN, LOCALSTORAGE_USER_NAME } from "../constants/Variable";
+import {
+    LOCALSTORAGE_CART_NAME,
+    LOCALSTORAGE_CART_NAME1,
+    LOCALSTORAGE_CART_NAME2,
+    LOCALSTORAGE_CART_NAME3,
+    LOCALSTORAGE_MODE,
+    LOCALSTORAGE_ORDER,
+    LOCALSTORAGE_USER_LOGIN,
+    LOCALSTORAGE_USER_NAME,
+} from "../constants/Variable";
 
 export const AppContext = React.createContext();
 
@@ -13,7 +22,9 @@ export default function AppProvider({ children }) {
     const [deliveryDate, setDeliveryDate] = useState("");
     const [menuOrder, setMenuOrder] = useState(1);
     const [mobileMode, setMobileMode] = useState(window.innerWidth < 700 ? true : false);
-    const [Cart, setCart] = useState([]);
+    const [Cart1, setCart1] = useState([]);
+    const [Cart2, setCart2] = useState([]);
+    const [Cart3, setCart3] = useState([]);
     const [userInfo, setUserInfo] = useState({});
     const [isOpenDrawer, setIsOpenDrawer] = useState(false);
     const [openDeleteCart, setOpenDeleteCart] = useState(false);
@@ -26,7 +37,9 @@ export default function AppProvider({ children }) {
     const [isHeaderOrder, setIsHeaderOrder] = useState(false);
     const [visiblePopupInfo, setVisiblePopupInfo] = useState(false);
     const [isLoadingMain, setisLoadingMain] = useState(true);
-    const [isCartMain, setisCartMain] = useState(true);
+    const [isCartMain1, setisCartMain1] = useState(true);
+    const [isCartMain2, setisCartMain2] = useState(true);
+    const [isCartMain3, setisCartMain3] = useState(true);
     const [headerInfo, setHeaderInfo] = useState({});
     const [keySearch, setKeySearch] = useState("");
     const [isSearchSubmit, setIsSearchSubmit] = useState(false);
@@ -134,59 +147,100 @@ export default function AppProvider({ children }) {
         } else {
             const auth = JSON.parse(localStorage.getItem(LOCALSTORAGE_USER_LOGIN));
             setAuth({ ...auth });
-            // getListOrder(auth.userId, 1, 3)
-            //     .then((res) => {
-            //         if (res.data) {
-            //             let orders = res.data;
-            //             orders = orders.filter((item) => item.statusId !== "4" || item.statusId !== "5");
-            //             console.log(orders);
-            //             setOrdersDrawer(orders || []);
-            //         } else {
-            //         }
-            //     })
-            //     .catch((error) => {
-            //         console.log(error);
-            //     });
         }
         return () => {};
     }, [history]);
 
     useEffect(() => {
-        const checkout = location.pathname.trim().split("/")[1];
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-            setCart([]);
-            setisCartMain(false);
-        } else {
-            const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-            if (checkout !== "" && checkout !== "order" && checkout !== "login") {
-                if (CartList.length === 0) {
-                    setisCartMain(false);
-                } else if (CartList.length > 0) {
-                    setisCartMain(true);
-                    if (CartList[0] && CartList[0].menuName) {
-                        setDeliveryDate(CartList[0].menuName);
+        const checkout = location.pathname.trim().split("/")[3];
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
+            setCart1([]);
+            setisCartMain1(false);
+        }
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+            setCart2([]);
+            setisCartMain2(false);
+        }
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+            setCart3([]);
+            setisCartMain3(false);
+        }
+
+        const CartList1 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+        const CartList2 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+        const CartList3 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+        if (checkout !== "" && checkout !== "order") {
+            if (mode === "1") {
+                if (CartList1.length === 0) {
+                    setisCartMain1(false);
+                } else if (CartList1.length > 0) {
+                    setisCartMain1(true);
+                    if (CartList1[0] && CartList1[0].menuName) {
+                        setDeliveryDate(CartList1[0].menuName);
                     }
+                    setCart1(CartList1);
                 }
-            } else {
-                setisCartMain(false);
+            } else if (mode === "2") {
+                if (CartList2.length === 0) {
+                    setisCartMain2(false);
+                } else if (CartList2.length > 0) {
+                    setisCartMain2(true);
+                    if (CartList2[0] && CartList2[0].menuName) {
+                        setDeliveryDate(CartList2[0].menuName);
+                    }
+                    setCart2(CartList2);
+                }
+            } else if (mode === "3") {
+                if (CartList3.length === 0) {
+                    setisCartMain3(false);
+                } else if (CartList3.length > 0) {
+                    setisCartMain3(true);
+                    if (CartList3[0] && CartList3[0].menuName) {
+                        setDeliveryDate(CartList3[0].menuName);
+                    }
+                    setCart3(CartList3);
+                }
             }
-            if (checkout === "checkout") {
-                if (CartList.length === 0) {
+        } else {
+            setisCartMain1(false);
+            setisCartMain2(false);
+            setisCartMain3(false);
+        }
+        if (checkout === "checkout") {
+            if (mode === "1") {
+                if (CartList1.length === 0) {
+                    history.push("/");
+                }
+            } else if (mode === "2") {
+                if (CartList2.length === 0) {
+                    history.push("/");
+                }
+            } else if (mode === "3") {
+                if (CartList3.length === 0) {
                     history.push("/");
                 }
             }
-            setCart([...CartList]);
+
+            setCart1([...CartList1]);
+            setCart2([...CartList2]);
+            setCart3([...CartList3]);
         }
-    }, [history, location]);
+    }, [history, location, mode]);
 
     return (
         <AppContext.Provider
             value={{
                 listProducts,
                 setlistProducts,
-                Cart,
-                setCart,
+                Cart1,
+                setCart1,
+                Cart2,
+                setCart2,
+                Cart3,
+                setCart3,
                 mobileMode,
                 setMobileMode,
                 isOpenDrawer,
@@ -207,8 +261,12 @@ export default function AppProvider({ children }) {
                 setIsHeaderHome,
                 headerInfo,
                 setHeaderInfo,
-                isCartMain,
-                setisCartMain,
+                isCartMain1,
+                setisCartMain1,
+                isCartMain2,
+                setisCartMain2,
+                isCartMain3,
+                setisCartMain3,
                 auth,
                 setAuth,
                 orderDrawer,

@@ -451,7 +451,7 @@
     }
     .cateogry-menu-wrapper {
         /* padding-right: 10px; */
-        padding-top: 10px;
+        padding-top: 15px;
         padding-bottom: 5px;
     }
     .cateogry-menu-img {
@@ -467,7 +467,8 @@
     }
     /* --------------- */
     .shop .product .img {
-        /* height: 180px !important; */
+        height: 115px !important;
+        width: 115px !important;
     }
     .slide-img {
         height: 180px !important;
@@ -732,7 +733,7 @@
 
     /* ---- */
     .checkout-content-item h2 {
-        font-size: 20px;
+        font-size: 18px;
     }
     .checkout-content-item h4 {
         font-size: 14px !important;

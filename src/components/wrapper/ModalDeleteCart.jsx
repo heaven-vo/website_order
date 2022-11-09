@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import Rodal from "rodal";
-import { LOCALSTORAGE_CART_NAME } from "../../constants/Variable";
+import { LOCALSTORAGE_CART_NAME, LOCALSTORAGE_CART_NAME1, LOCALSTORAGE_CART_NAME2, LOCALSTORAGE_CART_NAME3 } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 
 export const ModalDeleteCart = () => {
-    const { openDeleteCart, setOpenDeleteCart, mobileMode, setCart, setisCartMain } = useContext(AppContext);
+    const { mode, openDeleteCart, setOpenDeleteCart, mobileMode, setCart1, setCart2, setCart3, setisCartMain1, setisCartMain2, setisCartMain3 } = useContext(AppContext);
     let history = useHistory();
     return (
         <Rodal
@@ -56,9 +56,19 @@ export const ModalDeleteCart = () => {
                     onClick={(e) => {
                         e.preventDefault();
                         setOpenDeleteCart(false);
-                        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-                        setCart([]);
-                        setisCartMain(false);
+                        if (mode === "1") {
+                            setCart1([]);
+                            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
+                            setisCartMain1(false);
+                        } else if (mode === "2") {
+                            setCart2([]);
+                            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+                            setisCartMain2(false);
+                        } else {
+                            setCart3([]);
+                            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+                            setisCartMain3(false);
+                        }
                     }}
                     style={{
                         flex: 1,

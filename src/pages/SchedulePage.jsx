@@ -16,7 +16,7 @@ import ScrollContainer from "react-indiana-drag-scroll";
 import Skeleton from "react-loading-skeleton";
 
 const SchedulePage = () => {
-    const { setIsHeaderOrder, setHeaderInfo, setisCartMain, mobileMode, Cart, menuIdProvider, setMenuIdProvider, setDeliveryDate } = useContext(AppContext);
+    const { setIsHeaderOrder, setHeaderInfo, setisCartMain3, mobileMode, Cart3, menuIdProvider, setMenuIdProvider, setDeliveryDate } = useContext(AppContext);
     const [dayCurrent, setDayCurrent] = useState({});
     const [fullTime, setFullTime] = useState("");
     const [listDay, setListDay] = useState([]);
@@ -29,15 +29,6 @@ const SchedulePage = () => {
     let history = useHistory();
     let location = useLocation();
 
-    // function converDate(data) {
-    //     var dd = String(data.getDate()).padStart(2, "0");
-    //     var mm = String(data.getMonth()).padStart(2, "0");
-    //     var yy = String(data.getFullYear()).padStart(2, "0");
-    //     return {
-    //         dd: dd,
-    //         fullTime: dd + "/" + mm + "/" + yy,
-    //     };
-    // }
     const getDate = () => {
         Date.prototype.addDays = function (days) {
             var date = new Date(this.valueOf());
@@ -59,23 +50,24 @@ const SchedulePage = () => {
         }
         return schedule;
     };
-
+    const hanldeReLoad = () => {
+        hanldeFilterCate(0);
+    };
     useEffect(() => {
         setHeaderInfo({ isSearchHeader: true, title: "" });
-        if (Cart.length > 0) {
-            setisCartMain(true);
+        if (Cart3.length > 0) {
+            setisCartMain3(true);
         } else {
-            setisCartMain(false);
+            setisCartMain3(false);
         }
         setIsHeaderOrder(false);
 
-        // getListProductByFilter("e981f0c4-3633-4122-b770-ccaabb22e474", "c595cb7e-1813-484f-a97e-b5698bc7e7a6");
         return () => {
-            if (Cart.length > 0) {
-                setisCartMain(true);
+            if (Cart3.length > 0) {
+                setisCartMain3(true);
             }
         };
-    }, [setHeaderInfo, setIsHeaderOrder, Cart]);
+    }, [setHeaderInfo, setIsHeaderOrder, Cart3]);
     const handleGetProductMenu = (day) => {
         setIsLoadingProduct(true);
         setIsLoadingCate(true);
@@ -94,6 +86,7 @@ const SchedulePage = () => {
                         }
                     }
                     setTimeout(() => {
+                        console.log({ productList });
                         setListDay(days);
                         setCategorys(categoryList);
                         setProducts(productList);
@@ -116,9 +109,8 @@ const SchedulePage = () => {
             });
     };
     useEffect(() => {
-        setisCartMain(false);
+        setisCartMain3(false);
         if (location.state) {
-            console.log("menuIdProvider: ", menuIdProvider);
             const { day } = location.state;
             const { menuName } = location.state;
             // setDay(getDate()[2].day);
@@ -150,15 +142,13 @@ const SchedulePage = () => {
     };
 
     const hanldeFilterCate = (id) => {
-        setIsLoadingProduct(true);
         getProductMenuMode3(dayCurrent.id, id === 0 ? "" : id, 1, 100)
             .then((res) => {
                 if (res.data) {
-                    console.log(res.data);
                     const menu = res.data;
                     const productList = menu.products || [];
+                    setProducts(productList);
                     setTimeout(() => {
-                        setProducts(productList);
                         setIsLoadingProduct(false);
                     }, 300);
                 } else {
@@ -203,16 +193,7 @@ const SchedulePage = () => {
                             })}
                         </Slider>
                     </div>
-                    {/* <div style={{ width: "100%", background: "rgb(246, 249, 252)", padding: 15, gap: 15, gridTemplateColumns: "repeat(7, 1fr)" }} className="schedule-category"> */}
-                    {/* <div style={{ width: 150 }}>
-                            <Select
-                                // options={categoriesInMenu.length > 0 ? optionsBuilding : null}
-                                placeholder="Danh mục"
-                                isSearchable={false}
-                                onChange={(e) => {}}
-                                styles={colourStyles}
-                            />
-                        </div> */}
+
                     <ScrollContainer
                         className="schedule-category"
                         horizontal={true}
@@ -237,6 +218,7 @@ const SchedulePage = () => {
                                 onClick={() => {
                                     if (0 !== tabActive) {
                                         setTabActive(0);
+                                        setIsLoadingProduct(true);
                                         hanldeFilterCate(0);
                                     }
                                 }}
@@ -265,6 +247,7 @@ const SchedulePage = () => {
                                         onClick={() => {
                                             if (item.id !== tabActive) {
                                                 setTabActive(item.id);
+                                                setIsLoadingProduct(true);
                                                 hanldeFilterCate(item.id);
                                             }
                                         }}
@@ -283,7 +266,7 @@ const SchedulePage = () => {
                                 store={true}
                                 menuName={dayCurrent.name}
                                 reLoad={() => {
-                                    // hanldeReLoad();
+                                    hanldeReLoad();
                                 }}
                             />
                         )}

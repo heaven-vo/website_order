@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useImperativeHandle, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE } from "../../constants/Variable";
+import { checkOutOfMenu, checkOutOfStore } from "../../constants/Cart";
+import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME1, LOCALSTORAGE_CART_NAME2, LOCALSTORAGE_CART_NAME3, LOCALSTORAGE_MODE } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 
 export const ProductCart = React.forwardRef(({ product, openRodal, index, openRodalOutOfStore }, ref) => {
@@ -14,7 +15,7 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
             setProductRodalQuantity(1);
         },
     }));
-    const { setCart, menuIdProvider, setisCartMain, mode } = useContext(AppContext);
+    const { setCart1, setCart2, setCart3, menuIdProvider, setisCartMain1, setisCartMain2, setisCartMain3, mode, openRodalOutOfMenu, deliveryDate } = useContext(AppContext);
     const [productRodalQuantity, setProductRodalQuantity] = useState(0);
     const [isProductCart, setisProductCart] = useState(true);
     // const [isOutOfStore, setisOutOfStore] = useState(false);
@@ -23,28 +24,45 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
     let history = useHistory();
     useEffect(() => {
         let newProduct = { ...product, quantityCart: 0 };
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-            setCart([]);
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
+            setCart1([]);
+        }
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+            setCart2([]);
+        }
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+            setCart3([]);
+        }
+        let CartList = [];
+        if (mode === "1") {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+        } else if (mode === "2") {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
         } else {
-            const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-            for (let index = 0; index < CartList.length; index++) {
-                if (CartList[index].id === newProduct.id) {
-                    newProduct = { ...newProduct, quantityCart: CartList[index].quantityCart };
-                }
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+        }
+        for (let index = 0; index < CartList.length; index++) {
+            if (CartList[index].id === newProduct.id) {
+                newProduct = { ...newProduct, quantityCart: CartList[index].quantityCart };
             }
         }
 
         setPro({ ...newProduct });
         return () => {};
-    }, [product, setCart]);
+    }, [product, setCart1, setCart2, setCart3]);
 
     useEffect(() => {
-        // console.log({ product });
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+        let CartList = [];
+        if (mode === "1") {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+        } else if (mode === "2") {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+        } else {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
         }
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
         let include = false;
         CartList?.map((item) => {
             if (item.id === product.id) {
@@ -60,76 +78,191 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
         }
         return () => {};
     }, [product]);
-
-    const decreaseQty = () => {
+    const decreaseQtyCart1 = (id) => {
         setProductRodalQuantity(productRodalQuantity - 1);
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
         }
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-        let newCarts = CartList?.map((item) => {
+        const CartList1 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+        let newCarts = CartList1?.map((item) => {
             if (item.id === product.id) {
                 item.quantityCart = item.quantityCart - 1;
             }
             return item;
         });
-        setCart([...newCarts]);
-        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
+        setCart1([...newCarts]);
+        localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...newCarts]));
     };
-    const checkOutOfStore = (product) => {
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+    const decreaseQtyCart2 = (id) => {
+        setProductRodalQuantity(productRodalQuantity - 1);
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
         }
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+        const CartList2 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+        let newCarts = CartList2?.map((item) => {
+            if (item.id === product.id) {
+                item.quantityCart = item.quantityCart - 1;
+            }
+            return item;
+        });
+        setCart2([...newCarts]);
+        localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([...newCarts]));
+    };
+    const decreaseQtyCart3 = (id) => {
+        setProductRodalQuantity(productRodalQuantity - 1);
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+        }
+        const CartList3 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+        let newCarts = CartList3?.map((item) => {
+            if (item.id === product.id) {
+                item.quantityCart = item.quantityCart - 1;
+            }
+            return item;
+        });
+        setCart3([...newCarts]);
+        localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...newCarts]));
+    };
 
-        if (CartList.length > 0) {
-            if (CartList[0].storeId === product.storeId) {
-                return false;
+    // const checkOutOfStore = (product) => {
+    //     if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
+    //         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+    //     }
+    //     const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+
+    //     if (CartList.length > 0) {
+    //         if (CartList[0].storeId === product.storeId) {
+    //             return false;
+    //         } else {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // };
+    const AddCart = () => {
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
+        }
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+        }
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+        }
+
+        if (mode === "3") {
+            const CartList3 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+            if (!checkOutOfMenu(menuIdProvider, mode)) {
+                const carts = [
+                    ...CartList3,
+                    {
+                        ...product,
+                        quantityCart: 1,
+                        menuId: menuIdProvider,
+                        menuName: deliveryDate,
+                    },
+                ];
+                setisProductCart(true);
+                setProductRodalQuantity(productRodalQuantity + 1);
+                localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
+
+                setisCartMain3(true);
+                setCart3(carts);
+                localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...carts]));
             } else {
-                return true;
+                openRodalOutOfMenu({ rodal: true, product: product, index });
+                console.log("khac menu");
+            }
+        } else if (mode === "1") {
+            const CartList1 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+            if (!checkOutOfStore(product, mode)) {
+                const carts = [
+                    ...CartList1,
+                    {
+                        ...product,
+                        quantityCart: 1,
+                        menuId: menuIdProvider,
+                    },
+                ];
+                setisProductCart(true);
+                setisCartMain1(true);
+                setCart1(carts);
+                setProductRodalQuantity(productRodalQuantity + 1);
+                localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
+                localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...carts]));
+            } else {
+                openRodalOutOfStore({ rodal: true, product: product, index });
+                console.log("khac store");
+            }
+        } else {
+            const CartList2 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+            if (!checkOutOfStore(product, mode)) {
+                const carts = [
+                    ...CartList2,
+                    {
+                        ...product,
+                        quantityCart: 1,
+                        menuId: menuIdProvider,
+                    },
+                ];
+                console.log({ carts });
+                console.log({ productRodalQuantity });
+                setisProductCart(true);
+                setisCartMain2(true);
+                setProductRodalQuantity(1);
+                setCart2(carts);
+                localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
+                localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([...carts]));
+            } else {
+                openRodalOutOfStore({ rodal: true, product: product, index });
+                console.log("khac store");
             }
         }
-        return false;
     };
-    const AddCart = () => {
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-        }
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-        if (!checkOutOfStore(product)) {
-            const carts = [
-                ...CartList,
-                {
-                    ...product,
-                    quantityCart: 1,
-                    menuId: menuIdProvider,
-                },
-            ];
-            setisProductCart(true);
-            setisCartMain(true);
-            setProductRodalQuantity(productRodalQuantity + 1);
-            setCart(carts);
-            localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
-        } else {
-            openRodalOutOfStore({ rodal: true, product: product, index });
-            console.log("khac store");
-        }
-    };
-    const increaseQty = () => {
+    const increaseQtyCart1 = (id) => {
         setProductRodalQuantity(productRodalQuantity + 1);
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
         }
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-        let newCarts = CartList?.map((item) => {
+        const CartList1 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+        let newCarts = CartList1?.map((item) => {
             if (item.id === product.id) {
                 item.quantityCart = item.quantityCart + 1;
             }
             return item;
         });
-        setCart([...newCarts]);
-        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
+        setCart1([...newCarts]);
+        localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...newCarts]));
+    };
+    const increaseQtyCart2 = (id) => {
+        setProductRodalQuantity(productRodalQuantity + 1);
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+        }
+        const CartList2 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+        let newCarts = CartList2?.map((item) => {
+            if (item.id === product.id) {
+                item.quantityCart = item.quantityCart + 1;
+            }
+            return item;
+        });
+        setCart2([...newCarts]);
+        localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([...newCarts]));
+    };
+    const increaseQtyCart3 = (id) => {
+        setProductRodalQuantity(productRodalQuantity + 1);
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+        }
+        const CartList3 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+        let newCarts = CartList3?.map((item) => {
+            if (item.id === product.id) {
+                item.quantityCart = item.quantityCart + 1;
+            }
+            return item;
+        });
+        setCart3([...newCarts]);
+        localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...newCarts]));
     };
     return (
         <>
@@ -183,7 +316,13 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
                                         className="center_flex cart-quantity-minus"
                                         onClick={() => {
                                             if (productRodalQuantity > 1) {
-                                                decreaseQty(1);
+                                                if (mode === "1") {
+                                                    decreaseQtyCart1(1);
+                                                } else if (mode === "2") {
+                                                    decreaseQtyCart2(1);
+                                                } else {
+                                                    decreaseQtyCart3(1);
+                                                }
                                             } else {
                                                 openRodal({ rodal: true, product: product, index });
                                             }
@@ -194,7 +333,19 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
                                     <div className="center_flex cart-quantity-text">
                                         <span>{productRodalQuantity}</span>
                                     </div>
-                                    <div className="center_flex cart-quantity-plus" onClick={() => increaseQty(1)} style={{}}>
+                                    <div
+                                        className="center_flex cart-quantity-plus"
+                                        onClick={() => {
+                                            if (mode === "1") {
+                                                increaseQtyCart1(product.id);
+                                            } else if (mode === "2") {
+                                                increaseQtyCart2(product.id);
+                                            } else {
+                                                increaseQtyCart3(product.id);
+                                            }
+                                        }}
+                                        style={{}}
+                                    >
                                         <i className="fa-solid fa-plus"></i>
                                     </div>
                                 </div>

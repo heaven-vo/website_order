@@ -18,7 +18,6 @@ import { AppContext } from "./context/AppProvider";
 import Cart from "./pages/CartPage";
 import { FoodDetailPage } from "./pages/FoodDetailPage";
 import HomePage from "./pages/HomePages";
-import { LoginPage } from "./pages/LoginPage";
 import { MenuPage } from "./pages/MenuPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { OrderDetailPage } from "./pages/OrderDetailPage";
@@ -30,7 +29,7 @@ import { ViewAllProductCatePage } from "./pages/ViewAllProductCatePage";
 import { ViewAllProductStorePage } from "./pages/ViewAllProductStorePage";
 import "./util.css";
 function App() {
-    const { setMobileMode, isOpenDrawer, setIsOpenDrawer, isCartMain, isLoadingMain, mobileMode } = useContext(AppContext);
+    const { setMobileMode, isOpenDrawer, setIsOpenDrawer, isCartMain1, isCartMain2, isCartMain3, isLoadingMain, mobileMode, mode } = useContext(AppContext);
     const [vh, setVh] = useState(window.innerHeight);
     useEffect(() => {
         const updateVh = () => {
@@ -68,11 +67,19 @@ function App() {
             document.body.style.overflow = "auto";
             document.body.style.touchAction = "auto";
         }
-    }, [isCartMain]);
+    }, [isOpenDrawer]);
     const toggleDrawer = () => {
         setIsOpenDrawer((prevState) => !prevState);
     };
-
+    const renderCartMain = () => {
+        if (mode === "1") {
+            return isCartMain1 && <CartMain />;
+        } else if (mode === "2") {
+            return isCartMain2 && <CartMain />;
+        } else {
+            return isCartMain3 && <CartMain />;
+        }
+    };
     return (
         <div className="root center_flex" style={{ height: mobileMode ? vh : null }}>
             {/* <MessengerCustomerChat pageId="100083337097834" appId="437264958531394" /> */}
@@ -92,9 +99,9 @@ function App() {
                     <Route path="/" exact>
                         <HomePage />
                     </Route>
-                    <Route path="/login" exact>
+                    {/* <Route path="/login" exact>
                         <LoginPage />
-                    </Route>
+                    </Route> */}
 
                     <Route path="/mode/:modeId" exact>
                         <MenuPage />
@@ -119,7 +126,7 @@ function App() {
                         <FoodDetailPage />
                     </Route>
 
-                    <Route path="/checkout" exact>
+                    <Route path="/mode/:modeId/checkout" exact>
                         <Cart />
                     </Route>
                     <Route path="/mode/:modeId/search" exact>
@@ -135,7 +142,7 @@ function App() {
                         <NotFoundPage />
                     </Route>
                 </Switch>
-                {isCartMain && <CartMain />}
+                {renderCartMain()}
                 <Footer />
             </div>
         </div>

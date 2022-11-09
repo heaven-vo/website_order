@@ -5,21 +5,37 @@ import { useHistory } from "react-router-dom";
 import { AppContext } from "../context/AppProvider";
 
 export const NotFoundPage = () => {
-    const { setIsHeaderOrder } = useContext(AppContext);
+    const { setIsHeaderOrder, mobileMode, setHeaderInfo } = useContext(AppContext);
 
     let history = useHistory();
 
     useEffect(() => {
+        setHeaderInfo({ isSearchHeader: false });
         setIsHeaderOrder(false);
     }, [setIsHeaderOrder]);
 
     return (
-        <div style={{ marginTop: 50 }}>
-            <img src="https://miro.medium.com/max/1400/1*DeBkx8vjbumpCO-ZkPE9Cw.png" style={{ width: "100%", height: "100%" }} alt="" />
+        <div style={{}}>
+            <img src="/images/error-404.jpg" style={{ width: "100%", padding: mobileMode ? "100px 50px 0px 50px " : "100px 150px 0px 150px" }} alt="" />
             <div className="container-login100-form-btn">
-                <div className="wrap-login100-form-btn" style={{ width: "unset" }} onClick={() => history.push("/")}>
+                <div className="wrap-login100-form-btn center_flex" style={{ width: "unset" }} onClick={() => history.push("/")}>
                     <div className="login100-form-bgbtn"></div>
-                    <button className="login100-form-btn btn-hover">Quay lại trang chủ</button>
+                    <button
+                        onClick={() => {}}
+                        type="button"
+                        style={{
+                            textAlign: "center",
+                            width: 250,
+                            height: mobileMode ? 45 : 50,
+                            borderRadius: "0.5rem",
+                            alignItems: "center",
+                            backgroundColor: "var(--primary)",
+                            color: "#fff",
+                        }}
+                        className="center_flex checkout-btn"
+                    >
+                        <span style={{ fontWeight: 700, fontSize: mobileMode ? 14 : 16 }}>{"Quay lại trang chủ"}</span>
+                    </button>
                 </div>
             </div>
         </div>

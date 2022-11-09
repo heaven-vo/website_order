@@ -4,11 +4,13 @@ import Rodal from "rodal";
 import { getProductDetail } from "../apis/apiService";
 import Loading from "../common/Loading/Loading";
 import Pdata from "../components/products/Pdata";
-import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE } from "../constants/Variable";
+import { checkOutOfMenu, checkOutOfStore } from "../constants/Cart";
+import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME1, LOCALSTORAGE_CART_NAME2, LOCALSTORAGE_CART_NAME3, LOCALSTORAGE_MODE } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
 export const FoodDetailPage = () => {
-    const { setCart, mobileMode, setHeaderInfo, setisCartMain, menuIdProvider, mode, modeType, deliveryDate, setDeliveryDate } = useContext(AppContext);
+    const { setCart1, setCart2, setCart3, mobileMode, setHeaderInfo, setisCartMain1, setisCartMain2, setisCartMain3, menuIdProvider, mode, modeType, deliveryDate, setDeliveryDate } =
+        useContext(AppContext);
     const [countQuantity, setcountQuantity] = useState(1);
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
     const [product, setProduct] = useState({});
@@ -20,6 +22,7 @@ export const FoodDetailPage = () => {
     const { shopItems } = Pdata;
     let history = useHistory();
     let location = useLocation();
+
     useEffect(() => {
         // setIsHeader(false);
         console.log({ menuIdProvider });
@@ -36,14 +39,40 @@ export const FoodDetailPage = () => {
                         if (res.data) {
                             const product = res.data;
                             let newProduct = { ...product, quantityCart: 0 };
-                            if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-                                localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-                                setCart([]);
-                            } else {
-                                const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-                                for (let index = 0; index < CartList.length; index++) {
-                                    if (CartList[index].id === newProduct.id) {
-                                        newProduct = { ...newProduct, quantityCart: CartList[index].quantityCart };
+                            if (mode === "1") {
+                                if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+                                    localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
+                                    setCart1([]);
+                                } else {
+                                    const CartList1 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+                                    for (let index = 0; index < CartList1.length; index++) {
+                                        if (CartList1[index].id === newProduct.id) {
+                                            newProduct = { ...newProduct, quantityCart: CartList1[index].quantityCart };
+                                        }
+                                    }
+                                }
+                            } else if (mode === "2") {
+                                if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+                                    localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+                                    setCart2([]);
+                                } else {
+                                    const CartList2 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+                                    for (let index = 0; index < CartList2.length; index++) {
+                                        if (CartList2[index].id === newProduct.id) {
+                                            newProduct = { ...newProduct, quantityCart: CartList2[index].quantityCart };
+                                        }
+                                    }
+                                }
+                            } else if (mode === "3") {
+                                if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+                                    localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+                                    setCart3([]);
+                                } else {
+                                    const CartList3 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+                                    for (let index = 0; index < CartList3.length; index++) {
+                                        if (CartList3[index].id === newProduct.id) {
+                                            newProduct = { ...newProduct, quantityCart: CartList3[index].quantityCart };
+                                        }
                                     }
                                 }
                             }
@@ -64,13 +93,26 @@ export const FoodDetailPage = () => {
         }
 
         return () => {};
-    }, [history, location, setCart, setHeaderInfo, setIsLoadingCircle]);
+    }, [history, location, setCart1, setCart2, setCart3, setHeaderInfo, setIsLoadingCircle]);
 
     useEffect(() => {
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
         }
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+        }
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+        }
+        let CartList = [];
+        if (mode === "1") {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+        } else if (mode === "2") {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+        } else {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+        }
         let include = false;
 
         CartList?.map((item) => {
@@ -81,14 +123,6 @@ export const FoodDetailPage = () => {
             }
         });
 
-        // for (let index = 0; index < CartList.length; index++) {
-        //     console.log(CartList[index].id);
-        //     console.log(product.id);
-        //     if (CartList[index].id === product.id) {
-
-        //         return;
-        //     }
-        // }
         if (include) {
             setisProductCart(true);
         } else {
@@ -108,100 +142,213 @@ export const FoodDetailPage = () => {
 
         return () => {};
     }, [isLoadingCircle]);
-    const increaseQty = (id) => {
+    const increaseQtyCart1 = (id) => {
         setProductRodalQuantity(productRodalQuantity + 1);
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
         }
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-        let newCarts = CartList?.map((item) => {
+        const CartList1 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+        let newCarts = CartList1?.map((item) => {
             if (item.id === product.id) {
                 item.quantityCart = item.quantityCart + 1;
             }
             return item;
         });
-        setCart([...newCarts]);
-        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
+        setCart1([...newCarts]);
+        localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...newCarts]));
     };
-
-    const checkOutOfStore = (product) => {
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+    const increaseQtyCart2 = (id) => {
+        setProductRodalQuantity(productRodalQuantity + 1);
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
         }
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-
-        if (CartList.length > 0) {
-            if (CartList[0].storeId === product.storeId) {
-                return false;
-            } else {
-                return true;
+        const CartList2 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+        let newCarts = CartList2?.map((item) => {
+            if (item.id === product.id) {
+                item.quantityCart = item.quantityCart + 1;
             }
-        }
-        return false;
+            return item;
+        });
+        setCart2([...newCarts]);
+        localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([...newCarts]));
     };
-    const checkOutOfMenu = (product) => {
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+    const increaseQtyCart3 = (id) => {
+        setProductRodalQuantity(productRodalQuantity + 1);
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
         }
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-
-        if (CartList.length > 0) {
-            if (menuIdProvider === CartList[0].menuId) {
-                return false;
-            } else {
-                return true;
+        const CartList3 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+        let newCarts = CartList3?.map((item) => {
+            if (item.id === product.id) {
+                item.quantityCart = item.quantityCart + 1;
             }
-        }
-        return false;
+            return item;
+        });
+        setCart3([...newCarts]);
+        localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...newCarts]));
     };
+
+    // const checkOutOfMenu = () => {
+    //     if (mode === "1") {
+    //         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+    //             localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
+    //         }
+    //         const CartList1 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+
+    //         if (CartList1.length > 0) {
+    //             if (menuIdProvider === CartList1[0].menuId) {
+    //                 return false;
+    //             } else {
+    //                 return true;
+    //             }
+    //         }
+    //         return false;
+    //     } else if (mode === "2") {
+    //         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+    //             localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+    //         }
+    //         const CartList2 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+
+    //         if (CartList2.length > 0) {
+    //             if (menuIdProvider === CartList2[0].menuId) {
+    //                 return false;
+    //             } else {
+    //                 return true;
+    //             }
+    //         }
+    //         return false;
+    //     } else {
+    //         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+    //             localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+    //         }
+    //         const CartList3 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+
+    //         if (CartList3.length > 0) {
+    //             if (menuIdProvider === CartList3[0].menuId) {
+    //                 return false;
+    //             } else {
+    //                 return true;
+    //             }
+    //         }
+    //         return false;
+    //     }
+    // };
     // Giảm số lượng sản phẩm trong giỏ hàng
-    const decreaseQty = (id) => {
+    const decreaseQtyCart1 = (id) => {
         setProductRodalQuantity(productRodalQuantity - 1);
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
         }
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-        let newCarts = CartList?.map((item) => {
+        const CartList1 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+        let newCarts = CartList1?.map((item) => {
             if (item.id === product.id) {
                 item.quantityCart = item.quantityCart - 1;
             }
             return item;
         });
-        setCart([...newCarts]);
-        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
+        setCart1([...newCarts]);
+        localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...newCarts]));
+    };
+    const decreaseQtyCart2 = (id) => {
+        setProductRodalQuantity(productRodalQuantity - 1);
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+        }
+        const CartList2 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+        let newCarts = CartList2?.map((item) => {
+            if (item.id === product.id) {
+                item.quantityCart = item.quantityCart - 1;
+            }
+            return item;
+        });
+        setCart2([...newCarts]);
+        localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([...newCarts]));
+    };
+    const decreaseQtyCart3 = (id) => {
+        setProductRodalQuantity(productRodalQuantity - 1);
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+        }
+        const CartList3 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+        let newCarts = CartList3?.map((item) => {
+            if (item.id === product.id) {
+                item.quantityCart = item.quantityCart - 1;
+            }
+            return item;
+        });
+        setCart3([...newCarts]);
+        localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...newCarts]));
     };
 
     const AddCartOutOfStore = () => {
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-        }
-        // const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-        const carts = [
-            {
-                ...product,
-                quantityCart: 1,
-                menuId: menuIdProvider,
-            },
-        ];
-        setVisiblePopupOutOfMenu(false);
+        if (mode === "1") {
+            if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+                localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
+            }
+            const carts = [
+                {
+                    ...product,
+                    quantityCart: 1,
+                    menuId: menuIdProvider,
+                },
+            ];
+            setVisiblePopupOutOfStore(false);
+            setisProductCart(true);
+            setProductRodalQuantity(1);
+            setCart1(carts);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...carts]));
+        } else if (mode === "2") {
+            if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+                localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+            }
+            const carts = [
+                {
+                    ...product,
+                    quantityCart: 1,
+                    menuId: menuIdProvider,
+                },
+            ];
+            setVisiblePopupOutOfStore(false);
+            setisProductCart(true);
+            setProductRodalQuantity(1);
+            setCart2(carts);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([...carts]));
+        } else {
+            if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+                localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+            }
+            const carts = [
+                {
+                    ...product,
+                    quantityCart: 1,
+                    menuId: menuIdProvider,
+                },
+            ];
 
-        setisProductCart(true);
-        setProductRodalQuantity(1);
-        // itemsRef.current[indexRodal].isQuantity();
-        setCart(carts);
-        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
+            setVisiblePopupOutOfMenu(false);
+            setVisiblePopupOutOfStore(false);
+            setisProductCart(true);
+            setProductRodalQuantity(1);
+            setCart3(carts);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...carts]));
+        }
         // reLoad();
     };
     const AddCart = () => {
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
         }
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-        if (mode === "3") {
-            console.log({ deliveryDate });
-            if (!checkOutOfMenu(product)) {
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+        }
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+        }
+        if (mode === "1") {
+            const CartList1 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+            if (!checkOutOfStore(product, mode)) {
                 const carts = [
-                    ...CartList,
+                    ...CartList1,
                     {
                         ...product,
                         quantityCart: 1,
@@ -210,20 +357,47 @@ export const FoodDetailPage = () => {
                     },
                 ];
                 setisProductCart(true);
-                setisCartMain(true);
+                setisCartMain1(true);
                 setProductRodalQuantity(productRodalQuantity + 1);
-                setCart(carts);
-                localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
+                setCart1(carts);
+                localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...carts]));
                 localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
             } else {
+                setVisiblePopupOutOfStore(true);
+                console.log("khac store");
+            }
+        } else if (mode === "3") {
+            const CartList3 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+            if (!checkOutOfMenu(menuIdProvider, mode)) {
+                if (!checkOutOfStore(product, mode)) {
+                    const carts = [
+                        ...CartList3,
+                        {
+                            ...product,
+                            quantityCart: 1,
+                            menuId: menuIdProvider,
+                            menuName: deliveryDate,
+                        },
+                    ];
+                    setisProductCart(true);
+                    setisCartMain3(true);
+                    setProductRodalQuantity(productRodalQuantity + 1);
+                    setCart3(carts);
+                    localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...carts]));
+                    localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
+                } else {
+                    setVisiblePopupOutOfStore(true);
+                    console.log("khac store");
+                }
+            } else {
                 setVisiblePopupOutOfMenu(true);
-                // openRodalOutOfStore({ rodal: true, product: product, index });
                 console.log("khac menu");
             }
         } else {
-            if (!checkOutOfStore(product)) {
+            const CartList2 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+            if (!checkOutOfStore(product, mode)) {
                 const carts = [
-                    ...CartList,
+                    ...CartList2,
                     {
                         ...product,
                         quantityCart: 1,
@@ -231,30 +405,50 @@ export const FoodDetailPage = () => {
                     },
                 ];
                 setisProductCart(true);
-                setisCartMain(true);
+                setisCartMain2(true);
                 setProductRodalQuantity(productRodalQuantity + 1);
-                setCart(carts);
-                localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...carts]));
+                setCart2(carts);
+                localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([...carts]));
                 localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
             } else {
                 setVisiblePopupOutOfStore(true);
-                // openRodalOutOfStore({ rodal: true, product: product, index });
                 console.log("khac store");
             }
         }
     };
     const deleteCartItem = () => {
-        const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
+        let CartList = [];
+        if (mode === "1") {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+        } else if (mode === "2") {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+        } else {
+            CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+        }
+
         let newCarts = CartList?.filter((item) => item.id !== product.id);
-        setCart([...newCarts]);
-        localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([...newCarts]));
+        if (mode === "1") {
+            setCart1([...newCarts]);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...newCarts]));
+            if (newCarts.length === 0) {
+                setisCartMain1(false);
+            }
+        } else if (mode === "2") {
+            setCart2([...newCarts]);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([...newCarts]));
+            if (newCarts.length === 0) {
+                setisCartMain2(false);
+            }
+        } else {
+            setCart3([...newCarts]);
+            localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...newCarts]));
+            if (newCarts.length === 0) {
+                setisCartMain3(false);
+            }
+        }
         setVisiblePopupQuantity(false);
         setisProductCart(false);
         setProductRodalQuantity(0);
-
-        if (newCarts.length === 0) {
-            setisCartMain(false);
-        }
     };
     return (
         <>
@@ -489,7 +683,7 @@ export const FoodDetailPage = () => {
                                     <span style={{ fontSize: "1.2rem" }}>₫</span>
                                 </div>
 
-                                <h4 style={{ marginBottom: 15, fontSize: 14, fontWeight: 400, color: "#666666" }}>{product.packDescription}</h4>
+                                <h4 style={{ marginBottom: 15, fontSize: mobileMode ? 14 : 16, fontWeight: 400, color: "#666" }}>{product.packDescription}</h4>
                                 <h4 style={{ marginBottom: 15, fontSize: mobileMode ? 14 : 15, fontWeight: 500, color: "#4db856", textTransform: "uppercase" }}>
                                     {mode === "3" ? "Giao hàng vào " + deliveryDate : modeType}
                                 </h4>
@@ -518,7 +712,7 @@ export const FoodDetailPage = () => {
                                         <span style={{ color: "rgb(160,160,160)", fontWeight: 400, fontSize: 15 }}>{product.slogan}</span>
                                     </div>
                                 </div>
-                                {/* <p style={{ color: "#666666", padding: "20px 0", fontSize: "15px" }}>{product.description}</p> */}
+                                {product.description !== "" && <p style={{ color: "#666666", padding: "20px 0", fontSize: "15px" }}>{product.description}</p>}
                                 <div className="" style={{ paddingBottom: 15, paddingTop: 15 }}>
                                     {isProductCart ? (
                                         <div className="center_flex cart-quantity" style={{ width: " 100%", boxShadow: "0 4px 5px rgb(0 0 0 / 13%)" }}>
@@ -527,7 +721,13 @@ export const FoodDetailPage = () => {
                                                 className="center_flex cart-quantity-minus"
                                                 onClick={() => {
                                                     if (productRodalQuantity > 1) {
-                                                        decreaseQty(product.id);
+                                                        if (mode === "1") {
+                                                            decreaseQtyCart1(product.id);
+                                                        } else if (mode === "2") {
+                                                            decreaseQtyCart2(product.id);
+                                                        } else {
+                                                            decreaseQtyCart3(product.id);
+                                                        }
                                                     } else {
                                                         setVisiblePopupQuantity(true);
                                                     }
@@ -538,7 +738,18 @@ export const FoodDetailPage = () => {
                                             <div className="center_flex cart-quantity-text">
                                                 <span>{productRodalQuantity}</span>
                                             </div>
-                                            <div className="center_flex cart-quantity-plus" onClick={() => increaseQty(product.id)}>
+                                            <div
+                                                className="center_flex cart-quantity-plus"
+                                                onClick={() => {
+                                                    if (mode === "1") {
+                                                        increaseQtyCart1(product.id);
+                                                    } else if (mode === "2") {
+                                                        increaseQtyCart2(product.id);
+                                                    } else {
+                                                        increaseQtyCart3(product.id);
+                                                    }
+                                                }}
+                                            >
                                                 <i className="fa-solid fa-plus"></i>
                                             </div>
                                         </div>

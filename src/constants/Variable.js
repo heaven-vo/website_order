@@ -1,4 +1,6 @@
-export const LOCALSTORAGE_CART_NAME = "Cart";
+export const LOCALSTORAGE_CART_NAME1 = "Cart1";
+export const LOCALSTORAGE_CART_NAME2 = "Cart2";
+export const LOCALSTORAGE_CART_NAME3 = "Cart3";
 export const LOCALSTORAGE_USER_NAME = "User";
 export const LOCALSTORAGE_USER_LOGIN = "Auth";
 export const LOCALSTORAGE_MODE = "Mode";
