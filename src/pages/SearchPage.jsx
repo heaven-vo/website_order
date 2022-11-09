@@ -7,7 +7,7 @@ import ShopList from "../components/products/ShopList";
 import { AppContext } from "../context/AppProvider";
 
 export const SearchPage = () => {
-    const { setHeaderInfo, keySearch, mobileMode, isSearchSubmit, setIsSearchSubmit, menuIdProvider } = useContext(AppContext);
+    const { setHeaderInfo, keySearch, mobileMode, isSearchSubmit, setIsSearchSubmit, menuIdProvider, mode } = useContext(AppContext);
     const [isLoadingCircle, setIsLoadingCircle] = useState(false);
     const [listAll, setListAll] = useState(null);
     const [listSearch, setListSearch] = useState(null);
@@ -20,12 +20,17 @@ export const SearchPage = () => {
         if (menuIdProvider === "0") {
             history.push(`/mode/${modeId}`);
         }
+        if (mode === "2" || mode === "3") {
+            setTabActive(1);
+        } else {
+            setTabActive(0);
+        }
         setHeaderInfo({ isSearchHeader: true, title: "" });
         return () => {
             setHeaderInfo({});
             // setKeySearch("");
         };
-    }, [setHeaderInfo]);
+    }, [setHeaderInfo, mode]);
 
     useEffect(() => {
         if (isSearchSubmit || keySearch !== "") {
@@ -68,7 +73,7 @@ export const SearchPage = () => {
                         <div
                             style={{
                                 background: "#fff",
-                                borderRadius: "1rem",
+                                borderRadius: "10px",
                                 border: "1px solid rgb(204, 204, 204)",
                                 width: mobileMode ? 120 : 130,
                                 height: 40,
@@ -86,7 +91,7 @@ export const SearchPage = () => {
                         <div
                             style={{
                                 background: "#fff",
-                                borderRadius: "1rem",
+                                borderRadius: "10px",
                                 border: "1px solid rgb(204, 204, 204)",
                                 width: mobileMode ? 120 : 130,
                                 height: 40,

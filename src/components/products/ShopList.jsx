@@ -32,7 +32,7 @@ const ShopList = ({ data, isStore }) => {
                                 </div>
                                 <div
                                     className="f_flex cusor"
-                                    style={{ flexDirection: "column", gap: 5 }}
+                                    style={{ flexDirection: "column", gap: 5, flex: 1 }}
                                     onClick={() => {
                                         if (isStore) {
                                             history.push(`/mode/${mode}/store/${item.id}`);

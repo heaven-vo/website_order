@@ -6,24 +6,22 @@ import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import "../src/pages/responsive.css";
 import "./App.css";
-import Cart from "./common/Cart/Cart";
 import { CartMain } from "./common/Cart/CartMain";
 import Footer from "./common/footer/Footer";
 import { DrawerContent } from "./common/header/Drawer";
 import Header from "./common/header/Header";
 import Loading from "./common/Loading/Loading";
-import Data from "./components/Data";
-import Pdata from "./components/products/Pdata";
+
 import { ModalDeleteCart } from "./components/wrapper/ModalDeleteCart";
 import { ErrorModal, SuccessModal } from "./components/wrapper/ModalOrder";
 import { AppContext } from "./context/AppProvider";
+import Cart from "./pages/CartPage";
 import { FoodDetailPage } from "./pages/FoodDetailPage";
 import HomePage from "./pages/HomePages";
-import { LoginPage } from "./pages/LoginPage";
 import { MenuPage } from "./pages/MenuPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { OrderDetailPage } from "./pages/OrderDetailPage";
-import { OrderPage } from "./pages/OrderPage";
+import OrderLookupPage from "./pages/OrderLookupPage";
 import SchedulePage from "./pages/SchedulePage";
 import { SearchPage } from "./pages/SearchPage";
 
@@ -31,9 +29,7 @@ import { ViewAllProductCatePage } from "./pages/ViewAllProductCatePage";
 import { ViewAllProductStorePage } from "./pages/ViewAllProductStorePage";
 import "./util.css";
 function App() {
-    const { productItems } = Data;
-    const { shopItems } = Pdata;
-    const { setMobileMode, isOpenDrawer, setIsOpenDrawer, isCartMain, isLoadingMain, mobileMode, opentModalSuccess, setOpentModalSuccess } = useContext(AppContext);
+    const { setMobileMode, isOpenDrawer, setIsOpenDrawer, isCartMain1, isCartMain2, isCartMain3, isLoadingMain, mobileMode, mode } = useContext(AppContext);
     const [vh, setVh] = useState(window.innerHeight);
     useEffect(() => {
         const updateVh = () => {
@@ -71,11 +67,19 @@ function App() {
             document.body.style.overflow = "auto";
             document.body.style.touchAction = "auto";
         }
-    }, [isCartMain]);
+    }, [isOpenDrawer]);
     const toggleDrawer = () => {
         setIsOpenDrawer((prevState) => !prevState);
     };
-
+    const renderCartMain = () => {
+        if (mode === "1") {
+            return isCartMain1 && <CartMain />;
+        } else if (mode === "2") {
+            return isCartMain2 && <CartMain />;
+        } else {
+            return isCartMain3 && <CartMain />;
+        }
+    };
     return (
         <div className="root center_flex" style={{ height: mobileMode ? vh : null }}>
             {/* <MessengerCustomerChat pageId="100083337097834" appId="437264958531394" /> */}
@@ -95,9 +99,9 @@ function App() {
                     <Route path="/" exact>
                         <HomePage />
                     </Route>
-                    <Route path="/login" exact>
+                    {/* <Route path="/login" exact>
                         <LoginPage />
-                    </Route>
+                    </Route> */}
 
                     <Route path="/mode/:modeId" exact>
                         <MenuPage />
@@ -113,7 +117,7 @@ function App() {
                         <ViewAllProductCatePage />
                     </Route>
                     <Route path="/order" exact>
-                        <OrderPage />
+                        <OrderLookupPage />
                     </Route>
                     <Route path="/order/:order" exact>
                         <OrderDetailPage />
@@ -122,13 +126,13 @@ function App() {
                         <FoodDetailPage />
                     </Route>
 
-                    <Route path="/checkout" exact>
+                    <Route path="/mode/:modeId/checkout" exact>
                         <Cart />
                     </Route>
                     <Route path="/mode/:modeId/search" exact>
                         <SearchPage />
                     </Route>
-                    <Route path="/schedule" exact>
+                    <Route path="/mode/:id/schedule" exact>
                         <SchedulePage />
                     </Route>
                     {/* <Route path="/checkout2" exact>
@@ -138,7 +142,7 @@ function App() {
                         <NotFoundPage />
                     </Route>
                 </Switch>
-                {isCartMain && <CartMain />}
+                {renderCartMain()}
                 <Footer />
             </div>
         </div>

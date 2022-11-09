@@ -70,7 +70,6 @@
 }
 
 .shop-item {
-    /* background-color: red; */
     width: 100px;
     height: 100px;
 }
@@ -88,11 +87,11 @@
     padding: 15px 0px;
 }
 .shop-item-image {
-    width: 120px;
+    width: 125px;
     padding: 0px !important;
 }
 .shop-item-title {
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 700;
 }
 .shop-item-building {

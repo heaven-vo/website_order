@@ -6,6 +6,7 @@ import Loading from "../common/Loading/Loading";
 import { ProductList } from "../components/products/ProductList";
 import ShopList from "../components/products/ShopList";
 import { AppContext } from "../context/AppProvider";
+import ScrollContainer from "react-indiana-drag-scroll";
 
 export const ViewAllProductCatePage = () => {
     const { setHeaderInfo, menuIdProvider, mobileMode, mode, categoriesInMenu } = useContext(AppContext);
@@ -34,6 +35,7 @@ export const ViewAllProductCatePage = () => {
                     setIsLoadingCircle(false);
                 } else {
                     setIsLoadingCircle(false);
+                    setStores([]);
                 }
             })
             .catch((error) => {
@@ -105,14 +107,25 @@ export const ViewAllProductCatePage = () => {
     };
     const hanldeReLoad = () => {
         let cateId = location.pathname.trim().split("/")[4];
-        let menuId = location.pathname.trim().split("/")[2];
-        getListProductByFilter(menuId, cateId, 1, 100);
+        getListProductByFilter(menuIdProvider, cateId);
     };
     const colourStyles = {
         control: (styles) => ({
             ...styles,
-            // width: 150,
-            borderRadius: "1rem",
+            width: mobileMode ? 150 : 170,
+            borderRadius: "8px",
+            padding: "0 5px",
+            fontSize: mobileMode ? 14 : 16,
+        }),
+        menuList: (styles) => ({
+            ...styles,
+        }),
+    };
+    const filterStyles = {
+        control: (styles) => ({
+            ...styles,
+            width: mobileMode ? 160 : 170,
+            borderRadius: "8px",
             padding: "0 5px",
             fontSize: mobileMode ? 14 : 16,
         }),
@@ -135,17 +148,39 @@ export const ViewAllProductCatePage = () => {
     const optionsBuilding = categoriesInMenu?.map((item) => {
         return { value: item.id, label: item.name };
     });
+    const optionsFiltter = [
+        { id: 1, name: "Khuyến mãi" },
+        { id: 2, name: "Quán mở cửa" },
+    ].map((item) => {
+        return { value: item.id, label: item.name };
+    });
+    const sortFiltter = [
+        { id: 1, name: "Bán chạy nhất" },
+        { id: 2, name: "A - Z" },
+        { id: 3, name: "Z - A" },
+    ].map((item) => {
+        return { value: item.id, label: item.name };
+    });
     return (
         <div style={{ background: "rgb(246, 249, 252)", height: "100%" }}>
             <Loading isLoading={isLoadingCircle} />
             <div className={`loading-spin ${!isLoadingCircle && "loading-spin-done"}`}></div>
-            <div style={{ padding: "75px 15px 15px 15px", display: "flex", gap: 10, width: "100%" }}>
+            <div style={{ padding: "75px 15px 15px 15px", gap: 10, width: "100%", display: "flex", overflow: "auto" }}>
+                <div style={{}} className="center_flex cusor filter-select-cate">
+                    {/* <i className="fa-solid fa-utensils" style={{ fontSize: 14 }}></i> */}
+                    <Select options={optionsFiltter} placeholder="Lọc nhanh" isSearchable={false} onChange={(e) => {}} styles={colourStyles} menuPosition="fixed" />
+                </div>
+                <div style={{}} className="center_flex cusor filter-select-cate">
+                    {/* <i className="fa-solid fa-utensils" style={{ fontSize: 14 }}></i> */}
+                    <Select options={sortFiltter} placeholder="Sắp xếp theo" isSearchable={false} onChange={(e) => {}} styles={filterStyles} menuPosition="fixed" />
+                </div>
                 <div style={{}} className="center_flex cusor filter-select-cate">
                     {/* <i className="fa-solid fa-utensils" style={{ fontSize: 14 }}></i> */}
                     <Select
                         options={categoriesInMenu.length > 0 ? optionsBuilding : null}
                         placeholder="Danh mục"
-                        isSearchable={false}
+                        menuPosition="fixed"
+                        isSearchable={true}
                         onChange={(e) => {
                             setIsLoadingCircle(true);
                             if (mode === "1") {
@@ -159,6 +194,7 @@ export const ViewAllProductCatePage = () => {
                                             setIsLoadingCircle(false);
                                         } else {
                                             setIsLoadingCircle(false);
+                                            setStores([]);
                                         }
                                     })
                                     .catch((error) => {
@@ -216,17 +252,19 @@ export const ViewAllProductCatePage = () => {
                         }}
                     />
                 )}
-                {stores?.length === 0 ||
-                    (products?.length === 0 && (
-                        <section className="shop" style={{ padding: "25px 0 40px 0" }}>
-                            <div className="container center_flex">
-                                <div className="contentWidth  center_flex" style={{ marginLeft: 0, flexDirection: "column", gap: 20 }}>
-                                    <img src="/images/fish-bones.png" style={{ width: 50, opacity: 0.7 }} alt="" />
-                                    <span style={{ fontSize: "1rem", fontWeight: "lighter" }}>Hiện không có sản phẩm nào!!</span>
-                                </div>
+                {(stores?.length === 0 || products?.length === 0) && (
+                    <section className="shop" style={{ padding: "50px 0 40px 0" }}>
+                        <div className="container center_flex">
+                            <div className="contentWidth  center_flex" style={{ marginLeft: 0, flexDirection: "column", gap: 10 }}>
+                                <img src="/images/empty-food.png" style={{ width: mobileMode ? 50 : 80, paddingBottom: 10 }} alt="" />
+                                <span style={{ fontSize: mobileMode ? 16 : 20, fontWeight: 600 }}>Không có sản phẩm nào!</span>
+                                <span style={{ fontSize: mobileMode ? 14 : 16, fontWeight: "lighter", textAlign: "center", padding: "0 50px" }}>
+                                    Hiện không có sản phẩm nào, Bạn vui lòng quay lại vào lúc khác.
+                                </span>
                             </div>
-                        </section>
-                    ))}
+                        </div>
+                    </section>
+                )}
             </div>
 
             {/* {!isLoadingCircle && <ProductGrid data={products || []} label={title || ""} cateId={""} labelImg={img || IMAGE_NOTFOUND} isViewAll={false} />} */}

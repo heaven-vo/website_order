@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useImperativeHandle, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_MODE } from "../../constants/Variable";
+import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME, LOCALSTORAGE_CART_NAME1, LOCALSTORAGE_CART_NAME2, LOCALSTORAGE_CART_NAME3, LOCALSTORAGE_MODE } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 
 export const ShopCart = React.forwardRef(({ product }, ref) => {
     useImperativeHandle(ref, () => ({}));
-    const { setCart, mode, setisCartMain } = useContext(AppContext);
+    const { setCart1, setCart2, setCart3, mode, mobileMode } = useContext(AppContext);
     const [productRodalQuantity, setProductRodalQuantity] = useState(0);
     const [isShopCart, setisShopCart] = useState(true);
 
@@ -13,25 +13,53 @@ export const ShopCart = React.forwardRef(({ product }, ref) => {
     let history = useHistory();
     useEffect(() => {
         let newProduct = { ...product, quantityCart: 0 };
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-            localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-            setCart([]);
-        } else {
-            const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-            for (let index = 0; index < CartList.length; index++) {
-                if (CartList[index].id === newProduct.id) {
-                    newProduct = { ...newProduct, quantityCart: CartList[index].quantityCart };
+        if (mode === "1") {
+            if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
+                localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
+                setCart1([]);
+            } else {
+                const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
+                for (let index = 0; index < CartList.length; index++) {
+                    if (CartList[index].id === newProduct.id) {
+                        newProduct = { ...newProduct, quantityCart: CartList[index].quantityCart };
+                    }
                 }
             }
+            setPro({ ...newProduct });
+        } else if (mode === "2") {
+            if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
+                localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
+                setCart1([]);
+            } else {
+                const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
+                for (let index = 0; index < CartList.length; index++) {
+                    if (CartList[index].id === newProduct.id) {
+                        newProduct = { ...newProduct, quantityCart: CartList[index].quantityCart };
+                    }
+                }
+            }
+            setPro({ ...newProduct });
+        } else {
+            if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
+                localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
+                setCart1([]);
+            } else {
+                const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
+                for (let index = 0; index < CartList.length; index++) {
+                    if (CartList[index].id === newProduct.id) {
+                        newProduct = { ...newProduct, quantityCart: CartList[index].quantityCart };
+                    }
+                }
+            }
+            setPro({ ...newProduct });
         }
 
-        setPro({ ...newProduct });
         return () => {};
-    }, [product, setCart]);
+    }, [product, setCart1, setCart2, setCart3]);
 
     return (
         <>
-            <div className="box" key={pro.id} style={{ width: 150 }}>
+            <div className="box" key={pro.id} style={{ width: mobileMode ? 120 : 135 }}>
                 <div className="product mtop" style={{ margin: 0, padding: "0", boxShadow: "none" }}>
                     {/* <Link to="/food-detail"> */}
                     <div

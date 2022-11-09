@@ -126,3 +126,28 @@ export const getOrderDetail = (orderId) => {
         "Content-Type": "application/json",
     });
 };
+//https://deliveryvhgp-webapi.azurewebsites.net/api/v1/menus/now/mode3?pageSize=20
+export const getMenuMode3 = (size) => {
+    return axios.get(`${BASE_URL}${MENU}/now/mode3?pageSize=${size}`, {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+    });
+};
+//https://deliveryvhgp-webapi.azurewebsites.net/api/v1/menus/mode3/13c699e4-7e19-4ecb-ac99-1df0661f0e61/products?page=1&pageSize=20
+export const getProductMenuMode3 = (menuId, cateId, page, size) => {
+    let url = "";
+    if (cateId !== "") {
+        url = `&searchBy=${cateId}`;
+    }
+    return axios.get(`${BASE_URL}${MENU}/mode3/${menuId}/products?page=${page}&pageSize=${size}${url}`, {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+    });
+};
+//https://deliveryvhgp-webapi.azurewebsites.net/api/v1/orders/ByMenuId?menuId=13c699e4-7e19-4ecb-ac99-1df0661f0e61&pageIndex=1&pageSize=20
+export const getTimeDurationList = (menuId, page, size) => {
+    return axios.get(`${BASE_URL}${ORDER}/ByMenuId?menuId=${menuId}&pageIndex=${page}&pageSize=${size}`, {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+    });
+};

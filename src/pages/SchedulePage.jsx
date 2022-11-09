@@ -6,56 +6,30 @@ import Select from "react-select";
 import { useHistory, useLocation } from "react-router-dom";
 import Slider from "react-slick";
 import Rodal from "rodal";
-import { postOrder } from "../apis/apiService";
+import { getListProductByCateId, getProductMenuMode3, postOrder } from "../apis/apiService";
 import { CountDown } from "../common/Cart/CountDown";
 import Loading from "../common/Loading/Loading";
 import { LOCALSTORAGE_CART_NAME } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
+import { ProductList } from "../components/products/ProductList";
+import ScrollContainer from "react-indiana-drag-scroll";
+import Skeleton from "react-loading-skeleton";
 
 const SchedulePage = () => {
-    const { setIsHeaderOrder, setHeaderInfo, setisCartMain, mobileMode, Cart, userInfo, setCart, setOpentModalSuccess, setOpentModalError } = useContext(AppContext);
-    const [day, setDay] = useState("");
-    const [total, setTotal] = useState("");
-    const [hour, setHour] = useState("");
-    const [building, setBuilding] = useState("");
-    const [order, setOrder] = useState(null);
+    const { setIsHeaderOrder, setHeaderInfo, setisCartMain3, mobileMode, Cart3, menuIdProvider, setMenuIdProvider, setDeliveryDate } = useContext(AppContext);
+    const [dayCurrent, setDayCurrent] = useState({});
     const [fullTime, setFullTime] = useState("");
-    const [optionTime, setOptionTime] = useState([]);
-    const [visiblePopupComfirm, setVisiblePopupComfirm] = useState(false);
-    const [hourState, setHourState] = useState(true);
-    const [isLoadingOrder, setisLoadingOrder] = useState(false);
+    const [listDay, setListDay] = useState([]);
+    const [isLoadingCircle, setIsLoadingCircle] = useState(true);
+    const [isLoadingCate, setIsLoadingCate] = useState(false);
+    const [isLoadingProduct, setIsLoadingProduct] = useState(false);
+    const [products, setProducts] = useState(null);
+    const [categorys, setCategorys] = useState(null);
+    const [tabActive, setTabActive] = useState(0);
     let history = useHistory();
     let location = useLocation();
-    const hours = [
-        { value: "0", label: "08:00 - 9:00" },
-        { value: "1", label: "09:00 - 10:00" },
-        { value: "2", label: "10:00 - 11:00" },
-        { value: "3", label: "11:00 - 12:00" },
-        { value: "4", label: "12:00 - 13:00" },
-        { value: "5", label: "13:00 - 14:00" },
-        { value: "6", label: "14:00 - 15:00" },
-        { value: "7", label: "15:00 - 16:00" },
-        { value: "9", label: "16:00 - 17:00" },
-        { value: "10", label: "17:00 - 18:00" },
-        { value: "11", label: "18:00 - 19:00" },
-        // { value: "12", label: "19:00 - 20:00" },
-    ];
-    let date = new Date();
-    const optionsHours = hours.filter((hour) => {
-        if (parseInt(hour.label.split(" - ")[1]) >= date.getHours() + 1) {
-            return { value: hour.value, label: hour.label };
-        }
-    });
-    function converDate(data) {
-        var dd = String(data.getDate()).padStart(2, "0");
-        var mm = String(data.getMonth()).padStart(2, "0");
-        var yy = String(data.getFullYear()).padStart(2, "0");
-        return {
-            dd: dd,
-            fullTime: dd + "/" + mm + "/" + yy,
-        };
-    }
-    function getDate() {
+
+    const getDate = () => {
         Date.prototype.addDays = function (days) {
             var date = new Date(this.valueOf());
             date.setDate(date.getDate() + days);
@@ -64,213 +38,152 @@ const SchedulePage = () => {
         var date = new Date();
 
         let schedule = [];
-        for (let index = 0; index < 15; index++) {
-            schedule = [...schedule, { day: converDate(date.addDays(index)).dd, id: index, weekDay: date.addDays(index).toString().split(" ")[0], fullTime: converDate(date.addDays(index)).fullTime }];
+        for (let index = 0; index < listDay.length; index++) {
+            let day = listDay[index].dayFilter;
+            day = day.split("-");
+            if (day[2]) {
+                schedule = [
+                    ...schedule,
+                    { day: day[2].toString(), id: listDay[index].id, weekDay: date.addDays(index).toString().split(" ")[0], fullTime: listDay[index].dayFilter, name: listDay[index].name },
+                ];
+            }
         }
-        // console.log(date.addDays(0));
         return schedule;
-    }
-
+    };
+    const hanldeReLoad = () => {
+        hanldeFilterCate(0);
+    };
     useEffect(() => {
-        setHeaderInfo({ isSearchHeader: false, title: "Lịch giao hàng" });
-        setisCartMain(false);
-        setIsHeaderOrder(false);
-        if (location.state) {
-            let { order } = location.state;
-            setOrder(order);
+        setHeaderInfo({ isSearchHeader: true, title: "" });
+        if (Cart3.length > 0) {
+            setisCartMain3(true);
         } else {
-            history.push("/checkout");
+            setisCartMain3(false);
         }
+        setIsHeaderOrder(false);
+
         return () => {
-            if (Cart.length > 0) {
-                setisCartMain(true);
+            if (Cart3.length > 0) {
+                setisCartMain3(true);
             }
         };
-    }, [setHeaderInfo, setIsHeaderOrder, setisCartMain, Cart, location.state, history]);
-
+    }, [setHeaderInfo, setIsHeaderOrder, Cart3]);
+    const handleGetProductMenu = (day) => {
+        setIsLoadingProduct(true);
+        setIsLoadingCate(true);
+        getProductMenuMode3(day, "", 1, 100)
+            .then((res) => {
+                if (res.data) {
+                    const menu = res.data;
+                    const productList = menu.products || [];
+                    const categoryList = menu.categoryInMenuViews || [];
+                    const days = menu.menuMode3s || [];
+                    for (let index = 0; index < days.length; index++) {
+                        const element = days[index];
+                        if (element.id === day) {
+                            setMenuIdProvider(element.id);
+                            setDayCurrent(element);
+                        }
+                    }
+                    setTimeout(() => {
+                        console.log({ productList });
+                        setListDay(days);
+                        setCategorys(categoryList);
+                        setProducts(productList);
+                        setIsLoadingCircle(false);
+                        setIsLoadingProduct(false);
+                        setIsLoadingCate(false);
+                    }, 300);
+                } else {
+                    setIsLoadingCircle(false);
+                    setIsLoadingCate(false);
+                    setIsLoadingProduct(false);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                setProducts([]);
+                setIsLoadingCircle(false);
+                setIsLoadingCate(false);
+                setIsLoadingProduct(false);
+            });
+    };
     useEffect(() => {
-        setisCartMain(false);
-        setDay(getDate()[0].day);
-        setFullTime(getDate()[0].fullTime);
-        setHour(optionsHours[0] || "");
-        setOptionTime(optionsHours);
+        setisCartMain3(false);
+        if (location.state) {
+            const { day } = location.state;
+            const { menuName } = location.state;
+            // setDay(getDate()[2].day);
+            setDeliveryDate(menuName);
+            handleGetProductMenu(day);
+        } else {
+            history.push("/mode/3");
+        }
+
         return () => {};
-    }, []);
-    const SampleNextArrow = (props) => {
-        const { onClick } = props;
-        return (
-            <div className="control-btn" onClick={onClick}>
-                <button className="next">
-                    <i className="fa-solid fa-arrow-right"></i>
-                </button>
-            </div>
-        );
-    };
-    const SamplePrevArrow = (props) => {
-        const { onClick } = props;
-        return (
-            <div className="control-btn" onClick={onClick}>
-                <button className="prev">
-                    <i className="fa-solid fa-arrow-left"></i>
-                </button>
-            </div>
-        );
-    };
+    }, [location.state]);
 
     const settings = {
         dots: false,
-        slidesToShow: mobileMode ? 5 : 9,
+        slidesToShow: mobileMode ? 5 : 8,
         slidesToScroll: 5,
         autoplay: false,
         swipeToSlide: false,
         infinite: false,
-        swipe: false,
-        nextArrow: <SampleNextArrow />,
-        prevArrow: <SamplePrevArrow />,
+
         responsive: [
             {
                 breakpoint: 700,
                 settings: {
-                    slidesToShow: 5,
-                    slidesToScroll: 5,
-                    // slidesPerRow: 1,
-                    swipe: true,
-                    nextArrow: "",
-                    prevArrow: "",
-                    rows: 1,
+                    // swipe: true,
                 },
             },
         ],
     };
 
-    const handleValidate = () => {
-        let isValid = true;
-        if (!hour) {
-            isValid = false;
-        }
-        if (hour) {
-            setHourState(true);
-        } else {
-            setHourState(false);
-        }
-        if (isValid) {
-            setVisiblePopupComfirm(true);
-        }
-    };
-    const hanldeOrder = () => {
-        // setisLoadingOrder(true);
-
-        setOpentModalError(true);
-        // postOrder(order)
-        //     .then((res) => {
-        //         if (res.data) {
-        //             localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-        //             setCart([]);
-        //             setisLoadingOrder(false);
-        //             history.push("/");
-        //         }
-        //         return res;
-        //     })
-        //     .then((res) => {
-        //         if (res.data) {
-        //             const order = res.data;
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //         setisLoadingOrder(false);
-        //     });
+    const hanldeFilterCate = (id) => {
+        getProductMenuMode3(dayCurrent.id, id === 0 ? "" : id, 1, 100)
+            .then((res) => {
+                if (res.data) {
+                    const menu = res.data;
+                    const productList = menu.products || [];
+                    setProducts(productList);
+                    setTimeout(() => {
+                        setIsLoadingProduct(false);
+                    }, 300);
+                } else {
+                    // setIsLoadingCircle(false);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                setProducts([]);
+                setIsLoadingProduct(false);
+            });
     };
     return (
         <>
-            <Loading isLoading={isLoadingOrder} />
-            <Rodal
-                height={mobileMode ? 300 : 320}
-                width={mobileMode ? 350 : 400}
-                visible={visiblePopupComfirm}
-                showCloseButton={false}
-                onClose={() => {
-                    setVisiblePopupComfirm(false);
-                }}
-                style={{ borderRadius: 10 }}
-            >
-                <div style={{ padding: "5px 0 10px 0", textAlign: "center", display: "flex", flexDirection: "column" }}>
-                    <span className="" style={{ fontSize: mobileMode ? 18 : 20, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)" }}>
-                        Đơn hàng sẽ được gửi đi trong
-                    </span>
-                    <span className="" style={{ fontSize: mobileMode ? 18 : 20, fontWeight: 700, textAlign: "center", color: "rgb(82, 182, 91)" }}>
-                        {visiblePopupComfirm ? (
-                            <CountDown
-                                callbackOrder={() => {
-                                    hanldeOrder();
-                                    setVisiblePopupComfirm(false);
-                                }}
-                            />
-                        ) : (
-                            ""
-                        )}{" "}
-                        giây...
-                    </span>
-                </div>
-                <div style={{ padding: "5px 0" }}>
-                    <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 600 }}>Địa chỉ giao hàng:</span>
-                    <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 400 }}> Building {building} Vinhomes Grand Park</span>
-                </div>
-                <div style={{ padding: "5px 0" }}>
-                    <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 600 }}>Thời gian giao hàng dự kiến: </span>
-                    <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 400 }}>
-                        {hour !== null ? hour.label : ""}, {fullTime !== null ? fullTime : ""}
-                    </span>
-                </div>
-                <div style={{ padding: "5px 0" }}>
-                    <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 600 }}>Tổng tiền đơn hàng:</span>
-                    <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 400 }}>{" " + total.toLocaleString()}</span>
-                </div>
-                <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 15 }}>
-                    <button
-                        style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "rgb(220,220,220)", height: 50, color: "#000" }}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            setVisiblePopupComfirm(false);
-                        }}
-                    >
-                        Quay lại
-                    </button>
-                    <button
-                        onClick={(e) => {
-                            e.preventDefault();
-                            hanldeOrder();
-                            setVisiblePopupComfirm(false);
-                        }}
-                        style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", height: 50, color: "#fff" }}
-                    >
-                        Đồng ý
-                    </button>
-                </div>
-            </Rodal>
+            <Loading isLoading={isLoadingCircle} />
+            <div className={`loading-spin ${!isLoadingCircle && "loading-spin-done"}`}></div>
+
             <div className="container d_flex  schedule-padding" style={{ flexDirection: "column", gap: 10 }}>
                 <div className="schedule-wrapper">
-                    <div className="schedule-title">
-                        <h3 style={{ fontWeight: 700, paddingBottom: 30, display: "flex", gap: 5 }}>
-                            Chọn ngày giao hàng <h4 style={{ color: "red" }}>*</h4>
-                        </h3>
-                    </div>
-                    <div style={{ background: "#fff" }}>
+                    <div style={{ background: "#fff", paddingLeft: 15, paddingRight: 15, paddingBottom: 15 }}>
                         <Slider {...settings}>
                             {getDate().map((item, index) => {
                                 return (
                                     <div
-                                        className={`f_flex schedule-item ${day === item.day && "schedule-item-active"}`}
+                                        className={`f_flex schedule-item ${dayCurrent.id === item.id && "schedule-item-active"}`}
                                         onClick={() => {
-                                            setDay(item.day);
-                                            setFullTime(item.fullTime);
-                                            if (item.day.toString() === date.getDate().toString()) {
-                                                setOptionTime(optionsHours);
-                                            } else {
-                                                setOptionTime(hours);
+                                            if (dayCurrent.id !== item.id) {
+                                                setDayCurrent(item);
+                                                setFullTime(item.fullTime);
+                                                handleGetProductMenu(item.id);
+                                                setMenuIdProvider(item.id);
+                                                console.log(item);
+                                                setDeliveryDate(item.name);
+                                                setTabActive(0);
                                             }
-                                            console.log();
-                                            setHour("");
                                         }}
                                     >
                                         <span className="schedule-week"> {item.weekDay}</span>
@@ -280,73 +193,111 @@ const SchedulePage = () => {
                             })}
                         </Slider>
                     </div>
-                    <div className="schedule-title">
-                        <h3 style={{ fontWeight: 700, paddingTop: 30, display: "flex", gap: 5 }}>
-                            Chọn giờ nhận hàng <h4 style={{ color: "red" }}>*</h4>
-                        </h3>
-                    </div>
-                    <div style={{ paddingTop: 20 }}>
-                        <Select
-                            options={optionTime.length > 0 ? optionTime : []}
-                            placeholder={`${optionTime.length > 0 ? "Chọn giờ" : "Không có khung giờ phù hợp"} `}
-                            onChange={(e) => {
-                                setHour(e);
-                            }}
-                            isSearchable={false}
-                            value={hour}
-                        />
-                    </div>
-                    {!hourState && (
-                        <div className="input-validate">
-                            <span>Vui lòng chọn giờ nhận hàng</span>
-                        </div>
-                    )}
 
-                    <div className="center_flex" style={{ gap: 20, paddingTop: 30 }}>
-                        <button
-                            onClick={() => {
-                                history.goBack();
-                            }}
-                            type="button"
-                            disabled={isLoadingOrder}
-                            style={{
-                                textAlign: "center",
-                                width: "100%",
-                                height: 45,
-                                borderRadius: "0.5rem",
-                                alignItems: "center",
-                                border: "1px solid var(--primary)",
-                                backgroundColor: "#fff",
-                                color: "var(--primary)",
-                            }}
-                            className="center_flex checkout-btn"
-                        >
-                            <span style={{ fontWeight: 700, fontSize: mobileMode ? 15 : 18 }}>Quay lại</span>
-                        </button>
-                        <button
-                            onClick={() => {
-                                setBuilding(userInfo.building.label);
-                                setTotal(order.total);
-                                // setVisiblePopupComfirm(true);
-                                // setOpentModalError(true);
-                                handleValidate();
-                            }}
-                            type="button"
-                            disabled={isLoadingOrder}
-                            style={{
-                                textAlign: "center",
-                                width: "100%",
-                                height: 50,
-                                borderRadius: "0.5rem",
-                                alignItems: "center",
-                                backgroundColor: isLoadingOrder ? "#f5f5f5" : "var(--primary)",
-                                color: "#fff",
-                            }}
-                            className="center_flex checkout-btn"
-                        >
-                            <span style={{ fontWeight: 700, fontSize: mobileMode ? 15 : 18 }}>Đặt hàng</span>
-                        </button>
+                    <ScrollContainer
+                        className="schedule-category"
+                        horizontal={true}
+                        style={{ width: "100%", background: "rgb(246, 249, 252)", padding: 15, gap: 15, gridTemplateColumns: "repeat(7, 1fr)" }}
+                    >
+                        {isLoadingCate &&
+                            [1, 2, 3, 4].map((item, ind) => {
+                                return <Skeleton key={ind} height={38} width={mobileMode ? 135 : 150} borderRadius={10} />;
+                            })}
+                        {!isLoadingCate && (
+                            <div
+                                style={{
+                                    background: "#fff",
+                                    borderRadius: "10px",
+                                    border: "1px solid rgb(204, 204, 204)",
+                                    width: mobileMode ? 120 : 130,
+                                    height: 40,
+                                    color: "rgb(128, 128, 128)",
+                                    fontSize: mobileMode ? 14 : 16,
+                                }}
+                                className={`center_flex cusor ${tabActive === 0 ? "active-search" : ""}`}
+                                onClick={() => {
+                                    if (0 !== tabActive) {
+                                        setTabActive(0);
+                                        setIsLoadingProduct(true);
+                                        hanldeFilterCate(0);
+                                    }
+                                }}
+                            >
+                                <span>Tất cả</span>
+                            </div>
+                        )}
+
+                        {!isLoadingCate &&
+                            categorys !== null &&
+                            categorys.length > 0 &&
+                            categorys.map((item, index) => {
+                                return (
+                                    <div
+                                        key={index}
+                                        style={{
+                                            background: "#fff",
+                                            borderRadius: "10px",
+                                            border: "1px solid rgb(204, 204, 204)",
+                                            width: mobileMode ? 135 : 150,
+                                            height: 40,
+                                            color: "rgb(128, 128, 128)",
+                                            fontSize: mobileMode ? 14 : 16,
+                                        }}
+                                        className={`center_flex cusor ${tabActive === item.id ? "active-search" : ""}`}
+                                        onClick={() => {
+                                            if (item.id !== tabActive) {
+                                                setTabActive(item.id);
+                                                setIsLoadingProduct(true);
+                                                hanldeFilterCate(item.id);
+                                            }
+                                        }}
+                                    >
+                                        <span style={{ padding: "0 0" }}>{item.name}</span>
+                                    </div>
+                                );
+                            })}
+                    </ScrollContainer>
+                    {/* </div> */}
+                    <div>
+                        {products !== null && !isLoadingProduct && (
+                            <ProductList
+                                data={products}
+                                filter={1}
+                                store={true}
+                                menuName={dayCurrent.name}
+                                reLoad={() => {
+                                    hanldeReLoad();
+                                }}
+                            />
+                        )}
                     </div>
+                    <div className={`loading-spin ${!isLoadingProduct && "loading-spin-done"}`} style={{ top: mobileMode ? 285 : 315 }}></div>
+                    {isLoadingProduct &&
+                        [1, 2, 3, 4, 5, 6].map((item, index) => {
+                            return (
+                                <div
+                                    key={index}
+                                    style={{
+                                        transition: "0.5s all",
+                                        margin: "0 15px",
+                                        padding: "15px 0",
+                                        display: "flex",
+                                        gap: 15,
+                                        justifyContent: "space-between",
+                                        borderBottom: "1px solid #f0f0f0",
+                                    }}
+                                >
+                                    <div style={{ display: "flex", gap: 15 }}>
+                                        <Skeleton height={80} width={80} borderRadius={8} />
+                                        <div style={{ display: "flex", gap: 5, flexDirection: "column", paddingTop: 5 }}>
+                                            <Skeleton height={20} width={150} borderRadius={5} />
+                                            <Skeleton height={32} width={130} borderRadius={5} />
+                                        </div>
+                                    </div>
+                                    <Skeleton height={22} width={100} borderRadius={5} />
+                                </div>
+                            );
+                        })}
                 </div>
             </div>
         </>
