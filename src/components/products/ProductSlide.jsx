@@ -311,16 +311,17 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                                 <div className="product-slide-image" style={{ width: 40, height: 40, borderRadius: 50, marginLeft: 5 }}>
                                     <img style={{ borderRadius: 50, objectFit: "cover", width: "100%", height: "100%" }} src={labelImg} alt="" />
                                 </div>
-                                <h3>{label}</h3>
                                 <div
-                                    className="heading-right  "
-                                    style={{ display: label ? "block" : "none" }}
+                                    className="heading-right center_flex"
                                     onClick={() => {
                                         history.push(`/mode/${mode}/${filtter}/${cateId}`);
                                     }}
                                 >
-                                    {/* <span>Xem tất cả</span> */}
-                                    <i className="fa-solid fa-chevron-right" style={{ fontSize: 18, marginTop: 5, marginLeft: 30 }}></i>
+                                    <h3>{label}</h3>
+                                    <div className="heading-right  " style={{ display: label ? "block" : "none" }}>
+                                        {/* <span>Xem tất cả</span> */}
+                                        <i className="fa-solid fa-chevron-right" style={{ fontSize: 18, marginTop: 5, marginLeft: 15 }}></i>
+                                    </div>
                                 </div>
                             </div>
                             <div style={{ padding: "15px 15px 15px 15px" }}>

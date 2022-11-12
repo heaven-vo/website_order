@@ -104,7 +104,7 @@ export const ShopSlide = ({ filtter, label, data, cateId, isLoading, reLoad }) =
                                     }}
                                 >
                                     {/* <span>Xem tất cả</span> */}
-                                    <i className="fa-solid fa-chevron-right" style={{ fontSize: 18, marginTop: 5, marginLeft: 30 }}></i>
+                                    {/* <i className="fa-solid fa-chevron-right" style={{ fontSize: 16, marginTop: 5, marginLeft: 30 }}></i> */}
                                 </div>
                             </div>
                             <div className="shop-slide" style={{ padding: "15px 15px 15px 15px" }}>

@@ -4,7 +4,7 @@ import { checkOutOfMenu, checkOutOfStore } from "../../constants/Cart";
 import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME1, LOCALSTORAGE_CART_NAME2, LOCALSTORAGE_CART_NAME3, LOCALSTORAGE_MODE } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 
-export const ProductItem = React.forwardRef(({ product, openRodal, index, filter, openRodalOutOfStore, openRodalOutOfMenu, isBorderBottom, store, menuName }, ref) => {
+export const ProductItem = React.forwardRef(({ product, openRodal, index, filter, packDes, openRodalOutOfStore, openRodalOutOfMenu, isBorderBottom, store, menuName }, ref) => {
     useImperativeHandle(ref, () => ({
         resetQuantity() {
             setisProductCart(false);
@@ -265,6 +265,7 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                         <span
                             onClick={() => {
                                 // setIsHeader(false);
+                                setDeliveryDate(menuName);
                                 history.push(`/mode/${mode}/product/${product.id}`, { valid: true });
                             }}
                             style={{ fontWeight: 600, cursor: "pointer" }}
@@ -275,6 +276,7 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                             <span
                                 onClick={() => {
                                     // setIsHeader(false);
+                                    setDeliveryDate(menuName);
                                     history.push(`/mode/${mode}/product/${product.id}`, { valid: true });
                                 }}
                                 style={{ fontWeight: 500, cursor: "pointer", fontSize: 12, color: "rgb(102, 102, 102)" }}
@@ -346,7 +348,7 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                         {product.pricePerPack?.toLocaleString()}
                         <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
                     </span>
-                    {store && (
+                    {packDes && (
                         <span
                             onClick={() => {
                                 // setIsHeader(false);
@@ -354,7 +356,7 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                             }}
                             style={{ fontWeight: 500, cursor: "pointer", fontSize: 12, color: "rgb(102, 102, 102)" }}
                         >
-                            {"1 " + product.unit}
+                            {product.packDes !== "" ? product.packDes : product.unit}
                         </span>
                     )}
                 </div>

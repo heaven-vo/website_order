@@ -80,7 +80,6 @@ const OrderLookupPage = () => {
     }, [setIsHeaderOrder, setHeaderInfo, location]);
     let history = useHistory();
     const hanldeSubmit = (id) => {
-        console.log({ statusMain });
         // setStatusOrderUser(statusMain);
         setOrderInfo(null);
         setIsLoadingCircle(true);
@@ -356,7 +355,7 @@ const OrderLookupPage = () => {
                                                         </div>
                                                     </div>
                                                     <div className="f_flex status-icon" style={{ opacity: statusOrderUser[1].active ? 1 : 0.3 }}>
-                                                        <img src="https://cdn-icons-png.flaticon.com/512/3338/3338690.png" alt="" style={{ width: 42, height: 42 }} />
+                                                        <img src="https://cdn-icons-png.flaticon.com/512/3338/3338637.png" alt="" style={{ width: 42, height: 42 }} />
                                                         <div className="f_flex" style={{ flexDirection: "column" }}>
                                                             <span className="status-info-time">{statusOrderUser[1].time}</span>
                                                             <span className="status-info-name">{statusOrderUser[1].statusName}</span>

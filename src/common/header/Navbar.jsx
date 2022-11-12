@@ -69,7 +69,6 @@ const Navbar = () => {
     }, [apartment, area]);
 
     const handleSubmit = () => {
-        console.log(building);
         let isValid = true;
         if (fullName.length === 0 || phone.length === 0 || !building?.value || !validatePhoneNumber(phone)) {
             isValid = false;

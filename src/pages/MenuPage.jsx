@@ -297,16 +297,7 @@ export const MenuPage = () => {
                 .then((res) => {
                     if (res.data) {
                         const menu = res.data;
-                        // checkCartInMode3(mode);
                         setMenuProduct(menu);
-                        // setMenuIdProvider(menu.id);
-                        // setMenuCategory(menu.listCategoryStoreInMenus);
-                        // setCategoriesInMenu(menu.listCategoryStoreInMenus || []);
-                        // if (menu.listCategoryStoreInMenus.length > 0) {
-                        //     setMenuEmpty(false);
-                        // } else {
-                        //     setMenuEmpty(true);
-                        // }
                     } else {
                         setMenuProduct([]);
                         setMenuCategory([]);
@@ -692,7 +683,7 @@ export const MenuPage = () => {
                         <div className="container-padding f_flex" style={{ alignItems: "end", display: listStore.length > 0 ? "flex" : "none" }}>
                             <span style={{ padding: "40px 15px 10px 15px", fontWeight: 700, fontSize: 16, color: "rgb(100, 100, 100)" }}>Quán ngon gần bạn</span>
                         </div>
-                        <ShopList data={listStore.length > 0 && [...listStore]} isStore={true} />{" "}
+                        <ShopList data={listStore.length > 0 && [...listStore]} isStore={true} tabActive={0} />
                         {isLoadingMore && !isFull ? (
                             <div style={{ width: "100%" }} className="center_flex">
                                 <BallTriangle stroke="var(--primary)" style={{ width: 40 }} />

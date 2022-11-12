@@ -68,8 +68,8 @@ export const getListProductByCateId = (menuId, cateId, page, size) => {
     });
 };
 //https://deliveryvhgp-webapi.azurewebsites.net/api/v1/menus/1/products/byStoreId?storeId=s4&page=1&pageSize=10
-export const getListProductByStoreId = (menuId, cateId, page, size) => {
-    return axios.get(`${BASE_URL}${MENU}/${menuId}/${PRODUCT}/byStoreId?storeId=${cateId}&page=${page}&pageSize=${size}`, {
+export const getListProductByStoreId = (menuId, storeId, page, size) => {
+    return axios.get(`${BASE_URL}${MENU}/${menuId}/${PRODUCT}/byStoreId?storeId=${storeId}&page=${page}&pageSize=${size}`, {
         Accept: "application/json",
         "Content-Type": "application/json",
     });
@@ -133,13 +133,13 @@ export const getMenuMode3 = (size) => {
         "Content-Type": "application/json",
     });
 };
-//https://deliveryvhgp-webapi.azurewebsites.net/api/v1/menus/mode3/13c699e4-7e19-4ecb-ac99-1df0661f0e61/products?page=1&pageSize=20
+//https://deliveryvhgp-webapi.azurewebsites.net/api/v1/menus/mode3/55c40c76-f71b-4f13-8270-fba0cbcfb812/stores?page=1&pageSize=20&searchBy=4757550b-8142-4b00-9e59-d3287744ded8
 export const getProductMenuMode3 = (menuId, cateId, page, size) => {
     let url = "";
     if (cateId !== "") {
         url = `&searchBy=${cateId}`;
     }
-    return axios.get(`${BASE_URL}${MENU}/mode3/${menuId}/products?page=${page}&pageSize=${size}${url}`, {
+    return axios.get(`${BASE_URL}${MENU}/mode3/${menuId}/stores?page=${page}&pageSize=${size}${url}`, {
         Accept: "application/json",
         "Content-Type": "application/json",
     });

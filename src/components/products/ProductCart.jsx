@@ -205,8 +205,6 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
                         menuId: menuIdProvider,
                     },
                 ];
-                console.log({ carts });
-                console.log({ productRodalQuantity });
                 setisProductCart(true);
                 setisCartMain2(true);
                 setProductRodalQuantity(1);

@@ -65,6 +65,7 @@ const Cart = ({}) => {
     const [isLoadingWhite, setisLoadingWhite] = useState(true);
     const [isValidPhoneRegex, setIsValidPhoneRegex] = useState(true);
     const [storeName, setStoreName] = useState("");
+    const [deliveryDateCart, setDeliveryDate] = useState("");
     // const [isLoading, setIsLoading] = useState(true);
     const [paymentType, setPaymentType] = useState(0);
     const [isValidArea, setIsValidArea] = useState(false);
@@ -94,11 +95,17 @@ const Cart = ({}) => {
             } else {
                 CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
             }
-            console.log("ok");
             if (CartList.length === 0) {
-                history.push("/");
+                if (mode === "1") {
+                    history.push("/mode/1");
+                } else if (mode === "2") {
+                    history.push("/mode/2");
+                } else {
+                    history.push("/mode/3");
+                }
             } else {
                 setStoreName(CartList[0].storeName);
+                setDeliveryDate(CartList[0].menuName);
             }
         }
         setisLoadingWhite(true);
@@ -245,7 +252,7 @@ const Cart = ({}) => {
             id: "",
             phoneNumber: phone,
             total: totalPrice + 15000,
-            storeId: CartList.length > 0 && Cart[0].storeId,
+            storeId: CartList.length > 0 && CartList[0].storeId,
             menuId: menuIdProvider,
             buildingId: building.value,
             note: note,
@@ -259,7 +266,6 @@ const Cart = ({}) => {
                 },
             ],
         };
-        console.log({ order });
         postOrder(order)
             .then((res) => {
                 if (res.data) {
@@ -857,7 +863,7 @@ const Cart = ({}) => {
                                 {mode === "3" ? (
                                     <div className="checkout-content-item">
                                         <span>Ngày giao hàng</span>
-                                        <span style={{ fontSize: 15, fontWeight: 600, color: "#4db856", textTransform: "uppercase" }}>{deliveryDate}</span>
+                                        <span style={{ fontSize: 15, fontWeight: 600, color: "#4db856", textTransform: "uppercase" }}>{deliveryDateCart}</span>
                                     </div>
                                 ) : (
                                     <div className="checkout-content-item">

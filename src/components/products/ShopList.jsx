@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { IMAGE_NOTFOUND } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 import "./style.css";
-const ShopList = ({ data, isStore }) => {
+const ShopList = ({ data, tabActive }) => {
     const { mode } = useContext(AppContext);
     let history = useHistory();
     return (
@@ -21,7 +21,7 @@ const ShopList = ({ data, isStore }) => {
                                 <div
                                     className="shop-item cusor"
                                     onClick={() => {
-                                        if (isStore) {
+                                        if (tabActive === 0) {
                                             history.push(`/mode/${mode}/store/${item.id}`);
                                         } else {
                                             history.push(`/mode/${mode}/product/${item.id}`);
@@ -34,7 +34,7 @@ const ShopList = ({ data, isStore }) => {
                                     className="f_flex cusor"
                                     style={{ flexDirection: "column", gap: 5, flex: 1 }}
                                     onClick={() => {
-                                        if (isStore) {
+                                        if (tabActive === 0) {
                                             history.push(`/mode/${mode}/store/${item.id}`);
                                         } else {
                                             history.push(`/mode/${mode}/product/${item.id}`);

@@ -27,7 +27,6 @@ export const ViewAllProductCatePage = () => {
                     const storeData = res.data;
                     const storeList = storeData || [];
                     let { categoryName } = location.state;
-                    console.log({ storeList });
                     if (categoryName) {
                         setStores(storeList);
                         setHeaderInfo({ isSearchHeader: false, title: categoryName });
@@ -55,8 +54,6 @@ export const ViewAllProductCatePage = () => {
             setIsLoadingCircle(true);
             // setIsHeader(false);
             if (mode === "1") {
-                console.log({ mode });
-
                 getListStoreByCateId(menuIdProvider, cateId);
             } else if (mode === "2" || mode === "3") {
                 getListProductByFilter(menuIdProvider, cateId);
@@ -80,7 +77,6 @@ export const ViewAllProductCatePage = () => {
                     setTitle(title);
                     const image = category.image;
                     setImg(image);
-                    console.log({ productList });
                     // let newProduct =
                     // if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
                     //     localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
@@ -213,7 +209,6 @@ export const ViewAllProductCatePage = () => {
                                             const image = category.image;
                                             setImg(image);
 
-                                            console.log({ productList });
                                             setProducts(productList);
                                             setHeaderInfo({ isSearchHeader: false, title: title });
                                             setIsLoadingCircle(false);
@@ -237,6 +232,7 @@ export const ViewAllProductCatePage = () => {
                     <ShopList
                         data={stores !== null ? stores : []}
                         isStore={true}
+                        tabActive={0}
                         // filter={1}
                         // reLoad={() => {
                         //     hanldeReLoad();
@@ -247,6 +243,8 @@ export const ViewAllProductCatePage = () => {
                     <ProductList
                         data={products !== null ? products : []}
                         filter={1}
+                        packDes={true}
+                        store={true}
                         reLoad={() => {
                             hanldeReLoad();
                         }}

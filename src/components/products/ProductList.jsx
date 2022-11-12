@@ -6,7 +6,7 @@ import { LOCALSTORAGE_CART_NAME, LOCALSTORAGE_CART_NAME1, LOCALSTORAGE_CART_NAME
 import { AppContext } from "../../context/AppProvider";
 import { ProductItem } from "./ProductItem";
 
-export const ProductList = ({ data, filter, reLoad, store, menuName }) => {
+export const ProductList = ({ data, filter, packDes, reLoad, store, menuName }) => {
     const { setCart1, setCart2, setCart3, mobileMode, setisCartMain1, setisCartMain2, setisCartMain3, menuIdProvider, mode, deliveryDate } = useContext(AppContext);
     const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);
     const [visiblePopupOutOfStore, setVisiblePopupOutOfStore] = useState(false);
@@ -90,7 +90,6 @@ export const ProductList = ({ data, filter, reLoad, store, menuName }) => {
             setisCartMain3(true);
             reLoad();
         }
-        console.log("add item");
         setVisiblePopupOutOfStore(false);
         setVisiblePopupOutOfMenu(false);
         itemsRef.current[indexRodal].isQuantity();
@@ -329,6 +328,7 @@ export const ProductList = ({ data, filter, reLoad, store, menuName }) => {
                         return (
                             <ProductItem
                                 store={store}
+                                packDes={packDes}
                                 ref={(el) => (itemsRef.current[index] = el)}
                                 product={item}
                                 index={index}

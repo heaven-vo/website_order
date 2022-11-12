@@ -25,7 +25,6 @@ export const FoodDetailPage = () => {
 
     useEffect(() => {
         // setIsHeader(false);
-        console.log({ menuIdProvider });
         let modeId = location.pathname.trim().split("/")[2];
         if (menuIdProvider === "0" && mode !== "3") {
             history.push(`/mode/${modeId}`);
@@ -676,9 +675,9 @@ export const FoodDetailPage = () => {
                                 <i className="fa fa-star"></i>
                                 <i className="fa fa-star" style={{ color: "rgb(102, 102, 102)" }}></i>
                             </div> */}
-                                <h3 style={{ fontSize: 18 }}>{product.name}</h3>
+                                <h3 style={{ fontSize: 20 }}>{product.name}</h3>
                                 {/* <h4 style={{ fontWeight: 500, color: "rgb(102, 102, 102)" }}>{product.id}</h4> */}
-                                <div style={{ color: "var(--primary)", fontSize: "24px", marginTop: 10, marginBottom: 5, fontWeight: 600, display: "flex", alignItems: "center", gap: 5 }}>
+                                <div style={{ color: "var(--primary)", fontSize: "24px", marginTop: 10, fontWeight: 600, display: "flex", alignItems: "center", gap: 5 }}>
                                     {product.pricePerPack?.toLocaleString()}
                                     <span style={{ fontSize: "1.2rem" }}>₫</span>
                                 </div>
@@ -700,15 +699,25 @@ export const FoodDetailPage = () => {
                                 >
                                     <div className="food-detail-shop" style={{ width: 70, height: 70 }} onClick={() => {}}>
                                         <img
+                                            onClick={() => {
+                                                history.push(`/mode/${mode}/store/${product.storeId}`);
+                                            }}
                                             width={"100%"}
                                             height={"100%"}
-                                            style={{ objectFit: "cover", borderRadius: 8 }}
+                                            style={{ objectFit: "cover", borderRadius: 8, cursor: "pointer" }}
                                             src={product.storeImage || "https://cdn-icons-png.flaticon.com/512/123/123403.png"}
                                             alt=""
                                         />
                                     </div>
                                     <div style={{}} className="center_flex">
-                                        <h3 style={{ fontSize: 18, fontWeight: 600 }}>{product.storeName}</h3>
+                                        <h4
+                                            onClick={() => {
+                                                history.push(`/mode/${mode}/store/${product.storeId}`);
+                                            }}
+                                            style={{ fontSize: mobileMode ? 16 : 16, fontWeight: 500, cursor: "pointer" }}
+                                        >
+                                            {product.storeName}
+                                        </h4>
                                         <span style={{ color: "rgb(160,160,160)", fontWeight: 400, fontSize: 15 }}>{product.slogan}</span>
                                     </div>
                                 </div>

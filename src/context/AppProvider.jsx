@@ -198,9 +198,9 @@ export default function AppProvider({ children }) {
                     setisCartMain3(false);
                 } else if (CartList3.length > 0) {
                     setisCartMain3(true);
-                    if (CartList3[0] && CartList3[0].menuName) {
-                        setDeliveryDate(CartList3[0].menuName);
-                    }
+                    // if (CartList3[0] && CartList3[0].menuName) {
+                    //     setDeliveryDate(CartList3[0].menuName);
+                    // }
                     setCart3(CartList3);
                 }
             }
