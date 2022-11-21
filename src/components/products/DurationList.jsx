@@ -1,5 +1,4 @@
-import React, { useRef } from "react";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { useHistory } from "react-router-dom";
 import { IMAGE_NOTFOUND, LOCALSTORAGE_MODE } from "../../constants/Variable";
@@ -122,33 +121,6 @@ const DurationList = ({ data }) => {
                                 </ScrollContainer>
                             </div>
                         </div>
-                        {/* {!mobileMode && item.listStores.length > 4 && (
-                            <div className="view-all-btn">
-                                <div className="center_flex " style={{ flexDirection: "column", height: 160, gap: 10, marginRight: 15 }}>
-                                    <div
-                                        className="center_flex cusor view-all-btn"
-                                        onClick={() => {
-                                            localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify("3"));
-                                            setMenuIdProvider(item.id);
-                                            setDeliveryDate(item.name);
-                                            history.push(`/mode/${"3"}/schedule`, { day: item.id });
-                                        }}
-                                        style={{ borderRadius: 50, border: "1px solid rgb(220,220,220)", width: 45, height: 45 }}
-                                    >
-                                        <i className="fa-solid fa-chevron-right" style={{ fontSize: 18 }}></i>
-                                    </div>
-                                    <span
-                                        onClick={() => {
-                                            // history.push(`/mode/${mode}/${filtter}/${cateId}`);
-                                        }}
-                                        className="cusor"
-                                        style={{ fontSize: 14 }}
-                                    >
-                                        Xem thêm
-                                    </span>
-                                </div>
-                            </div>
-                        )} */}
                     </>
                 );
             }

@@ -38,17 +38,6 @@ export const ViewAllProductStorePage = () => {
                         setBuilding(category.location);
                         setCloseTime(category.closeTime);
                         setOpenTime(category.openTime);
-                        // let newProduct =
-                        // if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-                        //     localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-                        // } else {
-                        //     const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-                        //     for (let index = 0; index < CartList.length; index++) {
-                        //         if (CartList[index].id === newProduct.id) {
-                        //             newProduct = { ...newProduct, quantityCart: CartList[index].quantityCart };
-                        //         }
-                        //     }
-                        // }
                         setProducts(productList);
                         setHeaderInfo({ isSearchHeader: false, title: "Chi tiết cửa hàng" });
                         setIsLoadingCircle(false);

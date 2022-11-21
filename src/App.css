@@ -1376,7 +1376,7 @@ iframe {
     color: rgb(180, 180, 180);
 }
 .schedule-day {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 700;
 }
 .schedule-scroll {
@@ -1596,5 +1596,4 @@ iframe {
 }
 .order-lookup-content {
     width: 100%;
-    margin-top: 15px;
 }

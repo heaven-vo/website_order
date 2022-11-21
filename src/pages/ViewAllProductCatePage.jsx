@@ -4,19 +4,14 @@ import { useHistory, useLocation } from "react-router-dom";
 import { getListProductByCateId, getListStoreByCate } from "../apis/apiService";
 import Loading from "../common/Loading/Loading";
 import { ProductList } from "../components/products/ProductList";
-import ShopList from "../components/products/ShopList";
 import { AppContext } from "../context/AppProvider";
-import ScrollContainer from "react-indiana-drag-scroll";
+import ShopList from "../components/shop/ShopList";
 
 export const ViewAllProductCatePage = () => {
     const { setHeaderInfo, menuIdProvider, mobileMode, mode, categoriesInMenu } = useContext(AppContext);
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
     const [products, setProducts] = useState(null);
     const [stores, setStores] = useState(null);
-    const [title, setTitle] = useState("");
-    const [reload, setReload] = useState(false);
-    const [category, setCategory] = useState("");
-    const [img, setImg] = useState("");
     let location = useLocation();
     let history = useHistory();
 
@@ -50,15 +45,12 @@ export const ViewAllProductCatePage = () => {
             history.push(`/mode/${modeId}`);
         } else {
             let cateId = location.pathname.trim().split("/")[4];
-            // let menuId = location.pathname.trim().split("/")[2];
             setIsLoadingCircle(true);
-            // setIsHeader(false);
             if (mode === "1") {
                 getListStoreByCateId(menuIdProvider, cateId);
             } else if (mode === "2" || mode === "3") {
                 getListProductByFilter(menuIdProvider, cateId);
             }
-            // getListProductByFilter(menuIdProvider, cateId);
         }
         return () => {
             setIsLoadingCircle(false);
@@ -74,20 +66,6 @@ export const ViewAllProductCatePage = () => {
                     const category = res.data;
                     const productList = category.listProducts || [];
                     const title = category.name;
-                    setTitle(title);
-                    const image = category.image;
-                    setImg(image);
-                    // let newProduct =
-                    // if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-                    //     localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-                    // } else {
-                    //     const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-                    //     for (let index = 0; index < CartList.length; index++) {
-                    //         if (CartList[index].id === newProduct.id) {
-                    //             newProduct = { ...newProduct, quantityCart: CartList[index].quantityCart };
-                    //         }
-                    //     }
-                    // }
                     setProducts(productList);
                     setHeaderInfo({ isSearchHeader: false, title: title });
                     setIsLoadingCircle(false);
@@ -205,10 +183,6 @@ export const ViewAllProductCatePage = () => {
                                             const category = res.data;
                                             const productList = category.listProducts || [];
                                             const title = category.name;
-                                            setTitle(title);
-                                            const image = category.image;
-                                            setImg(image);
-
                                             setProducts(productList);
                                             setHeaderInfo({ isSearchHeader: false, title: title });
                                             setIsLoadingCircle(false);

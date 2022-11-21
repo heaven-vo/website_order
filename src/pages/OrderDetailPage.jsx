@@ -6,7 +6,7 @@ import { getStatusColor, getStatusName, STATUS_ORDER } from "../constants/Variab
 import { AppContext } from "../context/AppProvider";
 
 export const OrderDetailPage = () => {
-    const { setIsHeaderOrder, mobileMode, setisCartMain, setHeaderInfo, mode } = useContext(AppContext);
+    const { setIsHeaderOrder, mobileMode, setHeaderInfo, mode } = useContext(AppContext);
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
     const [orderInfo, setOrderInfo] = useState({});
     const [productOrder, setproductOrder] = useState([]);
@@ -63,7 +63,6 @@ export const OrderDetailPage = () => {
         }
         return cancel;
     };
-    // statusOrder[1] ? (statusOrder[1].name === STATUS_ORDER[1].compare ? 1 : 0.3) : 0.3
     const getOpacity = (status) => {
         let opacity = 0;
         if (status && status.name) {
@@ -77,7 +76,6 @@ export const OrderDetailPage = () => {
         }
         return opacity;
     };
-    //{statusOrder[0] ? (statusOrder[0].name === STATUS_ORDER[0].compare ? getTimeOrder(statusOrder[0].time) : "--") : "--"}
     const validStatus = (status) => {
         let statusTime = "--";
         if (status && status.name) {
@@ -95,17 +93,7 @@ export const OrderDetailPage = () => {
                 <div className="container non-radius" style={{ borderRadius: 10, padding: 0, background: "#fff" }}>
                     <div style={{ flexDirection: "column" }} className="f_flex">
                         <div className="" style={{ display: "block" }}>
-                            {/* {orderInfoComponent()} */}
                             <div className="order-wrapper order-detail-container" style={{ flex: 0.35 }}>
-                                {/* <h3 style={{ fontSize: mobileMode ? "1rem" : "1.3rem" }}>Thông tin giao hàng</h3> */}
-                                {/* <div className="f_flex order-detail-info">
-                                    <i className="fa-solid fa-circle" style={{ fontSize: "0.7rem", lineHeight: 2, color: "green" }}></i>
-                                    <div className="flex-collumn">
-                                        <span style={{ color: "green", fontWeight: 600 }}>Giao hàng thành công</span>
-                                        <span>08-08-2022 16:30</span>
-                                    </div>
-                                </div> */}
-
                                 <div className="f_flex order-detail-adrress">
                                     <i style={{ color: "var(--primary)", lineHeight: 1.3, fontSize: 12 }} className="fa-solid fa-circle"></i>
                                     <div className="flex-collumn">
@@ -129,7 +117,6 @@ export const OrderDetailPage = () => {
                                 </div>
                             </div>
                             {<div style={{ height: "10px", background: "#f6f9fc" }}></div>}
-                            {/* {productListComponent()} */}
                             <div className="order-wrapper" style={{ flex: 0.65 }}>
                                 <h3 style={{ fontSize: mobileMode ? "1rem" : "1.3rem", display: "flex", alignItems: "center", gap: 20 }}>
                                     Tiến độ

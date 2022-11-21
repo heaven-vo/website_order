@@ -1,19 +1,12 @@
-// @flow
 import * as React from "react";
 import { Link, useHistory } from "react-router-dom";
-import { getStatusColor, getStatusName, LOCALSTORAGE_USER_LOGIN } from "../../constants/Variable";
-// import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../context/AppProvider";
-// import "./Drawer.scss";
 export const DrawerContent = () => {
-    // const history = useNavigate();
-    const { setIsOpenDrawer, auth, setAuth, userInfo, orderDrawer } = React.useContext(AppContext);
+    const { setIsOpenDrawer, userInfo, orderDrawer } = React.useContext(AppContext);
     let history = useHistory();
 
     return (
         <div className="drawer__wrapper">
-            {/* {auth?.isLogin ? ( */}
-            {/* <> */}
             <div className="drawer__wrapper__item" style={{ justifyContent: "start", gap: 10 }}>
                 <img src="/images/account.png" alt="" style={{ width: 44, height: 44, borderRadius: 50 }} />
                 <div>
@@ -37,28 +30,7 @@ export const DrawerContent = () => {
                     <h4>Theo dõi đơn hàng</h4>
                 </div>
             </Link>
-            {/* <Link to={"/order"} onClick={() => setIsOpenDrawer(false)}>
-                <div className="drawer__wrapper__item" style={{ justifyContent: "start", gap: 10 }}>
-                    <img src="/images/order.svg" alt="" style={{ width: 27, height: 27, borderRadius: 50 }} />
-                    <div>
-                        <h4 style={{ fontSize: 15 }}>Lịch sử mua hàng</h4>
-                    </div>
-                </div>
-            </Link> */}
-            {/* <Link to={"/login"} onClick={() => setIsOpenDrawer(false)}>
-                <div
-                    className="drawer__wrapper__item"
-                    style={{ justifyContent: "start", gap: 10 }}
-                    onClick={() => {
-                        hanldeLogout();
-                    }}
-                >
-                    <div className="center_flex" style={{ background: "var(--red)", color: "#fff", width: 27, height: 27, borderRadius: 50 }}>
-                        <i style={{ fontSize: 13, marginLeft: 2 }} className="fa-solid fa-right-from-bracket"></i>
-                    </div>
-                    <h4>Đăng xuất</h4>
-                </div>
-            </Link> */}
+
             {orderDrawer.length > 0 && (
                 <>
                     <div style={{ padding: "20px 10px 10px 10px" }}>
@@ -73,7 +45,7 @@ export const DrawerContent = () => {
                                 key={index}
                                 style={{ width: "100%", padding: "0px 5px 7px 5px" }}
                                 onClick={() => {
-                                    history.push(`/order`, { orderId: item.id });
+                                    history.push(`/order/${item.id}`);
                                     setIsOpenDrawer(false);
                                 }}
                             >

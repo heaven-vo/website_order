@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { getAreas, getBuildings, getListOrder } from "../apis/apiService";
+import { getAreas } from "../apis/apiService";
 import {
-    LOCALSTORAGE_CART_NAME,
     LOCALSTORAGE_CART_NAME1,
     LOCALSTORAGE_CART_NAME2,
     LOCALSTORAGE_CART_NAME3,
@@ -30,6 +29,7 @@ export default function AppProvider({ children }) {
     const [openDeleteCart, setOpenDeleteCart] = useState(false);
     const [isCartFooter, setIsCartFooter] = useState(false);
     const [isHeaderHome, setIsHeaderHome] = useState(false);
+    const [isHeader, setIsHeader] = useState(true);
     const [opentModalSuccess, setOpentModalSuccess] = useState(false);
     const [orderIdSuccess, setorderIdSuccess] = useState("");
     const [opentModalError, setOpentModalError] = useState(false);
@@ -152,7 +152,7 @@ export default function AppProvider({ children }) {
     }, [history]);
 
     useEffect(() => {
-        const checkout = location.pathname.trim().split("/")[3];
+        const checkout = location.pathname.trim().split("/")[1];
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
             localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
             setCart1([]);
@@ -301,6 +301,8 @@ export default function AppProvider({ children }) {
                 setorderIdSuccess,
                 deliveryDate,
                 setDeliveryDate,
+                isHeader,
+                setIsHeader,
             }}
         >
             {children}

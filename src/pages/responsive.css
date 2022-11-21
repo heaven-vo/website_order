@@ -147,8 +147,8 @@
 } */
 
 @media (max-width: 700px) {
-    .order-detail-adrress span:first-child {
-        font-size: 15px !important;
+    .order-detail-adrress > div > span:first-child {
+        font-size: 16px !important;
     }
     .order-detail-adrress span {
         font-size: 14px !important;

@@ -151,3 +151,10 @@ export const getTimeDurationList = (menuId, page, size) => {
         "Content-Type": "application/json",
     });
 };
+//https://deliveryvhgp-webapi.azurewebsites.net/api/v1/orders/ByOrderId?orderId=0
+export const getUrlOrderPayment = (orderId) => {
+    return axios.get(`${BASE_URL}${ORDER}/ByOrderId?orderId=${orderId}`, {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+    });
+};

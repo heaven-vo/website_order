@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { getListSearchByKey } from "../apis/apiService";
 import Loading from "../common/Loading/Loading";
-import ShopList from "../components/products/ShopList";
+import ShopList from "../components/shop/ShopList";
 import { AppContext } from "../context/AppProvider";
 
 export const SearchPage = () => {
@@ -24,16 +24,10 @@ export const SearchPage = () => {
         setHeaderInfo({ isSearchHeader: true, title: "" });
         return () => {
             setHeaderInfo({});
-            // setKeySearch("");
         };
     }, [setHeaderInfo]);
 
     useEffect(() => {
-        // if (mode === "2" || mode === "3") {
-        //     setTabActive(1);
-        // } else {
-        //     setTabActive(0);
-        // }
         if (isSearchSubmit || keySearch !== "") {
             setIsLoadingCircle(true);
             getListSearchByKey(keySearch, menuIdProvider, 1, 100)

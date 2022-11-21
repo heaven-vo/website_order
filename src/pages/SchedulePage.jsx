@@ -1,25 +1,16 @@
-import React from "react";
-import { useContext } from "react";
-import { useState } from "react";
-import { useEffect } from "react";
-import Select from "react-select";
-import { useHistory, useLocation } from "react-router-dom";
-import Slider from "react-slick";
-import Rodal from "rodal";
-import { getListProductByCateId, getProductMenuMode3, postOrder } from "../apis/apiService";
-import { CountDown } from "../common/Cart/CountDown";
-import Loading from "../common/Loading/Loading";
-import { LOCALSTORAGE_CART_NAME } from "../constants/Variable";
-import { AppContext } from "../context/AppProvider";
-import { ProductList } from "../components/products/ProductList";
+import React, { useContext, useEffect, useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
 import Skeleton from "react-loading-skeleton";
-import ShopList from "../components/products/ShopList";
+import { useHistory, useLocation } from "react-router-dom";
+import Slider from "react-slick";
+import { getProductMenuMode3 } from "../apis/apiService";
+import Loading from "../common/Loading/Loading";
+import ShopList from "../components/shop/ShopList";
+import { AppContext } from "../context/AppProvider";
 
 const SchedulePage = () => {
     const { setIsHeaderOrder, setHeaderInfo, setisCartMain3, mobileMode, Cart3, menuIdProvider, setMenuIdProvider, setDeliveryDate } = useContext(AppContext);
     const [dayCurrent, setDayCurrent] = useState({});
-    const [fullTime, setFullTime] = useState("");
     const [listDay, setListDay] = useState([]);
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
     const [isLoadingCate, setIsLoadingCate] = useState(false);
@@ -31,22 +22,40 @@ const SchedulePage = () => {
     let location = useLocation();
 
     const getDate = () => {
-        Date.prototype.addDays = function (days) {
-            var date = new Date(this.valueOf());
-            date.setDate(date.getDate() + days);
-            return date;
-        };
-        var date = new Date();
-
         let schedule = [];
         for (let index = 0; index < listDay.length; index++) {
             let day = listDay[index].dayFilter;
+            let dayOfWeek = listDay[index].dayOfWeek;
             day = day.split("-");
+            let weekday = "";
+            switch (dayOfWeek) {
+                case "Monday":
+                    weekday = "T2";
+                    break;
+                case "Tuesday":
+                    weekday = "T3";
+                    break;
+                case "Wednesday":
+                    weekday = "T4";
+                    break;
+                case "Thursday":
+                    weekday = "T5";
+                    break;
+                case "Friday":
+                    weekday = "T6";
+                    break;
+                case "Saturday":
+                    weekday = "T7";
+                    break;
+                case "Sunday":
+                    weekday = "CN";
+                    break;
+                default:
+                    weekday = "";
+                    break;
+            }
             if (day[2]) {
-                schedule = [
-                    ...schedule,
-                    { day: day[2].toString(), id: listDay[index].id, weekDay: date.addDays(index).toString().split(" ")[0], fullTime: listDay[index].dayFilter, name: listDay[index].name },
-                ];
+                schedule = [...schedule, { day: day[2].toString(), id: listDay[index].id, weekDay: weekday, fullTime: listDay[index].dayFilter, name: listDay[index].name }];
             }
         }
         return schedule;
@@ -174,11 +183,11 @@ const SchedulePage = () => {
                             {getDate().map((item, index) => {
                                 return (
                                     <div
+                                        key={index}
                                         className={`f_flex schedule-item ${dayCurrent.id === item.id && "schedule-item-active"}`}
                                         onClick={() => {
                                             if (dayCurrent.id !== item.id) {
                                                 setDayCurrent(item);
-                                                setFullTime(item.fullTime);
                                                 handleGetProductMenu(item.id);
                                                 setMenuIdProvider(item.id);
                                                 setDeliveryDate(item.name);
@@ -220,9 +229,9 @@ const SchedulePage = () => {
                                     style={{
                                         background: "#fff",
                                         borderRadius: "5px",
-                                        border: "1px solid rgb(204, 204, 204)",
+                                        border: "1px solid rgb(230, 230, 230)",
                                         width: mobileMode ? 130 : 140,
-                                        height: 50,
+                                        height: 45,
                                         fontWeight: 500,
                                         color: "var(--primary)",
                                         fontSize: 14,
@@ -252,7 +261,7 @@ const SchedulePage = () => {
                                                 borderRadius: "5px",
                                                 border: "1px solid rgb(230, 230, 230)",
                                                 minWidth: mobileMode ? 135 : 150,
-                                                height: 50,
+                                                height: 45,
                                                 fontWeight: 500,
                                                 color: "var(--primary)",
                                                 fontSize: 14,

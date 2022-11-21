@@ -1,8 +1,6 @@
-import React, { useContext, useState } from "react";
-import { useRef } from "react";
-import { useEffect } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Rodal from "rodal";
-import { LOCALSTORAGE_CART_NAME, LOCALSTORAGE_CART_NAME1, LOCALSTORAGE_CART_NAME2, LOCALSTORAGE_CART_NAME3, LOCALSTORAGE_MODE } from "../../constants/Variable";
+import { LOCALSTORAGE_CART_NAME1, LOCALSTORAGE_CART_NAME2, LOCALSTORAGE_CART_NAME3, LOCALSTORAGE_MODE } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 import { ProductItem } from "./ProductItem";
 
@@ -155,9 +153,6 @@ export const ProductList = ({ data, filter, packDes, reLoad, store, menuName }) 
                             onClick={(e) => {
                                 e.preventDefault();
                                 AddCart();
-                                // setisProductCartRodal(false);
-                                // setIsOpenRodal(false);
-                                // deleteCartItem();
                             }}
                             style={{
                                 flex: 1,
@@ -289,10 +284,6 @@ export const ProductList = ({ data, filter, packDes, reLoad, store, menuName }) 
                             onClick={(e) => {
                                 e.preventDefault();
                                 AddCart();
-
-                                // setisProductCartRodal(false);
-                                // setIsOpenRodal(false);
-                                // deleteCartItem();
                             }}
                             style={{
                                 flex: 1,
