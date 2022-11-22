@@ -1,16 +1,12 @@
-import React from "react";
-import { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import Rodal from "rodal";
 import Select from "react-select";
-import { AppContext } from "../../context/AppProvider";
-import { useContext } from "react";
-import { useEffect } from "react";
-import { LOCALSTORAGE_USER_NAME } from "../../constants/Variable";
+import Rodal from "rodal";
 import { getApartment } from "../../apis/apiService";
+import { LOCALSTORAGE_USER_NAME } from "../../constants/Variable";
+import { AppContext } from "../../context/AppProvider";
 const Head = () => {
-    const { userInfo, setUserInfo, setVisiblePopupInfo, visiblePopupInfo, mobileMode, mode, setMode, buildings, setIsOpenDrawer, areaProvider } = useContext(AppContext);
-    // const [visible, setVisible] = useState(false);
+    const { userInfo, setUserInfo, setVisiblePopupInfo, visiblePopupInfo, mobileMode, mode, setMode, setIsOpenDrawer, areaProvider } = useContext(AppContext);
     const [fullName, setFullName] = useState("ok");
     const [phone, setPhone] = useState("");
     const [building, setBuilding] = useState("");
@@ -19,7 +15,6 @@ const Head = () => {
     const [apartmentList, setApartmentList] = useState([]);
     const [buldingList, setBuldingList] = useState([]);
     const [user, setUser] = useState({});
-    // const [isValid, setIsValid] = useState(false);
     const [isValidFullName, setIsValidFullname] = useState(false);
     const [isValidPhone, setIsValidPhone] = useState(false);
     const [isValidPhoneRegex, setIsValidPhoneRegex] = useState(true);
@@ -146,9 +141,7 @@ const Head = () => {
     return (
         <>
             <Rodal
-                // height={isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea ? (mobileMode ? 620 : 650) : mobileMode ? 500 : 540}
                 height={isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea || !isValidPhoneRegex ? (mobileMode ? 550 : 590) : mobileMode ? 500 : 540}
-                // height={mobileMode ? 535 : 575}
                 width={mobileMode ? 350 : 400}
                 visible={visiblePopupInfo}
                 onClose={() => {
@@ -182,11 +175,7 @@ const Head = () => {
                                 value={area}
                             />
                         </div>
-                        {/* {isValidArea && (
-                            <div className="input-validate">
-                                <span>Khu vực không được để trống</span>
-                            </div>
-                        )} */}
+
                         <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>
                                 Cụm tòa nhà<span style={{ color: "red", fontSize: 14 }}> *</span>
@@ -209,11 +198,7 @@ const Head = () => {
                                 value={apartment}
                             />
                         </div>
-                        {/* {isValidApartment && (
-                            <div className="input-validate">
-                                <span>Cụm tòa nhà không được để trống</span>
-                            </div>
-                        )} */}
+
                         <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>
                                 Building (Tòa nhà)<span style={{ color: "red", fontSize: 14 }}> *</span>
@@ -223,11 +208,6 @@ const Head = () => {
                             <Select options={optionsBuilding} placeholder="Tòa nhà" onChange={(e) => setBuilding(e)} value={building} />
                         </div>
 
-                        {/* {isValidBuilding && (
-                            <div className="input-validate">
-                                <span>Tòa nhà không được để trống</span>
-                            </div>
-                        )} */}
                         <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>
                                 Tên người nhận<span style={{ color: "red", fontSize: 14 }}> *</span>
@@ -250,11 +230,7 @@ const Head = () => {
                                 }}
                             />
                         </div>
-                        {/* {isValidFullName && (
-                            <div className="input-validate">
-                                <span>Tên không được để trống</span>
-                            </div>
-                        )} */}
+
                         <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>
                                 Số điện thoại nhận hàng<span style={{ color: "red", fontSize: 14 }}> *</span>
@@ -277,11 +253,6 @@ const Head = () => {
                                 }}
                             />
                         </div>
-                        {/* {isValidPhone && (
-                            <div className="input-validate">
-                                <span>Số điện thoại không được để trống</span>
-                            </div>
-                        )} */}
                     </div>
                     {(isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea || !validatePhoneNumber) && (
                         <div className="input-validate-form">

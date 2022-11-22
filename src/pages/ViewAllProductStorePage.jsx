@@ -6,11 +6,12 @@ import { ProductList } from "../components/products/ProductList";
 import { AppContext } from "../context/AppProvider";
 
 export const ViewAllProductStorePage = () => {
-    const { setHeaderInfo, menuIdProvider, modeType, mobileMode } = useContext(AppContext);
+    const { setHeaderInfo, menuIdProvider, modeType, mobileMode, mode, deliveryDate } = useContext(AppContext);
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
     const [products, setProducts] = useState(null);
     const [title, setTitle] = useState("");
     const [building, setBuilding] = useState("");
+    const [storeDes, setStoreDes] = useState("");
     const [openTime, setOpenTime] = useState("");
     const [closeTime, setCloseTime] = useState("");
 
@@ -31,23 +32,12 @@ export const ViewAllProductStorePage = () => {
                         const productList = category.listProducts || [];
                         const title = category.name;
                         setTitle(title);
+                        setStoreDes(category.description);
                         const image = category.image;
                         setImg(image);
-                        console.log({ category });
                         setBuilding(category.location);
                         setCloseTime(category.closeTime);
                         setOpenTime(category.openTime);
-                        // let newProduct =
-                        // if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-                        //     localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-                        // } else {
-                        //     const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-                        //     for (let index = 0; index < CartList.length; index++) {
-                        //         if (CartList[index].id === newProduct.id) {
-                        //             newProduct = { ...newProduct, quantityCart: CartList[index].quantityCart };
-                        //         }
-                        //     }
-                        // }
                         setProducts(productList);
                         setHeaderInfo({ isSearchHeader: false, title: "Chi tiết cửa hàng" });
                         setIsLoadingCircle(false);
@@ -82,7 +72,7 @@ export const ViewAllProductStorePage = () => {
         <div>
             <Loading isLoading={isLoadingCircle} />
             <div className={`loading-spin ${!isLoadingCircle && "loading-spin-done"}`}></div>
-            <div className="store-wrapper">
+            <div className="store-wrapper" style={{ height: storeDes !== null && storeDes !== "" ? 500 : 450 }}>
                 <div
                     className="store-image-background"
                     style={{
@@ -90,8 +80,16 @@ export const ViewAllProductStorePage = () => {
                     }}
                 >
                     <div className="store-name">
-                        <h3 style={{ paddingBottom: 5 }}> {title}</h3>
-                        <span className="store-building">
+                        <h3 style={{ paddingBottom: 0 }}> {title}</h3>
+                        {storeDes !== null && storeDes !== "" ? (
+                            <span className="store-building max-line-2" style={{ ppaddingBottom: 5, lineHeight: 1.5 }}>
+                                {storeDes}
+                            </span>
+                        ) : (
+                            ""
+                        )}
+
+                        <span className="store-building" style={{ paddingTop: 5 }}>
                             <i className="fa-solid fa-location-dot" style={{ color: "var(--primary)", paddingRight: 7 }}></i>
                             <span>{building}</span>
                         </span>
@@ -104,12 +102,12 @@ export const ViewAllProductStorePage = () => {
 
                         <span className="store-building" style={{ color: "green" }}>
                             <i className="fa-solid fa-clock-rotate-left" style={{ color: "green", paddingRight: 7 }}></i>
-                            <span>{modeType}</span>
+                            <span>{mode === "3" ? `Ngày giao hàng: ${deliveryDate}` : modeType}</span>
                         </span>
                     </div>
                 </div>
             </div>
-            {products?.length > 0 && <ProductList data={[...products] || []} filter={2} />}
+            {products?.length > 0 && <ProductList data={[...products] || []} filter={2} packDes={mode !== "1"} reLoad={() => {}} menuName={deliveryDate} />}
             {products?.length === 0 && (
                 <section className="shop" style={{ padding: "25px 0 40px 0" }}>
                     <div className="container center_flex">

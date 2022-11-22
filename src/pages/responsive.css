@@ -147,8 +147,8 @@
 } */
 
 @media (max-width: 700px) {
-    .order-detail-adrress span:first-child {
-        font-size: 15px !important;
+    .order-detail-adrress > div > span:first-child {
+        font-size: 16px !important;
     }
     .order-detail-adrress span {
         font-size: 14px !important;
@@ -520,8 +520,8 @@
         width: 100%;
         padding: 0px !important;
     }
-    .food-detail-right h3 {
-        font-size: 16px !important;
+    .food-detail-right > h3 {
+        font-size: 18px !important;
     }
     .food-detail-btn > div:first-child {
         width: 35% !important;

@@ -1,25 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
+import Select from "react-select";
 import Rodal from "rodal";
+import { getApartment } from "../../apis/apiService";
 import { LOCALSTORAGE_USER_NAME } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
-import { TabMenuOrder } from "./TabMenuOrder";
-import Select from "react-select";
-import { getApartment } from "../../apis/apiService";
 
 const Navbar = () => {
     // Toogle Menu
     const { userInfo, setIsOpenDrawer, headerInfo, setVisiblePopupInfo, visiblePopupInfo, setUserInfo, mobileMode, setKeySearch, areaProvider, setIsSearchSubmit, keySearch } = useContext(AppContext);
-    // const [MobileMenu, setMobileMenu] = useState(false);
     const [fullName, setFullName] = useState("");
     const [phone, setPhone] = useState("");
     const [building, setBuilding] = useState("");
-    const [user, setUser] = useState({});
     const [area, setArea] = useState("");
     const [apartment, setApartment] = useState("");
     const [apartmentList, setApartmentList] = useState([]);
     const [buldingList, setBuldingList] = useState([]);
-    // const [isValid, setIsValid] = useState(false);
     const [isValidFullName, setIsValidFullname] = useState(false);
     const [isValidPhone, setIsValidPhone] = useState(false);
     const [isValidBuilding, setIsValidBuilding] = useState(false);
@@ -34,7 +30,6 @@ const Navbar = () => {
         document.body.style.touchAction = "none";
     };
     useEffect(() => {
-        setUser(userInfo);
         setFullName(userInfo.fullName || "");
         setPhone(userInfo.phone || "");
         setBuilding(userInfo.building || "");
@@ -69,7 +64,6 @@ const Navbar = () => {
     }, [apartment, area]);
 
     const handleSubmit = () => {
-        console.log(building);
         let isValid = true;
         if (fullName.length === 0 || phone.length === 0 || !building?.value || !validatePhoneNumber(phone)) {
             isValid = false;
@@ -132,14 +126,11 @@ const Navbar = () => {
     return (
         <>
             <Rodal
-                // height={isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea ? (mobileMode ? 620 : 650) : mobileMode ? 500 : 540}
                 height={isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea || !isValidPhoneRegex ? (mobileMode ? 550 : 590) : mobileMode ? 500 : 540}
-                // height={mobileMode ? 535 : 575}
                 width={mobileMode ? 350 : 400}
                 visible={visiblePopupInfo}
                 onClose={() => {
                     setVisiblePopupInfo(false);
-                    // setIsValid(true);
                     setIsValidBuilding(false);
                     setIsValidFullname(false);
                     setIsValidPhone(false);
@@ -168,11 +159,7 @@ const Navbar = () => {
                                 value={area}
                             />
                         </div>
-                        {/* {isValidArea && (
-                            <div className="input-validate">
-                                <span>Khu vực không được để trống</span>
-                            </div>
-                        )} */}
+
                         <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>
                                 Cụm tòa nhà<span style={{ color: "red", fontSize: 14 }}> *</span>
@@ -195,11 +182,7 @@ const Navbar = () => {
                                 value={apartment}
                             />
                         </div>
-                        {/* {isValidApartment && (
-                            <div className="input-validate">
-                                <span>Cụm tòa nhà không được để trống</span>
-                            </div>
-                        )} */}
+
                         <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>
                                 Building (Tòa nhà)<span style={{ color: "red", fontSize: 14 }}> *</span>
@@ -209,11 +192,6 @@ const Navbar = () => {
                             <Select options={optionsBuilding} placeholder="Tòa nhà" onChange={(e) => setBuilding(e)} value={building} />
                         </div>
 
-                        {/* {isValidBuilding && (
-                            <div className="input-validate">
-                                <span>Tòa nhà không được để trống</span>
-                            </div>
-                        )} */}
                         <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>
                                 Tên người nhận<span style={{ color: "red", fontSize: 14 }}> *</span>
@@ -236,11 +214,7 @@ const Navbar = () => {
                                 }}
                             />
                         </div>
-                        {/* {isValidFullName && (
-                            <div className="input-validate">
-                                <span>Tên không được để trống</span>
-                            </div>
-                        )} */}
+
                         <div className="rodal-title" style={{ padding: "10px 0 10px 0" }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>
                                 Số điện thoại nhận hàng<span style={{ color: "red", fontSize: 14 }}> *</span>
@@ -263,11 +237,6 @@ const Navbar = () => {
                                 }}
                             />
                         </div>
-                        {/* {isValidPhone && (
-                            <div className="input-validate">
-                                <span>Số điện thoại không được để trống</span>
-                            </div>
-                        )} */}
                     </div>
                     {(isValidFullName || isValidPhone || isValidBuilding || isValidApartment || isValidArea || !validatePhoneNumber) && (
                         <div className="input-validate-form">
@@ -368,7 +337,6 @@ const Navbar = () => {
                                         setIsSearchSubmit(true);
                                     }
                                 }}
-                                // value={phone}
                                 placeholder="Tìm món ăn hoặc nhà hàng"
                                 type="text"
                                 style={{ width: " 100%", borderRadius: 4, padding: "8px 10px", lineHeight: "1rem", fontSize: "1rem" }}
@@ -376,18 +344,6 @@ const Navbar = () => {
                         </div>
                     )}
                 </div>
-                {/* {isHeaderOrder && (
-                    <div
-                        className={`container-mobile tab-menu-mobile search `}
-                        style={{
-                            justifyContent: "center",
-                            borderTop: "1px solid rgb(240,240,240)",
-                            padding: 0,
-                        }}
-                    >
-                        <TabMenuOrder />
-                    </div>
-                )} */}
             </section>
         </>
     );

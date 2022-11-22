@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { useHistory } from "react-router-dom";
-import Slider from "react-slick";
 import Rodal from "rodal";
-import { LOCALSTORAGE_CART_NAME, LOCALSTORAGE_CART_NAME1, LOCALSTORAGE_CART_NAME2, LOCALSTORAGE_CART_NAME3, LOCALSTORAGE_MODE } from "../../constants/Variable";
+import { LOCALSTORAGE_CART_NAME1, LOCALSTORAGE_CART_NAME2, LOCALSTORAGE_CART_NAME3, LOCALSTORAGE_MODE } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 import { ProductCart } from "./ProductCart";
 
@@ -124,36 +123,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
         itemsRef.current[indexRodal].resetQuantity();
         setProductRodal({});
     };
-    // const settingProductSlide = {
-    //     dots: false,
-    //     infinite: false,
-    //     slidesToShow: slideShow,
-    //     slidesToScroll: 4,
-    //     autoplay: false,
-    //     swipeToSlide: false,
-    //     swipe: false,
-    //     variableWidth: true,
-    //     appendDots: (dots) => {
-    //         return <ul style={{ margin: "0px" }}>{dots}</ul>;
-    //     },
-    //     nextArrow: slideShow >= 5 && <SampleNextArrow />,
-    //     prevArrow: slideShow >= 5 && <SamplePrevArrow />,
-    //     responsive: [
-    //         {
-    //             breakpoint: 700,
-    //             settings: {
-    //                 slidesToShow: data.length >= 2 ? 2 : 1,
-    //                 slidesToScroll: 1,
-    //                 swipeToSlide: true,
-    //                 // slidesPerRow: 1,
-    //                 swipe: true,
-    //                 nextArrow: "",
-    //                 prevArrow: "",
-    //                 rows: 1,
-    //             },
-    //         },
-    //     ],
-    // };
+
     let history = useHistory();
     return (
         <>
@@ -200,8 +170,7 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                     <button
                         onClick={(e) => {
                             e.preventDefault();
-                            // setisProductCartRodal(false);
-                            // setIsOpenRodal(false);
+
                             deleteCartItem();
                         }}
                         style={{
@@ -270,9 +239,6 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                             onClick={(e) => {
                                 e.preventDefault();
                                 AddCart();
-                                // setisProductCartRodal(false);
-                                // setIsOpenRodal(false);
-                                // deleteCartItem();
                             }}
                             style={{
                                 flex: 1,
@@ -298,29 +264,20 @@ export const ProductSlide = ({ filtter, label, data, labelImg, cateId, isLoading
                     <div className="contentWidth" style={{ marginLeft: 0 }}>
                         <div style={{}}>
                             <div className="f_flex" style={{ padding: "30px 15px 15px 15px", alignItems: "center", gap: 10, background: "rgb(246, 249, 252)" }}>
-                                {/* {isLoading ? (
-                                        <div style={{ marginRight: 5 }}>
-                                            <Skeleton height={45} width={45} borderRadius={50} />
-                                        </div>
-                                    ) : (
-                                        <div style={{ width: 45, height: 45, borderRadius: 50, marginLeft: 5 }}>
-                                            <img style={{ borderRadius: 50, objectFit: "cover", width: "100%", height: "100%" }} src={labelImg} alt="" />
-                                        </div>
-                                    )}
-                                    {isLoading ? <Skeleton height={43} width={150} borderRadius={8} style={{ margin: 0 }} /> : <h2>{label ? label : ""}</h2>} */}
                                 <div className="product-slide-image" style={{ width: 40, height: 40, borderRadius: 50, marginLeft: 5 }}>
                                     <img style={{ borderRadius: 50, objectFit: "cover", width: "100%", height: "100%" }} src={labelImg} alt="" />
                                 </div>
-                                <h3>{label}</h3>
                                 <div
-                                    className="heading-right  "
-                                    style={{ display: label ? "block" : "none" }}
+                                    className="heading-right center_flex"
                                     onClick={() => {
                                         history.push(`/mode/${mode}/${filtter}/${cateId}`);
                                     }}
                                 >
-                                    {/* <span>Xem tất cả</span> */}
-                                    <i className="fa-solid fa-chevron-right" style={{ fontSize: 18, marginTop: 5, marginLeft: 30 }}></i>
+                                    <h3>{label}</h3>
+                                    <div className="heading-right  " style={{ display: label ? "block" : "none" }}>
+                                        {/* <span>Xem tất cả</span> */}
+                                        <i className="fa-solid fa-chevron-right" style={{ fontSize: 18, marginTop: 5, marginLeft: 15 }}></i>
+                                    </div>
                                 </div>
                             </div>
                             <div style={{ padding: "15px 15px 15px 15px" }}>

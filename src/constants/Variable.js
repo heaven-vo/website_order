@@ -206,3 +206,88 @@ export const getStatusImg = (id) => {
     });
     return img;
 };
+
+export const Mdata = [
+    {
+        id: 2,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "https://www.highlandscoffee.com.vn/vnt_upload/weblink/Summer_Tea__website_banner2000x640_Tra_Yi_hYng.jpg",
+    },
+    {
+        id: 1,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/banner%2Fbanner_sale.jpg?alt=media&token=7d19e5a3-9cbf-44e7-902d-bb532651362f",
+    },
+    {
+        id: 3,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/banner%2F193452567_232982721923561_7074968439565756507_n.jpg?alt=media&token=81a1f170-ee5a-472f-b47a-31decc0760fc",
+    },
+];
+
+export const Mdata2 = [
+    {
+        id: 1,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/icon%2Fslider_1.webp?alt=media&token=b61c0b1c-cdb9-4376-a4d4-954dc4a562d6",
+    },
+    {
+        id: 3,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/banner%2Fsection_banner_2.jpg?alt=media&token=8b1e5d93-a71e-42e4-935c-79071d44f2a0",
+    },
+
+    {
+        id: 2,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "https://salt.tikicdn.com/cache/w830/ts/tmp/d3/b9/a9/26ecee15b4f1b63e5ff92b621226f000.jpg",
+    },
+];
+export const Mdata3 = [
+    {
+        id: 1,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/banner%2Fslide_2.png?alt=media&token=fda857ed-3c7f-469d-9e51-927a28207085",
+    },
+    // {
+    //     id: 3,
+    //     title: "50% Off For Your First Shopping",
+    //     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+    //     cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/banner%2Fsection_banner_2.jpg?alt=media&token=8b1e5d93-a71e-42e4-935c-79071d44f2a0",
+    // },
+
+    // {
+    //     id: 2,
+    //     title: "50% Off For Your First Shopping",
+    //     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+    //     cover: "https://salt.tikicdn.com/cache/w830/ts/tmp/d3/b9/a9/26ecee15b4f1b63e5ff92b621226f000.jpg",
+    // },
+];
+
+export const banner = [
+    {
+        id: 1,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/icon%2Fvinid-highlandcofffee-750x422.png?alt=media&token=ce734032-2d0e-46f9-a931-2ced9b55d2c7",
+    },
+    {
+        id: 2,
+        title: "50% Off For Your First Shopping",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+        cover: "https://firebasestorage.googleapis.com/v0/b/deliveryfood-9c436.appspot.com/o/icon%2FSagano-tmdt-bach-hoa-online-01.jpg?alt=media&token=db23cb1f-86ab-44a1-8231-30fdba04fc47",
+    },
+    // {
+    //     id: 3,
+    //     title: "50% Off For Your First Shopping",
+    //     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis consequat eu, quam etiam at quis ut convallis.",
+    //     cover: "https://minhvumedia.vn/wp-content/uploads/banner-khai-truong-nha-hang-min.jpg",
+    // },
+];

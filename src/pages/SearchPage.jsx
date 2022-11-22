@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { getListSearchByKey } from "../apis/apiService";
 import Loading from "../common/Loading/Loading";
-import ShopList from "../components/products/ShopList";
+import ShopList from "../components/shop/ShopList";
 import { AppContext } from "../context/AppProvider";
 
 export const SearchPage = () => {
@@ -20,21 +20,15 @@ export const SearchPage = () => {
         if (menuIdProvider === "0") {
             history.push(`/mode/${modeId}`);
         }
-        if (mode === "2" || mode === "3") {
-            setTabActive(1);
-        } else {
-            setTabActive(0);
-        }
+
         setHeaderInfo({ isSearchHeader: true, title: "" });
         return () => {
             setHeaderInfo({});
-            // setKeySearch("");
         };
-    }, [setHeaderInfo, mode]);
+    }, [setHeaderInfo]);
 
     useEffect(() => {
         if (isSearchSubmit || keySearch !== "") {
-            console.log(menuIdProvider);
             setIsLoadingCircle(true);
             getListSearchByKey(keySearch, menuIdProvider, 1, 100)
                 .then((res) => {
@@ -43,7 +37,6 @@ export const SearchPage = () => {
                         setListAll(data);
 
                         setListSearch(tabActive === 0 ? data.store : data.product);
-                        console.log({ data });
                         setIsLoadingCircle(false);
                         setIsSearchSubmit(false);
                     } else {
@@ -60,7 +53,7 @@ export const SearchPage = () => {
                 });
         }
         return () => {};
-    }, [isSearchSubmit]);
+    }, [isSearchSubmit, menuIdProvider, mode, setIsSearchSubmit]);
 
     return (
         <div>
@@ -118,7 +111,7 @@ export const SearchPage = () => {
                 </>
             )}
 
-            <ShopList data={listSearch !== null && listSearch} isStore={tabActive === 0} />
+            <ShopList data={listSearch !== null && listSearch} tabActive={tabActive} />
         </div>
     );
 };

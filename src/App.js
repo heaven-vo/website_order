@@ -16,11 +16,11 @@ import { ModalDeleteCart } from "./components/wrapper/ModalDeleteCart";
 import { ErrorModal, SuccessModal } from "./components/wrapper/ModalOrder";
 import { AppContext } from "./context/AppProvider";
 import Cart from "./pages/CartPage";
+import FailPaymentPage from "./pages/FailPaymentPage";
 import { FoodDetailPage } from "./pages/FoodDetailPage";
 import HomePage from "./pages/HomePages";
 import { MenuPage } from "./pages/MenuPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
-import { OrderDetailPage } from "./pages/OrderDetailPage";
 import OrderLookupPage from "./pages/OrderLookupPage";
 import SchedulePage from "./pages/SchedulePage";
 import { SearchPage } from "./pages/SearchPage";
@@ -29,7 +29,7 @@ import { ViewAllProductCatePage } from "./pages/ViewAllProductCatePage";
 import { ViewAllProductStorePage } from "./pages/ViewAllProductStorePage";
 import "./util.css";
 function App() {
-    const { setMobileMode, isOpenDrawer, setIsOpenDrawer, isCartMain1, isCartMain2, isCartMain3, isLoadingMain, mobileMode, mode } = useContext(AppContext);
+    const { setMobileMode, isOpenDrawer, setIsOpenDrawer, isCartMain1, isCartMain2, isCartMain3, isLoadingMain, mobileMode, mode, isHeader } = useContext(AppContext);
     const [vh, setVh] = useState(window.innerHeight);
     useEffect(() => {
         const updateVh = () => {
@@ -91,7 +91,7 @@ function App() {
                 {ErrorModal()}
                 <ModalDeleteCart />
                 <Loading isLoading={isLoadingMain} />
-                <Header />
+                {isHeader && <Header />}
                 <Drawer size={300} open={isOpenDrawer} duration={300} onClose={toggleDrawer} zIndex={9999} direction="right" className="drawer__container">
                     <DrawerContent />
                 </Drawer>
@@ -99,17 +99,11 @@ function App() {
                     <Route path="/" exact>
                         <HomePage />
                     </Route>
-                    {/* <Route path="/login" exact>
-                        <LoginPage />
-                    </Route> */}
 
                     <Route path="/mode/:modeId" exact>
                         <MenuPage />
                     </Route>
 
-                    {/* <Route path="/categories/:id" exact>
-                    <HomePage productItems={productItems} />
-                </Route> */}
                     <Route path="/mode/:modeId/store/:storeId" exact>
                         <ViewAllProductStorePage />
                     </Route>
@@ -120,7 +114,10 @@ function App() {
                         <OrderLookupPage />
                     </Route>
                     <Route path="/order/:order" exact>
-                        <OrderDetailPage />
+                        <OrderLookupPage />
+                    </Route>
+                    <Route path="/order/payment/failed">
+                        <FailPaymentPage />
                     </Route>
                     <Route path="/mode/:modeId/product/:id" exact>
                         <FoodDetailPage />
@@ -135,9 +132,7 @@ function App() {
                     <Route path="/mode/:id/schedule" exact>
                         <SchedulePage />
                     </Route>
-                    {/* <Route path="/checkout2" exact>
-                        <CheckoutPage />
-                    </Route> */}
+
                     <Route path="*">
                         <NotFoundPage />
                     </Route>

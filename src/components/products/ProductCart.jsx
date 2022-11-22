@@ -18,8 +18,7 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
     const { setCart1, setCart2, setCart3, menuIdProvider, setisCartMain1, setisCartMain2, setisCartMain3, mode, openRodalOutOfMenu, deliveryDate } = useContext(AppContext);
     const [productRodalQuantity, setProductRodalQuantity] = useState(0);
     const [isProductCart, setisProductCart] = useState(true);
-    // const [isOutOfStore, setisOutOfStore] = useState(false);
-    // const [count, setCount] = useState(0);
+
     const [pro, setPro] = useState({});
     let history = useHistory();
     useEffect(() => {
@@ -124,21 +123,6 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
         localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...newCarts]));
     };
 
-    // const checkOutOfStore = (product) => {
-    //     if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-    //         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-    //     }
-    //     const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-
-    //     if (CartList.length > 0) {
-    //         if (CartList[0].storeId === product.storeId) {
-    //             return false;
-    //         } else {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // };
     const AddCart = () => {
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
             localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
@@ -171,7 +155,6 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
                 localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...carts]));
             } else {
                 openRodalOutOfMenu({ rodal: true, product: product, index });
-                console.log("khac menu");
             }
         } else if (mode === "1") {
             const CartList1 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
@@ -192,7 +175,6 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
                 localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...carts]));
             } else {
                 openRodalOutOfStore({ rodal: true, product: product, index });
-                console.log("khac store");
             }
         } else {
             const CartList2 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
@@ -205,8 +187,6 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
                         menuId: menuIdProvider,
                     },
                 ];
-                console.log({ carts });
-                console.log({ productRodalQuantity });
                 setisProductCart(true);
                 setisCartMain2(true);
                 setProductRodalQuantity(1);
@@ -215,7 +195,6 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
                 localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([...carts]));
             } else {
                 openRodalOutOfStore({ rodal: true, product: product, index });
-                console.log("khac store");
             }
         }
     };
@@ -268,15 +247,12 @@ export const ProductCart = React.forwardRef(({ product, openRodal, index, openRo
         <>
             <div className="box" key={pro.id} style={{ width: 150 }}>
                 <div className="product mtop" style={{ margin: 5 }}>
-                    {/* <Link to="/food-detail"> */}
                     <div
                         className="img"
                         onClick={() => {
-                            // setIsHeader(false);
                             history.push(`/mode/${mode}/product/${product.id}`);
                         }}
                     >
-                        {/* <span className="discount">{item.discount}% Off</span> */}
                         <img
                             src={product.image || IMAGE_NOTFOUND}
                             alt=""

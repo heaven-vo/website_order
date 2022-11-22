@@ -1,12 +1,13 @@
+import moment from "moment/moment";
+import "moment/locale/vi";
 import React, { useContext, useEffect, useState } from "react";
 import BallTriangle from "react-loading-icons/dist/esm/components/ball-triangle";
 import { useHistory, useLocation } from "react-router-dom";
 import { getOrderDetail } from "../apis/apiService";
-import { getStatusColor, getStatusName, STATUS_ORDER } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
 const OrderLookupPage = () => {
-    const { setHeaderInfo, mobileMode, setIsHeaderOrder } = useContext(AppContext);
+    const { setHeaderInfo, mobileMode, setIsHeaderOrder, setisCartMain1, setisCartMain2, setisCartMain3 } = useContext(AppContext);
     const [isLoadingCircle, setIsLoadingCircle] = useState(false);
     const [orderInfo, setOrderInfo] = useState(null);
     const [notFound, setNotFound] = useState(false);
@@ -14,7 +15,7 @@ const OrderLookupPage = () => {
     const [orderId, setOrderId] = useState("");
     const [statusCanCelName, setStatusCanCelName] = useState("");
     const [productOrder, setproductOrder] = useState([]);
-    // const [statusOrder, setStatusOrder] = useState([]);
+    let history = useHistory();
     const statusMain = [
         {
             statusName: "Đặt hàng thành công",
@@ -57,31 +58,41 @@ const OrderLookupPage = () => {
 
     let location = useLocation();
     useEffect(() => {
+        setisCartMain1(false);
+        setisCartMain2(false);
+        setisCartMain3(false);
+
         setHeaderInfo({ isSearchHeader: false, title: "Đơn hàng của bạn" });
 
         return () => {};
     }, []);
+
     useEffect(() => {
         let doc = document.getElementById("main");
+        let orderIdUrl = location.pathname.split("/")[2];
 
-        if (location.state) {
-            let { orderId } = location.state;
-            setOrderId(orderId);
-            hanldeSubmit(orderId);
+        // if (location.state) {
+        //     let { orderId } = location.state;
+        //     setOrderId(orderId);
+        //     hanldeSubmit(orderId);
+        // } else
+        if (orderIdUrl) {
+            setOrderId(orderIdUrl);
+            hanldeSubmit(orderIdUrl);
         }
+        console.log("load");
         doc.scrollTo({
             top: 0,
             left: 0,
             behavior: "smooth",
         });
-        setIsHeaderOrder(false);
 
         // setHeaderInfo({ isSearchHeader: false, title: "Chi tiết đơn hàng" });
-    }, [setIsHeaderOrder, setHeaderInfo, location]);
-    let history = useHistory();
+    }, []);
     const hanldeSubmit = (id) => {
-        console.log({ statusMain });
-        // setStatusOrderUser(statusMain);
+        setisCartMain1(false);
+        setisCartMain2(false);
+        setisCartMain3(false);
         setOrderInfo(null);
         setIsLoadingCircle(true);
         getOrderDetail(id)
@@ -90,7 +101,6 @@ const OrderLookupPage = () => {
                     const order = res.data;
                     setOrderInfo(order);
                     setproductOrder(order.listProInMenu || []);
-                    // setStatusOrder(order.listStatusOrder || []);
                     if (order.listStatusOrder) {
                         handleSetStatusList(order.listStatusOrder, statusMain);
                         getStatusCancel(order.listStatusOrder);
@@ -98,6 +108,8 @@ const OrderLookupPage = () => {
                     }
                     setIsLoadingCircle(false);
                     setNotFound(false);
+
+                    history.replace(`/order/${order.id}`);
                 } else {
                     setNotFound(true);
                 }
@@ -110,13 +122,20 @@ const OrderLookupPage = () => {
             });
     };
     const getTimeOrder = (time) => {
-        let result = time.split(" ");
-        if (result && result[1]) {
-            result = result[1];
-            return result;
-        } else {
-            return "--";
-        }
+        moment.locale("vi");
+        let result = moment(time).format("LT");
+        return result;
+    };
+    const getFullTimeOrder = (timeOrder) => {
+        moment.locale("vi");
+        let date = moment(timeOrder).format("l");
+        let time = moment(timeOrder).format("LT");
+        return time + ", " + date;
+    };
+    const getDateOrder = (time) => {
+        moment.locale("vi");
+        let result = moment(time).format("l");
+        return result;
     };
     const handleSetStatusList = (listStatus, statusMain) => {
         let newStatus = statusMain;
@@ -163,8 +182,7 @@ const OrderLookupPage = () => {
     const getStatusCancelName = (statusList) => {
         for (let index = 0; index < statusList.length; index++) {
             const element = statusList[index];
-
-            switch (element) {
+            switch (element.status) {
                 case 6:
                     return "Đã Hủy";
 
@@ -179,35 +197,171 @@ const OrderLookupPage = () => {
                     return "Khách Hàng Hủy Đơn";
 
                 default:
-                    return "Đã Hủy";
             }
         }
     };
-    // statusOrder[1] ? (statusOrder[1].name === STATUS_ORDER[1].compare ? 1 : 0.3) : 0.3
-    // const getOpacity = (status) => {
-    //     console.log({ status });
-    //     let opacity = 0;
-    //     if (status) {
-    //         if (status.status === STATUS_ORDER[0].id || status.status === STATUS_ORDER[1].id || status.status === STATUS_ORDER[2].id || status.status === STATUS_ORDER[3].id) {
-    //             opacity = 1;
-    //         } else {
-    //             opacity = 0.3;
-    //         }
-    //     } else {
-    //         opacity = 0.3;
-    //     }
-    //     return opacity;
-    // };
-    //{statusOrder[0] ? (statusOrder[0].name === STATUS_ORDER[0].id ? getTimeOrder(statusOrder[0].time) : "--") : "--"}
-    // const validStatus = (status) => {
-    //     let statusTime = "--";
-    //     if (status) {
-    //         if (status.status === STATUS_ORDER[0].id || status.status === STATUS_ORDER[1].id || status.status === STATUS_ORDER[2].id || status.name === STATUS_ORDER[3].id) {
-    //             statusTime = getTimeOrder(statusOrder[0].time);
-    //         }
-    //     }
-    //     return statusTime;
-    // };
+
+    const getDurationByMode = (duration, modeId, timeCreated) => {
+        if (duration) {
+            if (modeId === "1") {
+                let timeStart = moment(timeCreated).add(20, "minutes").format("LT");
+                let timeEnd = moment(timeCreated).add(30, "minutes").format("LT");
+                return timeStart + " - " + timeEnd;
+            } else if (modeId === "2") {
+                let time = moment(timeCreated).format("l");
+                return duration.fromHour + " - " + duration.toHour + ", " + time;
+            } else if (modeId === "3") {
+                return duration.fromHour + " - " + duration.toHour + ", " + duration.dayfilter;
+            }
+        } else {
+            return "---";
+        }
+    };
+
+    const getStatusOrderTitle = (statusList, statusName, statusPayment, orderDuration, modeId, timeCreated) => {
+        let result = "";
+        for (let index = 0; index < statusList.length; index++) {
+            const element = statusList[index];
+            if (element.status === 6 || element.status === 10 || element.status === 11 || element.status === 12 || element.status === 13) {
+                let statusDescription = "---";
+                if (element.status === 6 || element.status === 10) {
+                    statusDescription = (
+                        <span style={{ color: "rgba(233, 69, 96, 1)" }}>
+                            Đơn hàng đã được hủy vào lúc{" "}
+                            <span style={{ textDecoration: "underline", fontSize: 15, fontWeight: 500, color: "rgba(233, 69, 96, 1)" }}>{getFullTimeOrder(element.time)}</span>
+                        </span>
+                    );
+                } else if (element.status === 11) {
+                    statusDescription = (
+                        <span style={{ color: "rgba(233, 69, 96, 1)" }}>
+                            Đơn hàng đã được nhà hàng hủy vào lúc{" "}
+                            <span style={{ textDecoration: "underline", fontSize: 15, fontWeight: 500, color: "rgba(233, 69, 96, 1)" }}>{getFullTimeOrder(element.time)}</span>
+                        </span>
+                    );
+                } else if (element.status === 12) {
+                    statusDescription = (
+                        <span style={{ color: "rgba(233, 69, 96, 1)" }}>
+                            Đơn hàng đã được tài xế hủy vào lúc{" "}
+                            <span style={{ textDecoration: "underline", fontSize: 15, fontWeight: 500, color: "rgba(233, 69, 96, 1)" }}>{getFullTimeOrder(element.time)}</span>
+                        </span>
+                    );
+                } else if (element.status === 13) {
+                    if (statusPayment === 0 || statusPayment === 1) {
+                        statusDescription = (
+                            <span>
+                                Đơn hàng đã được hủy vào lúc{" "}
+                                <span style={{ textDecoration: "underline", fontSize: 15, fontWeight: 500, color: "rgba(233, 69, 96, 1)" }}>{getFullTimeOrder(element.time)}</span>
+                            </span>
+                        );
+                    } else if (statusPayment === 2) {
+                        statusDescription = (
+                            <span style={{ color: "rgba(233, 69, 96, 1)" }}>
+                                Đơn hàng đã hủy do thanh toán thất bại vào lúc{" "}
+                                <span style={{ textDecoration: "underline", fontSize: 15, fontWeight: 500, color: "rgba(233, 69, 96, 1)" }}>{getFullTimeOrder(element.time)}</span>
+                            </span>
+                        );
+                    }
+                }
+                result = (
+                    <div
+                        className="f_flex order-detail-adrress"
+                        style={{ marginTop: 15, gap: 20, background: "rgba(233, 69, 96, 0.1)", padding: mobileMode ? "15px" : "15px 40px", alignItems: "center" }}
+                    >
+                        <img src="https://cdn-icons-png.flaticon.com/512/6911/6911990.png" alt="" style={{ width: 40, height: 40, opacity: 0.8 }}></img>
+                        <div className="flex-collumn">
+                            <span style={{ color: "rgba(233, 69, 96, 1)" }}>Đơn đã hủy</span>
+                            {statusDescription}
+                        </div>
+                    </div>
+                );
+            } else if (
+                element.status === 0 ||
+                element.status === 1 ||
+                element.status === 2 ||
+                element.status === 3 ||
+                element.status === 4 ||
+                element.status === 7 ||
+                element.status === 8 ||
+                element.status === 9
+            ) {
+                let statusDescription = "---";
+                if ((element.status === 0 || element.status === 1) && statusName === 1 && statusPayment === 0) {
+                    statusDescription = (
+                        <>
+                            <span style={{ color: "rgba(255, 170, 76, 1)" }}>Chờ thanh toán</span>
+                            <span style={{ color: "rgba(255, 170, 76, 1)" }}>
+                                Đơn hàng của bạn chưa thanh toán. Vui lòng thanh toán đơn hàng.{" "}
+                                <span
+                                    style={{ cursor: "pointer", textDecoration: "underline", fontSize: 15, fontWeight: 600, color: "rgba(255, 170, 76, 1)" }}
+                                    onClick={() => {
+                                        window.location.href = `https://deliveryvhgp-webapi.azurewebsites.net/api/v1/orders/ByOrderId/payment?orderId=${orderId}`;
+                                    }}
+                                >
+                                    Thanh toán ngay
+                                </span>
+                            </span>
+                        </>
+                    );
+                } else {
+                    statusDescription = (
+                        <>
+                            <span style={{ color: "rgba(255, 170, 76, 1)" }}>Đang giao hàng</span>
+                            <span style={{ color: "rgba(255, 170, 76, 1)" }}>
+                                Đơn hàng sẽ được giao vào{" "}
+                                <span style={{ textDecoration: "underline", fontSize: 15, fontWeight: 500, color: "rgba(255, 170, 76, 1)" }}>
+                                    {getDurationByMode(orderDuration, modeId, timeCreated)}
+                                </span>
+                            </span>
+                        </>
+                    );
+                }
+                result = (
+                    <div
+                        className="f_flex order-detail-adrress"
+                        style={{ marginTop: 15, gap: 20, background: "rgba(255, 170, 76, 0.1)", padding: mobileMode ? "15px" : "15px 40px", alignItems: "center" }}
+                    >
+                        <img src="https://cdn-icons-png.flaticon.com/512/754/754854.png" alt="" style={{ width: 35, height: 35, opacity: 0.7 }}></img>
+                        <div className="flex-collumn">{statusDescription}</div>
+                    </div>
+                );
+            } else if (element.status === 5) {
+                result = (
+                    <div
+                        className="f_flex order-detail-adrress"
+                        style={{ marginTop: 15, gap: 20, background: "rgba(48, 181, 102, 0.1)", padding: mobileMode ? "15px" : "15px 40px", alignItems: "center" }}
+                    >
+                        <img src="https://cdn-icons-png.flaticon.com/512/3502/3502601.png" alt="" style={{ width: 40, height: 40, opacity: 0.8 }}></img>
+
+                        <div className="flex-collumn" style={{}}>
+                            <span style={{ color: "rgba(48, 181, 102, 1)" }}>Giao hàng thành công</span>
+                            <span style={{ color: "rgba(48, 181, 102, 1)" }}>
+                                Đơn hàng đã được giao vào lúc{" "}
+                                <span style={{ textDecoration: "underline", fontSize: mobileMode ? 14 : 15, fontWeight: 500, color: "rgba(48, 181, 102, 1)" }}>{element.time}</span>
+                            </span>
+                        </div>
+                    </div>
+                );
+                break;
+            }
+        }
+
+        return result;
+    };
+
+    const getPaymentStatusName = (paymentStatus) => {
+        switch (paymentStatus) {
+            case 0:
+                return "Chưa thanh toán";
+            case 1:
+                return "Đã thanh toán";
+            case 2:
+                return "Thanh toán thất bại";
+
+            default:
+                return "---";
+        }
+    };
+
     return (
         <section className="background back-white" style={{ paddingTop: 70, paddingBottom: 80 }}>
             <div className="center_flex">
@@ -264,7 +418,7 @@ const OrderLookupPage = () => {
                     <span style={{ color: "rgb(149, 155, 164)", fontSize: 15 }}>Không tìm thấy đơn hàng nào!</span>
                 </div>
             )}
-            {orderInfo && orderInfo?.id && !notFound && (
+            {!isLoadingCircle && orderInfo && orderInfo?.id && !notFound && (
                 <>
                     <div style={{ height: "20px", background: "#f6f9fc" }}></div>
                     <div className="center_flex">
@@ -273,17 +427,31 @@ const OrderLookupPage = () => {
                                 <div style={{ flexDirection: "column" }} className="f_flex">
                                     <div className="" style={{ display: "block" }}>
                                         {/* {orderInfoComponent()} */}
+                                        {getStatusOrderTitle(
+                                            orderInfo.listStatusOrder,
+                                            orderInfo.paymentName,
+                                            orderInfo.paymentStatus,
+                                            {
+                                                dayfilter: orderInfo.dayfilter,
+                                                fromHour: orderInfo.fromHour,
+                                                toHour: orderInfo.toHour,
+                                            },
+                                            orderInfo.modeId,
+                                            orderInfo.time
+                                        )}
                                         <div className="order-wrapper order-detail-container" style={{ flex: 0.35 }}>
                                             {/* <h3 style={{ fontSize: mobileMode ? "1rem" : "1.3rem" }}>Thông tin giao hàng</h3> */}
-                                            {/* <div className="f_flex order-detail-info">
-                                    <i className="fa-solid fa-circle" style={{ fontSize: "0.7rem", lineHeight: 2, color: "green" }}></i>
-                                    <div className="flex-collumn">
-                                        <span style={{ color: "green", fontWeight: 600 }}>Giao hàng thành công</span>
-                                        <span>08-08-2022 16:30</span>
-                                    </div>
-                                </div> */}
+                                            {/* <div className="f_flex order-detail-adrress" style={{ marginTop: 15, gap: 11 }}>
+                                                <i style={{ color: "var(--primary)", lineHeight: 2, fontSize: 14 }} className="fa-solid fa-truck"></i>
+                                                <div className="flex-collumn">
+                                                    <span>Đang giao hàng</span>
+                                                    <span>
+                                                        Đơn hàng sẽ được giao vào <span style={{ textDecoration: "underline", fontSize: 15, fontWeight: 600 }}>16:30 - 18:00, 08-08-2022 </span>
+                                                    </span>
+                                                </div>
+                                            </div> */}
 
-                                            <div className="f_flex order-detail-adrress">
+                                            <div className="f_flex order-detail-adrress" style={{ marginTop: 15, gap: 15 }}>
                                                 <i style={{ color: "var(--primary)", lineHeight: 2, fontSize: 12 }} className="fa-solid fa-circle"></i>
                                                 <div className="flex-collumn">
                                                     <span>Mã đơn hàng:</span>
@@ -294,7 +462,7 @@ const OrderLookupPage = () => {
                                                 <i style={{ color: "var(--primary)", lineHeight: 2 }} className="fa-regular fa-clock"></i>
                                                 <div className="flex-collumn">
                                                     <span>Ngày đặt hàng:</span>
-                                                    <span> {orderInfo?.time?.split(" ")[0]} </span>
+                                                    <span> {getDateOrder(orderInfo?.time)} </span>
                                                 </div>
                                             </div>
                                             <div className="f_flex order-detail-adrress" style={{ marginTop: 15 }}>
@@ -306,7 +474,6 @@ const OrderLookupPage = () => {
                                             </div>
                                         </div>
                                         {<div style={{ height: "10px", background: "#f6f9fc" }}></div>}
-                                        {/* {productListComponent()} */}
                                         <div className="order-wrapper" style={{ flex: 0.65 }}>
                                             <h3 style={{ fontSize: mobileMode ? "1rem" : "1.3rem", display: "flex", alignItems: "center", gap: 20 }}>
                                                 Tiến độ
@@ -314,6 +481,13 @@ const OrderLookupPage = () => {
                                                     <div className="center_flex" style={{ background: "#e94560", borderRadius: "20px", padding: "7px 18px" }}>
                                                         <span className="order-store-status" style={{ fontSize: 15 }}>
                                                             {statusCanCelName}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                                {!isCancelOrder && orderInfo.paymentName === 1 && orderInfo.paymentStatus === 0 && (
+                                                    <div className="center_flex" style={{ background: "#e94560", borderRadius: "20px", padding: "7px 18px" }}>
+                                                        <span className="order-store-status" style={{ fontSize: 15 }}>
+                                                            {"Chưa thanh toán"}
                                                         </span>
                                                     </div>
                                                 )}
@@ -356,14 +530,14 @@ const OrderLookupPage = () => {
                                                         </div>
                                                     </div>
                                                     <div className="f_flex status-icon" style={{ opacity: statusOrderUser[1].active ? 1 : 0.3 }}>
-                                                        <img src="https://cdn-icons-png.flaticon.com/512/3338/3338690.png" alt="" style={{ width: 42, height: 42 }} />
+                                                        <img src="https://cdn-icons-png.flaticon.com/512/3338/3338637.png" alt="" style={{ width: 38, height: 38 }} />
                                                         <div className="f_flex" style={{ flexDirection: "column" }}>
                                                             <span className="status-info-time">{statusOrderUser[1].time}</span>
                                                             <span className="status-info-name">{statusOrderUser[1].statusName}</span>
                                                         </div>
                                                     </div>
                                                     <div className="f_flex status-icon" style={{ opacity: statusOrderUser[2].active ? 1 : 0.3 }}>
-                                                        <img src="https://cdn-icons-png.flaticon.com/512/3338/3338690.png" alt="" style={{ width: 42, height: 42 }} />
+                                                        <img src="https://cdn-icons-png.flaticon.com/512/3338/3338690.png" alt="" style={{ width: 38, height: 38 }} />
                                                         <div className="f_flex" style={{ flexDirection: "column" }}>
                                                             <span className="status-info-time">{statusOrderUser[2].time}</span>
                                                             <span className="status-info-name">{statusOrderUser[2].statusName}</span>
@@ -440,11 +614,22 @@ const OrderLookupPage = () => {
                                             <div className="order-detail-total">
                                                 <div className="order-detail-total-titlte">
                                                     Hình thức thanh toán:
-                                                    <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10 }}>
-                                                        {orderInfo.paymentName || "--"}
+                                                    <span className="order-detail-total-text center_flex" style={{ fontWeight: 400, marginLeft: 10, gap: 10 }}>
+                                                        <img src={`${orderInfo.paymentName === 0 ? "/images/money.png" : "/images/vnpay.png"}`} alt="" style={{ width: 30 }} />
+                                                        {orderInfo.paymentName === 0 ? "Tiền mặt" : "VN Pay"}
                                                     </span>
                                                 </div>
                                             </div>
+                                            {orderInfo.paymentName === 1 && (
+                                                <div className="order-detail-total" style={{ padding: "5px 0 5px 0" }}>
+                                                    <div className="order-detail-total-titlte">
+                                                        Trạng thái:
+                                                        <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10 }}>
+                                                            {getPaymentStatusName(orderInfo.paymentStatus)}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            )}
 
                                             <div className="order-detail-total">
                                                 <div className="order-detail-total-titlte">
@@ -481,7 +666,7 @@ const OrderLookupPage = () => {
                                                 </div>
                                             </div>
 
-                                            <div className="order-detail-total" style={{ borderTop: "1px solid rgb(230, 230, 230)", paddingTop: 15 }}>
+                                            <div className="order-detail-total" style={{ borderTop: "1px solid rgb(230, 230, 230)", paddingTop: 15, paddingBottom: 15 }}>
                                                 <div className="order-detail-total-titlte">
                                                     <span style={{ fontWeight: 700, color: "#000", fontSize: mobileMode ? "16px" : "18px" }}>Tổng cộng:</span>
                                                     <span
@@ -493,6 +678,28 @@ const OrderLookupPage = () => {
                                                     </span>
                                                 </div>
                                             </div>
+
+                                            {orderInfo.paymentName === 1 && orderInfo.paymentStatus === 0 && (
+                                                <button
+                                                    onClick={() => {
+                                                        window.location.href = `https://deliveryvhgp-webapi.azurewebsites.net/api/v1/orders/ByOrderId/payment?orderId=${orderId}`;
+                                                    }}
+                                                    type="button"
+                                                    // disabled={isLoadingOrder || (mode !== "1" && !hour)}
+                                                    style={{
+                                                        textAlign: "center",
+                                                        width: "100%",
+                                                        height: mobileMode ? 45 : 50,
+                                                        borderRadius: "0.5rem",
+                                                        alignItems: "center",
+                                                        backgroundColor: "var(--primary)",
+                                                        color: "#fff",
+                                                    }}
+                                                    className="center_flex checkout-btn"
+                                                >
+                                                    <span style={{ fontWeight: 700, fontSize: mobileMode ? 15 : 18 }}>{"Thanh toán lại"}</span>
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

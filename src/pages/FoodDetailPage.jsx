@@ -3,15 +3,12 @@ import { useHistory, useLocation } from "react-router-dom";
 import Rodal from "rodal";
 import { getProductDetail } from "../apis/apiService";
 import Loading from "../common/Loading/Loading";
-import Pdata from "../components/products/Pdata";
 import { checkOutOfMenu, checkOutOfStore } from "../constants/Cart";
 import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME1, LOCALSTORAGE_CART_NAME2, LOCALSTORAGE_CART_NAME3, LOCALSTORAGE_MODE } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
 export const FoodDetailPage = () => {
-    const { setCart1, setCart2, setCart3, mobileMode, setHeaderInfo, setisCartMain1, setisCartMain2, setisCartMain3, menuIdProvider, mode, modeType, deliveryDate, setDeliveryDate } =
-        useContext(AppContext);
-    const [countQuantity, setcountQuantity] = useState(1);
+    const { setCart1, setCart2, setCart3, mobileMode, setHeaderInfo, setisCartMain1, setisCartMain2, setisCartMain3, menuIdProvider, mode, modeType, deliveryDate } = useContext(AppContext);
     const [isLoadingCircle, setIsLoadingCircle] = useState(true);
     const [product, setProduct] = useState({});
     const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);
@@ -19,13 +16,10 @@ export const FoodDetailPage = () => {
     const [visiblePopupOutOfMenu, setVisiblePopupOutOfMenu] = useState(false);
     const [productRodalQuantity, setProductRodalQuantity] = useState(0);
     const [isProductCart, setisProductCart] = useState(true);
-    const { shopItems } = Pdata;
     let history = useHistory();
     let location = useLocation();
 
     useEffect(() => {
-        // setIsHeader(false);
-        console.log({ menuIdProvider });
         let modeId = location.pathname.trim().split("/")[2];
         if (menuIdProvider === "0" && mode !== "3") {
             history.push(`/mode/${modeId}`);
@@ -188,52 +182,6 @@ export const FoodDetailPage = () => {
         localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...newCarts]));
     };
 
-    // const checkOutOfMenu = () => {
-    //     if (mode === "1") {
-    //         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
-    //             localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
-    //         }
-    //         const CartList1 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
-
-    //         if (CartList1.length > 0) {
-    //             if (menuIdProvider === CartList1[0].menuId) {
-    //                 return false;
-    //             } else {
-    //                 return true;
-    //             }
-    //         }
-    //         return false;
-    //     } else if (mode === "2") {
-    //         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
-    //             localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
-    //         }
-    //         const CartList2 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
-
-    //         if (CartList2.length > 0) {
-    //             if (menuIdProvider === CartList2[0].menuId) {
-    //                 return false;
-    //             } else {
-    //                 return true;
-    //             }
-    //         }
-    //         return false;
-    //     } else {
-    //         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3))) {
-    //             localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([]));
-    //         }
-    //         const CartList3 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
-
-    //         if (CartList3.length > 0) {
-    //             if (menuIdProvider === CartList3[0].menuId) {
-    //                 return false;
-    //             } else {
-    //                 return true;
-    //             }
-    //         }
-    //         return false;
-    //     }
-    // };
-    // Giảm số lượng sản phẩm trong giỏ hàng
     const decreaseQtyCart1 = (id) => {
         setProductRodalQuantity(productRodalQuantity - 1);
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
@@ -364,7 +312,6 @@ export const FoodDetailPage = () => {
                 localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
             } else {
                 setVisiblePopupOutOfStore(true);
-                console.log("khac store");
             }
         } else if (mode === "3") {
             const CartList3 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
@@ -387,11 +334,9 @@ export const FoodDetailPage = () => {
                     localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
                 } else {
                     setVisiblePopupOutOfStore(true);
-                    console.log("khac store");
                 }
             } else {
                 setVisiblePopupOutOfMenu(true);
-                console.log("khac menu");
             }
         } else {
             const CartList2 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
@@ -412,7 +357,6 @@ export const FoodDetailPage = () => {
                 localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
             } else {
                 setVisiblePopupOutOfStore(true);
-                console.log("khac store");
             }
         }
     };
@@ -573,10 +517,6 @@ export const FoodDetailPage = () => {
                             onClick={(e) => {
                                 e.preventDefault();
                                 AddCartOutOfStore();
-
-                                // setisProductCartRodal(false);
-                                // setIsOpenRodal(false);
-                                // deleteCartItem();
                             }}
                             style={{
                                 flex: 1,
@@ -676,9 +616,8 @@ export const FoodDetailPage = () => {
                                 <i className="fa fa-star"></i>
                                 <i className="fa fa-star" style={{ color: "rgb(102, 102, 102)" }}></i>
                             </div> */}
-                                <h3 style={{ fontSize: 18 }}>{product.name}</h3>
-                                {/* <h4 style={{ fontWeight: 500, color: "rgb(102, 102, 102)" }}>{product.id}</h4> */}
-                                <div style={{ color: "var(--primary)", fontSize: "24px", marginTop: 10, marginBottom: 5, fontWeight: 600, display: "flex", alignItems: "center", gap: 5 }}>
+                                <h3 style={{ fontSize: 20 }}>{product.name}</h3>
+                                <div style={{ color: "var(--primary)", fontSize: "24px", marginTop: 10, fontWeight: 600, display: "flex", alignItems: "center", gap: 5 }}>
                                     {product.pricePerPack?.toLocaleString()}
                                     <span style={{ fontSize: "1.2rem" }}>₫</span>
                                 </div>
@@ -691,7 +630,6 @@ export const FoodDetailPage = () => {
                                     className="d_flex food-detail-info"
                                     style={{
                                         justifyContent: "start",
-                                        // marginRight: 150,
                                         padding: "10px 0 10px 0",
                                         gap: 15,
                                         borderTop: "1px solid rgb(230,230,230)",
@@ -700,15 +638,25 @@ export const FoodDetailPage = () => {
                                 >
                                     <div className="food-detail-shop" style={{ width: 70, height: 70 }} onClick={() => {}}>
                                         <img
+                                            onClick={() => {
+                                                history.push(`/mode/${mode}/store/${product.storeId}`);
+                                            }}
                                             width={"100%"}
                                             height={"100%"}
-                                            style={{ objectFit: "cover", borderRadius: 8 }}
+                                            style={{ objectFit: "cover", borderRadius: 8, cursor: "pointer" }}
                                             src={product.storeImage || "https://cdn-icons-png.flaticon.com/512/123/123403.png"}
                                             alt=""
                                         />
                                     </div>
                                     <div style={{}} className="center_flex">
-                                        <h3 style={{ fontSize: 18, fontWeight: 600 }}>{product.storeName}</h3>
+                                        <h4
+                                            onClick={() => {
+                                                history.push(`/mode/${mode}/store/${product.storeId}`);
+                                            }}
+                                            style={{ fontSize: mobileMode ? 16 : 16, fontWeight: 500, cursor: "pointer" }}
+                                        >
+                                            {product.storeName}
+                                        </h4>
                                         <span style={{ color: "rgb(160,160,160)", fontWeight: 400, fontSize: 15 }}>{product.slogan}</span>
                                     </div>
                                 </div>
@@ -766,34 +714,6 @@ export const FoodDetailPage = () => {
                                         </div>
                                     )}
                                 </div>
-                                {/* <div className="f_flex food-detail-btn" style={{ gap: 20, marginBottom: 25 }}>
-                                    <div style={{ border: "1px solid rgb(160,160,160)", textAlign: "center", width: 170, height: 50, borderRadius: "0.5rem", alignItems: "center" }} className="f_flex">
-                                        <div
-                                            onClick={() => setcountQuantity(countQuantity - (product.minimumDeIn || 1))}
-                                            style={{ width: "6rem", borderRight: "1px solid rgb(160,160,160)", height: "100%" }}
-                                            className="center_flex hover"
-                                        >
-                                            <i className="fa fa-minus"></i>
-                                        </div>
-                                        <span style={{ width: "6rem", fontWeight: 600, fontSize: 14 }}>
-                                            {countQuantity}
-                                            {" " + product.unit}
-                                        </span>
-                                        <div
-                                            onClick={() => setcountQuantity(countQuantity + (product.minimumDeIn || 1))}
-                                            style={{ width: "6rem", borderLeft: "1px solid rgb(160,160,160)", height: "100%" }}
-                                            className="center_flex hover"
-                                        >
-                                            <i className="fa fa-plus"></i>
-                                        </div>
-                                    </div>
-                                    <div style={{ textAlign: "center", width: 300, height: 50, borderRadius: "0.5rem", alignItems: "center" }} className="center_flex btn-hover">
-                                        <span onClick={() => AddCart()} style={{ fontWeight: 600, fontSize: 16 }}>
-                                            Thêm Giỏ Hàng
-                                        </span>
-                                    </div>
-                                </div> */}
-
                                 <table>
                                     <tbody>
                                         <tr className="">
@@ -806,10 +726,7 @@ export const FoodDetailPage = () => {
                                                 </div>
                                             </td>
                                         </tr>
-                                        {/* <tr className="">
-                                        <td className="food-detail-label">Xuất Xứ: </td>
-                                        <td className="food-detail-text">Việt Nam</td>
-                                    </tr> */}
+
                                         <tr className="">
                                             <td className="food-detail-label">Đóng Gói: </td>
                                             <td className="food-detail-text">{product.packNetWeight ? product.packNetWeight + " " + product.unit : "Không có"}</td>

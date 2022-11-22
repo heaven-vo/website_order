@@ -57,7 +57,7 @@ export const SuccessModal = () => {
                         className="modal-order-success-btn"
                         onClick={(e) => {
                             e.preventDefault();
-                            history.replace("/order", { orderId: orderIdSuccess });
+                            history.replace(`/order/${orderIdSuccess}`);
                             setOpentModalSuccess(false);
                         }}
                         style={{ flex: 1, padding: 12, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, height: 45, color: "#fff" }}

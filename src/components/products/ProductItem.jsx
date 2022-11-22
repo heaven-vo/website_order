@@ -4,7 +4,7 @@ import { checkOutOfMenu, checkOutOfStore } from "../../constants/Cart";
 import { IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME1, LOCALSTORAGE_CART_NAME2, LOCALSTORAGE_CART_NAME3, LOCALSTORAGE_MODE } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 
-export const ProductItem = React.forwardRef(({ product, openRodal, index, filter, openRodalOutOfStore, openRodalOutOfMenu, isBorderBottom, store, menuName }, ref) => {
+export const ProductItem = React.forwardRef(({ product, openRodal, index, filter, packDes, openRodalOutOfStore, openRodalOutOfMenu, isBorderBottom, store, menuName }, ref) => {
     useImperativeHandle(ref, () => ({
         resetQuantity() {
             setisProductCart(false);
@@ -20,7 +20,6 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
     const { setCart1, setCart2, setCart3, setisCartMain1, setisCartMain2, setisCartMain3, mode, menuIdProvider, mobileMode, setDeliveryDate, deliveryDate } = useContext(AppContext);
     const [productRodalQuantity, setProductRodalQuantity] = useState(0);
     const [isProductCart, setisProductCart] = useState(true);
-    // const [visiblePopupQuantity, setVisiblePopupQuantity] = useState(false);
 
     useEffect(() => {
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
@@ -102,22 +101,6 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
         localStorage.setItem(LOCALSTORAGE_CART_NAME3, JSON.stringify([...newCarts]));
     };
 
-    // const checkOutOfMenu = () => {
-    //     if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME))) {
-    //         localStorage.setItem(LOCALSTORAGE_CART_NAME, JSON.stringify([]));
-    //     }
-    //     const CartList = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME));
-
-    //     if (CartList.length > 0) {
-    //         if (menuIdProvider === CartList[0].menuId) {
-    //             return false;
-    //         } else {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // };
-
     const AddCart = () => {
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1))) {
             localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([]));
@@ -150,11 +133,9 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                     localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify(mode));
                 } else {
                     openRodalOutOfStore({ rodal: true, product: product, index });
-                    console.log("khac store");
                 }
             } else {
                 openRodalOutOfMenu({ rodal: true, product: product, index });
-                console.log("khac menu");
             }
         } else if (mode === "1") {
             const CartList1 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
@@ -175,7 +156,6 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                 localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...carts]));
             } else {
                 openRodalOutOfStore({ rodal: true, product: product, index });
-                console.log("khac store");
             }
         } else {
             const CartList2 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
@@ -196,7 +176,6 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                 localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([...carts]));
             } else {
                 openRodalOutOfStore({ rodal: true, product: product, index });
-                console.log("khac store");
             }
         }
     };
@@ -253,7 +232,6 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                     <div
                         className="product-list-img"
                         onClick={() => {
-                            // setIsHeader(false);
                             setDeliveryDate(menuName);
                             history.push(`/mode/${mode}/product/${product.id}`, { valid: true });
                         }}
@@ -264,7 +242,7 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                     <div className="product-list-name">
                         <span
                             onClick={() => {
-                                // setIsHeader(false);
+                                setDeliveryDate(menuName);
                                 history.push(`/mode/${mode}/product/${product.id}`, { valid: true });
                             }}
                             style={{ fontWeight: 600, cursor: "pointer" }}
@@ -274,7 +252,7 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                         {store && (
                             <span
                                 onClick={() => {
-                                    // setIsHeader(false);
+                                    setDeliveryDate(menuName);
                                     history.push(`/mode/${mode}/product/${product.id}`, { valid: true });
                                 }}
                                 style={{ fontWeight: 500, cursor: "pointer", fontSize: 12, color: "rgb(102, 102, 102)" }}
@@ -301,7 +279,6 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                                                 }
                                             } else {
                                                 openRodal({ rodal: true, product: product, index });
-                                                // setVisiblePopupQuantity(true);
                                             }
                                         }}
                                     >
@@ -346,15 +323,14 @@ export const ProductItem = React.forwardRef(({ product, openRodal, index, filter
                         {product.pricePerPack?.toLocaleString()}
                         <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
                     </span>
-                    {store && (
+                    {packDes && (
                         <span
                             onClick={() => {
-                                // setIsHeader(false);
                                 history.push(`/mode/${mode}/product/${product.id}`, { valid: true });
                             }}
                             style={{ fontWeight: 500, cursor: "pointer", fontSize: 12, color: "rgb(102, 102, 102)" }}
                         >
-                            {"1 " + product.unit}
+                            {product.packDes !== "" ? product.packDes : product.unit}
                         </span>
                     )}
                 </div>

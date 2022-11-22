@@ -6,13 +6,7 @@ import Navbar from "./Navbar";
 
 const Header = ({ CartItem }) => {
     const { isHeaderHome } = useContext(AppContext);
-    return (
-        <>
-            {isHeaderHome ? <Head /> : <Navbar />}
-
-            {/* <Navbar /> */}
-        </>
-    );
+    return <>{isHeaderHome ? <Head /> : <Navbar />}</>;
 };
 
 export default Header;

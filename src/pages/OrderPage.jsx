@@ -1,9 +1,6 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
-import { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { getListOrder } from "../apis/apiService";
-import { TabMenuOrder } from "../common/header/TabMenuOrder";
 import Loading from "../common/Loading/Loading";
 import { getStatusColor, getStatusName, IMAGE_NOTFOUND_v2 } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
@@ -15,7 +12,6 @@ export const OrderPage = () => {
     useEffect(() => {
         setIsLoadingCircle(true);
         setisCartMain(false);
-        // setIsHeaderOrder(true);
         setHeaderInfo({ isSearchHeader: false, title: "Lịch sử mua hàng" });
         getListOrder("1", 1, 100)
             .then((res) => {
