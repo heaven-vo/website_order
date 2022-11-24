@@ -66,6 +66,7 @@ const Cart = ({}) => {
     const [isLoadingWhite, setisLoadingWhite] = useState(true);
     const [isValidPhoneRegex, setIsValidPhoneRegex] = useState(true);
     const [storeName, setStoreName] = useState("");
+    const [service, setService] = useState("2");
     const [deliveryDateCart, setDeliveryDate] = useState("");
     // const [isLoading, setIsLoading] = useState(true);
     const [paymentType, setPaymentType] = useState(0);
@@ -272,7 +273,7 @@ const Cart = ({}) => {
         let order = {
             id: "",
             phoneNumber: phone,
-            total: totalPrice + 15000,
+            total: totalPrice,
             storeId: CartList.length > 0 && CartList[0].storeId,
             menuId: menuIdProvider,
             buildingId: building.value,
@@ -280,6 +281,7 @@ const Cart = ({}) => {
             fullName: fullName,
             shipCost: 10000,
             modeId: mode,
+            serviceId: service,
             deliveryTimeId: mode === "1" ? "1" : hour.value,
             orderDetail: [...productOrders],
             payments: [
@@ -630,7 +632,7 @@ const Cart = ({}) => {
                 <div style={{ padding: "5px 0", display: "flex", gap: 5 }}>
                     <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 600 }}>Tổng tiền đơn hàng:</span>
                     <span className="center_flex" style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 400, gap: 3 }}>
-                        {" " + (totalPrice + 15000).toLocaleString()}
+                        {" " + (totalPrice + 10000 + (service === "1" ? 15000 : 0)).toLocaleString()}
                         <span style={{ fontSize: "15px" }}>{"₫"}</span>
                     </span>
                 </div>
@@ -833,6 +835,64 @@ const Cart = ({}) => {
                                         </div>
                                     </div>
                                 ))}
+                                {mode === "1" && (
+                                    <div
+                                        className="c_flex"
+                                        style={{
+                                            borderBottom: "1px solid #f0f0f0",
+                                            background: "rgb(245,245,245)",
+                                            padding: "10px 10px 10px 10px",
+                                            borderRadius: 3,
+                                            gap: 15,
+                                            opacity: service === "2" ? 0.6 : 1,
+                                            transition: "0.3s all",
+                                        }}
+                                    >
+                                        <label for="service" className="c_flex cusor" style={{ gap: 5 }}>
+                                            <div style={{ marginRight: 10 }}>
+                                                <input
+                                                    type="checkbox"
+                                                    className="myinput"
+                                                    id="service"
+                                                    name="service"
+                                                    value={service}
+                                                    // checked={service === 1}
+                                                    onChange={(e) => {
+                                                        if (e.target.checked) {
+                                                            setService("1");
+                                                        } else {
+                                                            setService("2");
+                                                        }
+                                                    }}
+                                                />
+                                            </div>
+
+                                            <div
+                                                className=""
+                                                style={{
+                                                    width: mobileMode ? 35 : 45,
+                                                }}
+                                            >
+                                                <img src={"https://cdn-icons-png.flaticon.com/512/2844/2844235.png"} alt="" style={{ borderRadius: "0.5rem" }} />
+                                            </div>
+
+                                            <div className="checkout-product-info" style={{}}>
+                                                <div className="checkout-product-name" style={{ fontWeight: 600 }}>
+                                                    {"Hỏa tốc"}
+                                                </div>
+                                                <p className="cusor" style={{ color: "rgb(120,120,120)", fontSize: mobileMode ? 12 : 14, fontWeight: 500, paddingTop: mobileMode ? 2 : 5 }}>
+                                                    {"Đơn hàng của bạn đang được ưu tiên để tài xế giao sớm nhất."}
+                                                </p>
+                                            </div>
+                                        </label>
+                                        <div className="checkout-product-price">
+                                            <span style={{ display: "flex", gap: 3, fontSize: mobileMode ? 14 : 16 }}>
+                                                {(15000).toLocaleString()}
+                                                <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
                                 <div className="c_flex">
                                     <span style={{ fontSize: mobileMode ? 14 : 16 }}>Tiền hàng</span>
                                     <span style={{ fontWeight: 600, display: "flex", gap: 3, fontSize: mobileMode ? 14 : 16 }}>
@@ -843,7 +903,14 @@ const Cart = ({}) => {
                                 <div className="c_flex">
                                     <span style={{ fontSize: mobileMode ? 14 : 16 }}>Phí giao hàng</span>
                                     <span style={{ fontWeight: 600, display: "flex", fontSize: mobileMode ? 14 : 16, gap: 3 }}>
-                                        {"15.000"}
+                                        {"10.000"}
+                                        <span style={{ fontSize: 15, fontWeight: 600 }}>₫</span>
+                                    </span>
+                                </div>
+                                <div className="c_flex">
+                                    <span style={{ fontSize: mobileMode ? 14 : 16 }}>Phí dịch vụ</span>
+                                    <span style={{ fontWeight: 600, display: "flex", fontSize: mobileMode ? 14 : 16, gap: 3 }}>
+                                        {service === "1" ? "15.000" : 0}
                                         <span style={{ fontSize: 15, fontWeight: 600 }}>₫</span>
                                     </span>
                                 </div>
@@ -888,7 +955,7 @@ const Cart = ({}) => {
                                     </div>
                                     <div className="checkout-text-price">
                                         <span style={{ display: "flex", gap: 3, alignItems: "center" }}>
-                                            {(totalPrice + 15000).toLocaleString()}
+                                            {(totalPrice + 10000 + (service === "1" ? 15000 : 0)).toLocaleString()}
                                             <span style={{ fontSize: "1rem", fontWeight: 700 }}>₫</span>
                                         </span>
                                     </div>

@@ -147,6 +147,10 @@
 } */
 
 @media (max-width: 700px) {
+    .myinput {
+        transform: scale(1.3) !important;
+        -webkit-transform: scale(1.3) !important;
+    }
     .order-detail-adrress > div > span:first-child {
         font-size: 16px !important;
     }
