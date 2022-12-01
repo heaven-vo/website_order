@@ -55,7 +55,7 @@ const RodalUpdateCart = ({ visiblePopupQuantity, setVisiblePopupQuantity, produc
                 </div>
             </div>
 
-            <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 15, gap: 15 }}>
+            <div className="f_flex " style={{ width: " 100%", justifyContent: "space-between", paddingTop: 15, gap: 15 }}>
                 {productRodalQuantity > 0 ? (
                     <button
                         onClick={(e) => {
@@ -70,7 +70,7 @@ const RodalUpdateCart = ({ visiblePopupQuantity, setVisiblePopupQuantity, produc
                             height: 45,
                             fontWeight: 700,
                             borderRadius: 10,
-                            background: "var(--primary)",
+                            background: "linear-gradient(90deg, rgb(247, 143, 43) 0%, rgba(255, 175, 76, 1) 100%)",
                             transition: "0.3s all",
                             WebkitTransition: "0.3s all",
                             color: "#fff",

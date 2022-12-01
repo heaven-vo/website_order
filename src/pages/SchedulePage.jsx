@@ -135,7 +135,7 @@ const SchedulePage = () => {
 
     const settings = {
         dots: false,
-        slidesToShow: mobileMode ? 5 : 8,
+        slidesToShow: mobileMode ? 5 : 7,
         slidesToScroll: 5,
         autoplay: false,
         swipeToSlide: false,
@@ -228,7 +228,7 @@ const SchedulePage = () => {
                                 <div
                                     style={{
                                         background: "#fff",
-                                        borderRadius: "5px",
+                                        borderRadius: "8px",
                                         border: "1px solid rgb(230, 230, 230)",
                                         width: mobileMode ? 130 : 140,
                                         height: 45,
@@ -258,7 +258,7 @@ const SchedulePage = () => {
                                             key={index}
                                             style={{
                                                 background: "#fff",
-                                                borderRadius: "5px",
+                                                borderRadius: "8px",
                                                 border: "1px solid rgb(230, 230, 230)",
                                                 minWidth: mobileMode ? 135 : 150,
                                                 height: 45,

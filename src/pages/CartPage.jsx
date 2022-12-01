@@ -632,7 +632,7 @@ const Cart = ({}) => {
                 <div style={{ padding: "5px 0", display: "flex", gap: 5 }}>
                     <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 600 }}>Tổng tiền đơn hàng:</span>
                     <span className="center_flex" style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 400, gap: 3 }}>
-                        {" " + (totalPrice + 10000 + (service === "1" ? 15000 : 0)).toLocaleString()}
+                        {" " + (totalPrice + 10000 + (service === "1" ? 10000 : 0)).toLocaleString()}
                         <span style={{ fontSize: "15px" }}>{"₫"}</span>
                     </span>
                 </div>
@@ -887,7 +887,7 @@ const Cart = ({}) => {
                                         </label>
                                         <div className="checkout-product-price">
                                             <span style={{ display: "flex", gap: 3, fontSize: mobileMode ? 14 : 16 }}>
-                                                {(15000).toLocaleString()}
+                                                {(10000).toLocaleString()}
                                                 <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
                                             </span>
                                         </div>
@@ -910,7 +910,7 @@ const Cart = ({}) => {
                                 <div className="c_flex">
                                     <span style={{ fontSize: mobileMode ? 14 : 16 }}>Phí dịch vụ</span>
                                     <span style={{ fontWeight: 600, display: "flex", fontSize: mobileMode ? 14 : 16, gap: 3 }}>
-                                        {service === "1" ? "15.000" : 0}
+                                        {service === "1" ? "10.000" : 0}
                                         <span style={{ fontSize: 15, fontWeight: 600 }}>₫</span>
                                     </span>
                                 </div>
@@ -955,7 +955,7 @@ const Cart = ({}) => {
                                     </div>
                                     <div className="checkout-text-price">
                                         <span style={{ display: "flex", gap: 3, alignItems: "center" }}>
-                                            {(totalPrice + 10000 + (service === "1" ? 15000 : 0)).toLocaleString()}
+                                            {(totalPrice + 10000 + (service === "1" ? 10000 : 0)).toLocaleString()}
                                             <span style={{ fontSize: "1rem", fontWeight: 700 }}>₫</span>
                                         </span>
                                     </div>
@@ -973,7 +973,7 @@ const Cart = ({}) => {
                                         height: mobileMode ? 45 : 50,
                                         borderRadius: "0.5rem",
                                         alignItems: "center",
-                                        backgroundColor: isLoadingOrder || (mode !== "1" && !hour) ? "#f5f5f5" : "var(--primary)",
+                                        background: isLoadingOrder || (mode !== "1" && !hour) ? "#f5f5f5" : "linear-gradient(90deg, rgb(247, 143, 43) 0%, rgba(255, 175, 76, 1) 100%)",
                                         color: mode !== "1" && !hour ? "rgb(150,150,150)" : "#fff",
                                     }}
                                     className="center_flex checkout-btn"

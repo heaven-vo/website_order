@@ -26,6 +26,7 @@ export default function AppProvider({ children }) {
     const [Cart3, setCart3] = useState([]);
     const [userInfo, setUserInfo] = useState({});
     const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+    const [isLoadigFromHome, setisLoadigFromHome] = useState(true);
     const [openDeleteCart, setOpenDeleteCart] = useState(false);
     const [isCartFooter, setIsCartFooter] = useState(false);
     const [isHeaderHome, setIsHeaderHome] = useState(false);
@@ -303,6 +304,8 @@ export default function AppProvider({ children }) {
                 setDeliveryDate,
                 isHeader,
                 setIsHeader,
+                isLoadigFromHome,
+                setisLoadigFromHome,
             }}
         >
             {children}

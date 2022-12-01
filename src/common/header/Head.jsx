@@ -286,7 +286,12 @@ const Head = () => {
                     </div>
                 </div>
             </Rodal>
-            <section className="search container ">
+            <section
+                className="search container"
+                style={{
+                    backgroundImage: "linear-gradient(90deg, rgb(247, 143, 43) 0%, rgba(255, 175, 76, 1) 100%)",
+                }}
+            >
                 <div className="container f_flex " style={{ padding: "15px", flexDirection: "column" }}>
                     <div style={{ padding: "0 0 5px 0", color: "#000", fontWeight: 600 }}>
                         <span>Giao đến:</span>
@@ -316,7 +321,7 @@ const Head = () => {
                     </div>
                     <div className="header-home-container">
                         <div className="heaader-home-img">
-                            <img src="/images/home.png" alt="" />
+                            <img src="/images/home-removebg.png" alt="" />
                         </div>
                         <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "start" }}>
                             <span style={{ textTransform: "uppercase" }}>Cộng Đồng Chung Cư </span>

@@ -9,7 +9,7 @@ export const SuccessModal = () => {
     return (
         <div className="modal-success-wrapper">
             <Rodal
-                height={mobileMode ? 370 : 430}
+                height={mobileMode ? 400 : 450}
                 width={mobileMode ? 350 : 400}
                 visible={opentModalSuccess}
                 showCloseButton={false}
@@ -20,7 +20,7 @@ export const SuccessModal = () => {
                 style={{ borderRadius: 10, padding: 20 }}
             >
                 <div class="main-container">
-                    <img src="./images/success-back2.png" alt="" />
+                    <img src="https://i.pinimg.com/564x/86/fb/cd/86fbcdecb33bba33c132c46b6a53506a.jpg" alt="" />
                     <div class="check-container">
                         <div class="check-background">
                             <svg viewBox="0 0 65 51" fill="none" xmlns="http://www.w3.org/2000/svg">
