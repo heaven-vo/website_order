@@ -7,10 +7,11 @@ import { banner } from "../constants/Variable";
 import { AppContext } from "../context/AppProvider";
 
 const HomePage = ({ productItems, shopItems }) => {
-    const { userInfo, setIsHeaderHome, setVisiblePopupInfo, mobileMode, setMode, setisCartMain1, setisCartMain2, setisCartMain3, Cart1, Cart2, Cart3 } = useContext(AppContext);
+    const { userInfo, setIsHeaderHome, setVisiblePopupInfo, mobileMode, setMode, setisCartMain1, setisCartMain2, setisCartMain3, Cart1, Cart2, Cart3, setisLoadigFromHome } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(true);
     let history = useHistory();
     useEffect(() => {
+        setisLoadigFromHome(false);
         setIsLoading(true);
         setIsHeaderHome(true);
         setisCartMain1(false);
@@ -55,10 +56,11 @@ const HomePage = ({ productItems, shopItems }) => {
                             style={{}}
                             className="home-menu-item"
                             onClick={() => {
-                                setMode(1);
+                                setMode("1");
                                 if (userInfo.building && userInfo.fullName && userInfo.phone) {
                                     setVisiblePopupInfo(false);
-                                    history.push(`/mode/${1}`);
+                                    history.push(`/mode/${1}`, { home: true });
+                                    setisLoadigFromHome(true);
                                 } else {
                                     setVisiblePopupInfo(true);
                                 }
@@ -73,11 +75,12 @@ const HomePage = ({ productItems, shopItems }) => {
                             style={{}}
                             className="home-menu-item"
                             onClick={() => {
-                                setMode(2);
+                                setMode("2");
 
                                 if (userInfo.building && userInfo.fullName && userInfo.phone) {
                                     setVisiblePopupInfo(false);
-                                    history.push(`/mode/${2}`);
+                                    history.push(`/mode/${2}`, { home: true });
+                                    setisLoadigFromHome(true);
                                 } else {
                                     setVisiblePopupInfo(true);
                                 }
@@ -92,10 +95,11 @@ const HomePage = ({ productItems, shopItems }) => {
                             style={{}}
                             className="home-menu-item"
                             onClick={() => {
-                                setMode(3);
+                                setMode("3");
                                 if (userInfo.building && userInfo.fullName && userInfo.phone) {
                                     setVisiblePopupInfo(false);
-                                    history.push(`/mode/${3}`);
+                                    history.push(`/mode/${3}`, { home: true });
+                                    setisLoadigFromHome(true);
                                 } else {
                                     setVisiblePopupInfo(true);
                                 }

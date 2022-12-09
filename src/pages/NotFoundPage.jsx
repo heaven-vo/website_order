@@ -29,7 +29,7 @@ export const NotFoundPage = () => {
                             height: mobileMode ? 45 : 50,
                             borderRadius: "0.5rem",
                             alignItems: "center",
-                            backgroundColor: "var(--primary)",
+                            background: "linear-gradient(90deg, rgb(247, 143, 43) 0%, rgba(255, 175, 76, 1) 100%)",
                             color: "#fff",
                         }}
                         className="center_flex checkout-btn"

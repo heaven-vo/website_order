@@ -12,6 +12,20 @@
     -webkit-transition: 1s ease-in-out;
     border-radius: 0.5rem;
 }
+.loading-wrapper-mode {
+    position: fixed;
+    height: 90%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    overflow: hidden;
+    z-index: 98;
+    transition: 0.3s ease-in-out;
+    -webkit-transition: 0.3s ease-in-out;
+    border-radius: 0.5rem;
+}
 
 .loading-wrapper img {
     width: 50px;

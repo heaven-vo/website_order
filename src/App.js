@@ -11,6 +11,7 @@ import Footer from "./common/footer/Footer";
 import { DrawerContent } from "./common/header/Drawer";
 import Header from "./common/header/Header";
 import Loading from "./common/Loading/Loading";
+import LoadingMain from "./common/Loading/LoadingMain";
 
 import { ModalDeleteCart } from "./components/wrapper/ModalDeleteCart";
 import { ErrorModal, SuccessModal } from "./components/wrapper/ModalOrder";
@@ -24,7 +25,6 @@ import { NotFoundPage } from "./pages/NotFoundPage";
 import OrderLookupPage from "./pages/OrderLookupPage";
 import SchedulePage from "./pages/SchedulePage";
 import { SearchPage } from "./pages/SearchPage";
-
 import { ViewAllProductCatePage } from "./pages/ViewAllProductCatePage";
 import { ViewAllProductStorePage } from "./pages/ViewAllProductStorePage";
 import "./util.css";
@@ -91,6 +91,7 @@ function App() {
                 {ErrorModal()}
                 <ModalDeleteCart />
                 <Loading isLoading={isLoadingMain} />
+                {/* <LoadingMain isLoading={isLoadingMain} /> */}
                 {isHeader && <Header />}
                 <Drawer size={300} open={isOpenDrawer} duration={300} onClose={toggleDrawer} zIndex={9999} direction="right" className="drawer__container">
                     <DrawerContent />

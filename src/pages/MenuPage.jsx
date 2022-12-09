@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import Countdown from "react-countdown";
 import BallTriangle from "react-loading-icons/dist/esm/components/ball-triangle";
 import Skeleton from "react-loading-skeleton";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import Slider from "react-slick";
 import { getListStoreCategory, getListStoreInMenuByMode, getMenuByMode, getMenuByModeGroupBy, getMenuMode3 } from "../apis/apiService";
+import LoadingMode from "../common/Loading/LoadingMode";
 import CountDownMenu from "../components/menus/CountDownMenu";
 import DurationList from "../components/products/DurationList";
 import { ProductSlide, SampleNextArrow, SamplePrevArrow } from "../components/products/ProductSlide";
@@ -15,12 +16,27 @@ import { CATE_FITLER, IMAGE_NOTFOUND, LOCALSTORAGE_CART_NAME1, LOCALSTORAGE_CART
 import { AppContext } from "../context/AppProvider";
 
 export const MenuPage = () => {
-    const { mode, mobileMode, setIsHeaderOrder, setHeaderInfo, setMenuIdProvider, setisCartMain1, setisCartMain2, setCart1, setCart2, setOpenDeleteCart, setCategoriesInMenu, setKeySearch } =
-        useContext(AppContext);
+    const {
+        mode,
+        mobileMode,
+        setIsHeaderOrder,
+        setHeaderInfo,
+        setMenuIdProvider,
+        setisCartMain1,
+        setisCartMain2,
+        setCart1,
+        setCart2,
+        setOpenDeleteCart,
+        setCategoriesInMenu,
+        setKeySearch,
+        isLoadigFromHome,
+        setisLoadigFromHome,
+    } = useContext(AppContext);
     let date = new Date();
     let timeEnd2 = 15;
     const [filtter, setFilter] = useState(CATE_FITLER);
-    const [isLoadingPage, setIsLoadingPage] = useState(true);
+    const [isLoadingPage, setIsLoadingPage] = useState(false);
+    const [isLoadingMode2, setIsLoadingMode2] = useState(isLoadigFromHome);
     const [isLoadingProduct, setIsLoadingProduct] = useState(false);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
     const [menuProduct, setMenuProduct] = useState([]);
@@ -35,24 +51,79 @@ export const MenuPage = () => {
     const [timeEndState, setTimeEndState] = useState(timeEnd2);
     const [result, setReuslt] = useState(1);
     const [widthScreen, setWidthScreen] = useState(window.innerWidth - 100);
-
+    let location = useLocation();
     let history = useHistory();
     useEffect(() => {
-        setIsLoadingPage(true);
         setIsHeaderOrder(false);
         setKeySearch("");
+        console.log(location.state);
+
+        document.getElementById("main").style.overflow = "hidden";
         if (mode === "1") {
-            getMenuByModeId(mode);
-            setSlideData(Mdata);
+            if (!isLoadigFromHome) {
+                setIsLoadingMode2(false);
+                setSlideData(Mdata2);
+                setIsLoadingProduct(true);
+                setIsLoadingPage(true);
+                getMenuByModeId(mode);
+                setSlideData(Mdata);
+                document.getElementById("main").style.overflow = "auto";
+            } else {
+                setisLoadigFromHome(false);
+                setTimeout(() => {
+                    setSlideData(Mdata2);
+                    setIsLoadingMode2(false);
+                    setIsLoadingProduct(true);
+                    setIsLoadingPage(true);
+                    getMenuByModeId(mode);
+                    setSlideData(Mdata);
+                    document.getElementById("main").style.overflow = "auto";
+                }, 1500);
+            }
         }
         if (mode === "2") {
-            getMenu(mode, filtter, 1, 10);
-            setSlideData(Mdata2);
+            if (!isLoadigFromHome) {
+                setSlideData(Mdata2);
+                setIsLoadingMode2(false);
+                setIsLoadingProduct(true);
+                setIsLoadingPage(true);
+                getMenu(mode, filtter, 1, 100);
+                document.getElementById("main").style.overflow = "auto";
+            } else {
+                setisLoadigFromHome(false);
+                setTimeout(() => {
+                    setSlideData(Mdata2);
+                    setIsLoadingMode2(false);
+                    setIsLoadingProduct(true);
+                    setIsLoadingPage(true);
+                    getMenu(mode, filtter, 1, 100);
+                    document.getElementById("main").style.overflow = "auto";
+                }, 1500);
+            }
         }
         if (mode === "3") {
-            setHeaderInfo({ isSearchHeader: false, title: "Chọn ngày giao hàng" });
-            getMenuInMode3(7);
-            setSlideData(Mdata3);
+            if (!isLoadigFromHome) {
+                setSlideData(Mdata2);
+                setIsLoadingMode2(false);
+                setIsLoadingProduct(true);
+                setIsLoadingPage(true);
+                setHeaderInfo({ isSearchHeader: false, title: "Chọn ngày giao hàng" });
+                getMenuInMode3(7);
+                setSlideData(Mdata3);
+                document.getElementById("main").style.overflow = "auto";
+            } else {
+                setisLoadigFromHome(false);
+                setTimeout(() => {
+                    setSlideData(Mdata2);
+                    setIsLoadingMode2(false);
+                    setIsLoadingProduct(true);
+                    setIsLoadingPage(true);
+                    setHeaderInfo({ isSearchHeader: false, title: "Chọn ngày giao hàng" });
+                    getMenuInMode3(7);
+                    setSlideData(Mdata3);
+                    document.getElementById("main").style.overflow = "auto";
+                }, 1500);
+            }
         } else {
             setHeaderInfo({ isSearchHeader: true, title: "" });
         }
@@ -382,9 +453,10 @@ export const MenuPage = () => {
     return (
         <>
             <div className={`loading-spin ${!isLoadingPage && "loading-spin-done"}`}></div>
+            <LoadingMode isLoadingMode={isLoadingMode2} mode={mode} />
             <section className="shop background back-white" style={{ paddingTop: mode === "3" ? 80 : 120 }}>
                 <div className="container d_flex back-white " style={{ padding: "10px 15px 20px 15px", flexDirection: "column", gap: 10 }}>
-                    <div className="">{render()}</div>
+                    {!isLoadingMode2 && <div className="">{render()}</div>}
                     {isLoadingPage ? (
                         <Skeleton borderRadius={5} height={122} style={{ marginBottom: 5 }} />
                     ) : mode !== "3" && menuCategory && menuCategory.length > 0 ? (

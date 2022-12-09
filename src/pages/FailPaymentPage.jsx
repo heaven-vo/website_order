@@ -37,7 +37,7 @@ const FailPaymentPage = () => {
                         borderRadius: "0.5rem",
                         alignItems: "center",
                         width: "100%",
-                        backgroundColor: "var(--primary)",
+                        background: "linear-gradient(90deg, rgb(247, 143, 43) 0%, rgba(255, 175, 76, 1) 100%)",
                         color: "#fff",
                     }}
                     className="center_flex checkout-btn"

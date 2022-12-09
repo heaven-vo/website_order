@@ -5,7 +5,8 @@ import BallTriangle from "react-loading-icons/dist/esm/components/ball-triangle"
 import { useHistory, useLocation } from "react-router-dom";
 import { getOrderDetail } from "../apis/apiService";
 import { AppContext } from "../context/AppProvider";
-
+import Lottie from "react-lottie";
+import animation from "../../src/assets/loading-circle.json";
 const OrderLookupPage = () => {
     const { setHeaderInfo, mobileMode, setIsHeaderOrder, setisCartMain1, setisCartMain2, setisCartMain3 } = useContext(AppContext);
     const [isLoadingCircle, setIsLoadingCircle] = useState(false);
@@ -211,7 +212,7 @@ const OrderLookupPage = () => {
                 let time = moment(timeCreated).format("l");
                 return duration.fromHour + " - " + duration.toHour + ", " + time;
             } else if (modeId === "3") {
-                return duration.fromHour + " - " + duration.toHour + ", " + duration.dayfilter;
+                return duration.fromHour + " - " + duration.toHour + ", " + moment(duration.dayfilter).format("l");
             }
         } else {
             return "---";
@@ -336,7 +337,7 @@ const OrderLookupPage = () => {
                             <span style={{ color: "rgba(48, 181, 102, 1)" }}>Giao hàng thành công</span>
                             <span style={{ color: "rgba(48, 181, 102, 1)" }}>
                                 Đơn hàng đã được giao vào lúc{" "}
-                                <span style={{ textDecoration: "underline", fontSize: mobileMode ? 14 : 15, fontWeight: 500, color: "rgba(48, 181, 102, 1)" }}>{element.time}</span>
+                                <span style={{ textDecoration: "underline", fontSize: mobileMode ? 14 : 15, fontWeight: 500, color: "rgba(48, 181, 102, 1)" }}>{getFullTimeOrder(element.time)}</span>
                             </span>
                         </div>
                     </div>
@@ -361,7 +362,14 @@ const OrderLookupPage = () => {
                 return "---";
         }
     };
-
+    const defaultOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: animation,
+        rendererSettings: {
+            preserveAspectRatio: "xMidYMid slice",
+        },
+    };
     return (
         <section className="background back-white" style={{ paddingTop: 70, paddingBottom: 80 }}>
             <div className="center_flex">
@@ -391,7 +399,7 @@ const OrderLookupPage = () => {
                                 height: mobileMode ? 50 : 50,
                                 borderRadius: "0.5rem",
                                 alignItems: "center",
-                                backgroundColor: "var(--primary)",
+                                background: "linear-gradient(90deg, rgb(247, 143, 43) 0%, rgba(255, 175, 76, 1) 100%)",
                                 color: "#fff",
                                 cursor: "pointer",
                             }}
@@ -409,7 +417,8 @@ const OrderLookupPage = () => {
             </div>
             {isLoadingCircle && (
                 <div className="center_flex" style={{ display: "flex", paddingTop: 100 }}>
-                    <BallTriangle stroke="var(--primary)" />
+                    {/* <BallTriangle stroke="var(--primary)" /> */}
+                    <Lottie options={defaultOptions} height={mobileMode ? 220 : 270} width={mobileMode ? 220 : 270} speed={0.8} />
                 </div>
             )}
             {notFound && (
@@ -469,7 +478,7 @@ const OrderLookupPage = () => {
                                                 <i style={{ color: "var(--primary)", lineHeight: 2 }} className="fa-solid fa-location-dot"></i>
                                                 <div className="flex-collumn">
                                                     <span>Địa chỉ nhận hàng:</span>
-                                                    <span>Building {orderInfo.buildingName} Vinhomes Green Park</span>
+                                                    <span>Tòa {orderInfo.buildingName} Vinhomes Green Park</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -630,42 +639,86 @@ const OrderLookupPage = () => {
                                                     </div>
                                                 </div>
                                             )}
+                                            {orderInfo.listShipper.length > 0 &&
+                                                (orderInfo.listShipper[1] ? (
+                                                    <>
+                                                        <div className="order-detail-total">
+                                                            <div className="order-detail-total-titlte">
+                                                                Người giao hàng:
+                                                                <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10 }}>
+                                                                    {orderInfo.listShipper[1].shipperName || "--"}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="order-detail-total">
+                                                            <div className="order-detail-total-titlte">
+                                                                Liên hệ người giao hàng:
+                                                                <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10 }}>
+                                                                    {orderInfo.listShipper[1].phone || "--"}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <div className="order-detail-total">
+                                                            <div className="order-detail-total-titlte">
+                                                                Người lấy hàng:
+                                                                <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10 }}>
+                                                                    {orderInfo.listShipper[0].shipperName || "--"}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="order-detail-total">
+                                                            <div className="order-detail-total-titlte">
+                                                                Liên hệ người lấy hàng:
+                                                                <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10 }}>
+                                                                    {orderInfo.listShipper[0].phone || "--"}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                ))}
 
-                                            <div className="order-detail-total">
-                                                <div className="order-detail-total-titlte">
-                                                    Người giao hàng:
-                                                    <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10 }}>
-                                                        {"--"}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div className="order-detail-total">
-                                                <div className="order-detail-total-titlte">
-                                                    Liên hệ người giao hàng:
-                                                    <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10 }}>
-                                                        {"--"}
-                                                    </span>
-                                                </div>
-                                            </div>
                                             <div className="order-detail-total">
                                                 <div className="order-detail-total-titlte">
                                                     Tổng tiền hàng:
                                                     <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10, display: "flex", alignItems: "center", gap: 3 }}>
-                                                        {(orderInfo.total - orderInfo.shipCost).toLocaleString() || "--"}
+                                                        {orderInfo.total.toLocaleString() || "--"}
                                                         <span style={{ fontSize: mobileMode ? "0.8rem" : "0.9rem", fontWeight: 500 }}>₫</span>
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div className="order-detail-total" style={{ paddingBottom: 15 }}>
+                                            <div className="order-detail-total">
                                                 <div className="order-detail-total-titlte">
                                                     Phí vận chuyển:
                                                     <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10, display: "flex", alignItems: "center", gap: 3 }}>
-                                                        {orderInfo.shipCost?.toLocaleString() || "--"}
+                                                        {orderInfo.serviceId === "1" ? (orderInfo.shipCost - 10000)?.toLocaleString() : orderInfo.shipCost?.toLocaleString() || "--"}
                                                         <span style={{ fontSize: mobileMode ? "0.8rem" : "0.9rem", fontWeight: 500 }}>₫</span>
                                                     </span>
                                                 </div>
                                             </div>
-
+                                            {orderInfo.serviceId === "1" ? (
+                                                <div className="order-detail-total" style={{ paddingBottom: 15 }}>
+                                                    <div className="order-detail-total-titlte">
+                                                        Phí dịch vụ:
+                                                        <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10, display: "flex", alignItems: "center", gap: 3 }}>
+                                                            {"10.000"}
+                                                            <span style={{ fontSize: mobileMode ? "0.8rem" : "0.9rem", fontWeight: 500 }}>₫</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="order-detail-total" style={{ paddingBottom: 15 }}>
+                                                    <div className="order-detail-total-titlte">
+                                                        Phí dịch vụ:
+                                                        <span className="order-detail-total-text" style={{ fontWeight: 400, marginLeft: 10, display: "flex", alignItems: "center", gap: 3 }}>
+                                                            {"0"}
+                                                            <span style={{ fontSize: mobileMode ? "0.8rem" : "0.9rem", fontWeight: 500 }}>₫</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            )}
                                             <div className="order-detail-total" style={{ borderTop: "1px solid rgb(230, 230, 230)", paddingTop: 15, paddingBottom: 15 }}>
                                                 <div className="order-detail-total-titlte">
                                                     <span style={{ fontWeight: 700, color: "#000", fontSize: mobileMode ? "16px" : "18px" }}>Tổng cộng:</span>
@@ -673,7 +726,7 @@ const OrderLookupPage = () => {
                                                         className="order-detail-text-price"
                                                         style={{ fontWeight: 700, marginLeft: 10, color: "#000", fontSize: mobileMode ? "16px" : "18px", display: "flex", gap: 3 }}
                                                     >
-                                                        {orderInfo.total?.toLocaleString() || "--"}
+                                                        {(orderInfo.total + orderInfo.shipCost).toLocaleString() || "--"}
                                                         <span style={{ fontSize: mobileMode ? "0.9rem" : ".95rem", fontWeight: 700 }}>₫</span>
                                                     </span>
                                                 </div>
@@ -692,7 +745,7 @@ const OrderLookupPage = () => {
                                                         height: mobileMode ? 45 : 50,
                                                         borderRadius: "0.5rem",
                                                         alignItems: "center",
-                                                        backgroundColor: "var(--primary)",
+                                                        background: "linear-gradient(90deg, rgb(247, 143, 43) 0%, rgba(255, 175, 76, 1) 100%)",
                                                         color: "#fff",
                                                     }}
                                                     className="center_flex checkout-btn"
