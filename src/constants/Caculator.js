@@ -1,3 +1,5 @@
+import { LOCALSTORAGE_HiSTORY_SEARCH } from "./Variable";
+
 export const caculatorSale = (salePercent, price) => {
     return price - (salePercent / 100) * price;
 };
@@ -43,5 +45,43 @@ export const getHourFromDouble = (number) => {
         decNumber = parseInt(decNumber);
         decNumber = decNumber / 60;
         return intNumber + decNumber;
+    }
+};
+
+export const hanldeSaveSearchHistory = (modeId, keySearch) => {
+    let listSearch = [];
+    const historySearch = JSON.parse(localStorage.getItem(LOCALSTORAGE_HiSTORY_SEARCH));
+    switch (modeId) {
+        case "1":
+            if (!historySearch.mode_1.includes(keySearch)) {
+                if (historySearch.mode_1.length > 9) {
+                    historySearch.mode_1.pop();
+                }
+                listSearch = [keySearch, ...historySearch.mode_1];
+
+                localStorage.setItem(LOCALSTORAGE_HiSTORY_SEARCH, JSON.stringify({ ...historySearch, mode_1: listSearch }));
+            }
+            break;
+        case "2":
+            if (!historySearch.mode_2.includes(keySearch)) {
+                if (historySearch.mode_2.length > 9) {
+                    historySearch.mode_2.pop();
+                }
+                listSearch = [keySearch, ...historySearch.mode_2];
+
+                localStorage.setItem(LOCALSTORAGE_HiSTORY_SEARCH, JSON.stringify({ ...historySearch, mode_2: listSearch }));
+            }
+            break;
+        case "3":
+            if (!historySearch.mode_3.includes(keySearch)) {
+                if (historySearch.mode_3.length > 9) {
+                    historySearch.mode_3.pop();
+                }
+                listSearch = [keySearch, ...historySearch.mode_3];
+                localStorage.setItem(LOCALSTORAGE_HiSTORY_SEARCH, JSON.stringify({ ...historySearch, mode_3: listSearch }));
+            }
+            break;
+        default:
+            break;
     }
 };

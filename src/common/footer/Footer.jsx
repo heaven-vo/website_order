@@ -70,7 +70,7 @@ const Footer = () => {
                             {/* {!mobileMode && <h2>Liên Hệ Với Chúng Tôi</h2>} */}
                             <li>Vinhomes Grand Park Quận 9 – Thành Phố Thủ Đức </li>
                             <li>Email: support.help@gmail.com</li>
-                            <li>Hotline: +1900 </li>
+                            <li>Hotline: +1900 0069</li>
                         </ul>
                     </div>
                 </div>

@@ -3,6 +3,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import Select from "react-select";
 import Rodal from "rodal";
 import { getApartment } from "../../apis/apiService";
+import { hanldeSaveSearchHistory } from "../../constants/Caculator";
 import { LOCALSTORAGE_USER_NAME } from "../../constants/Variable";
 import { AppContext } from "../../context/AppProvider";
 
@@ -123,6 +124,7 @@ const Navbar = () => {
     const optionArea = areaProvider.map((area) => {
         return { value: area.id, label: area.name };
     });
+
     return (
         <>
             <Rodal
@@ -250,7 +252,7 @@ const Navbar = () => {
                     )}
                     <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 5, gap: 15 }}>
                         <button
-                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, height: 50 }}
+                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, height: 45 }}
                             onClick={(e) => {
                                 e.preventDefault();
                                 setVisiblePopupInfo(false);
@@ -263,7 +265,7 @@ const Navbar = () => {
                                 e.preventDefault();
                                 handleSubmit();
                             }}
-                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", color: "#fff", height: 50 }}
+                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", color: "#fff", height: 45 }}
                         >
                             OK
                         </button>
@@ -320,21 +322,43 @@ const Navbar = () => {
                     </div>
                     {headerInfo && headerInfo.isSearchHeader && (
                         <div className="search-header f_flex" style={{ width: " 100%" }}>
-                            <i className="fa-solid fa-magnifying-glass"></i>
+                            <i
+                                className="fa-solid fa-magnifying-glass cusor"
+                                onClick={() => {
+                                    if (keySearch !== "") {
+                                        let modeId = location.pathname.trim().split("/")[2];
+                                        history.replace(`/mode/${modeId}/search?keyword=${keySearch}`);
+                                        setIsSearchSubmit(true);
+                                        hanldeSaveSearchHistory(modeId, keySearch);
+                                    }
+                                }}
+                            ></i>
                             <input
                                 value={keySearch}
                                 onChange={(e) => {
+                                    if (e.target.value === "") {
+                                        let modeId = location.pathname.trim().split("/")[2];
+                                        history.replace(`/mode/${modeId}/search`);
+                                        setIsSearchSubmit(true);
+                                        document.getElementById("main").style.overflow = "hidden";
+                                    }
                                     setKeySearch(e.target.value);
                                 }}
                                 onClick={() => {
                                     let modeId = location.pathname.trim().split("/")[2];
-                                    history.push(`/mode/${modeId}/search`);
+                                    let search = location.pathname.trim().split("/")[3];
+                                    if (search !== "search") {
+                                        history.push(`/mode/${modeId}/search`);
+                                    }
                                 }}
                                 onKeyPress={(event) => {
-                                    if (event.key === "Enter") {
+                                    if (event.key === "Enter" && keySearch !== "") {
                                         event.preventDefault();
                                         event.target.blur();
+                                        let modeId = location.pathname.trim().split("/")[2];
+                                        history.replace(`/mode/${modeId}/search?keyword=${keySearch}`);
                                         setIsSearchSubmit(true);
+                                        hanldeSaveSearchHistory(modeId, keySearch);
                                     }
                                 }}
                                 placeholder="Tìm món ăn hoặc nhà hàng"

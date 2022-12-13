@@ -5,6 +5,7 @@ import {
     LOCALSTORAGE_CART_NAME1,
     LOCALSTORAGE_CART_NAME2,
     LOCALSTORAGE_CART_NAME3,
+    LOCALSTORAGE_HiSTORY_SEARCH,
     LOCALSTORAGE_MODE,
     LOCALSTORAGE_ORDER,
     LOCALSTORAGE_USER_LOGIN,
@@ -50,7 +51,7 @@ export default function AppProvider({ children }) {
     const [areaProvider, setAreaProvider] = useState([]);
     const [buildings, setBuildings] = useState([]);
     const [orderDrawer, setOrdersDrawer] = useState([]);
-    const [auth, setAuth] = useState({});
+    // const [auth, setAuth] = useState({});
     let location = useLocation();
     let history = useHistory();
     // const { productItems } = Data;
@@ -81,8 +82,8 @@ export default function AppProvider({ children }) {
             setOrdersDrawer(order);
         }
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_MODE))) {
-            setAuth({ userId: "", isLogin: false, userPhone: "" });
-            localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify({ userId: "", isLogin: false, userPhone: "" }));
+            // setAuth({ userId: "", isLogin: false, userPhone: "" });
+            // localStorage.setItem(LOCALSTORAGE_MODE, JSON.stringify({ userId: "", isLogin: false, userPhone: "" }));
         } else {
             const Mode = JSON.parse(localStorage.getItem(LOCALSTORAGE_MODE));
             setMode(Mode);
@@ -138,19 +139,25 @@ export default function AppProvider({ children }) {
             }
             setUserInfo(user);
         }
-        return () => {};
-    }, [history]);
-
-    useEffect(() => {
-        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_USER_LOGIN))) {
-            setAuth({ userId: "", isLogin: false, userPhone: "" });
-            localStorage.setItem(LOCALSTORAGE_USER_LOGIN, JSON.stringify({ userId: "", isLogin: false, userPhone: "" }));
+        if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_HiSTORY_SEARCH))) {
+            localStorage.setItem(LOCALSTORAGE_HiSTORY_SEARCH, JSON.stringify({ mode_1: [], mode_2: [], mode_3: [] }));
         } else {
-            const auth = JSON.parse(localStorage.getItem(LOCALSTORAGE_USER_LOGIN));
-            setAuth({ ...auth });
+            // const search = JSON.parse(localStorage.getItem(LOCALSTORAGE_HiSTORY_SEARCH));
+            // setUserInfo(user);
         }
         return () => {};
     }, [history]);
+
+    // useEffect(() => {
+    //     if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_USER_LOGIN))) {
+    //         setAuth({ userId: "", isLogin: false, userPhone: "" });
+    //         localStorage.setItem(LOCALSTORAGE_USER_LOGIN, JSON.stringify({ userId: "", isLogin: false, userPhone: "" }));
+    //     } else {
+    //         const auth = JSON.parse(localStorage.getItem(LOCALSTORAGE_USER_LOGIN));
+    //         setAuth({ ...auth });
+    //     }
+    //     return () => {};
+    // }, [history]);
 
     useEffect(() => {
         const checkout = location.pathname.trim().split("/")[1];
@@ -268,8 +275,8 @@ export default function AppProvider({ children }) {
                 setisCartMain2,
                 isCartMain3,
                 setisCartMain3,
-                auth,
-                setAuth,
+                // auth,
+                // setAuth,
                 orderDrawer,
                 setOrdersDrawer,
                 areaProvider,

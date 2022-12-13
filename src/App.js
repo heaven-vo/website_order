@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import Drawer from "react-modern-drawer";
 import "react-modern-drawer/dist/index.css";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, useHistory } from "react-router-dom";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import "../src/pages/responsive.css";
@@ -11,7 +11,6 @@ import Footer from "./common/footer/Footer";
 import { DrawerContent } from "./common/header/Drawer";
 import Header from "./common/header/Header";
 import Loading from "./common/Loading/Loading";
-import LoadingMain from "./common/Loading/LoadingMain";
 
 import { ModalDeleteCart } from "./components/wrapper/ModalDeleteCart";
 import { ErrorModal, SuccessModal } from "./components/wrapper/ModalOrder";
@@ -31,6 +30,7 @@ import "./util.css";
 function App() {
     const { setMobileMode, isOpenDrawer, setIsOpenDrawer, isCartMain1, isCartMain2, isCartMain3, isLoadingMain, mobileMode, mode, isHeader } = useContext(AppContext);
     const [vh, setVh] = useState(window.innerHeight);
+    let history = useHistory();
     useEffect(() => {
         const updateVh = () => {
             setVh(window.innerHeight);
@@ -84,7 +84,14 @@ function App() {
         <div className="root center_flex" style={{ height: mobileMode ? vh : null }}>
             {/* <MessengerCustomerChat pageId="100083337097834" appId="437264958531394" /> */}
             <div className="logo-backround">
-                <img style={{ width: "100%", height: "100%", objectFit: "contain" }} src="/images/logo.jpg" alt="" />
+                <img
+                    style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                    src="/images/logo.jpg"
+                    alt=""
+                    onClick={() => {
+                        history.push("/");
+                    }}
+                />
             </div>
             <div className="main" id="main">
                 {SuccessModal()}
