@@ -7,12 +7,15 @@ import { getOrderDetail } from "../apis/apiService";
 import { AppContext } from "../context/AppProvider";
 import Lottie from "react-lottie";
 import animation from "../../src/assets/loading-circle.json";
+import Rodal from "rodal";
 const OrderLookupPage = () => {
     const { setHeaderInfo, mobileMode, setIsHeaderOrder, setisCartMain1, setisCartMain2, setisCartMain3 } = useContext(AppContext);
     const [isLoadingCircle, setIsLoadingCircle] = useState(false);
     const [orderInfo, setOrderInfo] = useState(null);
     const [notFound, setNotFound] = useState(false);
-    const [isCancelOrder, setIsCancelOrder] = useState(false);
+    const [isCancelOrder, setIsCancelOrder] = useState(true);
+    const [isCancelButtonOrder, setIsCancelButtonOrder] = useState(true);
+    const [visiblePopupCancel, setVisiblePopupCancel] = useState(false);
     const [orderId, setOrderId] = useState("");
     const [statusCanCelName, setStatusCanCelName] = useState("");
     const [productOrder, setproductOrder] = useState([]);
@@ -75,11 +78,11 @@ const OrderLookupPage = () => {
         // if (location.state) {
         //     let { orderId } = location.state;
         //     setOrderId(orderId);
-        //     hanldeSubmit(orderId);
+        //     handleSubmit(orderId);
         // } else
         if (orderIdUrl) {
             setOrderId(orderIdUrl);
-            hanldeSubmit(orderIdUrl);
+            handleSubmit(orderIdUrl);
         }
         console.log("load");
         doc.scrollTo({
@@ -90,7 +93,7 @@ const OrderLookupPage = () => {
 
         // setHeaderInfo({ isSearchHeader: false, title: "Chi tiết đơn hàng" });
     }, []);
-    const hanldeSubmit = (id) => {
+    const handleSubmit = (id) => {
         setisCartMain1(false);
         setisCartMain2(false);
         setisCartMain3(false);
@@ -150,14 +153,19 @@ const OrderLookupPage = () => {
                 newStatus[1].time = getTimeOrder(item.time);
             }
             if (item.status === 3) {
+                setIsCancelButtonOrder(false);
                 newStatus[2].active = true;
                 newStatus[2].time = getTimeOrder(item.time);
             }
             if (item.status === 4 || item.status === 7 || item.status === 8) {
+                console.log("479");
+                setIsCancelButtonOrder(false);
                 newStatus[3].active = true;
                 newStatus[3].time = getTimeOrder(item.time);
             }
             if (item.status === 9) {
+                console.log("9");
+                setIsCancelButtonOrder(false);
                 newStatus[4].active = true;
                 newStatus[4].time = getTimeOrder(item.time);
             }
@@ -372,6 +380,53 @@ const OrderLookupPage = () => {
     };
     return (
         <section className="background back-white" style={{ paddingTop: 70, paddingBottom: 80 }}>
+            <Rodal
+                height={mobileMode ? 300 : 330}
+                width={mobileMode ? 350 : 400}
+                visible={visiblePopupCancel}
+                showCloseButton={false}
+                onClose={() => {
+                    setVisiblePopupCancel(false);
+                }}
+                style={{ borderRadius: 10 }}
+            >
+                <div className="modal-delete-cart">
+                    <div className="modal-delete-cart-img" style={{ width: "25%", padding: "20px 0" }}>
+                        <img className="" src="https://cdn-icons-png.flaticon.com/512/9136/9136133.png" alt="" />
+                    </div>
+                    <div style={{ textAlign: "center" }} className="modal-delete-cart-title">
+                        <span style={{}}>Bạn muốn hủy đơn hàng?</span>
+                    </div>
+                    <div style={{ textAlign: "center" }} className="modal-delete-cart-content">
+                        <span className="" style={{ fontWeight: 400 }}>
+                            Vui lòng liên hệ qua Hotline <span style={{ fontWeight: 700 }}>+1900 0069</span> để xác nhận hủy đơn
+                        </span>
+                    </div>
+                </div>
+                <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 20, gap: 10 }}>
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setVisiblePopupCancel(false);
+                        }}
+                        style={{
+                            flex: 1,
+                            padding: 14,
+                            fontSize: mobileMode ? 15 : 16,
+                            height: 45,
+                            cursor: "pointer",
+                            fontWeight: 700,
+                            borderRadius: 10,
+                            background: "var(--primary)",
+                            color: "#fff",
+                            transition: "0.3s all",
+                            WebkitTransition: "0.3s all",
+                        }}
+                    >
+                        Đồng ý
+                    </button>
+                </div>
+            </Rodal>
             <div className="center_flex">
                 <div className="order-lookup-wrapper">
                     <div className="c_flex" style={{ alignItems: "center", width: "100%", gap: 10, padding: "0 15px" }}>
@@ -384,13 +439,15 @@ const OrderLookupPage = () => {
                             }}
                             onKeyDown={(e) => {
                                 if (e.keyCode === 13) {
-                                    hanldeSubmit(orderId);
+                                    setIsCancelButtonOrder(true);
+                                    handleSubmit(orderId);
                                 }
                             }}
                         />
                         <button
                             onClick={() => {
-                                hanldeSubmit(orderId);
+                                setIsCancelButtonOrder(true);
+                                handleSubmit(orderId);
                             }}
                             type="button"
                             style={{
@@ -719,7 +776,7 @@ const OrderLookupPage = () => {
                                                     </div>
                                                 </div>
                                             )}
-                                            <div className="order-detail-total" style={{ borderTop: "1px solid rgb(230, 230, 230)", paddingTop: 15, paddingBottom: 15 }}>
+                                            <div className="order-detail-total" style={{ borderTop: "1px solid rgb(230, 230, 230)", paddingTop: 15, paddingBottom: 50 }}>
                                                 <div className="order-detail-total-titlte">
                                                     <span style={{ fontWeight: 700, color: "#000", fontSize: mobileMode ? "16px" : "18px" }}>Tổng cộng:</span>
                                                     <span
@@ -751,6 +808,28 @@ const OrderLookupPage = () => {
                                                     className="center_flex checkout-btn"
                                                 >
                                                     <span style={{ fontWeight: 700, fontSize: mobileMode ? 15 : 18 }}>{"Thanh toán lại"}</span>
+                                                </button>
+                                            )}
+                                            {orderInfo.paymentStatus === 0 && isCancelButtonOrder && (
+                                                <button
+                                                    onClick={() => {
+                                                        setVisiblePopupCancel(true);
+                                                    }}
+                                                    type="button"
+                                                    // disabled={isLoadingOrder || (mode !== "1" && !hour)}
+                                                    style={{
+                                                        textAlign: "center",
+                                                        width: "100%",
+                                                        height: mobileMode ? 45 : 50,
+                                                        borderRadius: "0.5rem",
+                                                        alignItems: "center",
+                                                        background: "#fff",
+                                                        border: "1px solid rgb(200, 200, 200)",
+                                                        color: "rgb(80, 80, 80)",
+                                                    }}
+                                                    className="center_flex checkout-btn"
+                                                >
+                                                    <span style={{ fontWeight: 700, fontSize: mobileMode ? 15 : 18 }}>{"Hủy đơn hàng"}</span>
                                                 </button>
                                             )}
                                         </div>

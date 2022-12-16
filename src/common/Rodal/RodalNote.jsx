@@ -47,7 +47,7 @@ export const RodalNote = ({ visiblePopupNote, setVisiblePopupNote, setNote, note
 
                 <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 5, gap: 15 }}>
                     <button
-                        style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, height: 50 }}
+                        style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, height: 45 }}
                         onClick={(e) => {
                             e.preventDefault();
                             setVisiblePopupNote(false);
@@ -63,7 +63,7 @@ export const RodalNote = ({ visiblePopupNote, setVisiblePopupNote, setNote, note
                             localStorage.setItem(LOCALSTORAGE_USER_NAME, JSON.stringify({ fullName, phone, building, area, note, apartment }));
                             setVisiblePopupNote(false);
                         }}
-                        style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", color: "#fff", height: 50 }}
+                        style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", color: "#fff", height: 45 }}
                     >
                         OK
                     </button>

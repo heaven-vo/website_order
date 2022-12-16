@@ -453,7 +453,7 @@ export const MenuPage = () => {
     return (
         <>
             <div className={`loading-spin ${!isLoadingPage && "loading-spin-done"}`}></div>
-            <LoadingMode isLoadingMode={isLoadingMode2} mode={mode} />
+            <LoadingMode isLoadingMode={isLoadingMode2} mode={mode} isLoadigFromHome={isLoadigFromHome} />
             <section className="shop background back-white" style={{ paddingTop: mode === "3" ? 80 : 120 }}>
                 <div className="container d_flex back-white " style={{ padding: "10px 15px 20px 15px", flexDirection: "column", gap: 10 }}>
                     {!isLoadingMode2 && <div className="">{render()}</div>}

@@ -158,3 +158,10 @@ export const getUrlOrderPayment = (orderId) => {
         "Content-Type": "application/json",
     });
 };
+//https://deliveryvhgp-webapi.azurewebsites.net/api/v1/menu-management/menus/menuId?menuId=1
+export const getShipcostByMenu = (menuId) => {
+    return axios.get(`${BASE_URL}menu-management/${MENU}/menuId?menuId=${menuId}`, {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+    });
+};

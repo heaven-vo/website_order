@@ -54,7 +54,7 @@ export const ViewAllProductCatePage = () => {
         }
         return () => {
             setIsLoadingCircle(false);
-            setHeaderInfo({});
+            // setHeaderInfo({});
         };
     }, [location.pathname, setHeaderInfo, menuIdProvider]);
     //

@@ -8,7 +8,7 @@ import { AppContext } from "../../context/AppProvider";
 import { useContext } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-function LoadingMode({ isLoadingMode, mode }) {
+function LoadingMode({ isLoadingMode, mode, isLoadigFromHome }) {
     const [remove, setRemove] = useState(false);
     const { mobileMode } = useContext(AppContext);
     const getMode = (modeCurent) => {
@@ -46,9 +46,12 @@ function LoadingMode({ isLoadingMode, mode }) {
         },
     };
     useEffect(() => {
-        setTimeout(() => {
-            setRemove(true);
-        }, 1800);
+        setTimeout(
+            () => {
+                setRemove(true);
+            },
+            isLoadigFromHome ? 1800 : 1
+        );
 
         return () => {};
     }, []);

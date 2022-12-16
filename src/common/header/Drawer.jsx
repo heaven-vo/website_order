@@ -9,7 +9,8 @@ export const DrawerContent = () => {
         <div className="drawer__wrapper">
             <div className="drawer__wrapper__item" style={{ justifyContent: "start", gap: 10 }}>
                 <img src="/images/account.png" alt="" style={{ width: 44, height: 44, borderRadius: 50 }} />
-                <div>
+                <div className="f_flex" style={{ flexDirection: "column", gap: 5 }}>
+                    <span>{userInfo.fullName ? userInfo.fullName : ""}</span>
                     <span>{userInfo.phone ? "+" + userInfo.phone : ""}</span>
                 </div>
             </div>

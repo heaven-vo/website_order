@@ -171,6 +171,7 @@ const Head = () => {
                                     setArea(e);
                                     setApartment("");
                                     setBuilding("");
+                                    setBuldingList([]);
                                 }}
                                 value={area}
                             />
@@ -266,7 +267,7 @@ const Head = () => {
                     )}
                     <div className="f_flex rodal-delet-cart" style={{ width: " 100%", justifyContent: "space-between", paddingTop: 5, gap: 15 }}>
                         <button
-                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, height: 50 }}
+                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, height: 45 }}
                             onClick={(e) => {
                                 e.preventDefault();
                                 setVisiblePopupInfo(false);
@@ -279,7 +280,7 @@ const Head = () => {
                                 e.preventDefault();
                                 handleSubmit();
                             }}
-                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", color: "#fff", height: 50 }}
+                            style={{ flex: 1, padding: 14, fontSize: "1rem", cursor: "pointer", fontWeight: 700, borderRadius: 10, background: "var(--primary)", color: "#fff", height: 45 }}
                         >
                             OK
                         </button>
@@ -293,7 +294,7 @@ const Head = () => {
                 }}
             >
                 <div className="container f_flex " style={{ padding: "15px", flexDirection: "column" }}>
-                    <div style={{ padding: "0 0 5px 0", color: "#000", fontWeight: 600 }}>
+                    <div style={{ padding: "0 0 5px 0", color: "#fff", fontWeight: 600 }}>
                         <span>Giao đến:</span>
                     </div>
                     <div className="c_flex" style={{ gap: 20 }}>

@@ -162,7 +162,7 @@ export const ProductList = ({ data, filter, packDes, reLoad, store, menuName }) 
                                 cursor: "pointer",
                                 fontWeight: 700,
                                 borderRadius: 10,
-                                background: "var(--primary)",
+                                background: "linear-gradient(90deg, rgb(247, 143, 43) 0%, rgba(255, 175, 76, 1) 100%)",
                                 color: "#fff",
                                 transition: "0.3s all",
                                 WebkitTransition: "0.3s all",

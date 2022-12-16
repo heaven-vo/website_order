@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Select from "react-select";
 import Rodal from "rodal";
-import { getApartment, getTimeDurationList, postOrder } from "../apis/apiService";
+import { getApartment, getShipcostByMenu, getTimeDurationList, postOrder } from "../apis/apiService";
 import { CountDown } from "../common/Cart/CountDown";
 import "../common/Cart/style.css";
 import Loading from "../common/Loading/Loading";
@@ -73,11 +73,13 @@ const Cart = ({}) => {
     const [isValidArea, setIsValidArea] = useState(false);
     const [isValidApartment, setIsValidApartment] = useState(false);
     const [note, setNote] = useState("");
+    const [shipCost, setShipCost] = useState(0);
     let date = new Date();
     let location = useLocation();
     useEffect(() => {
         let modeId = location.pathname.split("/")[2];
-        var total = 0;
+        let total = 0;
+        let menuIdCart = 0;
         if (modeId && (modeId === "1" || modeId === "2" || modeId === "3")) {
             if (modeId === "1") {
                 Cart1?.map((item) => {
@@ -85,6 +87,7 @@ const Cart = ({}) => {
                 });
                 if (Cart1 && Cart1?.length > 0) {
                     setMenuIdProvider(Cart1[0].menuId);
+                    menuIdCart = Cart1[0].menuId;
                 }
                 setTotalPrice(total);
                 setCartList(Cart1);
@@ -94,6 +97,7 @@ const Cart = ({}) => {
                 });
                 if (Cart2 && Cart2?.length > 0) {
                     setMenuIdProvider(Cart2[0].menuId);
+                    menuIdCart = Cart2[0].menuId;
                 }
                 setTotalPrice(total);
                 setCartList(Cart2);
@@ -103,12 +107,65 @@ const Cart = ({}) => {
                 });
                 if (Cart3 && Cart3?.length > 0) {
                     setMenuIdProvider(Cart3[0].menuId);
+                    menuIdCart = Cart3[0].menuId;
                 }
                 setTotalPrice(total);
                 setCartList(Cart3);
             }
+            let menuId = "13c699e4-7e19-4ecb-ac99-1df0661f0e61";
+            if (area) {
+                Promise.all([getTimeDurationList(menuId, 1, 100), getApartment(area.value), getShipcostByMenu(menuIdCart)])
+                    .then((res) => {
+                        if (res.length > 0) {
+                            const duration = res[0].data;
+                            const apart = res[1].data;
+                            const menuShipcost = res[2].data;
+                            setApartmentList(apart.listCluster);
+                            if (apartment) {
+                                for (let index = 0; index < apart.listCluster.length; index++) {
+                                    const element = apart.listCluster[index];
+                                    if (element.id === apartment.value) {
+                                        setBuldingList(element.listBuilding);
+                                    }
+                                }
+                            }
+                            if (menuShipcost) {
+                                setShipCost(menuShipcost.shipCost);
+                            }
+                            if (duration) {
+                                let optionsHours = [];
+                                if (mode === "2") {
+                                    duration.forEach((hour) => {
+                                        if (parseInt(hour.fromHour) >= date.getHours() + 1) {
+                                            optionsHours.push({ value: hour.id, label: hour.fromHour + " - " + hour.toHour });
+                                        }
+                                    });
+                                } else if (mode === "3") {
+                                    duration.forEach((hour) => {
+                                        optionsHours.push({ value: hour.id, label: hour.fromHour + " - " + hour.toHour });
+                                    });
+                                }
+
+                                setOptionTime(optionsHours);
+                            }
+
+                            setTimeout(() => {
+                                document.getElementById("main").style.overflow = "hidden";
+                                setisLoadingWhite(false);
+                            }, 300);
+                        } else {
+                            setApartmentList([]);
+                            setisLoadingWhite(false);
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        setApartmentList([]);
+                        setisLoadingWhite(false);
+                    });
+            }
         }
-    }, [Cart1, Cart2, Cart3]);
+    }, [Cart1, Cart2, Cart3, apartment, area]);
     useEffect(() => {
         let modeId = location.pathname.split("/")[2];
 
@@ -201,59 +258,59 @@ const Cart = ({}) => {
     };
 
     useEffect(() => {
-        let menuId = "13c699e4-7e19-4ecb-ac99-1df0661f0e61";
+        // let menuId = "13c699e4-7e19-4ecb-ac99-1df0661f0e61";
 
-        if (area) {
-            Promise.all([getTimeDurationList(menuId, 1, 100), getApartment(area.value)])
-                .then((res) => {
-                    if (res.length > 0) {
-                        const duration = res[0].data;
-                        const apart = res[1].data;
-                        setApartmentList(apart.listCluster);
-                        if (apartment) {
-                            for (let index = 0; index < apart.listCluster.length; index++) {
-                                const element = apart.listCluster[index];
-                                if (element.id === apartment.value) {
-                                    setBuldingList(element.listBuilding);
-                                }
-                            }
-                        }
-                        if (duration) {
-                            let optionsHours = [];
-                            if (mode === "2") {
-                                duration.forEach((hour) => {
-                                    if (parseInt(hour.fromHour) >= date.getHours() + 1) {
-                                        optionsHours.push({ value: hour.id, label: hour.fromHour + " - " + hour.toHour });
-                                    }
-                                });
-                            } else if (mode === "3") {
-                                duration.forEach((hour) => {
-                                    optionsHours.push({ value: hour.id, label: hour.fromHour + " - " + hour.toHour });
-                                });
-                            }
+        // if (area) {
+        //     Promise.all([getTimeDurationList(menuId, 1, 100), getApartment(area.value)])
+        //         .then((res) => {
+        //             if (res.length > 0) {
+        //                 const duration = res[0].data;
+        //                 const apart = res[1].data;
+        //                 setApartmentList(apart.listCluster);
+        //                 if (apartment) {
+        //                     for (let index = 0; index < apart.listCluster.length; index++) {
+        //                         const element = apart.listCluster[index];
+        //                         if (element.id === apartment.value) {
+        //                             setBuldingList(element.listBuilding);
+        //                         }
+        //                     }
+        //                 }
+        //                 if (duration) {
+        //                     let optionsHours = [];
+        //                     if (mode === "2") {
+        //                         duration.forEach((hour) => {
+        //                             if (parseInt(hour.fromHour) >= date.getHours() + 1) {
+        //                                 optionsHours.push({ value: hour.id, label: hour.fromHour + " - " + hour.toHour });
+        //                             }
+        //                         });
+        //                     } else if (mode === "3") {
+        //                         duration.forEach((hour) => {
+        //                             optionsHours.push({ value: hour.id, label: hour.fromHour + " - " + hour.toHour });
+        //                         });
+        //                     }
 
-                            setOptionTime(optionsHours);
-                        }
+        //                     setOptionTime(optionsHours);
+        //                 }
 
-                        setTimeout(() => {
-                            document.getElementById("main").style.overflow = "hidden";
-                            setisLoadingWhite(false);
-                        }, 400);
-                    } else {
-                        setApartmentList([]);
-                        setisLoadingWhite(false);
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    setApartmentList([]);
-                    setisLoadingWhite(false);
-                });
-        }
+        //                 setTimeout(() => {
+        //                     document.getElementById("main").style.overflow = "hidden";
+        //                     setisLoadingWhite(false);
+        //                 }, 400);
+        //             } else {
+        //                 setApartmentList([]);
+        //                 setisLoadingWhite(false);
+        //             }
+        //         })
+        //         .catch((error) => {
+        //             console.log(error);
+        //             setApartmentList([]);
+        //             setisLoadingWhite(false);
+        //         });
+        // }
         return () => {
             document.getElementById("main").style.overflow = "auto";
         };
-    }, [apartment, area]);
+    }, [userInfo]);
     const optionsBuilding = buldingList.map((building) => {
         return { value: building.id, label: building.name };
     });
@@ -279,7 +336,6 @@ const Cart = ({}) => {
             buildingId: building.value,
             note: note,
             fullName: fullName,
-            shipCost: 10000,
             modeId: mode,
             serviceId: service,
             deliveryTimeId: mode === "1" ? "1" : hour.value,
@@ -454,6 +510,8 @@ const Cart = ({}) => {
                                     setArea(e);
                                     setApartment("");
                                     setBuilding("");
+                                    setBuldingList([]);
+                                    // setApartmentList([]);
                                 }}
                                 value={area}
                             />
@@ -724,10 +782,11 @@ const Cart = ({}) => {
                                         setVisiblePopupInfo(true);
                                         setFullName(userInfo.fullName || "");
                                         setPhone(userInfo.phone || "");
-                                        setBuilding(userInfo.building || "");
+                                        // setBuilding(userInfo.building || "");
                                         setIsValidBuilding(false);
                                         setIsValidFullname(false);
                                         setIsValidPhone(false);
+                                        console.log(userInfo);
                                     }}
                                     style={{ color: "#1890ff", fontWeight: 700, cursor: "pointer", fontSize: 15 }}
                                 >
@@ -903,7 +962,7 @@ const Cart = ({}) => {
                                 <div className="c_flex">
                                     <span style={{ fontSize: mobileMode ? 14 : 16 }}>Phí giao hàng</span>
                                     <span style={{ fontWeight: 600, display: "flex", fontSize: mobileMode ? 14 : 16, gap: 3 }}>
-                                        {"10.000"}
+                                        {shipCost.toLocaleString()}
                                         <span style={{ fontSize: 15, fontWeight: 600 }}>₫</span>
                                     </span>
                                 </div>
@@ -955,7 +1014,7 @@ const Cart = ({}) => {
                                     </div>
                                     <div className="checkout-text-price">
                                         <span style={{ display: "flex", gap: 3, alignItems: "center" }}>
-                                            {(totalPrice + 10000 + (service === "1" ? 10000 : 0)).toLocaleString()}
+                                            {(totalPrice + shipCost + (service === "1" ? 10000 : 0)).toLocaleString()}
                                             <span style={{ fontSize: "1rem", fontWeight: 700 }}>₫</span>
                                         </span>
                                     </div>

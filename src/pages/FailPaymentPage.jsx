@@ -33,7 +33,7 @@ const FailPaymentPage = () => {
                     type="button"
                     style={{
                         textAlign: "center",
-                        height: mobileMode ? 45 : 50,
+                        height: mobileMode ? 45 : 45,
                         borderRadius: "0.5rem",
                         alignItems: "center",
                         width: "100%",
