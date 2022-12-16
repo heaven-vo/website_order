@@ -157,6 +157,7 @@ const Navbar = () => {
                                     setArea(e);
                                     setApartment("");
                                     setBuilding("");
+                                    setBuldingList([]);
                                 }}
                                 value={area}
                             />

@@ -171,6 +171,7 @@ const Head = () => {
                                     setArea(e);
                                     setApartment("");
                                     setBuilding("");
+                                    setBuldingList([]);
                                 }}
                                 value={area}
                             />
