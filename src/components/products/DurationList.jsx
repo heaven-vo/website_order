@@ -10,7 +10,7 @@ const DurationList = ({ data }) => {
     return (
         data.length > 0 &&
         data.map((item, ind) => {
-            if (item.listStores.length > 0) {
+            if (item.listStores?.length > 0) {
                 return (
                     <>
                         <div key={ind} style={{ width: "100%", padding: "25px 15px 10px 15px", background: "rgb(246, 249, 252)" }} className="c_flex">

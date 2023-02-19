@@ -246,6 +246,7 @@ export const MenuPage = () => {
                 .then((res) => {
                     if (res.data) {
                         const menu = res.data;
+                        console.log(menu);
                         setMenuProduct(menu);
                     } else {
                         setMenuProduct([]);

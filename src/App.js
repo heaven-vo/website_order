@@ -2,8 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import Drawer from "react-modern-drawer";
 import "react-modern-drawer/dist/index.css";
 import { Route, Switch, useHistory } from "react-router-dom";
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
 import "../src/pages/responsive.css";
 import "./App.css";
 import { CartMain } from "./common/Cart/CartMain";

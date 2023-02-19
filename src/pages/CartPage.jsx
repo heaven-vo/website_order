@@ -257,60 +257,6 @@ const Cart = ({}) => {
         }
     };
 
-    useEffect(() => {
-        // let menuId = "13c699e4-7e19-4ecb-ac99-1df0661f0e61";
-
-        // if (area) {
-        //     Promise.all([getTimeDurationList(menuId, 1, 100), getApartment(area.value)])
-        //         .then((res) => {
-        //             if (res.length > 0) {
-        //                 const duration = res[0].data;
-        //                 const apart = res[1].data;
-        //                 setApartmentList(apart.listCluster);
-        //                 if (apartment) {
-        //                     for (let index = 0; index < apart.listCluster.length; index++) {
-        //                         const element = apart.listCluster[index];
-        //                         if (element.id === apartment.value) {
-        //                             setBuldingList(element.listBuilding);
-        //                         }
-        //                     }
-        //                 }
-        //                 if (duration) {
-        //                     let optionsHours = [];
-        //                     if (mode === "2") {
-        //                         duration.forEach((hour) => {
-        //                             if (parseInt(hour.fromHour) >= date.getHours() + 1) {
-        //                                 optionsHours.push({ value: hour.id, label: hour.fromHour + " - " + hour.toHour });
-        //                             }
-        //                         });
-        //                     } else if (mode === "3") {
-        //                         duration.forEach((hour) => {
-        //                             optionsHours.push({ value: hour.id, label: hour.fromHour + " - " + hour.toHour });
-        //                         });
-        //                     }
-
-        //                     setOptionTime(optionsHours);
-        //                 }
-
-        //                 setTimeout(() => {
-        //                     document.getElementById("main").style.overflow = "hidden";
-        //                     setisLoadingWhite(false);
-        //                 }, 400);
-        //             } else {
-        //                 setApartmentList([]);
-        //                 setisLoadingWhite(false);
-        //             }
-        //         })
-        //         .catch((error) => {
-        //             console.log(error);
-        //             setApartmentList([]);
-        //             setisLoadingWhite(false);
-        //         });
-        // }
-        return () => {
-            document.getElementById("main").style.overflow = "auto";
-        };
-    }, [userInfo]);
     const optionsBuilding = buldingList.map((building) => {
         return { value: building.id, label: building.name };
     });
@@ -690,7 +636,7 @@ const Cart = ({}) => {
                 <div style={{ padding: "5px 0", display: "flex", gap: 5 }}>
                     <span style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 600 }}>Tổng tiền đơn hàng:</span>
                     <span className="center_flex" style={{ fontSize: mobileMode ? 14 : 17, fontWeight: 400, gap: 3 }}>
-                        {" " + (totalPrice + 10000 + (service === "1" ? 10000 : 0)).toLocaleString()}
+                        {" " + (totalPrice + shipCost + (service === "1" ? 10000 : 0))?.toLocaleString()}
                         <span style={{ fontSize: "15px" }}>{"₫"}</span>
                     </span>
                 </div>
@@ -888,7 +834,7 @@ const Cart = ({}) => {
                                         </div>
                                         <div className="checkout-product-price">
                                             <span style={{ display: "flex", gap: 3, fontSize: mobileMode ? 14 : 16 }}>
-                                                {item.pricePerPack.toLocaleString()}
+                                                {item.pricePerPack?.toLocaleString()}
                                                 <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
                                             </span>
                                         </div>
@@ -946,7 +892,7 @@ const Cart = ({}) => {
                                         </label>
                                         <div className="checkout-product-price">
                                             <span style={{ display: "flex", gap: 3, fontSize: mobileMode ? 14 : 16 }}>
-                                                {(10000).toLocaleString()}
+                                                {"10.000"}
                                                 <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
                                             </span>
                                         </div>
@@ -955,14 +901,14 @@ const Cart = ({}) => {
                                 <div className="c_flex">
                                     <span style={{ fontSize: mobileMode ? 14 : 16 }}>Tiền hàng</span>
                                     <span style={{ fontWeight: 600, display: "flex", gap: 3, fontSize: mobileMode ? 14 : 16 }}>
-                                        {CartList.length > 0 ? totalPrice.toLocaleString() : 0}
+                                        {CartList.length > 0 ? totalPrice?.toLocaleString() : 0}
                                         <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>₫</span>
                                     </span>
                                 </div>
                                 <div className="c_flex">
                                     <span style={{ fontSize: mobileMode ? 14 : 16 }}>Phí giao hàng</span>
                                     <span style={{ fontWeight: 600, display: "flex", fontSize: mobileMode ? 14 : 16, gap: 3 }}>
-                                        {shipCost.toLocaleString()}
+                                        {shipCost?.toLocaleString()}
                                         <span style={{ fontSize: 15, fontWeight: 600 }}>₫</span>
                                     </span>
                                 </div>
@@ -1014,7 +960,7 @@ const Cart = ({}) => {
                                     </div>
                                     <div className="checkout-text-price">
                                         <span style={{ display: "flex", gap: 3, alignItems: "center" }}>
-                                            {(totalPrice + shipCost + (service === "1" ? 10000 : 0)).toLocaleString()}
+                                            {(totalPrice + shipCost + (service === "1" ? 10000 : 0))?.toLocaleString()}
                                             <span style={{ fontSize: "1rem", fontWeight: 700 }}>₫</span>
                                         </span>
                                     </div>

@@ -144,7 +144,13 @@ export const FoodDetailPage = () => {
         const CartList1 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME1));
         let newCarts = CartList1?.map((item) => {
             if (item.id === product.id) {
-                item.quantityCart = item.quantityCart + 1;
+                if (product.maximumQuantity !== null && item.quantityCart < product.maximumQuantity) {
+                    item.quantityCart = item.quantityCart + 1;
+                    setProductRodalQuantity(productRodalQuantity + 1);
+                } else if (!product.maximumQuantity) {
+                    item.quantityCart = item.quantityCart + 1;
+                    setProductRodalQuantity(productRodalQuantity + 1);
+                }
             }
             return item;
         });
@@ -152,14 +158,19 @@ export const FoodDetailPage = () => {
         localStorage.setItem(LOCALSTORAGE_CART_NAME1, JSON.stringify([...newCarts]));
     };
     const increaseQtyCart2 = (id) => {
-        setProductRodalQuantity(productRodalQuantity + 1);
         if (!JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2))) {
             localStorage.setItem(LOCALSTORAGE_CART_NAME2, JSON.stringify([]));
         }
         const CartList2 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME2));
         let newCarts = CartList2?.map((item) => {
             if (item.id === product.id) {
-                item.quantityCart = item.quantityCart + 1;
+                if (product.maximumQuantity !== null && item.quantityCart < product.maximumQuantity) {
+                    item.quantityCart = item.quantityCart + 1;
+                    setProductRodalQuantity(productRodalQuantity + 1);
+                } else if (!product.maximumQuantity) {
+                    item.quantityCart = item.quantityCart + 1;
+                    setProductRodalQuantity(productRodalQuantity + 1);
+                }
             }
             return item;
         });
@@ -174,7 +185,13 @@ export const FoodDetailPage = () => {
         const CartList3 = JSON.parse(localStorage.getItem(LOCALSTORAGE_CART_NAME3));
         let newCarts = CartList3?.map((item) => {
             if (item.id === product.id) {
-                item.quantityCart = item.quantityCart + 1;
+                if (product.maximumQuantity !== null && item.quantityCart < product.maximumQuantity) {
+                    item.quantityCart = item.quantityCart + 1;
+                    setProductRodalQuantity(productRodalQuantity + 1);
+                } else if (!product.maximumQuantity) {
+                    item.quantityCart = item.quantityCart + 1;
+                    setProductRodalQuantity(productRodalQuantity + 1);
+                }
             }
             return item;
         });
@@ -733,11 +750,11 @@ export const FoodDetailPage = () => {
                                         </tr>
                                         <tr className="">
                                             <td className="food-detail-label">Tối Thiểu: </td>
-                                            <td className="food-detail-text">{product.minimumQuantity ? product.minimumQuantity + " " + product.unit : "Không có"}</td>
+                                            <td className="food-detail-text">{product.minimumQuantity ? product.minimumQuantity : "Không có"}</td>
                                         </tr>
                                         <tr className="">
                                             <td className="food-detail-label">Tối Đa: </td>
-                                            <td className="food-detail-text">{product.maximumQuantity ? product.maximumQuantity + " " + product.unit : "Không có"}</td>
+                                            <td className="food-detail-text">{product.maximumQuantity ? product.maximumQuantity : "Không có"}</td>
                                         </tr>
                                     </tbody>
                                 </table>
