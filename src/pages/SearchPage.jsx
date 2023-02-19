@@ -151,7 +151,7 @@ export const SearchPage = () => {
                                 }, 300);
                             }}
                         >
-                            <span>Nhà hàng</span>
+                            <span>Cửa hàng</span>
                         </div>
                         <div
                             style={{
@@ -173,7 +173,7 @@ export const SearchPage = () => {
                                 }, 300);
                             }}
                         >
-                            <span>Món ăn</span>
+                            <span>Sản phẩm</span>
                         </div>
                     </div>
                     {listSearch !== null && listSearch.length === 0 && !isLoadingSkeleton && (
