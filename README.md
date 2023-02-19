@@ -6,7 +6,7 @@
   <h1 align="center">CONG DONG CHUNG CU</h1>
 </p>
 <h4 align="center">
-    <a href="https://demo.evershop.io/">Demo</a>
+    <a href="https://foodd-delivery.netlify.app">Demo</a>
 </h4>
 
 ## Introduction
